@@ -1,5 +1,7 @@
 package net.dandielo.citizens.traders_v3.traders.stock;
 
+import net.dandielo.citizens.traders_v3.traders.Trader.Status;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -14,8 +16,19 @@ public class StockPlayer extends Stock {
 
 	@Override
 	public Inventory getInventory() {
-		Inventory inventory = Bukkit.createInventory(this, getFinalInventorySize(), name);
-		return inventory;
+		return Bukkit.createInventory(this, getFinalInventorySize(), name);
+	}
+
+	@Override
+	public Inventory getInventory(Status status) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Inventory getManagementInventory(Status status) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

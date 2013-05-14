@@ -25,8 +25,11 @@ public class Server extends Trader {
 	@Override
 	public void onRightClick()
 	{
-		//open the inventory
-		player.openInventory(stock.getInventory());
+		if ( status.inManagementMode() )
+		    inventory = stock.getManagementInventory(status);
+		else
+			inventory = stock.getInventory(status);
+		player.openInventory(inventory);
 	}
 
 	@Override

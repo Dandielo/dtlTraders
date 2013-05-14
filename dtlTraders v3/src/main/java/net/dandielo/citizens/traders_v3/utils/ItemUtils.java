@@ -3,8 +3,12 @@ package net.dandielo.citizens.traders_v3.utils;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
+import net.dandielo.citizens.traders_v3.bukkit.DtlTraders;
 import net.dandielo.citizens.traders_v3.core.exceptions.InvalidDataNodeException;
+import net.dandielo.citizens.traders_v3.core.exceptions.ItemDataNotFoundException;
+import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
 import net.dandielo.citizens.traders_v3.utils.items.ItemData;
+import net.dandielo.citizens.traders_v3.utils.items.flags.Lore;
 
 public class ItemUtils {
 
@@ -14,6 +18,37 @@ public class ItemUtils {
 	{
 		int id = item.getTypeId();
 		return ( id > 275 && id < 289 ) || ( id > 291 && id < 296 ) || ( id > 298 && id < 304 ) || ( id > 306 && id < 326 );// ? true : false );
+	}
+	
+	public static StockItem createStockItem(ItemStack bItem)
+	{
+		StockItem sItem = new StockItem(bItem);
+		for ( ItemData data : ItemData.itemDataList() )
+		{
+			try 
+			{
+				data.peek(bItem);
+				sItem.addData(data);
+			}
+			catch (ItemDataNotFoundException e)
+			{
+				DtlTraders.warning("No data found!");
+			}
+		}
+
+		//try to the lore
+		try 
+		{
+			Lore lore = new Lore("lore");
+			lore.peek(bItem);
+			sItem.addFlag(lore);
+		}
+		catch (ItemDataNotFoundException e)
+		{
+			DtlTraders.warning("No lore found!");
+		}
+		
+		return sItem;
 	}
 	
 	//create ItemStack
@@ -30,15 +65,4 @@ public class ItemUtils {
 		else
 			return new ItemStack(mat);
 	}
-	
-	//create item data
-	public static ItemData createItemData(String key, String value)
-	{
-		try {
-			return ItemData.createItemData("data", "");
-		} catch (InvalidDataNodeException e) {
-            return null;
-		}
-	}
-
 }

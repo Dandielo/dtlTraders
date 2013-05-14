@@ -1,15 +1,18 @@
 package net.dandielo.citizens.traders_v3.utils.items;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import net.dandielo.citizens.traders_v3.bukkit.DtlTraders;
 import net.dandielo.citizens.traders_v3.core.exceptions.InvalidDataNodeException;
+import net.dandielo.citizens.traders_v3.traders.Trader.Status;
 
 import org.bukkit.inventory.ItemStack;
 
 public abstract class ItemFlag {
     private final String key;
+    private DataNode info;
 	
 	public ItemFlag(String key)
 	{
@@ -18,6 +21,24 @@ public abstract class ItemFlag {
 	
 	public abstract boolean getValue();
 	public abstract void assing(ItemStack item);
+	public void assignLore(Status status, List<String> lore) { };
+	
+	public final void lore(Status status, List<String> lore) 
+	{
+		//no lore assignment 
+		if ( !info.assignLore() ) return;
+		
+		//check if trader has the required status
+		boolean assign = false;
+		for ( int i = 0 ; i < info.assignStatus().length && !assign ; ++i )
+			assign = info.assignStatus()[i].equals(status);
+		
+		//wrong status = see ya 
+		if ( !assign ) return;
+		
+		//call the method that can be override
+		assignLore(status, lore);
+	}
 	
 	public String getKey()
 	{
@@ -30,6 +51,12 @@ public abstract class ItemFlag {
 		return key.hashCode();
 	}
 	
+	@Override
+	public boolean equals(Object o)
+	{
+		return true;
+	}
+	
 	//getting item datas
 	private final static Map<DataNode, Class<? extends ItemFlag>> data = new HashMap<DataNode, Class<? extends ItemFlag>>();
 	
@@ -39,8 +66,6 @@ public abstract class ItemFlag {
 			throw new InvalidDataNodeException();
 		
 		data.put(clazz.getAnnotation(DataNode.class), clazz);
-		
-		//TODO registration info
 	}
 	
 	public final static ItemFlag createItemFlag(String key) throws InvalidDataNodeException
@@ -51,8 +76,9 @@ public abstract class ItemFlag {
 				nodeInfo = info;
 		try 
 		{
-			ItemFlag itemData = data.get(nodeInfo).getConstructor(String.class).newInstance(key);
-			return itemData;
+			ItemFlag itemFlag = data.get(nodeInfo).getConstructor(String.class).newInstance(key);
+			itemFlag.info = nodeInfo;
+			return itemFlag;
 		} 
 		catch (Exception e) 
 		{

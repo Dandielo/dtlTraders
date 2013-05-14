@@ -6,7 +6,9 @@ import java.util.List;
 import java.util.Map;
 
 import net.citizensnpcs.api.util.DataKey;
+import net.dandielo.citizens.traders_v3.traders.Trader.Status;
 
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 
 public abstract class Stock implements InventoryHolder {
@@ -38,4 +40,7 @@ public abstract class Stock implements InventoryHolder {
 
 	public void save(DataKey data) {
 	}
+
+	public abstract Inventory getInventory(Status status);
+	public abstract Inventory getManagementInventory(Status status);
 }

@@ -3,7 +3,9 @@ package net.dandielo.citizens.traders_v3.bukkit;
 import java.util.logging.Logger;
 
 import net.dandielo.citizens.traders_v3.tNpcManager;
+import net.dandielo.citizens.traders_v3.utils.NBTUtils;
 
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class DtlTraders extends JavaPlugin {

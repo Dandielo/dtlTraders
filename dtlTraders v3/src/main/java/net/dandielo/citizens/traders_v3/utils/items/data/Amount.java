@@ -5,9 +5,12 @@ import java.util.List;
 
 import org.bukkit.inventory.ItemStack;
 
+import net.dandielo.citizens.traders_v3.core.exceptions.ItemDataNotFoundException;
 import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
+import net.dandielo.citizens.traders_v3.utils.items.DataNode;
 import net.dandielo.citizens.traders_v3.utils.items.ItemData;
 
+@DataNode(name="Amount", saveKey="a")
 public class Amount extends ItemData {
 
 	List<Integer> amounts = new ArrayList<Integer>();
@@ -18,6 +21,7 @@ public class Amount extends ItemData {
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public <T> T getValue(StockItem stockItem) {
 		return (T) amounts;
 	}
@@ -62,4 +66,20 @@ public class Amount extends ItemData {
 		return result;
 	}
 
+	@Override
+	public void peek(ItemStack item) throws ItemDataNotFoundException {
+		amounts.clear();
+		amounts.add(item.getAmount());
+	}
+
+	public boolean equals(Amount amount)
+	{
+		return amount.getAmount() == getAmount();
+	}
+	
+	@Override
+	public boolean equals(Object o)
+	{
+		return equals((Amount)o);
+	}
 }

@@ -4,10 +4,12 @@ import java.util.List;
 import java.util.Map;
 
 import net.citizensnpcs.api.util.DataKey;
+import net.dandielo.citizens.traders_v3.traders.Trader.Status;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 
 public class StockTrader extends Stock {
 	
@@ -44,6 +46,7 @@ public class StockTrader extends Stock {
 	
 	//stock load and save
 	@Override
+	@SuppressWarnings("unchecked")
 	public void load(DataKey data) 
 	{
 		if ( data.keyExists("sell") )
@@ -108,12 +111,57 @@ public class StockTrader extends Stock {
 	@Override
 	public Inventory getInventory()
 	{
-		Inventory inventory = Bukkit.createInventory(this, getFinalInventorySize(), name);
+		return Bukkit.createInventory(this, getFinalInventorySize(), name);
+	}
+
+	@Override
+	public Inventory getInventory(Status status) {
+		Inventory inventory = getInventory();
+		setInventory(inventory, status);
 		return inventory;
 	}
 	
-	public void setInventory(Inventory inventory, String stock)
+	@Override
+	public Inventory getManagementInventory(Status status) {
+		Inventory inventory = getInventory();
+		setManagementInventory(inventory, status);
+		return inventory;
+	}
+	
+	public void setInventory(Inventory inventory, Status status)
 	{
+		//clear the inventory
+		inventory.clear();
+		for ( StockItem item : this.stock.get(status.asStock()) )
+		{
+			if ( !item.hasSlot() || item.getSlot() < 0 )
+				item.setSlot(inventory.firstEmpty());
+			
+			//set the lore
+			ItemStack itemStack = item.getItem();
+			itemStack.getItemMeta().setLore(item.getDataLore(status));
+			inventory.setItem(item.getSlot(), itemStack);
+		}
+	}
+	
+	public void setManagementInventory(Inventory inventory, Status status)
+	{
+		//clear the inventory
+		inventory.clear();
+		for ( StockItem item : this.stock.get(status.asStock()) )
+		{
+			if ( !item.hasSlot() || item.getSlot() < 0 )
+				item.setSlot(inventory.firstEmpty());
+			
+			//set the lore
+			ItemStack itemStack = item.getItem();
+			itemStack.getItemMeta().setLore(item.getDataLore(status));
+			inventory.setItem(item.getSlot(), itemStack);
+		}
+	}
+	
+	//public void setInventory(Inventory inventory, String stock)
+	//{
 	/*	if ( !s.isManaging() )
 		{
 			for( StockItem item : stock.get(s.toString()) ) 
@@ -147,7 +195,7 @@ public class StockTrader extends Stock {
 		} 
 		
 		return inventory;*/
-		inventory.clear();
-	}
+	//	inventory.clear();
+	//}
 
 }

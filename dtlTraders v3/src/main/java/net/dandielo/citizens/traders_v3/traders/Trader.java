@@ -1,6 +1,7 @@
 package net.dandielo.citizens.traders_v3.traders;
 
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 
 import net.citizensnpcs.api.npc.NPC;
 import net.dandielo.citizens.traders_v3.tNpc;
@@ -17,6 +18,8 @@ public abstract class Trader implements tNpc {
 	protected Wallet wallet;
 	protected Stock stock;
 	protected Player player;
+	
+	protected Inventory inventory;
 	
 	protected Status status;
 	
@@ -77,6 +80,10 @@ public abstract class Trader implements tNpc {
 			if ( SELL.name().toLowerCase().equals(status) )
 				return SELL;
 			return BUY;
+		}
+
+		public String asStock() {
+			return this.equals(BUY) || this.equals(MANAGE_BUY) ? "buy" : "sell";
 		}
 	}
 	

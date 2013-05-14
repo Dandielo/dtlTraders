@@ -2,9 +2,17 @@ package net.dandielo.citizens.traders_v3.utils.items.data;
 
 import org.bukkit.inventory.ItemStack;
 
+import net.dandielo.citizens.traders_v3.core.exceptions.ItemDataNotFoundException;
+import net.dandielo.citizens.traders_v3.traders.Trader.Status;
 import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
+import net.dandielo.citizens.traders_v3.utils.items.DataNode;
 import net.dandielo.citizens.traders_v3.utils.items.ItemData;
 
+@DataNode(
+name="Price", 
+saveKey = "p", 
+assignLore = true,
+assignStatus = {Status.BUY, Status.SELL, Status.SELL_AMOUNTS, Status.MANAGE_PRICE})
 public class Price extends ItemData {
 	double price = 0.0;
 	
@@ -39,6 +47,12 @@ public class Price extends ItemData {
 	@Override
 	public String save() {
 		return String.valueOf(price);
+	}
+
+	@Override
+	public void peek(ItemStack item) throws ItemDataNotFoundException {
+		//we don't want to have this in the new item 
+		throw new ItemDataNotFoundException();
 	}
 
 }
