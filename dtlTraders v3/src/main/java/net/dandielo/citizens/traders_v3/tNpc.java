@@ -1,5 +1,9 @@
 package net.dandielo.citizens.traders_v3;
 
-public class tNpc {
+public interface tNpc {
 
+	public void onLeftClick();
+	public void onRightClick();
+    public void onInventoryClick();
+	
 }
