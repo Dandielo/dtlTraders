@@ -4,19 +4,18 @@ import java.util.logging.Logger;
 
 import net.dandielo.citizens.traders_v3.tNpcManager;
 
-import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class DtlTraders extends JavaPlugin {
 	//bukkit resources
 	private static Logger logger = Logger.getLogger("Minecraft");
-	private static CommandSender console;
+//	private static CommandSender console;
 	
 	//plugin instance
 	private static DtlTraders instance;
 	
 	//plugin resources
-	private static tNpcManager npcManager;
+	//private static tNpcManager npcManager;
 	
 	@Override
 	public void onLoad()
@@ -30,13 +29,18 @@ public class DtlTraders extends JavaPlugin {
 		instance = this;
 		
 		//init Vault
-		npcManager = tNpcManager.instance();
+		initVault();
+		
+		//tNpcManager
+		//npcManager = tNpcManager.instance();
 		
 	    //init Traders
 		//init Bankers
 		
 		//init Denizen
+		initDenizens();
 		//init Wallets
+		initWallets();
 	}
 	
 	private void initDenizens()
@@ -73,10 +77,6 @@ public class DtlTraders extends JavaPlugin {
 	public static void severe(String message)
 	{
 		logger.severe("["+instance.getDescription().getName()+"] " + message);
-	}
-
-	public static tNpcManager tNPCManager() {
-		return npcManager;
 	}
 }
  

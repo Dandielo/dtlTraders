@@ -2,16 +2,13 @@ package net.dandielo.citizens.traders_v3.traits;
 
 import net.citizensnpcs.api.trait.Trait;
 import net.citizensnpcs.api.util.DataKey;
-import net.dandielo.citizens.traders_v3.tNpcManager;
-import net.dandielo.citizens.traders_v3.bukkit.DtlTraders;
 import net.dandielo.citizens.traders_v3.traders.setting.Settings;
 import net.dandielo.citizens.traders_v3.traders.stock.Stock;
 import net.dandielo.citizens.traders_v3.traders.stock.StockTrader;
 
 public class TraderTrait extends Trait {
-
 	// tNpc manager
-	private tNpcManager manager = DtlTraders.tNPCManager();
+	//private tNpcManager manager = DtlTraders.tNPCManager();
 	
 	//settings
 	private Settings settings = new Settings(this.npc);
@@ -54,7 +51,7 @@ public class TraderTrait extends Trait {
 		settings.load(data);
 		
 		//create and load the stock
-		stock = new StockTrader(settings.getStockName(this.npc.getName()), settings.getStockSize());
+		stock = new StockTrader(settings.getStockName(), settings.getStockSize());
 		stock.load(data);
 	}
 

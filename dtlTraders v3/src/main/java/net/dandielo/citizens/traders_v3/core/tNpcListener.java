@@ -8,11 +8,12 @@ import net.dandielo.citizens.traders_v3.core.exceptions.InvalidTraderTypeExcepti
 import net.dandielo.citizens.traders_v3.core.exceptions.TraderTypeNotFoundException;
 import net.dandielo.citizens.traders_v3.traders.Trader;
 import net.dandielo.citizens.traders_v3.traits.TraderTrait;
-import net.dandielo.citizens.traders_v3.traits.WalletTrait;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryOpenEvent;
 
 public class tNpcListener implements Listener {
 
@@ -21,6 +22,16 @@ public class tNpcListener implements Listener {
 	//general events
 	@EventHandler
 	public void inventoryClickEvent(InventoryClickEvent e)
+	{
+	}
+	
+	@EventHandler
+	public void inventoryOpenEvent(InventoryOpenEvent e)
+	{
+	}
+	
+	@EventHandler
+	public void inventoryCloseEvent(InventoryCloseEvent e)
 	{
 	}
 
@@ -40,9 +51,20 @@ public class tNpcListener implements Listener {
 				manager.openTransaction(e.getClicker(), trader);
 			}
 			else
+			{
 				trader = manager.getTransactionTrader(e.getClicker());
+				if ( !trader.equals(e.getNPC()) )
+				{
+					manager.closeTransaction(e.getClicker());
+					trader = tNpcManager.createTarder(e.getNPC(), traderTrait.getType(), e.getClicker());
+					manager.openTransaction(e.getClicker(), trader);
+				}
+			}
 			
-			trader.onRightClick();
+			trader.onLeftClick();
+			
+			if ( !trader.getStatus().inManagementMode() )
+				manager.closeTransaction(e.getClicker());
 		}
 		catch (TraderTypeNotFoundException e1) 
 		{

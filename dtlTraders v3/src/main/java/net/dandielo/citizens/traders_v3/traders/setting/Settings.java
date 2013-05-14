@@ -51,8 +51,13 @@ public class Settings extends GlobalSettings {
 		return stockSize;
 	}
 	
-	public String getStockName(String npc) {
-		return stockNameFormat.replace("{npc}", npc);
+	public String getStockName() {
+		return stockNameFormat.replace("{npc}", npc.getName());
+	}
+	
+	public String getStockDefault()
+	{
+		return stockDefault;
 	}
 
 	//loading and saving

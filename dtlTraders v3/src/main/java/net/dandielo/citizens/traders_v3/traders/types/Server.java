@@ -16,10 +16,17 @@ public class Server extends Trader {
 
 	@Override
 	public void onLeftClick() {
+		if ( status.inManagementMode() )
+			status = getDefaultStatus();
+		else
+			status = getDefaultManagementStatus();
 	}
 
 	@Override
-	public void onRightClick() {
+	public void onRightClick()
+	{
+		//open the inventory
+		player.openInventory(stock.getInventory());
 	}
 
 	@Override
