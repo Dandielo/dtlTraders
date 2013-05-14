@@ -4,14 +4,12 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import net.dandielo.citizens.traders_v3.bukkit.DtlTraders;
-import net.dandielo.citizens.traders_v3.core.exceptions.InvalidDataNodeException;
 import net.dandielo.citizens.traders_v3.core.exceptions.ItemDataNotFoundException;
 import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
 import net.dandielo.citizens.traders_v3.utils.items.ItemData;
 import net.dandielo.citizens.traders_v3.utils.items.flags.Lore;
 
 public class ItemUtils {
-
 
 	//durability check
 	public static boolean itemHasDurability(ItemStack item)

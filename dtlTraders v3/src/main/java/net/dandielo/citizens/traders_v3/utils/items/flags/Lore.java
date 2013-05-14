@@ -6,8 +6,10 @@ import java.util.List;
 import org.bukkit.inventory.ItemStack;
 
 import net.dandielo.citizens.traders_v3.core.exceptions.ItemDataNotFoundException;
+import net.dandielo.citizens.traders_v3.utils.items.DataNode;
 import net.dandielo.citizens.traders_v3.utils.items.ItemFlag;
 
+@DataNode(name="Lore", saveKey="lore")
 public class Lore extends ItemFlag {
 
 	private List<String> lore;

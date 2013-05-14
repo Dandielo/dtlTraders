@@ -7,6 +7,10 @@ import java.util.Map;
 import net.dandielo.citizens.traders_v3.bukkit.DtlTraders;
 import net.dandielo.citizens.traders_v3.core.exceptions.InvalidDataNodeException;
 import net.dandielo.citizens.traders_v3.traders.Trader.Status;
+import net.dandielo.citizens.traders_v3.utils.items.flags.Lore;
+import net.dandielo.citizens.traders_v3.utils.items.flags.Multiplier;
+import net.dandielo.citizens.traders_v3.utils.items.flags.PatternPrice;
+import net.dandielo.citizens.traders_v3.utils.items.flags.StackPrice;
 
 import org.bukkit.inventory.ItemStack;
 
@@ -60,7 +64,7 @@ public abstract class ItemFlag {
 	//getting item datas
 	private final static Map<DataNode, Class<? extends ItemFlag>> data = new HashMap<DataNode, Class<? extends ItemFlag>>();
 	
-	public final static void registerData(Class<? extends ItemFlag> clazz) throws InvalidDataNodeException
+	public final static void registerFlag(Class<? extends ItemFlag> clazz) throws InvalidDataNodeException
 	{
 		if ( !clazz.isAnnotationPresent(DataNode.class) )
 			throw new InvalidDataNodeException();
@@ -84,6 +88,21 @@ public abstract class ItemFlag {
 		{
 			DtlTraders.warning("Item flag could not be read, invalid flag set! Key: " + key);
 			throw new InvalidDataNodeException();
+		}
+	}
+	
+	public static void registerCoreFlags()
+	{
+		try
+		{
+			registerFlag(Lore.class);
+			registerFlag(PatternPrice.class);
+			registerFlag(StackPrice.class);
+			registerFlag(Multiplier.class);
+		} 
+		catch (InvalidDataNodeException e) 
+		{
+			DtlTraders.severe("Core item flag values are bugged!");
 		}
 	}
 }

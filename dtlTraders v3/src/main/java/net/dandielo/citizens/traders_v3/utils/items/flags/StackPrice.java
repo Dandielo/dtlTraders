@@ -2,11 +2,11 @@ package net.dandielo.citizens.traders_v3.utils.items.flags;
 
 import org.bukkit.inventory.ItemStack;
 
-import net.dandielo.citizens.traders_v3.traders.Trader.Status;
+import net.dandielo.citizens.traders_v3.traders.Trader.Status; 
 import net.dandielo.citizens.traders_v3.utils.items.DataNode;
 import net.dandielo.citizens.traders_v3.utils.items.ItemFlag;
 
-@DataNode(
+@DataNode( 
 name="StackPrice", 
 saveKey = "sp", 
 assignLore = true,

@@ -4,8 +4,10 @@ import org.bukkit.inventory.ItemStack;
 
 import net.dandielo.citizens.traders_v3.core.exceptions.ItemDataNotFoundException;
 import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
+import net.dandielo.citizens.traders_v3.utils.items.DataNode;
 import net.dandielo.citizens.traders_v3.utils.items.ItemData;
 
+@DataNode(name="Slot", saveKey="s")
 public class Slot extends ItemData {
 
 	private int slot;

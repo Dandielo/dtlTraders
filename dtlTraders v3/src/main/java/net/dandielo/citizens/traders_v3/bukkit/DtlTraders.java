@@ -2,10 +2,13 @@ package net.dandielo.citizens.traders_v3.bukkit;
 
 import java.util.logging.Logger;
 
-import net.dandielo.citizens.traders_v3.tNpcManager;
-import net.dandielo.citizens.traders_v3.utils.NBTUtils;
+import net.citizensnpcs.api.CitizensAPI;
+import net.citizensnpcs.api.trait.TraitInfo;
+import net.dandielo.citizens.traders_v3.traits.TraderTrait;
+import net.dandielo.citizens.traders_v3.traits.WalletTrait;
+import net.dandielo.citizens.traders_v3.utils.items.ItemData;
+import net.dandielo.citizens.traders_v3.utils.items.ItemFlag;
 
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class DtlTraders extends JavaPlugin {
@@ -17,7 +20,6 @@ public class DtlTraders extends JavaPlugin {
 	private static DtlTraders instance;
 	
 	//plugin resources
-	//private static tNpcManager npcManager;
 	
 	@Override
 	public void onLoad()
@@ -30,11 +32,16 @@ public class DtlTraders extends JavaPlugin {
 		//set the plugin instance
 		instance = this;
 		
+		//register traits
+		CitizensAPI.getTraitFactory().registerTrait(TraitInfo.create(TraderTrait.class).withName("trader"));
+		CitizensAPI.getTraitFactory().registerTrait(TraitInfo.create(WalletTrait.class).withName("wallet"));
+		
 		//init Vault
 		initVault();
 		
-		//tNpcManager
-		//npcManager = tNpcManager.instance();
+		//registering core extensions
+		ItemData.registerCoreData();
+		ItemFlag.registerCoreFlags();
 		
 	    //init Traders
 		//init Bankers

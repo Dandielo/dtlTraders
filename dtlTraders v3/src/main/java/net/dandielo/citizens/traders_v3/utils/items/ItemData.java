@@ -10,6 +10,16 @@ import net.dandielo.citizens.traders_v3.core.exceptions.InvalidDataNodeException
 import net.dandielo.citizens.traders_v3.core.exceptions.ItemDataNotFoundException;
 import net.dandielo.citizens.traders_v3.traders.Trader.Status;
 import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
+import net.dandielo.citizens.traders_v3.utils.items.data.Amount;
+import net.dandielo.citizens.traders_v3.utils.items.data.Book;
+import net.dandielo.citizens.traders_v3.utils.items.data.Color;
+import net.dandielo.citizens.traders_v3.utils.items.data.Enchant;
+import net.dandielo.citizens.traders_v3.utils.items.data.Firework;
+import net.dandielo.citizens.traders_v3.utils.items.data.Multiplier;
+import net.dandielo.citizens.traders_v3.utils.items.data.Name;
+import net.dandielo.citizens.traders_v3.utils.items.data.Price;
+import net.dandielo.citizens.traders_v3.utils.items.data.Slot;
+import net.dandielo.citizens.traders_v3.utils.items.data.StoredEnchant;
 
 import org.bukkit.inventory.ItemStack;
 
@@ -96,7 +106,7 @@ public abstract class ItemData {
 		}
 		return result;
 	}
-	
+
 	public final static void registerData(Class<? extends ItemData> clazz) throws InvalidDataNodeException
 	{
 		if ( !clazz.isAnnotationPresent(DataNode.class) )
@@ -122,6 +132,29 @@ public abstract class ItemData {
 		{
 			DtlTraders.warning("Item data could not be read, invalid data set! Key: " + key + ", value: " + value);
 			throw new InvalidDataNodeException();
+		}
+	}
+	
+	//register core item data
+	public static void registerCoreData()
+	{
+		try
+		{
+			registerData(Amount.class);
+		//	registerData(Book.class);
+		//	registerData(Color.class);
+		//	registerData(Enchant.class);
+		//	registerData(StoredEnchant.class);
+		//	registerData(Firework.class);
+		//	registerData(Multiplier.class);
+			registerData(Name.class);
+			registerData(Price.class);
+			registerData(Slot.class);
+		}
+		catch (InvalidDataNodeException e) 
+		{
+			DtlTraders.severe("Core item data values are bugged!");
+			e.printStackTrace();
 		}
 	}
 }

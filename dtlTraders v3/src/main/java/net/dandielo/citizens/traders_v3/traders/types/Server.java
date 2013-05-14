@@ -36,4 +36,9 @@ public class Server extends Trader {
 	public void onInventoryClick() {
 	}
 
+	@Override
+	public void onManageInventoryClick() {
+		return;
+	}
+
 }
