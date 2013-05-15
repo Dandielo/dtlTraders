@@ -2,10 +2,10 @@ package net.dandielo.citizens.traders_v3.traders.wallet;
 
 import org.bukkit.entity.Player;
 
+import static net.dandielo.citizens.traders_v3.bukkit.Econ.econ;
 import net.dandielo.citizens.traders_v3.traders.Trader;
 
 public class Wallet {
-
 	private double money;
 	private Type type;
 	
@@ -15,23 +15,42 @@ public class Wallet {
 	}
 	
 	//deposit to player or trader
-	public boolean deposit(Player player)
+	public boolean deposit(Player player, double amount)
 	{
-		return false;
+		return econ.deposit(player.getName(), amount);
 	}
-	public boolean deposit(Trader trader)
+	public boolean deposit(Trader trader, double amount)
 	{
-		return false;
-	}
+		if ( type.equals(Type.PRIVATE) )
+		{
+			money += amount;
+		}
+		else 
+		if ( type.equals(Type.OWNER) )
+		{
+			return econ.deposit(trader.getSettings().getOwner(), amount);
+		}
+		return true;
+	} 
 
 	//withdraw from player or trader
-	public boolean withdraw(Player Player)
+	public boolean withdraw(Player player, double amount)
 	{
-		return true;
+		return econ.withdraw(player.getName(), amount);
 	}
-	public boolean withdraw(Trader trader)
+	public boolean withdraw(Trader trader, double amount)
 	{
-		return true;
+		if ( type.equals(Type.INFINITE) )
+		    return true;
+		else 
+		if ( type.equals(Type.PRIVATE) )
+		{
+			return money - amount >= 0 ? (money -= amount) >= 0 : false;
+		}
+		else
+		{
+			return econ.withdraw(trader.getSettings().getOwner(), amount);
+		}
 	}
 	
 	//Type enum

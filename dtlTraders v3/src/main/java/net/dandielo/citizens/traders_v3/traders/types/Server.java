@@ -35,8 +35,8 @@ public class Server extends Trader {
 		player.openInventory(inventory);
 	}
 
-	@ClickHandler(status = {Status.SELL, Status.BUY}, inventory = InventoryType.TRADER)
-	public void uiChanges(InventoryClickEvent e)
+	@ClickHandler(status = {Status.SELL, Status.BUY, Status.SELL_AMOUNTS}, inventory = InventoryType.TRADER)
+	public void generalUI(InventoryClickEvent e)
 	{
 		int slot = e.getSlot();
 		if ( stock.isUiSlot(slot) )
@@ -60,8 +60,48 @@ public class Server extends Trader {
 		e.setCancelled(true);
 	}
 	
+	@ClickHandler(
+	status = {Status.MANAGE_SELL, Status.MANAGE_BUY, Status.MANAGE_AMOUNTS, Status.MANAGE_PRICE, Status.MANAGE_LIMITS}, 
+	inventory = InventoryType.TRADER)
+	public void manageUI(InventoryClickEvent e)
+	{
+		int slot = e.getSlot();
+		if ( stock.isUiSlot(slot) )
+		{
+			if ( hitTest(slot, "buy") )
+			{
+				status = Status.MANAGE_BUY;
+			}
+			else
+			if ( hitTest(slot, "sell") )
+			{
+				status = Status.MANAGE_SELL;
+			}
+			else
+			if ( hitTest(slot, "back") )
+			{
+				if ( hitTest(inventory.getSize()-1, "buy") )
+				    status = Status.MANAGE_SELL;
+				else
+				    status = Status.MANAGE_BUY;
+			}
+			else
+			if ( hitTest(slot, "price") )
+			{
+				status = Status.MANAGE_PRICE;
+			}
+			else
+			if ( hitTest(slot, "limit") )
+			{
+				status = Status.MANAGE_LIMITS;
+			}
+			stock.setInventory(inventory, getStatus());
+		}
+		e.setCancelled(true);
+	}
+	
 	@ClickHandler(status = {Status.SELL}, inventory = InventoryType.TRADER)
-	public void sellTopClick(InventoryClickEvent e)
+	public void buyItems(InventoryClickEvent e)
 	{
 		int slot = e.getSlot();
 		if ( stock.isUiSlot(slot) ) return;
@@ -93,6 +133,58 @@ public class Server extends Trader {
 		e.setCancelled(true);
 	}
 	
+	@ClickHandler(status = {Status.SELL, Status.BUY}, inventory = InventoryType.PLAYER)
+	public void sellItems(InventoryClickEvent e)
+	{
+		int slot = e.getSlot();
+		if ( e.isLeftClick() )
+		{
+			if ( stock.getItem(slot, "sell") != null )
+			if ( handleClick(e.getRawSlot()) )
+			{
+				player.sendMessage("L" + stock.getItem(slot, "sell").<Double>getData("p").toString());
+			}
+			else
+			{
+				player.sendMessage("L" + stock.getItem(slot, "sell").toString());
+			}
+		}
+		else
+		{
+			if ( stock.getItem(slot, "sell") != null )
+			if ( handleClick(e.getRawSlot()) )
+			{
+				player.sendMessage("R" + stock.getItem(slot, "sell").<Double>getData("p").toString());
+			}
+			else
+			{
+				player.sendMessage("R" + stock.getItem(slot, "sell").toString());
+			}
+		}
+		e.setCancelled(true);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	//shift handler
 	@ClickHandler(status = {Status.SELL, Status.BUY, Status.SELL_AMOUNTS}, shift = true, inventory = InventoryType.TRADER)
 	public void topShift(InventoryClickEvent e)
 	{
