@@ -7,6 +7,9 @@ import org.bukkit.configuration.file.FileConfiguration;
 public class PluginSettings {	
 	//plugin config file
 	protected static FileConfiguration config = DtlTraders.getInstance().getConfig();
+
+	//debug settings
+	private static String debugLevel;
 	
 	//locale settings, cached
 	private static String locale;
@@ -18,6 +21,10 @@ public class PluginSettings {
 	//load plugin settings
 	public static void initPluginSettings()
 	{
+		//debug settings
+		debugLevel = config.getString("debug", "normal");
+		
+		//locale settings
 		locale = config.getString("locale.load", "en");
 		localeAutoUpdate = config.getBoolean("locale.auto-update", true);
 		
@@ -39,5 +46,9 @@ public class PluginSettings {
 	public static boolean statisticsEnabled()
 	{
 		return statistics;
+	}
+
+	public static String debugLevel() {
+		return debugLevel.toUpperCase();
 	}
 }
