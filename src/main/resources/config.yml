@@ -1,19 +1,33 @@
+#locale settings
+locale:
+  #the choosen localization to load
+  load: en
+  #should the locale upcated autmaticaly, (using the plugin updater)
+  auto-update: true
+#logging settings
+logging:
+  #should transactions be logged?, (not used at this moment)
+  log: false
+  #the foramt how transactions should be logged, (not used at this moment)
+  log-format: ''
+  #should transactions be loggen on the web?
+  web-log: false
+  #web account name
+  web-account: ''
+  #web account id
+  web-id: 0
+#statistics
+statistics: 
+  #enable or disable statistics
+  enabled: true
+  #metrics should be enabled?
+  metrics: true
 #trader types related settings
 trader:
   #transaction related settings
   transaction:
     #sets if buying and selling should be done after clicking on a item twice in a row
     double-click: false
-    #should transactions be logged?, (not used at this moment)
-    log: false
-    #the foramt how transactions should be logged, (not used at this moment)
-    log-format: ''
-    #should transactions be loggen on the web?
-    web-log: false
-    #web account name
-    web-account: ''
-    #web account id
-    web-id: 0
   #manager mode related settings
   managing:
     #the starting stock when opening a trader (buy/sell)

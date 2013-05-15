@@ -77,7 +77,7 @@ keywords:
   buy-limit: Buy Limit #going to be removed (added later with player trader, with another name)
 
 #the following section will have all keys changed later
-lores:
+ui: #renamed from "lore"
   trader-inventory-buy:
     lore:
     - '^7Price: ^6{price}'

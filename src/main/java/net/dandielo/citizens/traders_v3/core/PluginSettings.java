@@ -10,12 +10,18 @@ public class PluginSettings {
 	
 	//locale settings, cached
 	private static String locale;
+	private static boolean localeAutoUpdate;
+	
+	//statistic settings
 	private static boolean statistics = false;
 	
 	//load plugin settings
 	public static void initPluginSettings()
 	{
-		locale = config.getString("general.locale", "en");
+		locale = config.getString("locale.load", "en");
+		localeAutoUpdate = config.getBoolean("locale.auto-update", true);
+		
+		//unused
 		statistics = config.getBoolean("general.statistics", false);
 	}
 	
@@ -23,6 +29,11 @@ public class PluginSettings {
 	public static String getLocale()
 	{
 		return locale;
+	}
+	
+	public static boolean autoUpdateLocale()
+	{
+		return localeAutoUpdate;
 	}
 	
 	public static boolean statisticsEnabled()
