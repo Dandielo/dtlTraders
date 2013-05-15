@@ -16,6 +16,10 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+/**
+ * Manages all message, and UI requests by using the chosen localization file
+ * @author dandielo
+ */
 public class LocaleManager {
 	/** Singleton instance */
 	public final static LocaleManager locale = new LocaleManager();
@@ -245,68 +249,152 @@ public class LocaleManager {
 		}
 	}
 	
-	public void sendMessage(CommandSender sender, String key, Object... obj)
+	/**
+	 * Send a message to the specified sender, may be player or console. It can use any number of arguments. If you want to use a cached keyword add a <strong>#</strong> prefix before the key name.
+	 * 
+	 * @param sender
+	 *     the sender where the message is going to be sent
+	 * @param key
+	 *     the message key, what message should we send
+	 * @param args
+	 *     additional arguments for the function call
+	 *     
+	 * @author dandielo   
+	 */
+	public void sendMessage(CommandSender sender, String key, Object... args)
 	{
-		if ( !messages.containsKey(new LocaleEntry(key, localeVersion)) )
-		{
-			localeYaml.set(buildPath("messages", key), "^3Check the locale, this message is not set!");
-			messages.put(new LocaleEntry(key, localeVersion), "^3Check the locale, this message is not set!");
-			save();
-		}
+		//check the message key
+		checkMessageKey(key);
 		
-		String msg = messages.get(new LocaleEntry(key, localeVersion));
-		for ( int i = 0 ; i < obj.length ; )
+		//get the message
+		String message = messages.get(new LocaleEntry(key, localeVersion));
+		
+		//for each additional argument
+		for ( int i = 0 ; i < args.length ; )
 		{
-			if ( obj[i] instanceof String )
+			//look for string arguments
+			if ( args[i] instanceof String )
 			{
-				if ( !keywords.containsKey(new LocaleEntry((String) obj[i+1], localeVersion)) && ((String) obj[i+1]).startsWith("#") )
-				{
-					localeYaml.set(buildPath("keywords", ((String) obj[i+1]).substring(1)), "^3Invalid keyword!");
-					keywords.put(new LocaleEntry((String) obj[i+1], localeVersion), "^3Invalid keyword!");
-					save();
-				}
+				//check if the argument might be a keyword
+				checkKeywordKey((String) args[i+1]);
 				
-				msg = msg.replaceAll("\\{" + (String) obj[i] + "\\}", keywords.get(new LocaleEntry((String) obj[i+1], localeVersion)));
+				//replace tags in the initial message string
+				message = message.replaceAll("\\{" + (String) args[i] + "\\}", keywords.get(new LocaleEntry((String) args[i+1], localeVersion)));
+				
+				//as because this case uses more than 1 argument, steps are doubled
 				i += 2;
 			} else
+				//this cannot be a tag, look for a valid one
 				++i;
 		}
-		sender.sendMessage(msg.replace('^', '§'));
+		//send the prepared message
+		sender.sendMessage(message.replace('^', '§'));
 	}
 	
-	//gets the required message
-	public String message(String key, Object... obj)
+	/**
+	 * Gets a prepared message that can be used further in any way. It can use any number of arguments. If you want to use a cached keyword add a <strong>#</strong> prefix before the key name.
+	 * 
+	 * @param key
+	 *     the message key, what message should we send
+	 * @param args
+	 *     additional arguments for the function call
+	 *     
+	 * @author dandielo   
+	 */
+	public String getMessage(String key, Object... args)
 	{
-		if ( !messages.containsKey(new LocaleEntry(key, localeVersion)) )
+		//check the message key
+		checkMessageKey(key);
+
+		//get the message
+		String message = messages.get(new LocaleEntry(key, localeVersion));
+
+		//for each additional argument
+		for ( int i = 0 ; i < args.length ; )
 		{
-			localeYaml.set(buildPath("messages", key), "^3Check the locale, this message is not set!");
-			messages.put(new LocaleEntry(key, localeVersion), "^3Check the locale, this message is not set!");
-			save();
-		}
-		
-		String msg = messages.get(new LocaleEntry(key, localeVersion));
-		for ( int i = 0 ; i < obj.length ; )
-		{
-			if ( obj[i] instanceof String )
+			//look for string arguments
+			if ( args[i] instanceof String )
 			{
-				if ( !keywords.containsKey(new LocaleEntry((String) obj[i+1], localeVersion)) && ((String) obj[i+1]).startsWith("#") )
-				{
-					localeYaml.set(buildPath("keywords", ((String) obj[i+1]).substring(1)), "^3Invalid keyword!");
-					keywords.put(new LocaleEntry((String) obj[i+1], localeVersion), "^3Invalid keyword!");
-					save();
-				}
-				
-				msg = msg.replaceAll("\\{" + (String) obj[i] + "\\}", keywords.get(new LocaleEntry((String) obj[i+1], localeVersion)));
+				//check if the argument might be a keyword
+				checkKeywordKey((String) args[i+1]);
+
+				//replace tags in the initial message string
+				message = message.replaceAll("\\{" + (String) args[i] + "\\}", keywords.get(new LocaleEntry((String) args[i+1], localeVersion)));
+
+				//as because this case uses more than 1 argument, steps are doubled
 				i += 2;
 			} else
+				//this cannot be a tag, look for a valid one
 				++i;
 		}
-		return msg.replace('^', '§');
+		//return the prepared message
+		return message.replace('^', '§');
 	}
 	
+	/**
+	 * Checks the given key if it's present in the cached message data.
+	 * If it's not present it saves it into the locale with the following string <strong>"^3Check the locale, this message is not set!"</strong>, and adds to the cached data.
+	 * @param key
+	 *     the key that will be checked
+	 *     
+	 * @author dandielo
+	 */
+	public void checkMessageKey(String key)
+	{
+		//it might be I've forgot to add a message to the locale, add it then with a warning string
+		if ( !messages.containsKey(new LocaleEntry(key, localeVersion)) )
+		{
+			//add to the yaml config
+			localeYaml.set(
+					buildPath("messages", key), 
+					"^3Check the locale, this message is not set!"
+					);
+			
+			//add to cached data 
+			messages.put(
+					new LocaleEntry(key, localeVersion), 
+					"^3Check the locale, this message is not set!"
+					);
+			save();
+		}
+	}
 	
-	//gets the required message
-	public List<String> lore(String key)
+	/**
+	 * Checks the given key if it's present in the cached keyword data.
+	 * If it's not present it saves it into the locale with the following string <strong>"^3Invalid keyword!"</strong>, and adds to the cached data.
+	 * @param key
+	 *     the key that will be checked
+	 *     
+	 * @author dandielo
+	 */
+	public void checkKeywordKey(String key)
+	{
+		//it might be I've forgot to add a message to the locale, add it then with a warning string
+		if ( !keywords.containsKey(new LocaleEntry(key, localeVersion)) && key.startsWith("#") )
+		{
+			//add to the yaml config
+			localeYaml.set(
+					buildPath("keywords", key.substring(1)), 
+					"^3Invalid keyword!"
+					);
+			
+			//add to cached data 
+			keywords.put(
+					new LocaleEntry(key, localeVersion), 
+					"^3Invalid keyword!"
+					);
+			save();
+		}
+	}
+	
+	/**
+	 * @param key
+	 *     the key where the lore is saved
+	 * @return
+	 *     the requested UI lore
+	 * @author dandielo
+	 */
+	public List<String> getLore(String key)
 	{
 		List<String> list = new ArrayList<String>();
 		if ( ui.containsKey(new LocaleEntry(key, localeVersion)) )
@@ -315,14 +403,27 @@ public class LocaleManager {
 		return list;
 	}
 
-	public String name(String key) {
+	/**
+	 * @param key
+	 *     the key where the name is saved
+	 * @return
+	 *     the requested UI name
+	 * @author dandielo
+	 */
+	public String getMame(String key) {
 		String name = "";
 		if ( ui.containsKey(new LocaleEntry(key, localeVersion)) )
 			name = ui.get(new LocaleEntry(key, localeVersion)).name();
 		return name.replace('^', '§');
 	}
-	
-	// helper tools
+
+	/**
+	 * Creates valid yaml paths for the given arguments using the specified path separator
+	 * @return
+	 *     valid yaml path
+	 * 
+	 * @author dandielo
+	 */
 	public static String buildPath(String... path) 
 	{
 		StringBuilder builder = new StringBuilder();
@@ -345,12 +446,23 @@ public class LocaleManager {
 		return builder.toString();
 	}
 	
-	@SuppressWarnings(value = { "all" })
+	/**
+	 * A special prepared HashMap extension, this allows to handle keyword searches in a specific way
+	 * @author dandielo
+	 *
+	 * @param <K> final type LocaleEntry
+	 * @param <V> final type String
+	 */
+	@SuppressWarnings({ "all" })
 	protected class KeywordMap<K extends LocaleEntry, V extends String> extends HashMap<K, V>
 	{
 		private static final long serialVersionUID = -3449939627787377766L;
-		
-		@SuppressWarnings("unchecked")
+
+		/**
+		 * Gets the given value for the given keyword if a <strong>#</strong> character is present at the keywords beginning, otherwise it will return the key supplied.
+		 * @param key
+		 *     given key to get value from
+		 */
 		@Override
 		public V get(Object key)
 		{			

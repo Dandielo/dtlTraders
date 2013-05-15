@@ -11,8 +11,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 /**
  * Updater class, this allows to update the locale file using locale.changes resource
- * 
- * @deprecated This updater is quite deprecated it will be exchanged with one that will update the locale from the drlTraders repo, depending on the localization
+ * <br><br>
+ * <Strong>Deprecated:</strong> This updater is quite deprecated it will be exchanged with one that will update the locale from the drlTraders repo, depending on the localization
  * @author dandielo
  */
 public class LocaleUpdater {
@@ -281,7 +281,14 @@ public class LocaleUpdater {
 		}
 	}
 	
-	// helper tools
+
+	/**
+	 * Creates valid yaml paths for the given arguments using the specified path separator
+	 * @return
+	 *     valid yaml path
+	 * 
+	 * @author dandielo
+	 */
 	public static String buildPath(String... path) 
 	{
 		StringBuilder builder = new StringBuilder();
@@ -300,7 +307,6 @@ public class LocaleUpdater {
 
 			first = false;
 		}
-
 		return builder.toString();
 	}
 
