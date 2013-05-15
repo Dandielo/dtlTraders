@@ -22,7 +22,7 @@ public class Econ {
         {
         	//economy exists, plugin enabled
         	economy = rspEcon.getProvider();
-        	DtlTraders.info("Using " + economy.getName() + " plugin");
+        	DtlTraders.info("Economy plugin: " + economy.getName());
         	enabled = true;
         } 
         else 

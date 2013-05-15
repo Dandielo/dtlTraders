@@ -38,6 +38,13 @@ public class DtlTraders extends JavaPlugin {
 		//set the plugin instance
 		instance = this;
 		
+		//init Vault
+		if ( !initVault() )
+		{
+			this.setEnabled(false);
+			this.getPluginLoader().disablePlugin(this);
+		}
+		
 		//init settings
 		TGlobalSettings.initGlobalSettings();
 		PluginSettings.initPluginSettings();
@@ -45,9 +52,6 @@ public class DtlTraders extends JavaPlugin {
 		//register traits
 		CitizensAPI.getTraitFactory().registerTrait(TraitInfo.create(TraderTrait.class).withName("trader"));
 		CitizensAPI.getTraitFactory().registerTrait(TraitInfo.create(WalletTrait.class).withName("wallet"));
-		
-		//init Vault
-		initVault();
 		
 		//registering core extensions
 		ItemData.registerCoreData();
@@ -58,7 +62,6 @@ public class DtlTraders extends JavaPlugin {
 		Trader.registerHandlers(Server.class);
 		
 		//register events
-		
 		getServer().getPluginManager().registerEvents(tNpcListener.instance(), this);
 		
 	    //init Traders
@@ -78,8 +81,14 @@ public class DtlTraders extends JavaPlugin {
 	{
 	}
 	
-	private void initVault()
+	private boolean initVault()
 	{
+		if ( getServer().getPluginManager().getPlugin("Vault") == null ) 
+		{
+			warning("Vault plugin not found! Disabling plugin");
+			return false;
+		}
+		return Econ.econ.isEnabled();
 	}
 	
 	//static methods
