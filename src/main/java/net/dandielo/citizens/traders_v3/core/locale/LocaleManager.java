@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.dandielo.citizens.traders_v3.bukkit.DtlTraders;
+import net.dandielo.citizens.traders_v3.core.PluginSettings;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
@@ -16,73 +17,73 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 public class LocaleManager {
-	// current locale version
-	public final static String pver = "1.0.6"; 
+	/** Singleton instance */
+	public final static LocaleManager locale = new LocaleManager();
+
+	/** The current locale version */
+	public final static String localeVersion = "1.1.0"; 
 	
-	// cache
-	private Map<LocaleEntry, String> cache;
+	/* cached messages, keywords and lores */
+	private Map<LocaleEntry, String> messages;
 	private Map<LocaleEntry, String> keywords;
-	private Map<LocaleEntry, ItemLocale> lores;
+	private Map<LocaleEntry, LocaleItem> ui;
+	
+	/* locale updater */
 	private LocaleUpdater updater;
 	
 	// locale file and yaml config
 	protected final static char PATH_SEPARATOR = '/';
 	
-	protected FileConfiguration locale;
-	protected File file;
+	protected FileConfiguration localeYaml;
+	protected File localeFile;
 	
 	
-	// methods	
-	public LocaleManager()
+	/** 
+	 * Manages all messages and lores that can be changed in the plugin
+	 * This class is a singleton, you can get an instance using it's public static field
+	 * 
+	 * @author dandielo
+	 */
+	private LocaleManager()
 	{
-		cache = new HashMap<LocaleEntry, String>(); 
+		updater = new LocaleUpdater(localeChangeConfiguration().getDefaults());
+		
+		messages = new HashMap<LocaleEntry, String>(); 
 		keywords = new KeywordMap<LocaleEntry, String>();
-		lores = new HashMap<LocaleEntry, ItemLocale>(); 
-		updater = new LocaleUpdater(defaultLocale().getDefaults());
+		ui = new HashMap<LocaleEntry, LocaleItem>(); 
 		
 		loadFile();
 	}
 	
+	/**
+	 * Loads the locale from file 
+	 * 
+	 * @author dandielo
+	 */
 	public void loadFile()
 	{
-		ConfigurationSection config = DtlTraders.getInstance().getConfig();
-		
-		String name = config.getString("locale.file");
-		if ( name == null ) 
-		{
-			name = "locale.en";
-			config.set("locale.file", name);
-			DtlTraders.getInstance().saveConfig();
-		}
-		
-		String path = config.getString("locale.path", "plugins/DtlCitizensTrader/locale");
-		if ( path.contains("\\") && !"\\".equals(File.separator) ) 
-		{
-			path = path.replace("\\", File.separator);
-		}
+		//get the file name and path
+		String name = "locale." + PluginSettings.getLocale();
+		String path = "plugins/dtlTraders/locale";
 		
 		File baseDirectory = new File(path);
 		if ( !baseDirectory.exists() ) 
 			baseDirectory.mkdirs();
 
-		
-		file = new File(path, name);
-		
-		if ( !file.exists() )
+		localeFile = new File(path, name);
+		if ( !localeFile.exists() )
 		{
 			try 
 			{
-				file.createNewFile();
+				localeFile.createNewFile();
 				
-				// Look for defaults in the jar
 			    InputStream stream = DtlTraders.getInstance().getResource("locale.en");
-			    
 			    if (stream != null)
 			    {
 			        YamlConfiguration yconfig = YamlConfiguration.loadConfiguration(stream);
-					locale = new YamlConfiguration();
-			        locale.setDefaults(yconfig);
-			        locale.options().copyDefaults(true);
+					localeYaml = new YamlConfiguration();
+			        localeYaml.setDefaults(yconfig);
+			        localeYaml.options().copyDefaults(true);
 			    }
 				
 			    save();
@@ -95,12 +96,19 @@ public class LocaleManager {
 		load();
 	}
 
-	public YamlConfiguration defaultLocale()
+	/** 
+	 * Loads locale changes from plugin resource, this will be used later to updated the locale
+	 * 
+	 * @return the yaml configuration that will be used to update the current locale file
+	 * @author dandielo
+	 */
+	public YamlConfiguration localeChangeConfiguration()
 	{
-		// Look for defaults in the jar
+		//Load locale changes
 	    InputStream stream = DtlTraders.getInstance().getResource("locale.changes");
 	    YamlConfiguration locale = null;
 	    
+	    //if the stream is not empty (changes are present)
 	    if (stream != null)
 	    {
 	        YamlConfiguration yconfig = YamlConfiguration.loadConfiguration(stream);
@@ -112,42 +120,59 @@ public class LocaleManager {
 	    return locale;
 	}
 	
+	/** 
+	 * Loads the configuration, caching all messages, keywords and lores. 
+	 * It also updates the locale file (depends on the configuration)
+	 * 
+	 * @author dandielo
+	 */
 	public void load()
 	{
-		load(true);
+		load(PluginSettings.autoUpdateLocale());
 	}
 	
+	/**
+	 * Loads the configuration, caching all messages, keywords and lores.
+	 * 
+	 * @param update
+	 * updates the current locale file using the LocaleUpdater 
+	 * 
+	 * @author dandielo
+	 */
 	public void load(boolean update)
 	{
-		locale = new YamlConfiguration();
-		locale.options().pathSeparator(PATH_SEPARATOR);
+		//create a new yaml configuration (old one if set going to be forgot)
+		localeYaml = new YamlConfiguration();
+		//set the separator
+		localeYaml.options().pathSeparator(PATH_SEPARATOR);
 				
 		try 
 		{
-			locale.load(file);
-			String ver = locale.getString("ver");
+			//load yaml from file
+			localeYaml.load(localeFile);
+			//get the locale version
+			String currentVersion = localeYaml.getString("ver");
 			
-			cache.clear();
-			ConfigurationSection section = locale.getConfigurationSection("messages");
-			if ( section != null )
-			for ( String key : section.getKeys(false) )
-				cache.put(new LocaleEntry(key, ver), section.getString(key));
-			
+			//clear all cached data
+			messages.clear();
 			keywords.clear();
-			section = locale.getConfigurationSection("keywords");
-			if ( section != null )
-			for ( String key : section.getKeys(false) )
-				keywords.put(new LocaleEntry("#"+key, ver), section.getString(key));
+			ui.clear();
+		
+			//load messages
+			loadMessages(currentVersion, localeYaml.getConfigurationSection("messages"));
+
+			//load keywords
+			loadKeywords(currentVersion, localeYaml.getConfigurationSection("keywords"));
+
+			//load UI configurations
+			loadUIConfigs(currentVersion, localeYaml.getConfigurationSection("ui"));
 			
-			lores.clear();
-			section = locale.getConfigurationSection("lores");
-			if ( section != null )
-			for ( String key : section.getKeys(false) )
-				lores.put(new LocaleEntry(key, ver), new ItemLocale(section.getString(buildPath(key, "name")), section.getStringList(buildPath(key, "lore"))));
-			
-			if ( ( ver == null || !ver.equals(pver) ) && update )
+			if ( ( currentVersion == null || !currentVersion.equals(localeVersion) ) && update )
 			{
-				locale = updater.update(cache, lores, keywords, file);
+				//updates the file
+				updater.update(messages, keywords, ui, localeFile);
+				
+				//after first updated cache needs to be cleared and reloaded, update it just once 
 				load(false);
 			}
 			
@@ -157,11 +182,64 @@ public class LocaleManager {
 			e.printStackTrace();
 		}
 	}
+
+	/**
+	 * Caches all messages 
+	 */
+	protected void loadMessages(String currentVersion, ConfigurationSection config)
+	{
+		//TODO add debug information (this is not normal)
+		if ( config == null ) return;
+		
+		for ( String key : config.getKeys(false) )
+			messages.put(
+					new LocaleEntry(key, currentVersion), 
+					config.getString(key)
+					);
+	}
 	
+	/**
+	 * Caches all keywords
+	 */
+	protected void loadKeywords(String currentVersion, ConfigurationSection config)
+	{
+		//TODO add debug information (this is not normal)
+		if ( config == null ) return;
+
+		for ( String key : config.getKeys(false) )
+			keywords.put(
+					new LocaleEntry("#"+key, currentVersion), 
+					config.getString(key)
+					);
+	}
+
+	/**
+	 * Caches all UI locale settings 
+	 */
+	protected void loadUIConfigs(String currentVersion, ConfigurationSection config)
+	{
+		//TODO add debug information (this is not normal)
+		if ( config == null ) return;
+
+		for ( String key : config.getKeys(false) )
+			ui.put(
+					new LocaleEntry(key, currentVersion), 
+					new LocaleItem( 
+							config.getString(buildPath(key, "name")),
+							config.getStringList(buildPath(key, "lore"))
+							)
+					);
+	}
+	
+	/**
+	 * Saves the current yaml setting to file
+	 * 
+	 *  @author dandielo
+	 */
 	public void save()
 	{
 		try {
-			locale.save(file);
+			localeYaml.save(localeFile);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -169,26 +247,26 @@ public class LocaleManager {
 	
 	public void sendMessage(CommandSender sender, String key, Object... obj)
 	{
-		if ( !cache.containsKey(new LocaleEntry(key, pver)) )
+		if ( !messages.containsKey(new LocaleEntry(key, localeVersion)) )
 		{
-			locale.set(buildPath("messages", key), "^3Check the locale, this message is not set!");
-			cache.put(new LocaleEntry(key, pver), "^3Check the locale, this message is not set!");
+			localeYaml.set(buildPath("messages", key), "^3Check the locale, this message is not set!");
+			messages.put(new LocaleEntry(key, localeVersion), "^3Check the locale, this message is not set!");
 			save();
 		}
 		
-		String msg = cache.get(new LocaleEntry(key, pver));
+		String msg = messages.get(new LocaleEntry(key, localeVersion));
 		for ( int i = 0 ; i < obj.length ; )
 		{
 			if ( obj[i] instanceof String )
 			{
-				if ( !keywords.containsKey(new LocaleEntry((String) obj[i+1], pver)) && ((String) obj[i+1]).startsWith("#") )
+				if ( !keywords.containsKey(new LocaleEntry((String) obj[i+1], localeVersion)) && ((String) obj[i+1]).startsWith("#") )
 				{
-					locale.set(buildPath("keywords", ((String) obj[i+1]).substring(1)), "^3Invalid keyword!");
-					keywords.put(new LocaleEntry((String) obj[i+1], pver), "^3Invalid keyword!");
+					localeYaml.set(buildPath("keywords", ((String) obj[i+1]).substring(1)), "^3Invalid keyword!");
+					keywords.put(new LocaleEntry((String) obj[i+1], localeVersion), "^3Invalid keyword!");
 					save();
 				}
 				
-				msg = msg.replaceAll("\\{" + (String) obj[i] + "\\}", keywords.get(new LocaleEntry((String) obj[i+1], pver)));
+				msg = msg.replaceAll("\\{" + (String) obj[i] + "\\}", keywords.get(new LocaleEntry((String) obj[i+1], localeVersion)));
 				i += 2;
 			} else
 				++i;
@@ -199,26 +277,26 @@ public class LocaleManager {
 	//gets the required message
 	public String message(String key, Object... obj)
 	{
-		if ( !cache.containsKey(new LocaleEntry(key, pver)) )
+		if ( !messages.containsKey(new LocaleEntry(key, localeVersion)) )
 		{
-			locale.set(buildPath("messages", key), "^3Check the locale, this message is not set!");
-			cache.put(new LocaleEntry(key, pver), "^3Check the locale, this message is not set!");
+			localeYaml.set(buildPath("messages", key), "^3Check the locale, this message is not set!");
+			messages.put(new LocaleEntry(key, localeVersion), "^3Check the locale, this message is not set!");
 			save();
 		}
 		
-		String msg = cache.get(new LocaleEntry(key, pver));
+		String msg = messages.get(new LocaleEntry(key, localeVersion));
 		for ( int i = 0 ; i < obj.length ; )
 		{
 			if ( obj[i] instanceof String )
 			{
-				if ( !keywords.containsKey(new LocaleEntry((String) obj[i+1], pver)) && ((String) obj[i+1]).startsWith("#") )
+				if ( !keywords.containsKey(new LocaleEntry((String) obj[i+1], localeVersion)) && ((String) obj[i+1]).startsWith("#") )
 				{
-					locale.set(buildPath("keywords", ((String) obj[i+1]).substring(1)), "^3Invalid keyword!");
-					keywords.put(new LocaleEntry((String) obj[i+1], pver), "^3Invalid keyword!");
+					localeYaml.set(buildPath("keywords", ((String) obj[i+1]).substring(1)), "^3Invalid keyword!");
+					keywords.put(new LocaleEntry((String) obj[i+1], localeVersion), "^3Invalid keyword!");
 					save();
 				}
 				
-				msg = msg.replaceAll("\\{" + (String) obj[i] + "\\}", keywords.get(new LocaleEntry((String) obj[i+1], pver)));
+				msg = msg.replaceAll("\\{" + (String) obj[i] + "\\}", keywords.get(new LocaleEntry((String) obj[i+1], localeVersion)));
 				i += 2;
 			} else
 				++i;
@@ -231,16 +309,16 @@ public class LocaleManager {
 	public List<String> lore(String key)
 	{
 		List<String> list = new ArrayList<String>();
-		if ( lores.containsKey(new LocaleEntry(key, pver)) )
-			for ( String l : lores.get(new LocaleEntry(key, pver)).lore() )
+		if ( ui.containsKey(new LocaleEntry(key, localeVersion)) )
+			for ( String l : ui.get(new LocaleEntry(key, localeVersion)).lore() )
 				list.add(l.replace('^', '§'));
 		return list;
 	}
 
 	public String name(String key) {
 		String name = "";
-		if ( lores.containsKey(new LocaleEntry(key, pver)) )
-			name = lores.get(new LocaleEntry(key, pver)).name();
+		if ( ui.containsKey(new LocaleEntry(key, localeVersion)) )
+			name = ui.get(new LocaleEntry(key, localeVersion)).name();
 		return name.replace('^', '§');
 	}
 	
@@ -267,6 +345,7 @@ public class LocaleManager {
 		return builder.toString();
 	}
 	
+	@SuppressWarnings(value = { "all" })
 	protected class KeywordMap<K extends LocaleEntry, V extends String> extends HashMap<K, V>
 	{
 		private static final long serialVersionUID = -3449939627787377766L;
