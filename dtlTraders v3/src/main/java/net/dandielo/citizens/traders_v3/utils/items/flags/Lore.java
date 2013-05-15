@@ -4,12 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import net.dandielo.citizens.traders_v3.core.exceptions.ItemDataNotFoundException;
 import net.dandielo.citizens.traders_v3.utils.items.DataNode;
 import net.dandielo.citizens.traders_v3.utils.items.ItemFlag;
 
-@DataNode(name="Lore", saveKey="lore")
+@DataNode(name="Lore", saveKey=".lore")
 public class Lore extends ItemFlag {
 
 	private List<String> lore;
@@ -38,9 +39,11 @@ public class Lore extends ItemFlag {
 		
 		//add this lore
 		lore.addAll(this.lore);
-		
-		//save the new list
-		item.getItemMeta().setLore(lore);
+
+		//save the new lore
+		ItemMeta meta = item.getItemMeta();
+		meta.setLore(lore);
+		item.setItemMeta(meta);
 	}
 	
 	public void peek(ItemStack item) throws ItemDataNotFoundException

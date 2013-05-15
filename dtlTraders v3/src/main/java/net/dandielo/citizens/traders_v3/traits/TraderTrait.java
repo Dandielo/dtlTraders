@@ -11,11 +11,12 @@ public class TraderTrait extends Trait {
 	//private tNpcManager manager = DtlTraders.tNPCManager();
 	
 	//settings
-	private Settings settings = new Settings(this.npc);
+	private Settings settings;
 	private Stock stock;
 	
-	protected TraderTrait() {
+	public TraderTrait() {
 		super("trader");
+		settings = new Settings(this.npc);
 	}
 	
 	//get settings for this Trader NPC
@@ -41,7 +42,8 @@ public class TraderTrait extends Trait {
 	@Override
 	public void onAttach()
 	{
-		
+		settings = new Settings(this.npc);
+		stock = new StockTrader(settings.getStockName(), settings.getStockSize());
 	}
 	
 	@Override

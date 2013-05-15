@@ -29,12 +29,23 @@ public abstract class Stock implements InventoryHolder {
         stock.put("buy", new ArrayList<StockItem>());
 	}
 	
+	//Stockitem operations
+	public StockItem getItem(int slot, String stock)
+	{
+		return this.stock.get(stock).get(slot);
+	}
+	
 	//inventory size
 	public final int getFinalInventorySize()
 	{
 		return size*9;
 	}
 
+	public boolean isUiSlot(int slot)
+	{
+		return slot < getFinalInventorySize() && slot >= getFinalInventorySize() - 3;
+	}
+	
 	public void load(DataKey data) {
 	}
 
@@ -43,4 +54,7 @@ public abstract class Stock implements InventoryHolder {
 
 	public abstract Inventory getInventory(Status status);
 	public abstract Inventory getManagementInventory(Status status);
+	public abstract void setInventory(Inventory inventory, Status status);
+	public abstract void setManagementInventory(Inventory inventory, Status status);
+	
 }

@@ -4,16 +4,16 @@ import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.trait.trait.Owner;
 import net.citizensnpcs.api.util.DataKey;
 
-public class Settings extends GlobalSettings {	
+public class Settings extends TGlobalSettings {	
     //the Npc associated with these settings
 	private final NPC npc;
 	private String owner;
-	private String type;
+	private String type = "server";
 	
 	//npc related settings
-	private int stockSize;
-	private String stockNameFormat;
-	private String stockDefault;
+	private int stockSize = TGlobalSettings.stockSize;
+	private String stockNameFormat = TGlobalSettings.stockNameFormat;
+	private String stockDefault = TGlobalSettings.stockDefault;
 	
 	public Settings(NPC npc) {
 		this.npc = npc;
@@ -66,9 +66,9 @@ public class Settings extends GlobalSettings {
 		type = data.getString("type");
 		
 		//load stock settings
-		stockSize = data.getInt("stock.size", GlobalSettings.stockSize);
-		stockNameFormat = data.getString("stock.format", GlobalSettings.stockNameFormat);
-		stockDefault = data.getString("stock.default", GlobalSettings.stockDefault);
+		stockSize = data.getInt("stock.size", TGlobalSettings.stockSize);
+		stockNameFormat = data.getString("stock.format", TGlobalSettings.stockNameFormat);
+		stockDefault = data.getString("stock.default", TGlobalSettings.stockDefault);
 	}
 	
 	public void save(DataKey data) {
@@ -76,11 +76,11 @@ public class Settings extends GlobalSettings {
 		data.setString("type", type);
 		
 		//save stock settings
-		if ( stockSize != GlobalSettings.stockSize )
+		if ( stockSize != TGlobalSettings.stockSize )
 			data.setInt("stock.size", stockSize);
-		if ( !stockNameFormat.equals(GlobalSettings.stockNameFormat) )
+		if ( !stockNameFormat.equals(TGlobalSettings.stockNameFormat) )
 			data.setString("stock.format", stockNameFormat);
-		if ( !stockDefault.equals(GlobalSettings.stockDefault) )
+		if ( !stockDefault.equals(TGlobalSettings.stockDefault) )
 			data.setString("stock.default", stockDefault);
 			
 	}

@@ -8,7 +8,7 @@ import net.dandielo.citizens.traders_v3.utils.items.ItemFlag;
 
 @DataNode(
 name="Multiplier", 
-saveKey = "mp", 
+saveKey = ".mp", 
 assignLore = true,
 assignStatus = {Status.MANAGE_PRICE})
 public class Multiplier extends ItemFlag {

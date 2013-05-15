@@ -1,6 +1,6 @@
 package net.dandielo.citizens.traders_v3;
 
-import net.citizensnpcs.api.event.NPCClickEvent;
+import net.citizensnpcs.api.event.NPCLeftClickEvent;
 import net.citizensnpcs.api.event.NPCRightClickEvent;
 import net.dandielo.citizens.traders_v3.bukkit.DtlTraders;
 import net.dandielo.citizens.traders_v3.core.exceptions.InvalidTraderTypeException;
@@ -16,9 +16,20 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 
 public class tNpcListener implements Listener {
-
+	private static tNpcListener instance = new tNpcListener();
+	
+	public static tNpcListener instance()
+	{
+		return instance;
+	}
+	
+	//class definition
 	tNpcManager manager = tNpcManager.instance();
 
+	public tNpcListener()
+	{
+	}
+	
 	//general events
 	@EventHandler
 	public void inventoryClickEvent(InventoryClickEvent e)
@@ -28,9 +39,9 @@ public class tNpcListener implements Listener {
 		if ( trader != null )
 		{
 			if ( trader.getStatus().inManagementMode() )
-				trader.onManageInventoryClick();
+				trader.onManageInventoryClick(e);
 			else
-			    trader.onInventoryClick();
+			    trader.onInventoryClick(e);
 		}
 	}
 	
@@ -46,7 +57,7 @@ public class tNpcListener implements Listener {
 
 	//npc events
 	@EventHandler
-	public void npcClickEvent(NPCClickEvent e)
+	public void npcClickEvent(NPCLeftClickEvent e)
 	{
 		if ( !e.getNPC().hasTrait(TraderTrait.class) ) return;
 		

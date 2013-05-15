@@ -43,9 +43,9 @@ public class StockItem {
 	{
 		load(format);
 
-		Lore lore = new Lore("lore").setLore(list);
-		if ( flags.containsKey("lore") )
-			flags.put("lore", lore);
+		Lore lore = new Lore(".lore").setLore(list);
+		if ( flags.containsKey(".lore") )
+			flags.put(".lore", lore);
 	}
 
 	public void load(String format)
@@ -59,30 +59,58 @@ public class StockItem {
 		String key = "";
 		while(matcher.find())
 		{
-			if ( !key.isEmpty() && !key.equals(matcher.group(2)) )
+			if ( matcher.group(2) != null )
 			{
 				try 
 				{
 					if ( key.startsWith(".") )
 						flags.put(key, ItemFlag.createItemFlag(key));
 					else
-						data.put(key, ItemData.createItemData(key, value));
+						data.put(key, ItemData.createItemData(key, value.trim()));
 				}
 				catch (InvalidDataNodeException e) 
 				{
 					DtlTraders.warning("Could not load item data with key: " + key + ", value: " + value);
 				}
-			}
-
-			if ( key.equals(matcher.group(2)) )
-			{
-				value += " " + matcher.group(4);
-			}
-			else
-			{
 				key = matcher.group(2);
 				value = matcher.group(3);
 			}
+			else
+			if ( matcher.group(4) != null )
+			{
+				if ( matcher.group(4).startsWith(".") )
+				{
+					try 
+					{
+						if ( key.startsWith(".") )
+							flags.put(key, ItemFlag.createItemFlag(key));
+						else
+							data.put(key, ItemData.createItemData(key, value.trim()));
+					}
+					catch (InvalidDataNodeException e) 
+					{
+						DtlTraders.warning("Could not load item data with key: " + key + ", value: " + value);
+					}
+					key = matcher.group(4);
+					value = "";
+				}
+				else if ( !matcher.group(4).isEmpty() )
+				{
+					value += " " + matcher.group(4);
+				}
+			}
+		}
+		try 
+		{
+			if ( key.startsWith(".") )
+				flags.put(key, ItemFlag.createItemFlag(key));
+			else
+				data.put(key, ItemData.createItemData(key, value.trim()));
+		}
+		catch (InvalidDataNodeException e) 
+		{
+			e.printStackTrace();
+			DtlTraders.warning("Could not load item data with key: " + key + ", value: " + value);
 		}
 	}
 
@@ -100,6 +128,12 @@ public class StockItem {
 			if ( flag.getValue() )
 				result += " " + flag.getKey();		
 		return result;
+	}
+	
+	@Override 
+	public String toString()
+	{
+		return save();
 	}
 
 	public ItemStack getItem()
@@ -134,6 +168,12 @@ public class StockItem {
 	public void addData(ItemData data)
 	{
 		this.data.put(data.getKey(), data);
+	}
+
+	//flags
+	public boolean hasFlag(String key)
+	{
+		return flags.containsKey(key);
 	}
 
 	public void addFlag(ItemFlag flag)
@@ -178,13 +218,19 @@ public class StockItem {
 		return ((Amount) data.get("a")).getAmount();
 	}
 
+	//lore
+	public List<String> getLore()
+	{
+		return ((Lore)flags.get(".lore")).getLore();
+	}
+
 	//equality checks
 	public boolean equals(StockItem item)
 	{
 		boolean equals = true;
 		for ( ItemData data : this.data.values() )
 			equals = equals ? item.data.containsValue(data) : equals;
-	    for ( ItemFlag flag : flags.values() )
+		for ( ItemFlag flag : flags.values() )
 		    equals = equals ? item.flags.containsValue(flag) : equals;
 		return equals;
 	}

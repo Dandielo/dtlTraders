@@ -36,7 +36,7 @@ public class Price extends ItemData {
 	}
 
 	@Override
-	public void assing(ItemStack flags) {
+	public void assing(ItemStack item) {
 	}
 
 	@Override

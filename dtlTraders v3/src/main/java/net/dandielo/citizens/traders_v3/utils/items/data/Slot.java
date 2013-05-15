@@ -34,7 +34,7 @@ public class Slot extends ItemData {
 	}
 
 	@Override
-	public void assing(ItemStack flags) {
+	public void assing(ItemStack item) {
 	}
 
 	@Override

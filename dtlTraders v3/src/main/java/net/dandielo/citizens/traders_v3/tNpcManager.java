@@ -52,10 +52,9 @@ public class tNpcManager {
 	//class definition
 	private tNpcManager()
 	{
-		registerTraderTypes();
 	}
 	
-	private void registerTraderTypes()
+	public static void registerTraderTypes()
 	{
 		try
 		{

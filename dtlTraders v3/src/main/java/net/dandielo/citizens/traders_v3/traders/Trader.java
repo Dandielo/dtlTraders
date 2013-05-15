@@ -1,10 +1,20 @@
 package net.dandielo.citizens.traders_v3.traders;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 
 import net.citizensnpcs.api.npc.NPC;
 import net.dandielo.citizens.traders_v3.tNpc;
+import net.dandielo.citizens.traders_v3.bukkit.DtlTraders;
+import net.dandielo.citizens.traders_v3.traders.clicks.ClickHandler;
 import net.dandielo.citizens.traders_v3.traders.setting.Settings;
 import net.dandielo.citizens.traders_v3.traders.stock.Stock;
 import net.dandielo.citizens.traders_v3.traders.wallet.Wallet;
@@ -12,6 +22,20 @@ import net.dandielo.citizens.traders_v3.traits.TraderTrait;
 import net.dandielo.citizens.traders_v3.traits.WalletTrait;
 
 public abstract class Trader implements tNpc {
+	//Click handlers
+	private static Map<Class<? extends Trader>, List<Method>> handlers = new HashMap<Class<? extends Trader>, List<Method>>();
+	
+	public static void registerHandlers(Class<? extends Trader> clazz)
+	{
+		List<Method> methods = new ArrayList<Method>();
+		for ( Method method : clazz.getMethods() )
+			if ( method.isAnnotationPresent(ClickHandler.class) )
+				methods.add(method);
+		handlers.put(clazz, methods);
+	}
+	
+	//temp data
+	private int lastSlot = -1;
 	
 	//the trader class
 	protected Settings settings;
@@ -20,14 +44,13 @@ public abstract class Trader implements tNpc {
 	protected Player player;
 	
 	protected Inventory inventory;
-	
 	protected Status status;
 	
 	//constructor
 	public Trader(TraderTrait trader, WalletTrait wallet, Player player)
 	{
-		status = getDefaultStatus();
 		settings = trader.getSettings();
+		status = getDefaultStatus();
 		stock = trader.getStock();
 		this.wallet = wallet.getWallet();
 		this.player = player;
@@ -43,20 +66,59 @@ public abstract class Trader implements tNpc {
 		return settings.getNPC().getId() == npc.getId();
 	}
 	
+	@Override
+	public void onInventoryClick(InventoryClickEvent e)
+	{ 
+		boolean top = e.getView().convertSlot(e.getRawSlot()) == e.getRawSlot();
+		
+		//get all handlers
+		List<Method> methods = handlers.get(getClass());
+		for ( Method method : methods )
+		{
+			ClickHandler handler = method.getAnnotation(ClickHandler.class);
+			
+			if ( !handler.shift() ? !e.isShiftClick() : true )
+			{
+				if ( checkStatusWith(handler.status()) && handler.inventory().equals(top) )
+				{
+					try 
+					{
+						method.invoke(this, e);
+					} 
+					catch (Exception ex) 
+					{
+						DtlTraders.severe("Error when handling click event");
+						ex.printStackTrace();
+					}
+				}
+			}
+		}
+	}
 	
 	
 	
 	
 	
+	public boolean checkStatusWith(Status[] stat)
+	{
+		for ( Status s : stat )
+			if ( s.equals(status) )
+				return true;
+		return false;
+	}
 	
+	public boolean handleClick(int slot)
+	{
+		if ( Settings.dClickEvent() )
+			return lastSlot == (lastSlot = slot); 
+		else
+			return true;
+	}
 	
-	
-	
-	
-	
-	
-	
-	
+	public boolean hitTest(int slot, String mode)
+	{
+		return Settings.getUiItems().get(mode).equals(inventory.getItem(slot));
+	}
 
 	//Trader status enum
 	public static enum Status

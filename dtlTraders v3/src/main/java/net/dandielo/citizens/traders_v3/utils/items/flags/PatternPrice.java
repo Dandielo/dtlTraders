@@ -8,7 +8,7 @@ import net.dandielo.citizens.traders_v3.utils.items.ItemFlag;
 
 @DataNode(
 name="PatternPrice", 
-saveKey = "pp", 
+saveKey = ".pp", 
 assignLore = true,
 assignStatus = {Status.MANAGE_SELL, Status.MANAGE_BUY})
 public class PatternPrice extends ItemFlag {

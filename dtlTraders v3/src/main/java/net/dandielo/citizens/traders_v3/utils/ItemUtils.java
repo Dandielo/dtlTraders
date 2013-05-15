@@ -37,7 +37,7 @@ public class ItemUtils {
 		//try to the lore
 		try 
 		{
-			Lore lore = new Lore("lore");
+			Lore lore = new Lore(".lore");
 			lore.peek(bItem);
 			sItem.addFlag(lore);
 		}

@@ -4,6 +4,12 @@ import java.util.logging.Logger;
 
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.trait.TraitInfo;
+import net.dandielo.citizens.traders_v3.tNpcListener;
+import net.dandielo.citizens.traders_v3.tNpcManager;
+import net.dandielo.citizens.traders_v3.core.PluginSettings;
+import net.dandielo.citizens.traders_v3.traders.Trader;
+import net.dandielo.citizens.traders_v3.traders.setting.TGlobalSettings;
+import net.dandielo.citizens.traders_v3.traders.types.Server;
 import net.dandielo.citizens.traders_v3.traits.TraderTrait;
 import net.dandielo.citizens.traders_v3.traits.WalletTrait;
 import net.dandielo.citizens.traders_v3.utils.items.ItemData;
@@ -32,6 +38,10 @@ public class DtlTraders extends JavaPlugin {
 		//set the plugin instance
 		instance = this;
 		
+		//init settings
+		TGlobalSettings.initGlobalSettings();
+		PluginSettings.initPluginSettings();
+		
 		//register traits
 		CitizensAPI.getTraitFactory().registerTrait(TraitInfo.create(TraderTrait.class).withName("trader"));
 		CitizensAPI.getTraitFactory().registerTrait(TraitInfo.create(WalletTrait.class).withName("wallet"));
@@ -42,6 +52,14 @@ public class DtlTraders extends JavaPlugin {
 		//registering core extensions
 		ItemData.registerCoreData();
 		ItemFlag.registerCoreFlags();
+		tNpcManager.registerTraderTypes();
+		
+		//register type handlers
+		Trader.registerHandlers(Server.class);
+		
+		//register events
+		
+		getServer().getPluginManager().registerEvents(tNpcListener.instance(), this);
 		
 	    //init Traders
 		//init Bankers
