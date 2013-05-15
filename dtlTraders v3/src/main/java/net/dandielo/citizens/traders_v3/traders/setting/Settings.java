@@ -13,7 +13,7 @@ public class Settings extends TGlobalSettings {
 	//npc related settings
 	private int stockSize = TGlobalSettings.stockSize;
 	private String stockNameFormat = TGlobalSettings.stockNameFormat;
-	private String stockDefault = TGlobalSettings.stockDefault;
+	private String stockStart = TGlobalSettings.stockStart;
 	
 	public Settings(NPC npc) {
 		this.npc = npc;
@@ -55,9 +55,14 @@ public class Settings extends TGlobalSettings {
 		return stockNameFormat.replace("{npc}", npc.getName());
 	}
 	
-	public String getStockDefault()
+	public String getStockStart()
 	{
-		return stockDefault;
+		return stockStart;
+	}
+	
+	public String getManagerStockStart()
+	{
+		return mmStockStart;
 	}
 
 	//loading and saving
@@ -68,20 +73,21 @@ public class Settings extends TGlobalSettings {
 		//load stock settings
 		stockSize = data.getInt("stock.size", TGlobalSettings.stockSize);
 		stockNameFormat = data.getString("stock.format", TGlobalSettings.stockNameFormat);
-		stockDefault = data.getString("stock.default", TGlobalSettings.stockDefault);
+		stockStart = data.getString("stock.default", TGlobalSettings.stockStart);
 	}
 	
 	public void save(DataKey data) {
 		//save trader settings
 		data.setString("type", type);
+		data.setRaw("stock", null);
 		
 		//save stock settings
 		if ( stockSize != TGlobalSettings.stockSize )
 			data.setInt("stock.size", stockSize);
 		if ( !stockNameFormat.equals(TGlobalSettings.stockNameFormat) )
 			data.setString("stock.format", stockNameFormat);
-		if ( !stockDefault.equals(TGlobalSettings.stockDefault) )
-			data.setString("stock.default", stockDefault);
+		if ( !stockStart.equals(TGlobalSettings.stockStart) )
+			data.setString("stock.default", stockStart);
 			
 	}
 

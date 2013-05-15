@@ -30,11 +30,7 @@ public abstract class Stock implements InventoryHolder {
 	}
 	
 	//Stockitem operations
-	public StockItem getItem(int slot, String stock)
-	{
-		return this.stock.get(stock).get(slot);
-	}
-	
+
 	//inventory size
 	public final int getFinalInventorySize()
 	{
@@ -52,9 +48,33 @@ public abstract class Stock implements InventoryHolder {
 	public void save(DataKey data) {
 	}
 
-	public abstract Inventory getInventory(Status status);
-	public abstract Inventory getManagementInventory(Status status);
-	public abstract void setInventory(Inventory inventory, Status status);
-	public abstract void setManagementInventory(Inventory inventory, Status status);
+	/*item operations*/
+	public StockItem getItem(int slot, String stock)
+	{
+		StockItem resultItem = null;
+		for ( StockItem stockItem : this.stock.get(stock) )
+			if ( stockItem.getSlot() == slot )
+				resultItem = stockItem;
+		return resultItem;
+	}
+	public StockItem getItem(StockItem item, String stock)
+	{
+		return this.stock.get(stock).get(this.stock.get(stock).indexOf(item));
+	}
+	/*public boolean hasItem(StockItem item, String stock)
+	{
+		return this.stock.get(stock).contains(item);
+	}*/
 	
+	/*abstract methods*/
+	public abstract Inventory getInventory(Status status);
+	public abstract Inventory getManagementInventory(Status baseStatus, Status status);
+	public abstract void setInventory(Inventory inventory, Status status);
+	public abstract void setManagementInventory(Inventory inventory, Status baseStatus, Status status);
+
+	//oposite stock
+	public static String opositeStock(String stock)
+	{
+		return stock.equals("sell") ? "buy" : "sell"; 
+	}
 }

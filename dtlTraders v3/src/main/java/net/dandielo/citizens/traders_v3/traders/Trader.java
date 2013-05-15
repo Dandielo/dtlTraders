@@ -9,6 +9,7 @@ import java.util.Map;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 
 import net.citizensnpcs.api.npc.NPC;
 import net.dandielo.citizens.traders_v3.tNpc;
@@ -16,9 +17,11 @@ import net.dandielo.citizens.traders_v3.bukkit.DtlTraders;
 import net.dandielo.citizens.traders_v3.traders.clicks.ClickHandler;
 import net.dandielo.citizens.traders_v3.traders.setting.Settings;
 import net.dandielo.citizens.traders_v3.traders.stock.Stock;
+import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
 import net.dandielo.citizens.traders_v3.traders.wallet.Wallet;
 import net.dandielo.citizens.traders_v3.traits.TraderTrait;
 import net.dandielo.citizens.traders_v3.traits.WalletTrait;
+import net.dandielo.citizens.traders_v3.utils.ItemUtils;
 
 public abstract class Trader implements tNpc {
 	//Click handlers
@@ -35,6 +38,7 @@ public abstract class Trader implements tNpc {
 	
 	//temp data
 	private int lastSlot = -1;
+	private StockItem selectedItem = null;
 	
 	//the trader class
 	protected Settings settings;
@@ -43,6 +47,7 @@ public abstract class Trader implements tNpc {
 	protected Player player;
 	
 	protected Inventory inventory;
+	protected Status baseStatus;
 	protected Status status;
 	
 	//constructor
@@ -55,15 +60,26 @@ public abstract class Trader implements tNpc {
 		this.player = player;
 	}
 	
-	//trader settings
+	//trader getters
 	public Settings getSettings()
 	{
 		return settings;
 	}
 	
-	//current trader status
-	public Status getStatus() {
+	public Status getStatus() 
+	{
 		return status;
+	}
+	
+	public void parseStatus(Status newStatus)
+	{
+	    status = newStatus;
+		baseStatus = Status.parseBaseManageStatus(baseStatus, newStatus);
+	}
+	
+	public Stock getStock()
+	{
+		return stock;
 	}
 	
 	public boolean equals(NPC npc)
@@ -71,10 +87,22 @@ public abstract class Trader implements tNpc {
 		return settings.getNPC().getId() == npc.getId();
 	}
 	
+	//inventory click handler
+	@Override
+	public void onManageInventoryClick(InventoryClickEvent e)
+	{
+		inventoryClickParser(e);
+	}
+	
 	@Override
 	public void onInventoryClick(InventoryClickEvent e)
 	{ 
-		boolean top = e.getView().convertSlot(e.getRawSlot()) == e.getRawSlot();
+		inventoryClickParser(e);
+	}
+	
+	private final void inventoryClickParser(InventoryClickEvent e)
+	{
+        boolean top = e.getView().convertSlot(e.getRawSlot()) == e.getRawSlot();
 		
 		//get all handlers
 		List<Method> methods = handlers.get(getClass());
@@ -100,10 +128,121 @@ public abstract class Trader implements tNpc {
 		}
 	}
 	
+	/** Transaction methods */
+	public boolean sellTransaction()
+	{
+		if ( wallet.withdraw(player, selectedItem.getPrice()) )
+		{
+			wallet.deposit(this, selectedItem.getPrice());
+			return true;
+		}
+		return false;
+	}
 	
+	public boolean buyTransaction()
+	{
+		if ( wallet.withdraw(this, selectedItem.getPrice()) )
+		{
+			wallet.deposit(player, selectedItem.getPrice());
+			return true;
+		}
+		return false;
+	}
+
+	/** Helper methods */
+	public void addToInventory()
+	{
+		player.getInventory().addItem(selectedItem.getItem());
+	}
 	
+	/** 
+	 * Selects the item using the slot as search key. It will search in a stock depending on the actual traders status.
+	 * The result will be stored and returned.
+	 * 
+	 * @param slot 
+	 *     Search for item at slot
+	 * @return 
+	 *     Returns the item found or null otherwise    
+	 * 
+	 * @author dandielo
+	 */
+	public StockItem selectItem(int slot)
+	{
+		return (selectedItem = stock.getItem(slot, status.asStock()));
+	}
+
+	/** 
+	 * Selects the item using a bukkit item to compare with. If a similar item is found it will be stored.
+	 * 
+	 * @param item 
+	 *     Item to compare with
+	 * @return 
+	 *     Returns the item found, or null otherwise
+	 * @author dandielo
+	 */
+	public StockItem selectItem(ItemStack item)
+	{
+		return stock.getItem(ItemUtils.createStockItem(item), status.asStock());
+	}
+
+	/** 
+	 * Selects the item using the slot as search key. It will search in a stock depending on the actual traders status.
+	 * The result will be checked true if an item was found false otherwise. The item found will be stored.
+	 * 
+	 * @param slot 
+	 *     Search for item at slot
+	 * @return 
+	 *     Returns true if the item was found, false otherwise   
+	 * @author dandielo
+	 */
+	//TODO This might be not needed
+	public boolean selectAndCheckItem(int slot)
+	{
+		return (selectedItem = stock.getItem(slot, status.asStock())) != null;
+	}
 	
+	/** 
+	 * Selects the item using a bukkit item to compare with. If a similar item is found it will be stored.
+	 * 
+	 * @param item 
+	 *     Item to compare with
+	 * @return 
+	 *     Returns true if the item was found, false otherwise   
+	 * @author dandielo
+	 */
+	//TODO This might be not needed
+	public boolean selectAndCheckItem(ItemStack item)
+	{
+		return (selectedItem = stock.getItem(ItemUtils.createStockItem(item), status.asStock())) != null;
+	}
 	
+	/** 
+	 * @return returns true if there is a item stored, false otherwise
+	 * @author dandielo 
+	 */
+	public boolean hasSelectedItem()
+	{
+		return selectedItem != null;
+	}
+	
+	/**
+	 * @return 
+	 *     Returns the stored item 
+	 * @author dandielo 
+	 */
+	public StockItem getSelectedItem()
+	{
+		return selectedItem;
+	}
+	
+	/** 
+	 * Checks if the currents trader status is present in the given array
+	 *
+	 * @param stat
+	 *     array to check
+	 *    
+	 * @author dandielo
+	 */
 	public boolean checkStatusWith(Status[] stat)
 	{
 		for ( Status s : stat )
@@ -112,6 +251,14 @@ public abstract class Trader implements tNpc {
 		return false;
 	}
 	
+	/** 
+	 * Depending on the config value, this function will check if the given slot was clicked 2 times in a row
+	 * 
+	 * @param slot
+	 *     Inventory slot to be checked
+	 *     
+	 * @author dandielo
+	 */
 	public boolean handleClick(int slot)
 	{
 		if ( Settings.dClickEvent() )
@@ -119,10 +266,20 @@ public abstract class Trader implements tNpc {
 		else
 			return true;
 	}
-	
-	public boolean hitTest(int slot, String mode)
+
+	/** 
+	 * Makes a hit-test with the slot given and a item saved in the config file (UI items)
+	 * 
+	 * @param slot
+	 *     slot to test
+	 * @param item
+	 *     the name of the item, that name is used in the config file
+	 * 
+	 * @author dandielo
+	 */
+	public boolean hitTest(int slot, String item)
 	{
-		return Settings.getUiItems().get(mode).equals(inventory.getItem(slot));
+		return Settings.getUiItems().get(item).equals(inventory.getItem(slot));
 	}
 
 	//Trader status enum
@@ -133,6 +290,11 @@ public abstract class Trader implements tNpc {
 		public boolean inManagementMode()
 		{
 			return !( this.equals(SELL) || this.equals(BUY) || this.equals(SELL_AMOUNTS) ); 
+		}
+		
+		public static Status parseBaseManageStatus(Status oldStatus, Status newStatus)
+		{
+			return newStatus.equals(MANAGE_SELL) || newStatus.equals(MANAGE_BUY) ? newStatus : oldStatus;
 		}
 		
 		public static Status baseManagementStatus(String status)
@@ -156,12 +318,12 @@ public abstract class Trader implements tNpc {
 	
 	public Status getDefaultStatus()
 	{
-		return Status.baseStatus(settings.getStockDefault());
+		return Status.baseStatus(settings.getStockStart());
 	}
 	
 	public Status getDefaultManagementStatus()
 	{
-		return Status.baseManagementStatus(settings.getStockDefault());
+		return Status.baseManagementStatus(settings.getManagerStockStart());
 	}
 	
 	

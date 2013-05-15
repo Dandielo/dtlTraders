@@ -26,7 +26,7 @@ public class StockPlayer extends Stock {
 	}
 
 	@Override
-	public Inventory getManagementInventory(Status status) {
+	public Inventory getManagementInventory(Status baseStatus, Status status) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -38,7 +38,7 @@ public class StockPlayer extends Stock {
 	}
 
 	@Override
-	public void setManagementInventory(Inventory inventory, Status status) {
+	public void setManagementInventory(Inventory inventory, Status baseStatus, Status status) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -22,14 +22,14 @@ public class Server extends Trader {
 		if ( status.inManagementMode() )
 			status = getDefaultStatus();
 		else
-			status = getDefaultManagementStatus();
+			parseStatus(getDefaultManagementStatus());
 	}
 
 	@Override
 	public void onRightClick()
 	{
 		if ( status.inManagementMode() )
-			inventory = stock.getManagementInventory(status);
+			inventory = stock.getManagementInventory(baseStatus, status);
 		else
 			inventory = stock.getInventory(status);
 		player.openInventory(inventory);
@@ -70,76 +70,78 @@ public class Server extends Trader {
 		{
 			if ( hitTest(slot, "buy") )
 			{
-				status = Status.MANAGE_BUY;
+				parseStatus(Status.MANAGE_BUY);
 			}
 			else
 			if ( hitTest(slot, "sell") )
 			{
-				status = Status.MANAGE_SELL;
+				parseStatus(Status.MANAGE_SELL);
 			}
 			else
 			if ( hitTest(slot, "back") )
 			{
-				if ( hitTest(inventory.getSize()-1, "buy") )
-				    status = Status.MANAGE_SELL;
-				else
-				    status = Status.MANAGE_BUY;
+					parseStatus(baseStatus);
 			}
 			else
 			if ( hitTest(slot, "price") )
 			{
-				status = Status.MANAGE_PRICE;
+				parseStatus(Status.MANAGE_PRICE);
 			}
 			else
 			if ( hitTest(slot, "limit") )
 			{
-				status = Status.MANAGE_LIMITS;
+				parseStatus(Status.MANAGE_LIMITS);
 			}
-			stock.setInventory(inventory, getStatus());
+			stock.setManagementInventory(inventory, baseStatus, status);
 		}
 		e.setCancelled(true);
 	}
 	
 	@ClickHandler(status = {Status.SELL}, inventory = InventoryType.TRADER)
-	public void buyItems(InventoryClickEvent e)
+	public void sellItems(InventoryClickEvent e)
 	{
 		int slot = e.getSlot();
 		if ( stock.isUiSlot(slot) ) return;
 
 		if ( e.isLeftClick() )
 		{
-			if ( stock.getItem(slot, "sell") != null )
-			if ( handleClick(e.getRawSlot()) )
+			if ( selectAndCheckItem(slot) )
 			{
-				player.sendMessage("L" + stock.getItem(slot, "sell").<Double>getData("p").toString());
-			}
-			else
-			{
-				player.sendMessage("L" + stock.getItem(slot, "sell").toString());
+				if ( handleClick(e.getRawSlot()) )
+				{
+					if ( sellTransaction() )
+						addToInventory();
+				}
+				else
+				{
+					player.sendMessage("Price: " + getSelectedItem().<Double>getData("p"));
+				}
 			}
 		}
 		else
 		{
-			if ( stock.getItem(slot, "sell") != null )
-			if ( handleClick(e.getRawSlot()) )
+			/*if ( selectAndCheckItem(slot) )
 			{
-				player.sendMessage("R" + stock.getItem(slot, "sell").<Double>getData("p").toString());
-			}
-			else
-			{
-				player.sendMessage("R" + stock.getItem(slot, "sell").toString());
-			}
+				if ( handleClick(e.getRawSlot()) )
+				{
+					player.sendMessage("R" + getSelectedItem().<Double>getData("p").toString());
+				}
+				else
+				{
+					player.sendMessage("R" + getSelectedItem().toString());
+				}
+			}*/
 		}
 		e.setCancelled(true);
 	}
 	
 	@ClickHandler(status = {Status.SELL, Status.BUY}, inventory = InventoryType.PLAYER)
-	public void sellItems(InventoryClickEvent e)
+	public void buyItems(InventoryClickEvent e)
 	{
 		int slot = e.getSlot();
 		if ( e.isLeftClick() )
 		{
-			if ( stock.getItem(slot, "sell") != null )
+		/*	if ( stock.getItem(slot, "sell") != null )
 			if ( handleClick(e.getRawSlot()) )
 			{
 				player.sendMessage("L" + stock.getItem(slot, "sell").<Double>getData("p").toString());
@@ -147,11 +149,11 @@ public class Server extends Trader {
 			else
 			{
 				player.sendMessage("L" + stock.getItem(slot, "sell").toString());
-			}
+			}*/
 		}
 		else
 		{
-			if ( stock.getItem(slot, "sell") != null )
+		/*	if ( stock.getItem(slot, "sell") != null )
 			if ( handleClick(e.getRawSlot()) )
 			{
 				player.sendMessage("R" + stock.getItem(slot, "sell").<Double>getData("p").toString());
@@ -159,7 +161,7 @@ public class Server extends Trader {
 			else
 			{
 				player.sendMessage("R" + stock.getItem(slot, "sell").toString());
-			}
+			}*/
 		}
 		e.setCancelled(true);
 	}
@@ -339,9 +341,5 @@ public class Server extends Trader {
 	{
 
 	}*/
-
-	@Override
-	public void onManageInventoryClick(InventoryClickEvent e) {
-	}
 
 }

@@ -38,15 +38,6 @@ public class StockTrader extends Stock {
 		this.stock.get(stock).remove(item);
 	}
 
-	public StockItem getItem(int slot, String stock)
-	{
-		StockItem resultItem = null;
-		for ( StockItem stockItem : this.stock.get(stock) )
-			if ( stockItem.getSlot() == slot )
-				resultItem = stockItem;
-		return resultItem;
-	}
-
 	//stock load and save
 	@Override
 	@SuppressWarnings("unchecked")
@@ -149,9 +140,9 @@ public class StockTrader extends Stock {
 	}
 
 	@Override
-	public Inventory getManagementInventory(Status status) {
+	public Inventory getManagementInventory(Status baseStatus, Status status) {
 		Inventory inventory = getInventory();
-		setManagementInventory(inventory, status);
+		setManagementInventory(inventory, baseStatus, status);
 		return inventory;
 	}
 
@@ -169,10 +160,10 @@ public class StockTrader extends Stock {
 		//	itemStack.getItemMeta().setLore(item.getDataLore(status));
 			inventory.setItem(item.getSlot(), itemStack);
 		}
-		setUi(inventory, status);
+		setUi(inventory, null, status);
 	}
 
-	public void setManagementInventory(Inventory inventory, Status status)
+	public void setManagementInventory(Inventory inventory, Status baseStatus, Status status)
 	{
 		//clear the inventory
 		inventory.clear();
@@ -186,10 +177,10 @@ public class StockTrader extends Stock {
 		//	itemStack.getItemMeta().setLore(item.getDataLore(status));
 			inventory.setItem(item.getSlot(), itemStack);
 		}
-		setUi(inventory, status);
+		setUi(inventory, baseStatus, status);
 	}
 
-	public void setUi(Inventory inventory, Status status)
+	public void setUi(Inventory inventory, Status baseStatus, Status status)
 	{
 		Map<String, ItemStack> items = TGlobalSettings.getUiItems();
 
@@ -216,13 +207,16 @@ public class StockTrader extends Stock {
 			inventory.setItem(this.getFinalInventorySize() - 3, items.get("limit"));
 			break;
 		case MANAGE_PRICE:
-			inventory.setItem(this.getFinalInventorySize() - 1, items.get("back"));
+			inventory.setItem(this.getFinalInventorySize() - 2, items.get("back"));
+			inventory.setItem(this.getFinalInventorySize() - 1, items.get(Stock.opositeStock(baseStatus.asStock())));
 			break;
 		case MANAGE_AMOUNTS:
-			inventory.setItem(this.getFinalInventorySize() - 1, items.get("back"));
+			inventory.setItem(this.getFinalInventorySize() - 2, items.get("back"));
+			inventory.setItem(this.getFinalInventorySize() - 1, items.get(Stock.opositeStock(baseStatus.asStock())));
 			break;
 		case MANAGE_LIMITS:
-			inventory.setItem(this.getFinalInventorySize() - 1, items.get("back"));
+			inventory.setItem(this.getFinalInventorySize() - 2, items.get("back"));
+			inventory.setItem(this.getFinalInventorySize() - 1, items.get(Stock.opositeStock(baseStatus.asStock())));
 		default:
 			break;
 		}

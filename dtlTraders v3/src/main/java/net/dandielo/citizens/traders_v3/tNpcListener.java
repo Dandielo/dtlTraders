@@ -35,7 +35,7 @@ public class tNpcListener implements Listener {
 	public void inventoryClickEvent(InventoryClickEvent e)
 	{
 		Trader trader = manager.getTransactionTrader((Player)e.getWhoClicked());
-		
+
 		if ( trader != null )
 		{
 			if ( trader.getStatus().inManagementMode() )
@@ -57,7 +57,7 @@ public class tNpcListener implements Listener {
 
 	//npc events
 	@EventHandler
-	public void npcClickEvent(NPCLeftClickEvent e)
+	public void npcLeftClickEvent(NPCLeftClickEvent e)
 	{
 		if ( !e.getNPC().hasTrait(TraderTrait.class) ) return;
 		

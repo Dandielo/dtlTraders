@@ -1,0 +1,83 @@
+#trader types related settings
+trader:
+  #transaction related settings
+  transaction:
+    #sets if buying and selling should be done after clicking on a item twice in a row
+    double-click: false
+    #should transactions be logged?, (not used at this moment)
+    log: false
+    #the foramt how transactions should be logged, (not used at this moment)
+    log-format: ''
+    #should transactions be loggen on the web?
+    web-log: false
+    #web account name
+    web-account: ''
+    #web account id
+    web-id: 0
+  #manager mode related settings
+  managing:
+    #the starting stock when opening a trader (buy/sell)
+    start-stock: sell
+    #item used to toggle between modes (air counts for anything)
+    item: 'air'
+    #right click toggling (instead of left click, which is default from 3.0+)
+    right-click: true
+    #special blocks used when setting prices and limits, format => 'item_id value'
+    special-blocks:
+    - dirt 0.01
+    - wooden_planks 0.1
+    - log 10
+    - cobblestone 100
+    - stone 10000
+  #stock related settings
+  stock:
+    #default starting stock (if this stock is set and not empty!, this does not apply for player traders)
+    start-stock: 'sell'
+    #default stock size in rows, min 1, max 6 (applied on creation)
+    size: 6
+    #default stock name format, how should be the traders stock named by default, {npc} tag for npc name
+    format: '{npc}''s shop'
+  #wallet related settings
+  wallet:
+    #default wallet type for traders (if set to infinite player traders will use "owner" type instead)
+    type: 'infinite'
+    #initial wallet money on creation (does not apply for player traders)
+    money: 0.0
+  #pattern related settings
+  pattern:
+    #default patterns applied to each market and server trader uppon creation (array setting)
+    defaults: []
+    #the file where patterns are saved
+    file: 'patterns.yml'
+  #book item related settings
+  books:
+    #the file where book datas are stored
+    file: 'books.yml'
+    #how should be books stored? (file/regular items)
+    store: 'file'
+  #player trader related settings
+  player:
+    #limits of player traders per player
+    limit: 1
+    #default stock size for player traders, if set overrides the stock.size setting
+    size: 2
+    #default stock name format, how should be the traders stock named by default, {npc} tag for npc name, and {player} for the traders owner
+    #if set overrides the stock.format setting
+    format: '{npc}''s shop, {player}''s company'
+  #ui related settings
+  ui:
+    #item that will "link" to sell stock
+    sell: wool:1
+    #item that will "link" to buy stock
+    buy: wool:2
+    #item that will "link" back to a basic stock
+    back: wool:14
+    #item that will "link" to price managing
+    price: wool:15
+    #item that will :link" to limit managing
+    limit: wool:3
+  #denizen support related settings
+  denizen:
+banker:
+auction:
+#planned
