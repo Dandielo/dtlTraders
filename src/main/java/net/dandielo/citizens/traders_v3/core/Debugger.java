@@ -48,20 +48,20 @@ public class Debugger {
 	{
 		if ( debugger.levelEnabled(DebugLevel.CRITICAL) )
 		{
-			debugger.sender.sendMessage(mergeArgs(ChatColor.RED, "[CRITICAL]", ChatColor.GOLD, "-----------------"));
-			debugger.sender.sendMessage(mergeArgs(ChatColor.RED, "[CRITICAL]", ChatColor.GOLD, args));
-			debugger.sender.sendMessage(mergeArgs(ChatColor.RED, "[CRITICAL]", ChatColor.GOLD, "-----------------"));
+		//	debugger.sender.sendMessage(mergeArgs(ChatColor.RED, DtlTraders.PREFIX, "[CRITICAL]", ChatColor.GOLD, "-----------------"));
+			debugger.sender.sendMessage(mergeArgs(ChatColor.RED, DtlTraders.PREFIX, "[CRITICAL]", ChatColor.GOLD, args));
+		//	debugger.sender.sendMessage(mergeArgs(ChatColor.RED, DtlTraders.PREFIX, "[CRITICAL]", ChatColor.GOLD, "-----------------"));
 		}
 	}
 
 	/**
 	 * Sends a <strong>severe</strong> message to the console
 	 */
-	public static void severe(Object... args)
+	public static void high(Object... args)
 	{
-		if ( debugger.levelEnabled(DebugLevel.SEVERE) )
+		if ( debugger.levelEnabled(DebugLevel.HIGH) )
 		{
-			debugger.sender.sendMessage(mergeArgs(ChatColor.GOLD, "[SEVERE]", ChatColor.WHITE, args));
+			debugger.sender.sendMessage(mergeArgs(ChatColor.GOLD, DtlTraders.PREFIX, "[SEVERE]", ChatColor.WHITE, args));
 		}
 	}
 
@@ -72,7 +72,7 @@ public class Debugger {
 	{
 		if ( debugger.levelEnabled(DebugLevel.NORMAL) )
 		{
-			debugger.sender.sendMessage(mergeArgs(ChatColor.YELLOW, "[NORMAL]", ChatColor.WHITE, args));
+			debugger.sender.sendMessage(mergeArgs(ChatColor.YELLOW, DtlTraders.PREFIX, "[NORMAL]", ChatColor.WHITE, args));
 		}
 	}
 
@@ -83,7 +83,7 @@ public class Debugger {
 	{
 		if ( debugger.levelEnabled(DebugLevel.LOW) )
 		{
-			debugger.sender.sendMessage(mergeArgs(ChatColor.AQUA, "[LOW]", ChatColor.WHITE, args));
+			debugger.sender.sendMessage(mergeArgs(ChatColor.AQUA, DtlTraders.PREFIX, "[LOW]", ChatColor.WHITE, args));
 		}
 	}
 
@@ -94,7 +94,7 @@ public class Debugger {
 	{
 		if ( debugger.levelEnabled(DebugLevel.INFO) )
 		{
-			debugger.sender.sendMessage(mergeArgs(ChatColor.GREEN, "[INFO]", ChatColor.WHITE, args));
+			debugger.sender.sendMessage(mergeArgs(ChatColor.GREEN, DtlTraders.PREFIX, "[INFO]", ChatColor.WHITE, args));
 		}
 	}
 	
@@ -124,7 +124,7 @@ public class Debugger {
 	 */
 	public static enum DebugLevel
 	{
-		 NONE, CRITICAL, SEVERE, NORMAL, LOW, INFO;
+		 NONE, CRITICAL, HIGH, NORMAL, LOW, INFO;
 		 
 		 boolean showCritical()
 		 {
@@ -133,7 +133,7 @@ public class Debugger {
 		 
 		 boolean showHigh()
 		 {
-			 return showNormal() || equals(SEVERE);
+			 return showNormal() || equals(HIGH);
 		 }
 		 
 		 boolean showNormal()
@@ -159,7 +159,7 @@ public class Debugger {
 				 return false;
 			 case CRITICAL:
 				 return showCritical();
-			 case SEVERE:
+			 case HIGH:
 				 return showHigh();
 			 case NORMAL:
 				 return showNormal();
