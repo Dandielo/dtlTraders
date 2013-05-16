@@ -21,6 +21,7 @@ public class ItemUtils {
 	
 	public static StockItem createStockItem(ItemStack bItem)
 	{
+		Debugger.low("Item object present: ", bItem);
 		StockItem sItem = new StockItem(bItem);
 		for ( ItemData data : ItemData.itemDataList() )
 		{

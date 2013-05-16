@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
@@ -63,7 +64,7 @@ public abstract class Trader implements tNpc {
 	public Trader(TraderTrait trader, WalletTrait wallet, Player player)
 	{
 		//debug info
-		Debugger.info("Creating a trader, for: ", player.getName());
+		Debugger.low("Creating a trader, for: ", player.getName());
 		
 		settings = trader.getSettings();
 		status = getDefaultStatus();
@@ -118,9 +119,9 @@ public abstract class Trader implements tNpc {
 	}
 	
 	private final void inventoryClickParser(InventoryClickEvent e)
-	{
+	{		
 		//debug info
-		Debugger.info("Parsing click event");
+		Debugger.low("Parsing click event");
 		
         boolean top = e.getView().convertSlot(e.getRawSlot()) == e.getRawSlot();
 		
@@ -131,21 +132,19 @@ public abstract class Trader implements tNpc {
 			ClickHandler handler = method.getAnnotation(ClickHandler.class);
 
 			//debug info
-			Debugger.info("Method: ", method.getName());
 			Debugger.info("Checking shift click requirement");
-			
 			if ( !handler.shift() ? !e.isShiftClick() : true )
 			{
+				
 				//debug info
 				Debugger.info("Checking trader status requirement");
-				
 				if ( checkStatusWith(handler.status()) && handler.inventory().equals(top) )
 				{
 					try 
 					{
-						//debug info
-						Debugger.info("Executing");
 						
+						//debug info
+						Debugger.low("Executing method: ", ChatColor.AQUA, method.getName());
 						method.invoke(this, e);
 					} 
 					catch (Exception ex) 
@@ -165,6 +164,7 @@ public abstract class Trader implements tNpc {
 				}
 			}
 		}
+		Debugger.normal("Event cancelled: ", e.isCancelled());
 	}
 	
 	/** Transaction methods */
@@ -328,7 +328,26 @@ public abstract class Trader implements tNpc {
 	
 	
 	
+	/**
+	 */
+	public void selectNewItem(ItemStack item)
+	{
+		selectedItem = item != null ? ItemUtils.createStockItem(item) : null;
+	}
 	
+	/**
+	 * 
+	 * @param item
+	 */
+	public boolean selectAndCheckNewItem(ItemStack item)
+	{
+		return (selectedItem = item != null && item.getTypeId() != 0 ? ItemUtils.createStockItem(item) : null) != null;
+	}
+	
+	public void clearSelection()
+	{
+		selectedItem = null;
+	}
 	
 	/** 
 	 * Selects the item using the slot as search key. It will search in a stock depending on the actual traders status.
@@ -361,8 +380,7 @@ public abstract class Trader implements tNpc {
 	}
 
 	/** 
-	 * Selects the item using the slot as search key. It will search in a stock depending on the actual traders status.
-	 * The result will be checked true if an item was found false otherwise. The item found will be stored.
+	 * Checks if the selected item has enough amounts declared to handle the clicked slot request
 	 * 
 	 * @param slot 
 	 *     Search for item at slot
@@ -402,7 +420,7 @@ public abstract class Trader implements tNpc {
 	//TODO This might be not needed
 	public boolean selectAndCheckItem(ItemStack item)
 	{
-		return (selectedItem = stock.getItem(ItemUtils.createStockItem(item), status.asStock())) != null;
+		return (selectedItem = item != null && item.getTypeId() != 0 ? stock.getItem(ItemUtils.createStockItem(item), status.asStock()) : null ) != null;
 	}
 	
 	/** 
@@ -474,7 +492,7 @@ public abstract class Trader implements tNpc {
 	//Trader status enum
 	public static enum Status
 	{
-		SELL, BUY, SELL_AMOUNTS, MANAGE_SELL, MANAGE_BUY, MANAGE_PRICE, MANAGE_AMOUNTS, MANAGE_LIMITS;
+		SELL, BUY, SELL_AMOUNTS, MANAGE_SELL, MANAGE_BUY, MANAGE_PRICE, MANAGE_AMOUNTS, MANAGE_LIMITS, MANAGE_UNLOCKED;
 		
 		public boolean inManagementMode()
 		{

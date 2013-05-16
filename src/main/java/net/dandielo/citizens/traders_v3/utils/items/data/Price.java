@@ -25,6 +25,16 @@ public class Price extends ItemData {
 	public Price(String key) {
 		super(key);
 	}
+	
+	public void increase(double value)
+	{
+		price += value;
+	}
+	
+	public void decrease(double value)
+	{
+		price = price -= value < 0 ? 0 : price;
+	}
 
 	@Override
 	@SuppressWarnings("unchecked")

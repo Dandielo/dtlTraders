@@ -132,6 +132,8 @@ public class TGlobalSettings extends PluginSettings {
 		uiItems.put("back", ItemUtils.createItemStack(tConfig.getString("ui.back", "wool:14")));
 		uiItems.put("price", ItemUtils.createItemStack(tConfig.getString("ui.price", "wool:15")));
 		uiItems.put("limit", ItemUtils.createItemStack(tConfig.getString("ui.limit", "wool:3")));
+		uiItems.put("lock", ItemUtils.createItemStack(tConfig.getString("ui.lock", "wool:4")));
+		uiItems.put("unlock", ItemUtils.createItemStack(tConfig.getString("ui.unlock", "wool:5")));
 		
 		//load denizen settings
 	}
@@ -152,6 +154,11 @@ public class TGlobalSettings extends PluginSettings {
 		return doubleClick;
 	}
 
+	public static double getBlockValue(ItemStack item)
+	{
+		return specialBlocks.containsKey(item) ? specialBlocks.get(item) : 1.0;
+	}
+	
 	public static Map<String, ItemStack> getUiItems()
 	{
 		return uiItems;

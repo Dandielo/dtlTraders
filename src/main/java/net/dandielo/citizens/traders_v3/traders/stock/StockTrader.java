@@ -231,19 +231,23 @@ public class StockTrader extends Stock {
 			inventory.setItem(this.getFinalInventorySize() - 1, items.get("buy"));
 			inventory.setItem(this.getFinalInventorySize() - 2, items.get("price"));
 			inventory.setItem(this.getFinalInventorySize() - 3, items.get("limit"));
+			inventory.setItem(this.getFinalInventorySize() - 4, items.get("unlock"));
 			break;
 		case MANAGE_BUY:
 			inventory.setItem(this.getFinalInventorySize() - 1, items.get("sell"));
 			inventory.setItem(this.getFinalInventorySize() - 2, items.get("price"));
 			inventory.setItem(this.getFinalInventorySize() - 3, items.get("limit"));
+			inventory.setItem(this.getFinalInventorySize() - 4, items.get("unlock"));
+			break;
+		case MANAGE_UNLOCKED:
+			inventory.setItem(this.getFinalInventorySize() - 4, items.get("lock"));
 			break;
 		case MANAGE_PRICE:
 			inventory.setItem(this.getFinalInventorySize() - 2, items.get("back"));
 			inventory.setItem(this.getFinalInventorySize() - 1, items.get(Stock.opositeStock(baseStatus.asStock())));
 			break;
 		case MANAGE_AMOUNTS:
-			inventory.setItem(this.getFinalInventorySize() - 2, items.get("back"));
-			inventory.setItem(this.getFinalInventorySize() - 1, items.get(Stock.opositeStock(baseStatus.asStock())));
+			inventory.setItem(this.getFinalInventorySize() - 1, items.get("back"));
 			break;
 		case MANAGE_LIMITS:
 			inventory.setItem(this.getFinalInventorySize() - 2, items.get("back"));

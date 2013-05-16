@@ -55,4 +55,16 @@ public class StockPlayer extends Stock {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+
+	@Override
+	public void addItem(StockItem item, String stock) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void removeItem(StockItem item, String stock) {
+		// TODO Auto-generated method stub
+		
+	}
 }

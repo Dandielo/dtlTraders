@@ -43,7 +43,12 @@ public abstract class Stock implements InventoryHolder {
 
 	public boolean isUiSlot(int slot)
 	{
-		return slot < getFinalInventorySize() && slot >= getFinalInventorySize() - 3;
+		return slot < getFinalInventorySize() && slot >= getFinalInventorySize() - 4;
+	}
+	
+	public void clearStock(String stock)
+	{
+		this.stock.get(stock).clear();
 	}
 	
 	public void load(DataKey data) {
@@ -66,6 +71,9 @@ public abstract class Stock implements InventoryHolder {
 	{
 		return this.stock.get(stock).get(this.stock.get(stock).indexOf(item));
 	}
+	
+	public abstract void addItem(StockItem item, String stock);
+	public abstract void removeItem(StockItem item, String stock);
 	/*public boolean hasItem(StockItem item, String stock)
 	{
 		return this.stock.get(stock).contains(item);

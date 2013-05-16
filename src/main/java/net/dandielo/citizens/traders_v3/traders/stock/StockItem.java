@@ -305,6 +305,18 @@ public class StockItem {
 		return ((Lore)flags.get(".lore")).getLore();
 	}
 
+	//get attributes
+	public Price priceAttr()
+	{
+		return (Price) data.get("p");
+	}
+	
+	//formated attributes
+	public String getFormatedPrice()
+	{
+		return data.containsKey("p") ? String.valueOf(((Price) data.get("p")).getPrice()) : "none";
+	}
+	
 	//equality checks
 	public boolean equals(StockItem item)
 	{
@@ -312,6 +324,11 @@ public class StockItem {
 		Debugger.info("Check items if they are equal");
 		
 		boolean equals = true;
+		//id check
+		equals = item.getItem().getTypeId() == this.item.getTypeId();
+		equals = equals && !ItemUtils.itemHasDurability(item.getItem()) ? 
+				this.item.getDurability() == item.item.getDurability() : 
+				equals;
 		for ( ItemData data : this.data.values() )
 		{
 			Debugger.info("Data: ", data.getClass().getSimpleName());
