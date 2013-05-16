@@ -121,46 +121,124 @@ public class Server extends Trader {
 		{
 			if ( selectAndCheckItem(slot) )
 			{
+				if ( getSelectedItem().hasMultipleAmounts() )
+				{
+					status = Status.SELL_AMOUNTS;
+					stock.setAmountsInventory(inventory, getSelectedItem());
+				}
+				else
 				if ( handleClick(e.getRawSlot()) )
 				{
 					if ( !inventoryHasPlace() )
 					{
 						
+						//temp
+						Debugger.low("Player has no space to buy this item");
 					}
 					else
 					if ( !sellTransaction() )
 					{
 						
+						//temp
+						Debugger.low("Player has no space to buy this item");
 					}
 					else
 					{
+						addToInventory();
+						
 						locale.sendMessage(player, "trader-transaction-success", "trader", getNPC().getName(),
 								"player", player.getName(), "action", "#bought", "item", getSelectedItem().getName(),
-								"amount", getSelectedItem().getAmount(), "price", getSelectedItem().getPrice());
+								"amount", String.valueOf(getSelectedItem().getAmount()), "price", String.valueOf(getSelectedItem().getPrice()));
 					}
 				}
 				else
 				{
 					//informations about the item some1 wants to buy
 					locale.sendMessage(player, "trader-transaction-item",
-							"item", getSelectedItem().getName(), "amount", getSelectedItem().getAmount(), 
-							"price", getSelectedItem().getPrice());
+							"item", getSelectedItem().getName(), "amount", String.valueOf(getSelectedItem().getAmount()), 
+							"price", String.valueOf(getSelectedItem().getPrice()));
 				}
 			}
 		}
 		else
 		{
-			/*if ( selectAndCheckItem(slot) )
+			if ( selectAndCheckItem(slot) )
 			{
 				if ( handleClick(e.getRawSlot()) )
 				{
-					player.sendMessage("R" + getSelectedItem().<Double>getData("p").toString());
+					if ( !inventoryHasPlace() )
+					{
+						
+						//temp
+						Debugger.low("Player has no space to buy this item");
+					}
+					else
+					if ( !sellTransaction() )
+					{
+						
+						//temp
+						Debugger.low("Player has no space to buy this item");
+					}
+					else
+					{
+						addToInventory();
+						
+						locale.sendMessage(player, "trader-transaction-success", "trader", getNPC().getName(),
+								"player", player.getName(), "action", "#bought", "item", getSelectedItem().getName(),
+								"amount", String.valueOf(getSelectedItem().getAmount()), "price", String.valueOf(getSelectedItem().getPrice()));
+					}
 				}
 				else
 				{
-					player.sendMessage("R" + getSelectedItem().toString());
+					//informations about the item some1 wants to buy
+					locale.sendMessage(player, "trader-transaction-item",
+							"item", getSelectedItem().getName(), "amount", String.valueOf(getSelectedItem().getAmount()), 
+							"price", String.valueOf(getSelectedItem().getPrice()));
 				}
-			}*/
+			}
+		}
+		e.setCancelled(true);
+	}
+	
+	@ClickHandler(status = {Status.SELL_AMOUNTS}, inventory = InventoryType.TRADER)
+	public void sellAmountsItems(InventoryClickEvent e)
+	{
+		int slot = e.getSlot();
+		if ( stock.isUiSlot(slot) ) return;
+
+		if ( checkItemAmount(slot) )
+		{
+			if ( handleClick(e.getRawSlot()) )
+			{
+				if ( !inventoryHasPlace(slot) )
+				{
+
+					//temp
+					Debugger.low("Player has no space to buy this item");
+				}
+				else
+					if ( !sellTransaction(slot) )
+					{
+
+						//temp
+						Debugger.low("Player has no space to buy this item");
+					}
+					else
+					{
+						addToInventory(slot);
+
+						locale.sendMessage(player, "trader-transaction-success", "trader", getNPC().getName(),
+								"player", player.getName(), "action", "#bought", "item", getSelectedItem().getName(),
+								"amount", String.valueOf(getSelectedItem().getAmount()), "price", String.valueOf(stock.parsePrice(getSelectedItem(), slot)));
+					}
+			}
+			else
+			{
+				//informations about the item some1 wants to buy
+				locale.sendMessage(player, "trader-transaction-item",
+						"item", getSelectedItem().getName(), "amount", String.valueOf(getSelectedItem().getAmount()), 
+						"price", String.valueOf(stock.parsePrice(getSelectedItem(), slot)));
+			}
 		}
 		e.setCancelled(true);
 	}

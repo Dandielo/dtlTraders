@@ -83,7 +83,7 @@ public class Amount extends ItemData {
 		amounts.add(item.getAmount());
 	}
 
-	public boolean equals(Amount amount)
+/*	public boolean equals(Amount amount)
 	{
 		return amount.getAmount() == getAmount();
 	}
@@ -92,5 +92,5 @@ public class Amount extends ItemData {
 	public boolean equals(Object o)
 	{
 		return o instanceof Amount ? equals((Amount)o) : false;
-	}
+	}*/
 }

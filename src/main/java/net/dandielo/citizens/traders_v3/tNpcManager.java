@@ -43,9 +43,9 @@ public class tNpcManager {
 		return transactions.get(player.getName());
 	}
 	
-	public boolean closeTransaction(Player player)
+	public void closeTransaction(Player player)
 	{
-		return transactions.containsKey(player.getName());
+		transactions.remove(player.getName());
 	}
 	//current banker registry
 	//private Map<String, Trader> traders = new HashMap<String, Trader>();

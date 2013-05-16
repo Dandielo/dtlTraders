@@ -288,6 +288,11 @@ public class StockItem {
 		return ((Amount) data.get("a")).getAmount(i);
 	}
 	
+	public List<Integer> getAmounts()
+	{
+		return ((Amount) data.get("a")).getAmounts();
+	}
+	
 	//name
 	public String getName()
 	{
@@ -303,11 +308,22 @@ public class StockItem {
 	//equality checks
 	public boolean equals(StockItem item)
 	{
+		//debug info (all)
+		Debugger.info("Check items if they are equal");
+		
 		boolean equals = true;
 		for ( ItemData data : this.data.values() )
+		{
+			Debugger.info("Data: ", data.getClass().getSimpleName());
 			equals = equals ? item.data.containsValue(data) : equals;
+			Debugger.info("Result: ", equals);
+		}
 		for ( ItemFlag flag : flags.values() )
+		{
+			Debugger.info("Flag: ", flag.getClass().getSimpleName());
 		    equals = equals ? item.flags.containsValue(flag) : equals;
+			Debugger.info("Result: ", equals);
+		}
 		return equals;
 	}
 

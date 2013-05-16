@@ -170,9 +170,14 @@ public abstract class Trader implements tNpc {
 	/** Transaction methods */
 	public boolean sellTransaction()
 	{
-		if ( wallet.withdraw(player, selectedItem.getPrice()) )
+		return sellTransaction(0);	
+	}
+	
+	public boolean sellTransaction(int slot)
+	{
+		if ( wallet.withdraw(player, stock.parsePrice(selectedItem, slot)) )
 		{
-			wallet.deposit(this, selectedItem.getPrice());
+			wallet.deposit(this, stock.parsePrice(selectedItem, slot));
 			return true;
 		}
 		return false;
@@ -180,9 +185,14 @@ public abstract class Trader implements tNpc {
 	
 	public boolean buyTransaction()
 	{
-		if ( wallet.withdraw(this, selectedItem.getPrice()) )
+		return buyTransaction(0);
+	}
+	
+	public boolean buyTransaction(int slot)
+	{
+		if ( wallet.withdraw(this, stock.parsePrice(selectedItem, slot)) )
 		{
-			wallet.deposit(player, selectedItem.getPrice());
+			wallet.deposit(player, stock.parsePrice(selectedItem, slot));
 			return true;
 		}
 		return false;
@@ -209,15 +219,36 @@ public abstract class Trader implements tNpc {
 				
 		return _inventoryHasPlace(selectedItem.getAmount(slot));
 	}
+	
 	public final boolean _inventoryHasPlace(int amount) 
 	{
-		/*PlayerInventory inventory = player.getInventory();
-		int amountToAdd = amount;
+		if ( inventory.firstEmpty() >= 0 && inventory.firstEmpty() < inventory.getSize() )
+			return true;
+		
+		//the players inventory
+		PlayerInventory inventory = player.getInventory();
+		
+		//the amount left to add to the inventory
+		int amountLeft = amount;
 		
 		//get all item stack with the same type
-		for ( ItemStack item : inventory.all(selectedItem.getItemStack().getType()).values() )
+		for ( ItemStack item : inventory.all(selectedItem.getItem().getType()).values() )
 		{
-			if ( item.getDurability() == selectedItem.getItemStack().getDurability() ) 
+			if ( selectedItem.equals(ItemUtils.createStockItem(item)) )
+			{
+				if ( item.getAmount() + amountLeft <= item.getMaxStackSize() )
+					return true;
+				
+				if ( item.getAmount() < item.getMaxStackSize() ) {
+					amountLeft = ( item.getAmount() + amountLeft ) % item.getMaxStackSize(); 
+				}
+				
+				if ( amountLeft <= 0 )
+					return true;
+			}
+		}
+		return false;
+			/*if ( item.getDurability() == selectedItem.getItemStack().getDurability() ) 
 			{
 				if ( MetaTools.getName(item).equals(selectedItem.getName()) ) 
 				{
@@ -231,15 +262,9 @@ public abstract class Trader implements tNpc {
 					if ( amountToAdd <= 0 )
 						return true;
 				}
-			}
-		}
+			}*/
 
 		//if we still ahve some items to add, is there an empty slot for them?
-		if ( inventory.firstEmpty() < inventory.getSize() 
-				&& inventory.firstEmpty() >= 0 ) {
-			return true;
-		}*/
-		return false;
 	}
 	
 	
@@ -261,57 +286,43 @@ public abstract class Trader implements tNpc {
 	private final boolean _addToInventory(int amount) 
 	{
 		PlayerInventory inventory = player.getInventory();
-		int amountToAdd = amount;
+		int amountLeft = amount;
 
 		for ( ItemStack item : inventory.all(selectedItem.getItem().getType()).values() ) 
 		{
 			if ( selectedItem.equals(ItemUtils.createStockItem(item)) )
 			{
+				//add amount to an item in the inventory, its done
+				if ( item.getAmount() + amountLeft <= item.getMaxStackSize() ) {
+					item.setAmount( item.getAmount() + amountLeft );
+					return true;
+				} 
 				
-			}
-		/*	if ( item.getDurability() == selectedItem.getItemStack().getDurability() )
-			{
-				if ( MetaTools.getName(item).equals(selectedItem.getName()) && selectedItem.equalsLores(item) && selectedItem.equalsFireworks(item) ) 
-				{
-					//add amount to an item in the inventory, its done
-					if ( item.getAmount() + amountToAdd <= selectedItem.getItemStack().getMaxStackSize() ) {
-						item.setAmount( item.getAmount() + amountToAdd );
-						setItemPriceLore(item);
-						return true;
-					} 
-					
-					//add amount to an item in the inventory, but we still got some left
-					if ( item.getAmount() < selectedItem.getItemStack().getMaxStackSize() ) {
-						amountToAdd = ( item.getAmount() + amountToAdd ) % selectedItem.getItemStack().getMaxStackSize(); 
-						item.setAmount(selectedItem.getItemStack().getMaxStackSize());
-						setItemPriceLore(item);
-					}
-						
-					//nothing left
-					if ( amountToAdd <= 0 )
-						return true;
+				//add amount to an item in the inventory, but we still got some left
+				if ( item.getAmount() < item.getMaxStackSize() ) {
+					amountLeft = ( item.getAmount() + amountLeft ) % item.getMaxStackSize(); 
+					item.setAmount(item.getMaxStackSize());
 				}
-			}*/
+					
+				//nothing left
+				if ( amountLeft <= 0 )
+					return true;
+			}
 		}
-		return false;
-	/*	
-		//create new stack
+
 		if ( inventory.firstEmpty() < inventory.getSize() 
-				&& inventory.firstEmpty() >= 0 ) {
+				&& inventory.firstEmpty() >= 0 ) 
+		{
 			
 			//new stack
-			ItemStack is = selectedItem.getItemStack().clone();
-			is.setAmount(amountToAdd);
-			
-			setItemPriceLore(is);
+			ItemStack is = selectedItem.getItem();
+			is.setAmount(amountLeft);
 			
 			//set the item info the inv
 			inventory.setItem(inventory.firstEmpty(), is);
 			return true;
 		}
-		
-		//could not be added to inventory
-		return false;*/
+		return false;
 	}
 	
 	
@@ -359,7 +370,21 @@ public abstract class Trader implements tNpc {
 	 *     Returns true if the item was found, false otherwise   
 	 * @author dandielo
 	 */
-	//TODO This might be not needed
+	public boolean checkItemAmount(int slot)
+	{
+		return selectedItem.getAmounts().size() > slot;
+	}
+	
+	/** 
+	 * Selects the item using the slot as search key. It will search in a stock depending on the actual traders status.
+	 * The result will be checked true if an item was found false otherwise. The item found will be stored.
+	 * 
+	 * @param slot 
+	 *     Search for item at slot
+	 * @return 
+	 *     Returns true if the item was found, false otherwise   
+	 * @author dandielo
+	 */
 	public boolean selectAndCheckItem(int slot)
 	{
 		return (selectedItem = stock.getItem(slot, status.asStock())) != null;

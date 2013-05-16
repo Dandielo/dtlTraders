@@ -9,6 +9,7 @@ messages:
   trader-stock-item-select: '^6Item selected'
   trader-stock-item-invalid: '^6Item is invalid'
   trader-stock-item-remove: '^6Item removed'
+  trader-transaction-item: '^6{item}, price: ^e{price}'
   trader-transaction-success: '^6You {action} ^3{amount} ^6for ^3{price}'
 #splited "trader-transaction-failed-money" into two messages, added {wallet.type} and {wallet.balance} tags
   trader-transaction-failed-player-money: '^6You dont have enough money'

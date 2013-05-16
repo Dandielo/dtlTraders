@@ -1,8 +1,10 @@
 package net.dandielo.citizens.traders_v3.core.locale;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -88,7 +90,7 @@ public class LocaleManager {
 			{
 				localeFile.createNewFile();
 				
-			    InputStream stream = DtlTraders.getInstance().getResource("locales/locale.en");
+			    InputStream stream = DtlTraders.getInstance().getResource("locales/locale.en.yml");
 			    if (stream != null)
 			    {
 			        YamlConfiguration yconfig = YamlConfiguration.loadConfiguration(stream);
@@ -310,9 +312,9 @@ public class LocaleManager {
 	 */
 	public void sendMessage(CommandSender sender, String key, Object... args)
 	{
-		//debug info
-		Debugger.info("Sending message to: ", sender.getName(), ", message key: ", key);
-		Debugger.info("With arguments: ", args);
+		//debug low
+		Debugger.low("Preparing message to: ", sender.getName(), ", message key: ", key);
+		Debugger.low("With arguments: ", args);
 		
 		//check the message key
 		checkMessageKey(key);
@@ -323,9 +325,16 @@ public class LocaleManager {
 		//for each additional argument
 		for ( int i = 0 ; i < args.length ; )
 		{
+			//debug info
+			Debugger.info("Checking ", i + 1, " message argument: ", args[i]);
+			Debugger.info("Checking ", i + 2, " message argument: ", args[i+1]);
+			
 			//look for string arguments
 			if ( args[i] instanceof String )
 			{
+				//debug info
+				Debugger.info("Valid tag");
+
 				//check if the argument might be a keyword
 				checkKeywordKey((String) args[i+1]);
 				
@@ -338,6 +347,10 @@ public class LocaleManager {
 				//this cannot be a tag, look for a valid one
 				++i;
 		}
+		
+		//debug low
+		Debugger.low("Sending message to: ", sender.getName(), ", message key: ", key);
+		
 		//send the prepared message
 		sender.sendMessage(message.replace('^', '§'));
 	}
@@ -355,8 +368,8 @@ public class LocaleManager {
 	public String getMessage(String key, Object... args)
 	{
 		//debug info
-		Debugger.info("Preparing message, key: ", key);
-		Debugger.info("With arguments: ", args);
+		Debugger.low("Preparing message, key: ", key);
+		Debugger.low("With arguments: ", args);
 		
 		//check the message key
 		checkMessageKey(key);
@@ -431,7 +444,8 @@ public class LocaleManager {
 	public void checkKeywordKey(String key)
 	{
 		//debug info
-		Debugger.info("Checking keyworkd key: ", key);
+		Debugger.info("Checking keyword key: ", key);
+		
 		
 		//it might be I've forgot to add a message to the locale, add it then with a warning string
 		if ( !keywords.containsKey(new LocaleEntry(key, localeVersion)) && key.startsWith("#") )

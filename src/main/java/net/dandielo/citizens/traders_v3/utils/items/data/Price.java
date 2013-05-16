@@ -58,8 +58,6 @@ public class Price extends ItemData {
 
 	@Override
 	public void peek(ItemStack item) throws ItemDataNotFoundException {
-		//we don't want to have this in the new item 
-		throw new ItemDataNotFoundException();
 	}
 
 }

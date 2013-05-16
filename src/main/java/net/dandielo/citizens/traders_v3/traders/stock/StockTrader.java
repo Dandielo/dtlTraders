@@ -172,6 +172,24 @@ public class StockTrader extends Stock {
 		}
 		setUi(inventory, null, status);
 	}
+	
+	public void setAmountsInventory(Inventory inventory, StockItem item)
+	{
+		//debug info
+		Debugger.info("Setting inventory, status: ", Status.SELL_AMOUNTS.name().toLowerCase());
+		
+		//clear the inventory
+		inventory.clear();
+		for ( Integer amount : item.getAmounts() )
+		{
+			//set the lore
+			ItemStack itemStack = item.getItem();
+			itemStack.setAmount(amount);
+		//	itemStack.getItemMeta().setLore(item.getDataLore(status));
+			inventory.setItem(inventory.firstEmpty(), itemStack);
+		}
+		setUi(inventory, null, Status.SELL_AMOUNTS);
+	}
 
 	public void setManagementInventory(Inventory inventory, Status baseStatus, Status status)
 	{
@@ -233,6 +251,11 @@ public class StockTrader extends Stock {
 		default:
 			break;
 		}
+	}
+
+	@Override
+	public double parsePrice(StockItem item, int slot) {
+		return item.getPrice() * item.getAmount(slot);
 	}
 
 }

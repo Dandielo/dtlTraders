@@ -29,6 +29,14 @@ trader:
   transaction:
     #sets if buying and selling should be done after clicking on a item twice in a row
     double-click: false
+
+#------------- needs to be changed
+    #Multiple amounts click logic, should amounts be displayed on demand click, or auto when clicked?
+    logic: auto
+    #click that should be used to handle the window request
+    click: right
+#-------------
+
   #manager mode related settings
   managing:
     #the starting stock when opening a trader (buy/sell)

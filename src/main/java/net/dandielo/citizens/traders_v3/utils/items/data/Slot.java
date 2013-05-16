@@ -60,15 +60,16 @@ public class Slot extends ItemData {
 	}
 	
 	//equality check
-	public boolean equals(Slot slot)
+/*	public boolean equals(Slot slot)
 	{
+		if ( slot.slot == -1 ) return true;
 		return slot.slot == this.slot;
-	}
+	}*/
 	
-	@Override
+/*	@Override
 	public boolean equals(Object o)
 	{
 		return o instanceof Slot ? equals((Slot)o) : false;
-	}
+	}*/
 	
 }

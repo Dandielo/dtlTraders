@@ -4,6 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import net.dandielo.citizens.traders_v3.bukkit.DtlTraders;
+import net.dandielo.citizens.traders_v3.core.Debugger;
 import net.dandielo.citizens.traders_v3.core.exceptions.ItemDataNotFoundException;
 import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
 import net.dandielo.citizens.traders_v3.utils.items.ItemData;
@@ -30,7 +31,10 @@ public class ItemUtils {
 			}
 			catch (ItemDataNotFoundException e)
 			{
-				DtlTraders.warning("No data found!");
+				//debug low
+				Debugger.low("Item data not found for this item");
+				Debugger.low("Exception: ", e.getClass().getSimpleName());
+				Debugger.low("data: ", data.getKey());
 			}
 		}
 
@@ -43,7 +47,9 @@ public class ItemUtils {
 		}
 		catch (ItemDataNotFoundException e)
 		{
-			DtlTraders.warning("No lore found!");
+			//debug low
+			Debugger.low("Item lore not found for this item");
+			Debugger.low("Exception: ", e.getClass().getSimpleName());
 		}
 		
 		return sItem;

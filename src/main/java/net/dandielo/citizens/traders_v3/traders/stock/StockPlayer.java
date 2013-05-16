@@ -43,4 +43,16 @@ public class StockPlayer extends Stock {
 		
 	}
 
+	@Override
+	public void setAmountsInventory(Inventory inventory, StockItem item) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/* price methods */
+	@Override
+	public double parsePrice(StockItem item, int slot) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }
