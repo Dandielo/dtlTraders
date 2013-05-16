@@ -2,7 +2,6 @@ package net.dandielo.citizens.traders_v3;
 
 import net.citizensnpcs.api.event.NPCLeftClickEvent;
 import net.citizensnpcs.api.event.NPCRightClickEvent;
-import net.dandielo.citizens.traders_v3.bukkit.DtlTraders;
 import net.dandielo.citizens.traders_v3.core.Debugger;
 import net.dandielo.citizens.traders_v3.core.exceptions.InvalidTraderTypeException;
 import net.dandielo.citizens.traders_v3.core.exceptions.TraderTypeNotFoundException;
@@ -54,6 +53,9 @@ public class tNpcListener implements Listener {
 	@EventHandler
 	public void inventoryCloseEvent(InventoryCloseEvent e)
 	{
+		Trader trader = manager.getTransactionTrader((Player) e.getPlayer());
+		if ( trader != null && !trader.getStatus().inManagementMode() )
+			manager.closeTransaction((Player) e.getPlayer());
 	}
 
 	//npc events

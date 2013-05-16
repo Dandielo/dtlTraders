@@ -10,7 +10,7 @@ import net.dandielo.citizens.traders_v3.utils.ItemUtils;
 import net.dandielo.citizens.traders_v3.utils.items.DataNode;
 import net.dandielo.citizens.traders_v3.utils.items.ItemData;
 
-@DataNode(name="Durability", saveKey="d")
+@DataNode(name="Durability", saveKey="d", byDefault = false)
 public class Durability extends ItemData
 {
 	private double durabilityPercent;

@@ -1,3 +1,4 @@
+debug: normal
 #locale settings
 locale:
   #the choosen localization to load

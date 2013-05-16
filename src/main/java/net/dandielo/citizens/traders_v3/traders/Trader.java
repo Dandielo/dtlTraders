@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 
 import net.citizensnpcs.api.npc.NPC;
 import net.dandielo.citizens.traders_v3.tNpc;
@@ -188,13 +189,135 @@ public abstract class Trader implements tNpc {
 	}
 
 	/** Helper methods */
-	public void addToInventory()
+/*	public void addToInventory()
 	{
 		//debug info
 		Debugger.info("Adding item to players inventory, player", player.getName());
 		
 		player.getInventory().addItem(selectedItem.getItem());
+	}*/
+	public final boolean inventoryHasPlace()
+	{
+		return inventoryHasPlace(0);
 	}
+	
+	public final boolean inventoryHasPlace(int slot) 
+	{
+		//debug info
+		Debugger.info("Checking players inventory space");
+		Debugger.info("Player: ", player.getName(), ", item: ", selectedItem.getItem().getType().name().toLowerCase());
+				
+		return _inventoryHasPlace(selectedItem.getAmount(slot));
+	}
+	public final boolean _inventoryHasPlace(int amount) 
+	{
+		/*PlayerInventory inventory = player.getInventory();
+		int amountToAdd = amount;
+		
+		//get all item stack with the same type
+		for ( ItemStack item : inventory.all(selectedItem.getItemStack().getType()).values() )
+		{
+			if ( item.getDurability() == selectedItem.getItemStack().getDurability() ) 
+			{
+				if ( MetaTools.getName(item).equals(selectedItem.getName()) ) 
+				{
+					if ( item.getAmount() + amountToAdd <= selectedItem.getItemStack().getMaxStackSize() )
+						return true;
+					
+					if ( item.getAmount() < 64 ) {
+						amountToAdd = ( item.getAmount() + amountToAdd ) % 64; 
+					}
+					
+					if ( amountToAdd <= 0 )
+						return true;
+				}
+			}
+		}
+
+		//if we still ahve some items to add, is there an empty slot for them?
+		if ( inventory.firstEmpty() < inventory.getSize() 
+				&& inventory.firstEmpty() >= 0 ) {
+			return true;
+		}*/
+		return false;
+	}
+	
+	
+	
+	public final boolean addToInventory() 
+	{
+		return addToInventory(0);
+	}
+	
+	public final boolean addToInventory(int slot) 
+	{
+		//debug info
+		Debugger.info("Adding item to players inventory");
+		Debugger.info("Player: ", player.getName(), ", item: ", selectedItem.getItem().getType().name().toLowerCase());
+				
+		return _addToInventory(selectedItem.getAmount(slot));
+	}
+	
+	private final boolean _addToInventory(int amount) 
+	{
+		PlayerInventory inventory = player.getInventory();
+		int amountToAdd = amount;
+
+		for ( ItemStack item : inventory.all(selectedItem.getItem().getType()).values() ) 
+		{
+			if ( selectedItem.equals(ItemUtils.createStockItem(item)) )
+			{
+				
+			}
+		/*	if ( item.getDurability() == selectedItem.getItemStack().getDurability() )
+			{
+				if ( MetaTools.getName(item).equals(selectedItem.getName()) && selectedItem.equalsLores(item) && selectedItem.equalsFireworks(item) ) 
+				{
+					//add amount to an item in the inventory, its done
+					if ( item.getAmount() + amountToAdd <= selectedItem.getItemStack().getMaxStackSize() ) {
+						item.setAmount( item.getAmount() + amountToAdd );
+						setItemPriceLore(item);
+						return true;
+					} 
+					
+					//add amount to an item in the inventory, but we still got some left
+					if ( item.getAmount() < selectedItem.getItemStack().getMaxStackSize() ) {
+						amountToAdd = ( item.getAmount() + amountToAdd ) % selectedItem.getItemStack().getMaxStackSize(); 
+						item.setAmount(selectedItem.getItemStack().getMaxStackSize());
+						setItemPriceLore(item);
+					}
+						
+					//nothing left
+					if ( amountToAdd <= 0 )
+						return true;
+				}
+			}*/
+		}
+		return false;
+	/*	
+		//create new stack
+		if ( inventory.firstEmpty() < inventory.getSize() 
+				&& inventory.firstEmpty() >= 0 ) {
+			
+			//new stack
+			ItemStack is = selectedItem.getItemStack().clone();
+			is.setAmount(amountToAdd);
+			
+			setItemPriceLore(is);
+			
+			//set the item info the inv
+			inventory.setItem(inventory.firstEmpty(), is);
+			return true;
+		}
+		
+		//could not be added to inventory
+		return false;*/
+	}
+	
+	
+	
+	
+	
 	
 	/** 
 	 * Selects the item using the slot as search key. It will search in a stock depending on the actual traders status.

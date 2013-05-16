@@ -9,7 +9,7 @@ import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
 import net.dandielo.citizens.traders_v3.utils.items.DataNode;
 import net.dandielo.citizens.traders_v3.utils.items.ItemData;
 
-@DataNode(name="Name", saveKey="n")
+@DataNode(name="Name", saveKey="n", byDefault = false)
 public class Name extends ItemData {
 
 	private String name;
@@ -19,6 +19,11 @@ public class Name extends ItemData {
 		super(key);
 	}
 
+	public String getName()
+	{
+		return name;
+	}
+	
 	@Override
 	@SuppressWarnings("unchecked")
 	public <T> T getValue(StockItem stockItem)

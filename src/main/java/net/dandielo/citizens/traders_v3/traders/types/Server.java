@@ -123,12 +123,28 @@ public class Server extends Trader {
 			{
 				if ( handleClick(e.getRawSlot()) )
 				{
-					if ( sellTransaction() )
-						addToInventory();
+					if ( !inventoryHasPlace() )
+					{
+						
+					}
+					else
+					if ( !sellTransaction() )
+					{
+						
+					}
+					else
+					{
+						locale.sendMessage(player, "trader-transaction-success", "trader", getNPC().getName(),
+								"player", player.getName(), "action", "#bought", "item", getSelectedItem().getName(),
+								"amount", getSelectedItem().getAmount(), "price", getSelectedItem().getPrice());
+					}
 				}
 				else
 				{
-					player.sendMessage("Price: " + getSelectedItem().<Double>getData("p"));
+					//informations about the item some1 wants to buy
+					locale.sendMessage(player, "trader-transaction-item",
+							"item", getSelectedItem().getName(), "amount", getSelectedItem().getAmount(), 
+							"price", getSelectedItem().getPrice());
 				}
 			}
 		}
@@ -152,7 +168,7 @@ public class Server extends Trader {
 	@ClickHandler(status = {Status.SELL, Status.BUY}, inventory = InventoryType.PLAYER)
 	public void buyItems(InventoryClickEvent e)
 	{
-		int slot = e.getSlot();
+	//	int slot = e.getSlot();
 		if ( e.isLeftClick() )
 		{
 		/*	if ( stock.getItem(slot, "sell") != null )

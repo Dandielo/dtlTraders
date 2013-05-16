@@ -11,7 +11,7 @@ import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
 import net.dandielo.citizens.traders_v3.utils.items.DataNode;
 import net.dandielo.citizens.traders_v3.utils.items.ItemData;
 
-@DataNode(name="Amount", saveKey="a")
+@DataNode(name="Amount", saveKey="a", byDefault = true)
 public class Amount extends ItemData {
 
 	List<Integer> amounts = new ArrayList<Integer>();
@@ -30,6 +30,11 @@ public class Amount extends ItemData {
 	public int getAmount()
 	{
 		return amounts.get(0);
+	}
+	
+	public int getAmount(int i)
+	{
+		return amounts.get(i);
 	}
 	
 	public void addAmount(int a)

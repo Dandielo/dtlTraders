@@ -15,6 +15,7 @@ import net.dandielo.citizens.traders_v3.utils.RegexMatcher;
 import net.dandielo.citizens.traders_v3.utils.items.ItemData;
 import net.dandielo.citizens.traders_v3.utils.items.ItemFlag;
 import net.dandielo.citizens.traders_v3.utils.items.data.Amount;
+import net.dandielo.citizens.traders_v3.utils.items.data.Name;
 import net.dandielo.citizens.traders_v3.utils.items.data.Price;
 import net.dandielo.citizens.traders_v3.utils.items.data.Slot;
 import net.dandielo.citizens.traders_v3.utils.items.flags.Lore;
@@ -32,7 +33,8 @@ public class StockItem {
 	//constructors
 	public StockItem(ItemStack item)
 	{
-		this.item = item;  
+		this.item = item;
+		ItemData.initWithDefaults(this);
 	}
 
 	public StockItem(String format)
@@ -62,6 +64,7 @@ public class StockItem {
 	{
 		String[] itemFormat = format.split(" ", 2);
 		item = ItemUtils.createItemStack(itemFormat[0]);
+		ItemData.initWithDefaults(this);
 
 		Matcher matcher = RegexMatcher.instance().getMatcher("item", itemFormat[1]);
 
@@ -231,7 +234,7 @@ public class StockItem {
 	{
 		this.data.put(data.getKey(), data);
 	}
-
+	
 	//flags
 	public boolean hasFlag(String key)
 	{
@@ -280,6 +283,17 @@ public class StockItem {
 		return ((Amount) data.get("a")).getAmount();
 	}
 
+	public int getAmount(int i)
+	{
+		return ((Amount) data.get("a")).getAmount(i);
+	}
+	
+	//name
+	public String getName()
+	{
+		return hasData("n") ? ((Name)data.get("n")).getName() : item.getType().name().toLowerCase();
+	}
+	
 	//lore
 	public List<String> getLore()
 	{

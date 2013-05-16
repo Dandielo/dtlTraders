@@ -125,6 +125,33 @@ public abstract class ItemData {
 		data.put(clazz.getAnnotation(DataNode.class), clazz);
 	}
 	
+	public final static void initWithDefaults(StockItem item)
+	{
+		//debug high
+		Debugger.low("Initializing item defaults");
+		
+		for ( Map.Entry<DataNode, Class<? extends ItemData>> entry : data.entrySet() )
+		{
+			if ( entry.getKey().byDefault() )
+			{
+				try 
+				{
+					item.addData(createItemData(item.getItem(), entry.getKey().saveKey(), null));
+				} 
+				catch (Exception e) 
+				{
+					//debug high
+					Debugger.high("While applying default data to item");
+					Debugger.high("Exception: ", e.getClass().getSimpleName());
+					
+					//debug normal
+					Debugger.normal("Exception message: ", e.getMessage());
+					Debugger.normal("Stack trace: ", e.getStackTrace());
+				}
+			}
+		}
+	}
+	
 	public final static ItemData createItemData(ItemStack item, String key, String value) throws InvalidDataNodeException, InvalidDataAssignmentException
 	{
 		DataNode nodeInfo = null;
@@ -135,7 +162,7 @@ public abstract class ItemData {
 		{
 			ItemData itemData = data.get(nodeInfo).getConstructor(String.class).newInstance(key);
 			itemData.checkItemCompatibility(item);
-			itemData.load(value);
+			if ( value != null ) itemData.load(value);
 			itemData.info = nodeInfo;
 			return itemData;
 		} 

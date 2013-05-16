@@ -11,7 +11,8 @@ import net.dandielo.citizens.traders_v3.utils.items.ItemData;
 
 @DataNode(
 name="Price", 
-saveKey = "p", 
+saveKey = "p",
+byDefault = false,
 assignLore = true,
 assignStatus = {Status.BUY, Status.SELL, Status.SELL_AMOUNTS, Status.MANAGE_PRICE})
 public class Price extends ItemData {

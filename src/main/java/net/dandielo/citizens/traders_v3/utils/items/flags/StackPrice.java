@@ -9,6 +9,7 @@ import net.dandielo.citizens.traders_v3.utils.items.ItemFlag;
 @DataNode( 
 name="StackPrice", 
 saveKey = ".sp", 
+byDefault = false,
 assignLore = true,
 assignStatus = {Status.MANAGE_SELL, Status.MANAGE_BUY})
 public class StackPrice extends ItemFlag {
