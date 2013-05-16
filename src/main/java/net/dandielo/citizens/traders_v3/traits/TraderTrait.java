@@ -57,7 +57,7 @@ public class TraderTrait extends Trait {
 		settings.load(data);
 		
 		//create and load the stock
-		stock = new StockTrader(settings.getStockName(), settings.getStockSize());
+		//stock = new StockTrader(settings.getStockName(), settings.getStockSize());
 		stock.load(data);
 	}
 

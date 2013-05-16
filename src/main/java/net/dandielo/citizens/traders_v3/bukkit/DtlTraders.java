@@ -21,7 +21,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class DtlTraders extends JavaPlugin {
 	//console prefix
-	public static final String PREFIX = ChatColor.DARK_GREEN + "[dtlTraders]" + ChatColor.WHITE; 
+	public static final String PREFIX = "[dtlTraders]" + ChatColor.WHITE; 
 	
 	//bukkit resources
 	private static Logger logger = Logger.getLogger("Minecraft");
@@ -34,15 +34,19 @@ public class DtlTraders extends JavaPlugin {
 	@Override
 	public void onLoad()
 	{
-		Debugger.info("Loading plugin");
 	}
 	
 	@Override
 	public void onEnable()
 	{
-		Debugger.info("Enabling plugin");
 		//set the plugin instance
 		instance = this;
+		
+		//init plugin settings
+		saveDefaultConfig();
+		PluginSettings.initPluginSettings();
+		
+		Debugger.info("Enabling plugin");
 		
 		//init Vault
 		if ( !initVault() )
@@ -51,10 +55,7 @@ public class DtlTraders extends JavaPlugin {
 			this.getPluginLoader().disablePlugin(this);
 		}
 		
-		//init settings
-		saveDefaultConfig();
-
-		PluginSettings.initPluginSettings();
+		//init global settings
 		TGlobalSettings.initGlobalSettings();
 		
 		//register traits

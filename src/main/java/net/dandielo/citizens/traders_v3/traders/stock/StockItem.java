@@ -36,13 +36,18 @@ public class StockItem {
 
 	public StockItem(String format)
 	{
+		//debug info
+		Debugger.info("Creating stock item");
+		Debugger.info(format);
+		
 		load(format);
 	}
 
 	public StockItem(String format, List<String> list)
 	{
 		//debug info
-		Debugger.info("Creating stock item with format: ", format);
+		Debugger.info("Creating stock item");
+		Debugger.info(format);
 		
 		//load
 		load(format);

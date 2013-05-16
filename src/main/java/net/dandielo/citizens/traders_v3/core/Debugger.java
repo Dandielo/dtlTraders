@@ -1,5 +1,7 @@
 package net.dandielo.citizens.traders_v3.core;
 
+import java.lang.reflect.Array;
+
 import net.dandielo.citizens.traders_v3.bukkit.DtlTraders;
 
 import org.bukkit.ChatColor;
@@ -48,9 +50,13 @@ public class Debugger {
 	{
 		if ( debugger.levelEnabled(DebugLevel.CRITICAL) )
 		{
-		//	debugger.sender.sendMessage(mergeArgs(ChatColor.RED, DtlTraders.PREFIX, "[CRITICAL]", ChatColor.GOLD, "-----------------"));
-			debugger.sender.sendMessage(mergeArgs(ChatColor.RED, DtlTraders.PREFIX, "[CRITICAL]", ChatColor.GOLD, args));
-		//	debugger.sender.sendMessage(mergeArgs(ChatColor.RED, DtlTraders.PREFIX, "[CRITICAL]", ChatColor.GOLD, "-----------------"));
+			StringBuilder builder = new StringBuilder();
+			for ( Object arg : args )
+			{
+				builder.append(arg);
+			}
+			
+			debugger.sender.sendMessage(mergeArgs(DtlTraders.PREFIX, ChatColor.RED, "[CRITICAL] ", ChatColor.RESET, ChatColor.GOLD, builder.toString()));
 		}
 	}
 
@@ -61,7 +67,13 @@ public class Debugger {
 	{
 		if ( debugger.levelEnabled(DebugLevel.HIGH) )
 		{
-			debugger.sender.sendMessage(mergeArgs(ChatColor.GOLD, DtlTraders.PREFIX, "[SEVERE]", ChatColor.WHITE, args));
+			StringBuilder builder = new StringBuilder();
+			for ( Object arg : args )
+			{
+				builder.append(arg);
+			}
+			
+			debugger.sender.sendMessage(mergeArgs(DtlTraders.PREFIX, ChatColor.GOLD, ChatColor.BOLD, "[SEVERE] ", ChatColor.RESET, builder.toString()));
 		}
 	}
 
@@ -72,7 +84,13 @@ public class Debugger {
 	{
 		if ( debugger.levelEnabled(DebugLevel.NORMAL) )
 		{
-			debugger.sender.sendMessage(mergeArgs(ChatColor.YELLOW, DtlTraders.PREFIX, "[NORMAL]", ChatColor.WHITE, args));
+			StringBuilder builder = new StringBuilder();
+			for ( Object arg : args )
+			{
+				builder.append(arg);
+			}
+			
+			debugger.sender.sendMessage(mergeArgs(DtlTraders.PREFIX, ChatColor.YELLOW, "[NORMAL] ", ChatColor.RESET, builder.toString()));
 		}
 	}
 
@@ -83,7 +101,13 @@ public class Debugger {
 	{
 		if ( debugger.levelEnabled(DebugLevel.LOW) )
 		{
-			debugger.sender.sendMessage(mergeArgs(ChatColor.AQUA, DtlTraders.PREFIX, "[LOW]", ChatColor.WHITE, args));
+			StringBuilder builder = new StringBuilder();
+			for ( Object arg : args )
+			{
+				builder.append(arg);
+			}
+			
+			debugger.sender.sendMessage(mergeArgs(DtlTraders.PREFIX, ChatColor.AQUA, "[LOW] ", ChatColor.RESET, builder.toString()));
 		}
 	}
 
@@ -94,7 +118,13 @@ public class Debugger {
 	{
 		if ( debugger.levelEnabled(DebugLevel.INFO) )
 		{
-			debugger.sender.sendMessage(mergeArgs(ChatColor.GREEN, DtlTraders.PREFIX, "[INFO]", ChatColor.WHITE, args));
+			StringBuilder builder = new StringBuilder();
+			for ( Object arg : args )
+			{
+				builder.append(arg);
+			}
+			
+			debugger.sender.sendMessage(mergeArgs(DtlTraders.PREFIX, ChatColor.GREEN, "[INFO] ", ChatColor.RESET, builder.toString()));
 		}
 	}
 	
@@ -106,14 +136,13 @@ public class Debugger {
 	 *     merged string
 	 * @author dandielo
 	 */
+	@SuppressWarnings("rawtypes")
 	private static String mergeArgs(Object... args)
 	{
 		StringBuilder builder = new StringBuilder();
 		for ( Object arg : args )
 		{
 			builder.append(arg);
-			if ( !arg.equals(args[args.length-1]) )
-			    builder.append(" ");
 		}
 		return builder.toString();
 	}
