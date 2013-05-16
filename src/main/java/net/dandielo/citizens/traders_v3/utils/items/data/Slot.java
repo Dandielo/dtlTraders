@@ -2,6 +2,7 @@ package net.dandielo.citizens.traders_v3.utils.items.data;
 
 import org.bukkit.inventory.ItemStack;
 
+import net.dandielo.citizens.traders_v3.core.exceptions.InvalidDataAssignmentException;
 import net.dandielo.citizens.traders_v3.core.exceptions.ItemDataNotFoundException;
 import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
 import net.dandielo.citizens.traders_v3.utils.items.DataNode;
@@ -38,6 +39,11 @@ public class Slot extends ItemData {
 	}
 
 	@Override
+	public void checkItemCompatibility(ItemStack item)
+			throws InvalidDataAssignmentException {
+	}
+
+	@Override
 	public void load(String value) {
 		slot = Integer.parseInt(value);
 	}
@@ -62,7 +68,7 @@ public class Slot extends ItemData {
 	@Override
 	public boolean equals(Object o)
 	{
-		return equals((Slot)o);
+		return o instanceof Slot ? equals((Slot)o) : false;
 	}
 	
 }

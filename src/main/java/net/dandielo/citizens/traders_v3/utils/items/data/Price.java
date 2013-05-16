@@ -2,6 +2,7 @@ package net.dandielo.citizens.traders_v3.utils.items.data;
 
 import org.bukkit.inventory.ItemStack;
 
+import net.dandielo.citizens.traders_v3.core.exceptions.InvalidDataAssignmentException;
 import net.dandielo.citizens.traders_v3.core.exceptions.ItemDataNotFoundException;
 import net.dandielo.citizens.traders_v3.traders.Trader.Status;
 import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
@@ -37,6 +38,11 @@ public class Price extends ItemData {
 
 	@Override
 	public void assing(ItemStack item) {
+	}
+
+	@Override
+	public void checkItemCompatibility(ItemStack item)
+			throws InvalidDataAssignmentException {
 	}
 
 	@Override

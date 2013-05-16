@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 
 import net.dandielo.citizens.traders_v3.core.Debugger;
+import net.dandielo.citizens.traders_v3.core.exceptions.InvalidDataAssignmentException;
 import net.dandielo.citizens.traders_v3.core.exceptions.InvalidDataNodeException;
 import net.dandielo.citizens.traders_v3.traders.Trader.Status;
 import net.dandielo.citizens.traders_v3.utils.ItemUtils;
@@ -75,18 +76,28 @@ public class StockItem {
 					if ( key.startsWith(".") )
 						flags.put(key, ItemFlag.createItemFlag(key));
 					else if ( !key.isEmpty() )
-						data.put(key, ItemData.createItemData(key, value.trim()));
+						data.put(key, ItemData.createItemData(item, key, value.trim()));
 				}
 				catch (InvalidDataNodeException e) 
 				{
 					//debug high
 					Debugger.high("While loading a StockItem, a exception occured");
-					//TODO DataNode information
 					Debugger.high("Exception: ", e.getClass().getSimpleName());
 					
 					//debug normal
 					Debugger.normal("Exception message: ", e.getMessage());
 					Debugger.normal("StackTrace: ", e.getStackTrace());
+				}
+				catch (InvalidDataAssignmentException e) 
+				{
+					//debug normal
+					Debugger.normal("This data cannot be assigned to this item");
+					Debugger.normal("Key: ", key, ", value: ", value, ", item: ", item.getType().name().toLowerCase());
+					Debugger.normal("Exception: ", e.getClass().getSimpleName());
+					
+					//debug low
+					Debugger.low("Exception message: ", e.getMessage());
+					Debugger.low("StackTrace: ", e.getStackTrace());
 				}
 				key = matcher.group(2);
 				value = matcher.group(3);
@@ -101,18 +112,28 @@ public class StockItem {
 						if ( key.startsWith(".") )
 							flags.put(key, ItemFlag.createItemFlag(key));
 						else if ( !key.isEmpty() )
-							data.put(key, ItemData.createItemData(key, value.trim()));
+							data.put(key, ItemData.createItemData(item, key, value.trim()));
 					}
 					catch (InvalidDataNodeException e) 
 					{
 						//debug high
 						Debugger.high("While loading a StockItem, a exception occured");
-						//TODO DataNode information
 						Debugger.high("Exception: ", e.getClass().getSimpleName());
 						
 						//debug normal
 						Debugger.normal("Exception message: ", e.getMessage());
 						Debugger.normal("StackTrace: ", e.getStackTrace());
+					}
+					catch (InvalidDataAssignmentException e) 
+					{
+						//debug normal
+						Debugger.normal("This data cannot be assigned to this item");
+						Debugger.normal("Key: ", key, ", value: ", value, ", item: ", item.getType().name().toLowerCase());
+						Debugger.normal("Exception: ", e.getClass().getSimpleName());
+						
+						//debug low
+						Debugger.low("Exception message: ", e.getMessage());
+						Debugger.low("StackTrace: ", e.getStackTrace());
 					}
 					key = matcher.group(4);
 					value = "";
@@ -128,18 +149,28 @@ public class StockItem {
 			if ( key.startsWith(".") )
 				flags.put(key, ItemFlag.createItemFlag(key));
 			else if ( !key.isEmpty() )
-				data.put(key, ItemData.createItemData(key, value.trim()));
+				data.put(key, ItemData.createItemData(item, key, value.trim()));
 		}
 		catch (InvalidDataNodeException e) 
 		{
 			//debug high
 			Debugger.high("While loading a StockItem, a exception occured");
-			//TODO DataNode information
 			Debugger.high("Exception: ", e.getClass().getSimpleName());
 			
 			//debug normal
 			Debugger.normal("Exception message: ", e.getMessage());
 			Debugger.normal("StackTrace: ", e.getStackTrace());
+		} 
+		catch (InvalidDataAssignmentException e) 
+		{
+			//debug normal
+			Debugger.normal("This data cannot be assigned to this item");
+			Debugger.normal("Key: ", key, ", value: ", value, ", item: ", item.getType().name().toLowerCase());
+			Debugger.normal("Exception: ", e.getClass().getSimpleName());
+			
+			//debug low
+			Debugger.low("Exception message: ", e.getMessage());
+			Debugger.low("StackTrace: ", e.getStackTrace());
 		}
 	}
 

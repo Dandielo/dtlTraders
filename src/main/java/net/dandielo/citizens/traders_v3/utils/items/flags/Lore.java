@@ -61,6 +61,8 @@ public class Lore extends ItemFlag {
 	@Override
 	public boolean equals(Object o)
 	{
+		if ( !(o instanceof Lore) ) return false;
+		
 		Lore lore = (Lore) o;
 		if ( !(lore.lore == null && this.lore == null) && !(lore.lore != null && this.lore != null) ) return false;
 		if ( lore.lore.size() != this.lore.size() ) return false;

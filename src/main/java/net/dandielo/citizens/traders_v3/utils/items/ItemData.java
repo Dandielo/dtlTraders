@@ -5,22 +5,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.dandielo.citizens.traders_v3.bukkit.DtlTraders;
 import net.dandielo.citizens.traders_v3.core.Debugger;
+import net.dandielo.citizens.traders_v3.core.exceptions.InvalidDataAssignmentException;
 import net.dandielo.citizens.traders_v3.core.exceptions.InvalidDataNodeException;
 import net.dandielo.citizens.traders_v3.core.exceptions.ItemDataNotFoundException;
 import net.dandielo.citizens.traders_v3.traders.Trader.Status;
 import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
 import net.dandielo.citizens.traders_v3.utils.items.data.Amount;
-import net.dandielo.citizens.traders_v3.utils.items.data.Book;
-import net.dandielo.citizens.traders_v3.utils.items.data.Color;
-import net.dandielo.citizens.traders_v3.utils.items.data.Enchant;
-import net.dandielo.citizens.traders_v3.utils.items.data.Firework;
-import net.dandielo.citizens.traders_v3.utils.items.data.Multiplier;
+import net.dandielo.citizens.traders_v3.utils.items.data.Durability;
 import net.dandielo.citizens.traders_v3.utils.items.data.Name;
 import net.dandielo.citizens.traders_v3.utils.items.data.Price;
 import net.dandielo.citizens.traders_v3.utils.items.data.Slot;
-import net.dandielo.citizens.traders_v3.utils.items.data.StoredEnchant;
 
 import org.bukkit.inventory.ItemStack;
 
@@ -64,6 +59,10 @@ public abstract class ItemData {
 	public abstract void load(String value);
 	public abstract String save();
 	
+	public abstract void checkItemCompatibility(ItemStack item) throws InvalidDataAssignmentException;
+	{
+	}
+	
 	public final String saveString()
 	{
 		return toString();
@@ -84,7 +83,7 @@ public abstract class ItemData {
 	public String getKey() {
 		return key;
 	}
-	
+		
 	@Override
 	public boolean equals(Object o)
 	{
@@ -126,7 +125,7 @@ public abstract class ItemData {
 		data.put(clazz.getAnnotation(DataNode.class), clazz);
 	}
 	
-	public final static ItemData createItemData(String key, String value) throws InvalidDataNodeException
+	public final static ItemData createItemData(ItemStack item, String key, String value) throws InvalidDataNodeException, InvalidDataAssignmentException
 	{
 		DataNode nodeInfo = null;
 		for ( DataNode info : data.keySet() )
@@ -135,6 +134,7 @@ public abstract class ItemData {
 		try 
 		{
 			ItemData itemData = data.get(nodeInfo).getConstructor(String.class).newInstance(key);
+			itemData.checkItemCompatibility(item);
 			itemData.load(value);
 			itemData.info = nodeInfo;
 			return itemData;
@@ -148,6 +148,9 @@ public abstract class ItemData {
 			//debug normal
 			Debugger.normal("Exception message: ", e.getMessage());
 			Debugger.normal("Stack trace: ", e.getStackTrace());
+			
+			if ( e instanceof InvalidDataAssignmentException )
+			    throw new InvalidDataAssignmentException();
 			throw new InvalidDataNodeException();
 		}
 	}
@@ -161,6 +164,7 @@ public abstract class ItemData {
 		try
 		{
 			registerData(Amount.class);
+			registerData(Durability.class);
 		//	registerData(Book.class);
 		//	registerData(Color.class);
 		//	registerData(Enchant.class);

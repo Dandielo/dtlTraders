@@ -3,6 +3,7 @@ package net.dandielo.citizens.traders_v3.utils.items.data;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import net.dandielo.citizens.traders_v3.core.exceptions.InvalidDataAssignmentException;
 import net.dandielo.citizens.traders_v3.core.exceptions.ItemDataNotFoundException;
 import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
 import net.dandielo.citizens.traders_v3.utils.items.DataNode;
@@ -45,6 +46,11 @@ public class Name extends ItemData {
 	}
 
 	@Override
+	public void checkItemCompatibility(ItemStack item)
+			throws InvalidDataAssignmentException {
+	}
+
+	@Override
 	public void load(String value)
 	{
 		name = value;
@@ -64,7 +70,7 @@ public class Name extends ItemData {
 	@Override
 	public boolean equals(Object o)
 	{
-		return equals((Name)o);
+		return o instanceof Name ? equals((Name)o) : false;
 	}
 
 }

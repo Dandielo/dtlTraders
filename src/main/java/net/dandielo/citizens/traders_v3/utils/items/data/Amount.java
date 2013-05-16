@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.bukkit.inventory.ItemStack;
 
+import net.dandielo.citizens.traders_v3.core.exceptions.InvalidDataAssignmentException;
 import net.dandielo.citizens.traders_v3.core.exceptions.ItemDataNotFoundException;
 import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
 import net.dandielo.citizens.traders_v3.utils.items.DataNode;
@@ -52,6 +53,11 @@ public class Amount extends ItemData {
 	}
 
 	@Override
+	public void checkItemCompatibility(ItemStack item)
+			throws InvalidDataAssignmentException {
+	}
+
+	@Override
 	public void load(String value) {
 		amounts.clear();
 		for ( String amout : value.split(",") )
@@ -80,6 +86,6 @@ public class Amount extends ItemData {
 	@Override
 	public boolean equals(Object o)
 	{
-		return equals((Amount)o);
+		return o instanceof Amount ? equals((Amount)o) : false;
 	}
 }
