@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.dandielo.citizens.traders_v3.bukkit.DtlTraders;
+import net.dandielo.citizens.traders_v3.core.Debugger;
 import net.dandielo.citizens.traders_v3.core.exceptions.InvalidDataNodeException;
 import net.dandielo.citizens.traders_v3.core.exceptions.ItemDataNotFoundException;
 import net.dandielo.citizens.traders_v3.traders.Trader.Status;
@@ -41,6 +42,7 @@ public abstract class ItemData {
 	
 	public final void lore(Status status, List<String> lore) 
 	{
+		
 		//no lore assignment 
 		if ( !info.assignLore() ) return;
 		
@@ -51,6 +53,9 @@ public abstract class ItemData {
 		
 		//wrong status = see ya 
 		if ( !assign ) return;
+		
+		//debug info
+		Debugger.info("Assigning temporary lore, data: ", info.name());
 		
 		//call the method that can be override
 		assignDataLore(status, lore);
@@ -101,7 +106,13 @@ public abstract class ItemData {
 			} 
 			catch (Exception e)
 			{
-				DtlTraders.warning("Item data could not be read, invalid data set!");
+				//debug high
+				Debugger.high("Item data could not be read, invalid data set!");
+				Debugger.high("Exception: ", e.getClass().getSimpleName());
+				
+				//debug normal
+				Debugger.normal("Exception message: ", e.getMessage());
+				Debugger.normal("Stack trace: ", e.getStackTrace());
 			}
 		}
 		return result;
@@ -130,7 +141,13 @@ public abstract class ItemData {
 		} 
 		catch (Exception e) 
 		{
-			DtlTraders.warning("Item data could not be read, invalid data set! Key: " + key + ", value: " + value);
+			//debug high
+			Debugger.high("Item data could not be read, invalid data set! Key: " + key + ", value: " + value);
+			Debugger.high("Exception: ", e.getClass().getSimpleName());
+			
+			//debug normal
+			Debugger.normal("Exception message: ", e.getMessage());
+			Debugger.normal("Stack trace: ", e.getStackTrace());
 			throw new InvalidDataNodeException();
 		}
 	}
@@ -138,6 +155,9 @@ public abstract class ItemData {
 	//register core item data
 	public static void registerCoreData()
 	{
+		//debug info
+		Debugger.info("Registering item datas");
+		
 		try
 		{
 			registerData(Amount.class);
@@ -153,8 +173,13 @@ public abstract class ItemData {
 		}
 		catch (InvalidDataNodeException e) 
 		{
-			DtlTraders.severe("Core item data values are bugged!");
-			e.printStackTrace();
+			//debug critical
+			Debugger.critical("Core item data classes bugged");
+			Debugger.critical("Exception: ", e.getClass().getSimpleName());
+			
+			//debug high
+			Debugger.high("Exception message: ", e.getMessage());
+			Debugger.high("Stack trace: ", e.getStackTrace());
 		}
 	}
 }

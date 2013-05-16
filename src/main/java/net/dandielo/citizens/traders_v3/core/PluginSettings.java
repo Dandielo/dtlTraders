@@ -21,6 +21,9 @@ public class PluginSettings {
 	//load plugin settings
 	public static void initPluginSettings()
 	{
+		//debug info
+		Debugger.info("Loading plugin settings");
+		
 		//debug settings
 		debugLevel = config.getString("debug", "normal");
 		

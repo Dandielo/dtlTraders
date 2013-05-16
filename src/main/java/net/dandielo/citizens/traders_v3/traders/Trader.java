@@ -14,6 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import net.citizensnpcs.api.npc.NPC;
 import net.dandielo.citizens.traders_v3.tNpc;
 import net.dandielo.citizens.traders_v3.bukkit.DtlTraders;
+import net.dandielo.citizens.traders_v3.core.Debugger;
 import net.dandielo.citizens.traders_v3.traders.clicks.ClickHandler;
 import net.dandielo.citizens.traders_v3.traders.setting.Settings;
 import net.dandielo.citizens.traders_v3.traders.stock.Stock;
@@ -29,6 +30,9 @@ public abstract class Trader implements tNpc {
 	
 	public static void registerHandlers(Class<? extends Trader> clazz)
 	{
+		//debug info
+		Debugger.info("Registering click handlers for trader type: ", clazz.getSimpleName());
+		
 		List<Method> methods = new ArrayList<Method>();
 		for ( Method method : clazz.getMethods() )
 			if ( method.isAnnotationPresent(ClickHandler.class) )
@@ -53,6 +57,9 @@ public abstract class Trader implements tNpc {
 	//constructor
 	public Trader(TraderTrait trader, WalletTrait wallet, Player player)
 	{
+		//debug info
+		Debugger.info("Creating a trader, for: ", player.getName());
+		
 		settings = trader.getSettings();
 		status = getDefaultStatus();
 		stock = trader.getStock();
@@ -102,6 +109,9 @@ public abstract class Trader implements tNpc {
 	
 	private final void inventoryClickParser(InventoryClickEvent e)
 	{
+		//debug info
+		Debugger.info("Parsing click event");
+		
         boolean top = e.getView().convertSlot(e.getRawSlot()) == e.getRawSlot();
 		
 		//get all handlers
@@ -109,19 +119,34 @@ public abstract class Trader implements tNpc {
 		for ( Method method : methods )
 		{
 			ClickHandler handler = method.getAnnotation(ClickHandler.class);
+
+			//debug info
+			Debugger.info("Method: ", method.getName());
+			Debugger.info("Checking shift click requirement");
 			
 			if ( !handler.shift() ? !e.isShiftClick() : true )
 			{
+				//debug info
+				Debugger.info("Checking trader status requirement");
+				
 				if ( checkStatusWith(handler.status()) && handler.inventory().equals(top) )
 				{
 					try 
 					{
+						//debug info
+						Debugger.info("Executing");
+						
 						method.invoke(this, e);
 					} 
 					catch (Exception ex) 
 					{
-						DtlTraders.severe("Error when handling click event");
-						ex.printStackTrace();
+						//debug info
+						Debugger.critical("While executing inventory click event");
+						Debugger.critical("Trader: ", this.getSettings().getNPC().getName(), ", player: ", player.getName());
+						Debugger.critical("Exception: ", ex.getClass().getSimpleName());
+						Debugger.critical(" ");
+						Debugger.critical("Exception message: ", ex.getMessage());
+						Debugger.high("Stack trace: ", ex.getStackTrace());
 					}
 				}
 			}
@@ -152,6 +177,9 @@ public abstract class Trader implements tNpc {
 	/** Helper methods */
 	public void addToInventory()
 	{
+		//debug info
+		Debugger.info("Adding item to players inventory, player", player.getName());
+		
 		player.getInventory().addItem(selectedItem.getItem());
 	}
 	

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.dandielo.citizens.traders_v3.bukkit.DtlTraders;
+import net.dandielo.citizens.traders_v3.core.Debugger;
 import net.dandielo.citizens.traders_v3.core.exceptions.InvalidDataNodeException;
 import net.dandielo.citizens.traders_v3.traders.Trader.Status;
 import net.dandielo.citizens.traders_v3.utils.items.flags.Lore;
@@ -86,7 +87,13 @@ public abstract class ItemFlag {
 		} 
 		catch (Exception e) 
 		{
-			DtlTraders.warning("Item flag could not be read, invalid flag set! Key: " + key);
+			//debug critical
+			Debugger.critical("Item flag could not be read, invalid flag set! Key: ", key);
+			Debugger.critical("Exception: ", e.getClass().getSimpleName());
+			
+			//debug high
+			Debugger.high("Exception message: ", e.getMessage());
+			Debugger.high("Stack trace: ", e.getStackTrace());
 			throw new InvalidDataNodeException();
 		}
 	}
@@ -102,7 +109,13 @@ public abstract class ItemFlag {
 		} 
 		catch (InvalidDataNodeException e) 
 		{
-			DtlTraders.severe("Core item flag values are bugged!");
+			//debug critical
+			Debugger.critical("Core item flag classes bugged");
+			Debugger.critical("Exception: ", e.getClass().getSimpleName());
+			
+			//debug high
+			Debugger.high("Exception message: ", e.getMessage());
+			Debugger.high("Stack trace: ", e.getStackTrace());
 		}
 	}
 }

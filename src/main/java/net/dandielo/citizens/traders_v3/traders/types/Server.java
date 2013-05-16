@@ -3,6 +3,7 @@ package net.dandielo.citizens.traders_v3.traders.types;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
+import net.dandielo.citizens.traders_v3.core.Debugger;
 import net.dandielo.citizens.traders_v3.traders.Trader;
 import net.dandielo.citizens.traders_v3.traders.TraderType;
 import net.dandielo.citizens.traders_v3.traders.clicks.ClickHandler;
@@ -18,7 +19,12 @@ public class Server extends Trader {
 	}
 
 	@Override
-	public void onLeftClick() {
+	public void onLeftClick()
+	{
+		//debug info
+		Debugger.info(this.getClass().getSimpleName(), " Trader left click event, by: ", player.getName());
+		
+		
 		if ( status.inManagementMode() )
 			status = getDefaultStatus();
 		else
@@ -28,6 +34,9 @@ public class Server extends Trader {
 	@Override
 	public void onRightClick()
 	{
+		//debug info
+		Debugger.info(this.getClass().getSimpleName(), " Trader right click event, by: ", player.getName());
+		
 		if ( status.inManagementMode() )
 			inventory = stock.getManagementInventory(baseStatus, status);
 		else
@@ -64,7 +73,7 @@ public class Server extends Trader {
 	status = {Status.MANAGE_SELL, Status.MANAGE_BUY, Status.MANAGE_AMOUNTS, Status.MANAGE_PRICE, Status.MANAGE_LIMITS}, 
 	inventory = InventoryType.TRADER)
 	public void manageUI(InventoryClickEvent e)
-	{
+	{		
 		int slot = e.getSlot();
 		if ( stock.isUiSlot(slot) )
 		{
@@ -201,7 +210,21 @@ public class Server extends Trader {
 		    e.setCancelled(true);
 	}
 	
+	@ClickHandler(status = {Status.SELL, Status.BUY, Status.SELL_AMOUNTS, Status.MANAGE_SELL, Status.MANAGE_BUY, Status.MANAGE_AMOUNTS, Status.MANAGE_PRICE, Status.MANAGE_LIMITS}, shift = true, inventory = InventoryType.TRADER)
+	public void topDebug(InventoryClickEvent e)
+	{
+		//debug info
+		Debugger.info("Inventory click, by: ", player.getName(), ", status: ", status.name().toLowerCase());
+		Debugger.info("slot: ", e.getSlot(), ", left: ", e.isLeftClick(), ", shift: ", e.isShiftClick());
+	}
 	
+	@ClickHandler(status = {Status.SELL, Status.BUY, Status.SELL_AMOUNTS, Status.MANAGE_SELL, Status.MANAGE_BUY, Status.MANAGE_AMOUNTS, Status.MANAGE_PRICE, Status.MANAGE_LIMITS}, shift = true, inventory = InventoryType.PLAYER)
+	public void botDebug(InventoryClickEvent e)
+	{
+		//debug info
+		Debugger.info("Inventory click, by: ", player.getName(), ", status: ", status.name().toLowerCase());
+		Debugger.info("slot: ", e.getSlot(), ", left: ", e.isLeftClick(), ", shift: ", e.isShiftClick());
+	}
 	
 	
 	

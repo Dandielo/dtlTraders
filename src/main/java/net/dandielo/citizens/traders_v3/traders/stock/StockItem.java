@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 
-import net.dandielo.citizens.traders_v3.bukkit.DtlTraders;
+import net.dandielo.citizens.traders_v3.core.Debugger;
 import net.dandielo.citizens.traders_v3.core.exceptions.InvalidDataNodeException;
 import net.dandielo.citizens.traders_v3.traders.Trader.Status;
 import net.dandielo.citizens.traders_v3.utils.ItemUtils;
@@ -41,6 +41,10 @@ public class StockItem {
 
 	public StockItem(String format, List<String> list)
 	{
+		//debug info
+		Debugger.info("Creating stock item with format: ", format);
+		
+		//load
 		load(format);
 
 		Lore lore = new Lore(".lore").setLore(list);
@@ -70,7 +74,14 @@ public class StockItem {
 				}
 				catch (InvalidDataNodeException e) 
 				{
-					DtlTraders.warning("Could not load item data with key: " + key + ", value: " + value);
+					//debug high
+					Debugger.high("While loading a StockItem, a exception occured");
+					//TODO DataNode information
+					Debugger.high("Exception: ", e.getClass().getSimpleName());
+					
+					//debug normal
+					Debugger.normal("Exception message: ", e.getMessage());
+					Debugger.normal("StackTrace: ", e.getStackTrace());
 				}
 				key = matcher.group(2);
 				value = matcher.group(3);
@@ -89,7 +100,14 @@ public class StockItem {
 					}
 					catch (InvalidDataNodeException e) 
 					{
-						DtlTraders.warning("Could not load item data with key: " + key + ", value: " + value);
+						//debug high
+						Debugger.high("While loading a StockItem, a exception occured");
+						//TODO DataNode information
+						Debugger.high("Exception: ", e.getClass().getSimpleName());
+						
+						//debug normal
+						Debugger.normal("Exception message: ", e.getMessage());
+						Debugger.normal("StackTrace: ", e.getStackTrace());
 					}
 					key = matcher.group(4);
 					value = "";
@@ -109,13 +127,19 @@ public class StockItem {
 		}
 		catch (InvalidDataNodeException e) 
 		{
-			e.printStackTrace();
-			DtlTraders.warning("Could not load item data with key: " + key + ", value: " + value);
+			//debug high
+			Debugger.high("While loading a StockItem, a exception occured");
+			//TODO DataNode information
+			Debugger.high("Exception: ", e.getClass().getSimpleName());
+			
+			//debug normal
+			Debugger.normal("Exception message: ", e.getMessage());
+			Debugger.normal("StackTrace: ", e.getStackTrace());
 		}
 	}
 
 	public String save()
-	{
+	{		
 		String result = "";
 		result += item.getTypeId();
 		if ( !ItemUtils.itemHasDurability(item) )
@@ -162,6 +186,8 @@ public class StockItem {
 
 	public <T> T getData(String key)
 	{
+		//debug info
+		Debugger.info("Getting data from StockItem, data key: ", key);
 		return data.get(key).<T>getValue(this);
 	}
 

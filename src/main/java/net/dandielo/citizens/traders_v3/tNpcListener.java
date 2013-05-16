@@ -3,6 +3,7 @@ package net.dandielo.citizens.traders_v3;
 import net.citizensnpcs.api.event.NPCLeftClickEvent;
 import net.citizensnpcs.api.event.NPCRightClickEvent;
 import net.dandielo.citizens.traders_v3.bukkit.DtlTraders;
+import net.dandielo.citizens.traders_v3.core.Debugger;
 import net.dandielo.citizens.traders_v3.core.exceptions.InvalidTraderTypeException;
 import net.dandielo.citizens.traders_v3.core.exceptions.TraderTypeNotFoundException;
 import net.dandielo.citizens.traders_v3.traders.Trader;
@@ -88,11 +89,15 @@ public class tNpcListener implements Listener {
 		}
 		catch (TraderTypeNotFoundException e1) 
 		{
-			DtlTraders.severe("Trader type does not exists, did you removed an extension?");
+			//debug critical
+			Debugger.critical("Trader type was not found, type: ", traderTrait.getType());
+			Debugger.critical("Did you changed the save file?");
 		} 
 		catch (InvalidTraderTypeException e1) 
 		{
-			DtlTraders.severe("Trader type is invalid, is this type up to date?");
+			//debug critical
+			Debugger.critical("Trader type is invalid, type: ", traderTrait.getType());
+			Debugger.critical("Contact the dev to fix this!");
 		}
 	}
 
@@ -117,11 +122,15 @@ public class tNpcListener implements Listener {
 		}
 		catch (TraderTypeNotFoundException e1) 
 		{
-			DtlTraders.severe("Trader type does not exists, did you removed an extension?");
+			//debug critical
+			Debugger.critical("Trader type was not found, type: ", traderTrait.getType());
+			Debugger.critical("Did you changed the save file?");
 		} 
 		catch (InvalidTraderTypeException e1) 
 		{
-			DtlTraders.severe("Trader type is invalid, is this type up to date?");
+			//debug critical
+			Debugger.critical("Trader type is invalid, type: ", traderTrait.getType());
+			Debugger.critical("Contact the dev to fix this!");
 		}
 	}
 

@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 
 import net.citizensnpcs.api.npc.NPC;
 import net.dandielo.citizens.traders_v3.bukkit.DtlTraders;
+import net.dandielo.citizens.traders_v3.core.Debugger;
 import net.dandielo.citizens.traders_v3.core.exceptions.InvalidTraderTypeException;
 import net.dandielo.citizens.traders_v3.core.exceptions.TraderTypeNotFoundException;
 import net.dandielo.citizens.traders_v3.core.exceptions.TraderTypeRegistrationError;
@@ -52,12 +53,16 @@ public class tNpcManager {
 	//class definition
 	private tNpcManager()
 	{
+		//debug info
+		Debugger.info("Initializing tNpcManager");
 	}
 	
 	public static void registerTraderTypes()
 	{
 		try
 		{
+			//debug info
+			Debugger.info("Register server trader type");
 			registerType(Server.class);
 		} 
 		catch (TraderTypeRegistrationError e) 
@@ -113,7 +118,8 @@ public class tNpcManager {
 		}
 		catch (Exception e)
 		{
-			DtlTraders.severe("The following trader type is invalid: " + typeInfo.name() + ", author: " + typeInfo.author());
+			//debug critical
+			Debugger.critical("Invalid trader type: " + typeInfo.name() + ", author: " + typeInfo.author());
 			throw new InvalidTraderTypeException(type);
 		}
 		return trader;

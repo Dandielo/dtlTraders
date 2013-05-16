@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.citizensnpcs.api.util.DataKey;
+import net.dandielo.citizens.traders_v3.core.Debugger;
 import net.dandielo.citizens.traders_v3.traders.Trader.Status;
 
 import org.bukkit.inventory.Inventory;
@@ -19,6 +20,9 @@ public abstract class Stock implements InventoryHolder {
 	
 	protected Stock(String name, int size)
 	{
+		//debug info
+		Debugger.info("Creating stock with name: ", name, ", size: ", size);
+		
         if( size <= 0 || size > 6 ){
         	throw new IllegalArgumentException("Size must be between 1 and 6");}
         
@@ -57,6 +61,7 @@ public abstract class Stock implements InventoryHolder {
 				resultItem = stockItem;
 		return resultItem;
 	}
+	
 	public StockItem getItem(StockItem item, String stock)
 	{
 		return this.stock.get(stock).get(this.stock.get(stock).indexOf(item));

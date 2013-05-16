@@ -3,6 +3,7 @@ package net.dandielo.citizens.traders_v3.traders.setting;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.trait.trait.Owner;
 import net.citizensnpcs.api.util.DataKey;
+import net.dandielo.citizens.traders_v3.core.Debugger;
 
 public class Settings extends TGlobalSettings {	
     //the Npc associated with these settings
@@ -66,7 +67,11 @@ public class Settings extends TGlobalSettings {
 	}
 
 	//loading and saving
-	public void load(DataKey data) {
+	public void load(DataKey data) 
+	{
+		//debug info
+		Debugger.info("Loading trader settings for: ", this.npc.getName());
+		
 		//load trader settings
 		type = data.getString("type");
 		
@@ -76,7 +81,11 @@ public class Settings extends TGlobalSettings {
 		stockStart = data.getString("stock.default", TGlobalSettings.stockStart);
 	}
 	
-	public void save(DataKey data) {
+	public void save(DataKey data) 
+	{
+		//debug info
+		Debugger.info("Saving trader settings for:", this.npc.getName());
+		
 		//save trader settings
 		data.setString("type", type);
 		data.setRaw("stock", null);

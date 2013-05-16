@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.dandielo.citizens.traders_v3.bukkit.DtlTraders;
+import net.dandielo.citizens.traders_v3.core.Debugger;
 import net.dandielo.citizens.traders_v3.core.PluginSettings;
 
 import org.bukkit.command.CommandSender;
@@ -50,6 +51,9 @@ public class LocaleManager {
 	 */
 	private LocaleManager()
 	{
+		//debug info
+		Debugger.info("Initializing locale manager");
+		
 		updater = new LocaleUpdater(localeChangeConfiguration().getDefaults());
 		
 		messages = new HashMap<LocaleEntry, String>(); 
@@ -66,6 +70,9 @@ public class LocaleManager {
 	 */
 	public void loadFile()
 	{
+		//debug info
+		Debugger.info("Loading locale file");
+		
 		//get the file name and path
 		String name = "locale." + PluginSettings.getLocale();
 		String path = "plugins/dtlTraders/locale";
@@ -94,7 +101,14 @@ public class LocaleManager {
 			} 
 			catch (IOException e)
 			{
-				throw new RuntimeException(e);
+				//debug high
+				Debugger.high("While loading locale file, an exception occured");
+				Debugger.normal("Exception message: ", e.getClass().getSimpleName());
+				Debugger.high("Filename: ", name, ", path to file", path);
+
+				//debug high
+				Debugger.normal("Exception message: ", e.getMessage());
+				Debugger.normal("StackTrace: ", e.getStackTrace());
 			}
 		}
 		load();
@@ -108,6 +122,9 @@ public class LocaleManager {
 	 */
 	public YamlConfiguration localeChangeConfiguration()
 	{
+		//debug info
+		Debugger.info("Loading locale changes");
+		
 		//Load locale changes
 	    InputStream stream = DtlTraders.getInstance().getResource("locale.changes");
 	    YamlConfiguration locale = null;
@@ -132,6 +149,9 @@ public class LocaleManager {
 	 */
 	public void load()
 	{
+		//debug info
+		Debugger.info("Loading yaml configuration");
+		
 		load(PluginSettings.autoUpdateLocale());
 	}
 	
@@ -178,12 +198,18 @@ public class LocaleManager {
 				
 				//after first updated cache needs to be cleared and reloaded, update it just once 
 				load(false);
-			}
-			
+			}			
 		} 
 		catch (Exception e)
 		{
-			e.printStackTrace();
+			//debug high
+			Debugger.high("While reading the locale file, an exception occured");
+			Debugger.high("Exception message: ", e.getClass().getSimpleName());
+			Debugger.high("On update: ", update);
+
+			//debug high
+			Debugger.normal("Exception message: ", e.getMessage());
+			Debugger.normal("StackTrace: ", e.getStackTrace());
 		}
 	}
 
@@ -192,6 +218,9 @@ public class LocaleManager {
 	 */
 	protected void loadMessages(String currentVersion, ConfigurationSection config)
 	{
+		//debug info
+		Debugger.info("Loading locale messages");
+		
 		//TODO add debug information (this is not normal)
 		if ( config == null ) return;
 		
@@ -207,6 +236,9 @@ public class LocaleManager {
 	 */
 	protected void loadKeywords(String currentVersion, ConfigurationSection config)
 	{
+		//debug info
+		Debugger.info("Loading locale keywords");
+		
 		//TODO add debug information (this is not normal)
 		if ( config == null ) return;
 
@@ -222,6 +254,9 @@ public class LocaleManager {
 	 */
 	protected void loadUIConfigs(String currentVersion, ConfigurationSection config)
 	{
+		//debug info
+		Debugger.info("Loading locale UI configs");
+		
 		//TODO add debug information (this is not normal)
 		if ( config == null ) return;
 
@@ -242,10 +277,22 @@ public class LocaleManager {
 	 */
 	public void save()
 	{
-		try {
+		//debug info
+		Debugger.info("Saving locale YAML configuration to file");
+		
+		try 
+		{
 			localeYaml.save(localeFile);
-		} catch (IOException e) {
-			e.printStackTrace();
+		} 
+		catch (IOException e)
+		{
+			//debug high
+			Debugger.high("While saving the locale YAML configuration, an exception occured");
+			Debugger.high("Exception: ", e.getClass().getSimpleName());
+			
+			//debug normal
+			Debugger.normal("Exception message: ", e.getMessage());
+			Debugger.normal("Stack trace: ", e.getStackTrace());
 		}
 	}
 	
@@ -263,6 +310,10 @@ public class LocaleManager {
 	 */
 	public void sendMessage(CommandSender sender, String key, Object... args)
 	{
+		//debug info
+		Debugger.info("Sending message to: ", sender.getName(), ", message key: ", key);
+		Debugger.info("With arguments: ", args);
+		
 		//check the message key
 		checkMessageKey(key);
 		
@@ -303,6 +354,10 @@ public class LocaleManager {
 	 */
 	public String getMessage(String key, Object... args)
 	{
+		//debug info
+		Debugger.info("Preparing message, key: ", key);
+		Debugger.info("With arguments: ", args);
+		
 		//check the message key
 		checkMessageKey(key);
 
@@ -341,9 +396,15 @@ public class LocaleManager {
 	 */
 	public void checkMessageKey(String key)
 	{
+		//debug info
+		Debugger.info("Checking message key: ",key);
+		
 		//it might be I've forgot to add a message to the locale, add it then with a warning string
 		if ( !messages.containsKey(new LocaleEntry(key, localeVersion)) )
 		{
+			//debug low
+			Debugger.low("Message key not found: ", key);
+			
 			//add to the yaml config
 			localeYaml.set(
 					buildPath("messages", key), 
@@ -369,9 +430,15 @@ public class LocaleManager {
 	 */
 	public void checkKeywordKey(String key)
 	{
+		//debug info
+		Debugger.info("Checking keyworkd key: ", key);
+		
 		//it might be I've forgot to add a message to the locale, add it then with a warning string
 		if ( !keywords.containsKey(new LocaleEntry(key, localeVersion)) && key.startsWith("#") )
 		{
+			//debug low
+			Debugger.low("Keyword key not found: ", key);
+			
 			//add to the yaml config
 			localeYaml.set(
 					buildPath("keywords", key.substring(1)), 
@@ -396,6 +463,9 @@ public class LocaleManager {
 	 */
 	public List<String> getLore(String key)
 	{
+		//debug info
+		Debugger.info("Getting lore for UI item: ", key);
+		
 		List<String> list = new ArrayList<String>();
 		if ( ui.containsKey(new LocaleEntry(key, localeVersion)) )
 			for ( String l : ui.get(new LocaleEntry(key, localeVersion)).lore() )
@@ -410,7 +480,10 @@ public class LocaleManager {
 	 *     the requested UI name
 	 * @author dandielo
 	 */
-	public String getMame(String key) {
+	public String getName(String key) {
+		//debug info
+		Debugger.info("Getting name for UI item: ", key);
+		
 		String name = "";
 		if ( ui.containsKey(new LocaleEntry(key, localeVersion)) )
 			name = ui.get(new LocaleEntry(key, localeVersion)).name();

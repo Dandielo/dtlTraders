@@ -6,6 +6,7 @@ import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.trait.TraitInfo;
 import net.dandielo.citizens.traders_v3.tNpcListener;
 import net.dandielo.citizens.traders_v3.tNpcManager;
+import net.dandielo.citizens.traders_v3.core.Debugger;
 import net.dandielo.citizens.traders_v3.core.PluginSettings;
 import net.dandielo.citizens.traders_v3.traders.Trader;
 import net.dandielo.citizens.traders_v3.traders.setting.TGlobalSettings;
@@ -15,12 +16,15 @@ import net.dandielo.citizens.traders_v3.traits.WalletTrait;
 import net.dandielo.citizens.traders_v3.utils.items.ItemData;
 import net.dandielo.citizens.traders_v3.utils.items.ItemFlag;
 
+import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class DtlTraders extends JavaPlugin {
+	//console prefix
+	public static final String PREFIX = ChatColor.DARK_GREEN + "[dtlTraders]" + ChatColor.WHITE; 
+	
 	//bukkit resources
 	private static Logger logger = Logger.getLogger("Minecraft");
-//	private static CommandSender console;
 	
 	//plugin instance
 	private static DtlTraders instance;
@@ -30,11 +34,13 @@ public class DtlTraders extends JavaPlugin {
 	@Override
 	public void onLoad()
 	{
+		Debugger.info("Loading plugin");
 	}
 	
 	@Override
 	public void onEnable()
 	{
+		Debugger.info("Enabling plugin");
 		//set the plugin instance
 		instance = this;
 		

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.citizensnpcs.api.util.DataKey;
+import net.dandielo.citizens.traders_v3.core.Debugger;
 import net.dandielo.citizens.traders_v3.traders.Trader.Status;
 import net.dandielo.citizens.traders_v3.traders.setting.TGlobalSettings;
 
@@ -43,6 +44,9 @@ public class StockTrader extends Stock {
 	@SuppressWarnings("unchecked")
 	public void load(DataKey data) 
 	{
+		//debug info
+		Debugger.info("Loading traders stock");
+		
 		if ( data.keyExists("sell") )
 		{
 			for ( Object item : (List<Object>) data.getRaw("sell") ) 
@@ -99,6 +103,9 @@ public class StockTrader extends Stock {
 	@Override
 	public void save(DataKey data)
 	{
+		//debug info
+		Debugger.info("Saving traders stock");
+		
 		List<Object> sellList = new ArrayList<Object>();
 		for ( StockItem item : stock.get("sell") )
 			if ( item.hasFlag(".lore") )
@@ -148,6 +155,9 @@ public class StockTrader extends Stock {
 
 	public void setInventory(Inventory inventory, Status status)
 	{
+		//debug info
+		Debugger.info("Setting inventory, status: ", status.name().toLowerCase());
+		
 		//clear the inventory
 		inventory.clear();
 		for ( StockItem item : this.stock.get(status.asStock()) )
@@ -165,6 +175,9 @@ public class StockTrader extends Stock {
 
 	public void setManagementInventory(Inventory inventory, Status baseStatus, Status status)
 	{
+		//debug info
+		Debugger.info("Setting management inventory, status: ", status.name().toLowerCase(), ", base status: ", baseStatus.name().toLowerCase());
+		
 		//clear the inventory
 		inventory.clear();
 		for ( StockItem item : this.stock.get(status.asStock()) )
@@ -221,43 +234,5 @@ public class StockTrader extends Stock {
 			break;
 		}
 	}
-	
-	//public void setInventory(Inventory inventory, String stock)
-	//{
-	/*	if ( !s.isManaging() )
-		{
-			for( StockItem item : stock.get(s.toString()) ) 
-			{
-				ItemStack chk = setLore(item.getItemStack(), getPriceLore(item, 0, s.toString(), patterns, player));
-
-				if ( item.getSlot() < 0 )
-            		item.setSlot(inventory.firstEmpty());
-
-	            inventory.setItem( item.getSlot() ,chk);
-
-	        }
-			if ( !stock.get( opositeStock(s.toString()) ).isEmpty() )
-	        	inventory.setItem(stockSize - 1, itemsConfig.getItemManagement( opositeStock(s.toString()) ) );
-
-		} 
-		else 
-		{
-			for( StockItem item : stock.get(s.toString()) )
-			{
-				ItemStack chk = setLore(item.getItemStack(), getLore(type, item, s.toString(), patterns, player));
-
-	            if ( item.getSlot() < 0 )
-            		item.setSlot(inventory.firstEmpty());
-	            inventory.setItem( item.getSlot() ,chk);
-
-	        }
-            inventory.setItem(stockSize - 3, itemsConfig.getItemManagement(4) );
-            inventory.setItem(stockSize - 2, itemsConfig.getItemManagement(2) );
-            inventory.setItem(stockSize - 1, itemsConfig.getItemManagement(opositeStock(s.toString())) );
-		} 
-
-		return inventory;*/
-	//	inventory.clear();
-	//}
 
 }

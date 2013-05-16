@@ -7,6 +7,7 @@ import java.util.Map;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 
+import net.dandielo.citizens.traders_v3.core.Debugger;
 import net.dandielo.citizens.traders_v3.core.PluginSettings;
 import net.dandielo.citizens.traders_v3.utils.ItemUtils;
 
@@ -47,6 +48,10 @@ public class TGlobalSettings extends PluginSettings {
 	//load global settings
 	public static void initGlobalSettings()
 	{
+		//debug info
+		Debugger.info("Loading general trader configuration");
+		
+		//get trader section
 		tConfig = config.getConfigurationSection("trader");
 
 		//load transaction settings
@@ -60,12 +65,25 @@ public class TGlobalSettings extends PluginSettings {
 		mmItemToggle = ItemUtils.createItemStack(tConfig.getString("managing.item", "air"));
 		mmRightToggle = tConfig.getBoolean("managing.right-click", false);
 
-		@SuppressWarnings("unchecked")
-		List<String> specials = (List<String>) tConfig.getList("managing.special-blocks");
-		for ( String entry : specials )
+		try
 		{
-			String[] data = entry.split(" ");
-			specialBlocks.put(ItemUtils.createItemStack(data[0]), Double.parseDouble(data[1]));
+			@SuppressWarnings("unchecked")
+			List<String> specials = (List<String>) tConfig.getList("managing.special-blocks");
+			for ( String entry : specials )
+			{
+				String[] data = entry.split(" ");
+				specialBlocks.put(ItemUtils.createItemStack(data[0]), Double.parseDouble(data[1]));
+			}
+		}
+		catch(Exception e)
+		{
+			//debug high
+			Debugger.high("While loading special blocks, a exception occured");
+			Debugger.high("Exception: ", e.getClass().getSimpleName());
+			
+			//debug normal
+			Debugger.normal("Exception message: ", e.getMessage());
+			Debugger.normal("StackTrace: ", e.getStackTrace());
 		}
 
 		//load stock settings
@@ -78,15 +96,27 @@ public class TGlobalSettings extends PluginSettings {
 		walletMoney = tConfig.getDouble("wallet.money", 0.0);
 
 		//load pattern settings
-		@SuppressWarnings("unchecked")
-		List<String> defaults = (List<String>) tConfig.getList("pattern.defaults");
-		for ( String entry : defaults )
+		try
 		{
-			String[] data = entry.split(" ");
-			defaultPatterns.put(data[0], Integer.parseInt(data[1]));
+			@SuppressWarnings("unchecked")
+			List<String> defaults = (List<String>) tConfig.getList("pattern.defaults");
+			for ( String entry : defaults )
+			{
+				String[] data = entry.split(" ");
+				defaultPatterns.put(data[0], Integer.parseInt(data[1]));
+			}
 		}
-		patternFile = tConfig.getString("pattern.file", "patterns.yml");
-
+		catch(Exception e)
+		{
+			//debug high
+			Debugger.high("While loading pattern defaults, a exception occured");
+			Debugger.high("Exception: ", e.getClass().getSimpleName());
+			
+			//debug normal
+			Debugger.normal("Exception message: ", e.getMessage());
+			Debugger.normal("StackTrace: ", e.getStackTrace());
+		}
+		
 		//load books settings
 	//	bookFile
 	//	bookSaving
