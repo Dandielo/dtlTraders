@@ -44,7 +44,7 @@ public class LocaleUpdater {
 		loadKeywords(LocaleManager.localeVersion, config.getConfigurationSection(buildPath("keywords")));
 		
 		//load keywords
-		loadUIConfigs(LocaleManager.localeVersion, config.getConfigurationSection(buildPath("kui")));
+		loadUIConfigs(LocaleManager.localeVersion, config.getConfigurationSection(buildPath("ui")));
 				
 			
 	}
@@ -117,6 +117,9 @@ public class LocaleUpdater {
 		//create the new yaml configuration
 		YamlConfiguration newLocaleYaml = new YamlConfiguration();
 		
+		//set the version to the latest one
+		newLocaleYaml.set("ver", LocaleManager.localeVersion);
+		
 		//set the default locale format?
 		newLocaleYaml.set("messages", "");
 		newLocaleYaml.set("keywords", "");
@@ -124,8 +127,6 @@ public class LocaleUpdater {
 		
 		//set the path separator we are using
 		newLocaleYaml.options().pathSeparator(LocaleManager.PATH_SEPARATOR);
-		//set the version to the latest one
-		newLocaleYaml.set("ver", LocaleManager.localeVersion);
 		
 		//altering messages
 		for ( Map.Entry<LocaleEntry, String> entry : this.messages.entrySet() )
@@ -233,11 +234,11 @@ public class LocaleUpdater {
 			{
 				//if these ui settings are new just add them to the yaml config
 				newLocaleYaml.set(
-						buildPath("lores",entry.getKey().key(), "name"), 
+						buildPath("ui",entry.getKey().key(), "name"), 
 						entry.getValue().name()
 						);
 				newLocaleYaml.set(
-						buildPath("lores",entry.getKey().key(), "lore"), 
+						buildPath("ui",entry.getKey().key(), "lore"), 
 						entry.getValue().lore()
 						);
 			}
@@ -261,11 +262,11 @@ public class LocaleUpdater {
 		for ( Entry<LocaleEntry, LocaleItem> entry : uiSettings.entrySet() )
 		{
 			newLocaleYaml.set(
-					buildPath("lores", entry.getKey().key(), "name"), 
+					buildPath("ui", entry.getKey().key(), "name"), 
 					entry.getValue().name()
 					);
 			newLocaleYaml.set(
-					buildPath("lores", entry.getKey().key(), "lore"), 
+					buildPath("ui", entry.getKey().key(), "lore"), 
 					entry.getValue().lore()
 					);
 		}

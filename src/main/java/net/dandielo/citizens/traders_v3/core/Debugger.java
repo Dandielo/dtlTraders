@@ -1,7 +1,5 @@
 package net.dandielo.citizens.traders_v3.core;
 
-import java.lang.reflect.Array;
-
 import net.dandielo.citizens.traders_v3.bukkit.DtlTraders;
 
 import org.bukkit.ChatColor;
@@ -136,7 +134,6 @@ public class Debugger {
 	 *     merged string
 	 * @author dandielo
 	 */
-	@SuppressWarnings("rawtypes")
 	private static String mergeArgs(Object... args)
 	{
 		StringBuilder builder = new StringBuilder();

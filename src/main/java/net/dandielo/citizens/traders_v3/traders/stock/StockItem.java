@@ -74,7 +74,7 @@ public class StockItem {
 				{
 					if ( key.startsWith(".") )
 						flags.put(key, ItemFlag.createItemFlag(key));
-					else
+					else if ( !key.isEmpty() )
 						data.put(key, ItemData.createItemData(key, value.trim()));
 				}
 				catch (InvalidDataNodeException e) 
@@ -100,7 +100,7 @@ public class StockItem {
 					{
 						if ( key.startsWith(".") )
 							flags.put(key, ItemFlag.createItemFlag(key));
-						else
+						else if ( !key.isEmpty() )
 							data.put(key, ItemData.createItemData(key, value.trim()));
 					}
 					catch (InvalidDataNodeException e) 
@@ -127,7 +127,7 @@ public class StockItem {
 		{
 			if ( key.startsWith(".") )
 				flags.put(key, ItemFlag.createItemFlag(key));
-			else
+			else if ( !key.isEmpty() )
 				data.put(key, ItemData.createItemData(key, value.trim()));
 		}
 		catch (InvalidDataNodeException e) 

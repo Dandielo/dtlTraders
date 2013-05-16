@@ -13,8 +13,9 @@ import org.bukkit.inventory.ItemStack;
 
 import net.citizensnpcs.api.npc.NPC;
 import net.dandielo.citizens.traders_v3.tNpc;
-import net.dandielo.citizens.traders_v3.bukkit.DtlTraders;
 import net.dandielo.citizens.traders_v3.core.Debugger;
+import net.dandielo.citizens.traders_v3.core.locale.LocaleManager;
+import net.dandielo.citizens.traders_v3.core.tools.StringTools;
 import net.dandielo.citizens.traders_v3.traders.clicks.ClickHandler;
 import net.dandielo.citizens.traders_v3.traders.setting.Settings;
 import net.dandielo.citizens.traders_v3.traders.stock.Stock;
@@ -39,6 +40,9 @@ public abstract class Trader implements tNpc {
 				methods.add(method);
 		handlers.put(clazz, methods);
 	}
+	
+	//static helpers
+	protected LocaleManager locale = LocaleManager.locale;
 	
 	//temp data
 	private int lastSlot = -1;
@@ -76,6 +80,11 @@ public abstract class Trader implements tNpc {
 	public Status getStatus() 
 	{
 		return status;
+	}
+	
+	public NPC getNPC()
+	{
+		return settings.getNPC();
 	}
 	
 	public void parseStatus(Status newStatus)
@@ -142,11 +151,15 @@ public abstract class Trader implements tNpc {
 					{
 						//debug info
 						Debugger.critical("While executing inventory click event");
-						Debugger.critical("Trader: ", this.getSettings().getNPC().getName(), ", player: ", player.getName());
 						Debugger.critical("Exception: ", ex.getClass().getSimpleName());
+						Debugger.critical("Method: ", method.getName());
+						Debugger.critical("Trader: ", this.getSettings().getNPC().getName(), ", player: ", player.getName());
 						Debugger.critical(" ");
 						Debugger.critical("Exception message: ", ex.getMessage());
-						Debugger.high("Stack trace: ", ex.getStackTrace());
+						Debugger.high("Stack trace: ", StringTools.stackTrace(ex.getStackTrace()));
+						
+						//cancel the event because of the exception!
+						e.setCancelled(true);
 					}
 				}
 			}

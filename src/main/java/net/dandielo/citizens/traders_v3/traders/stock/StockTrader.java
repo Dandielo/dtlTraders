@@ -180,7 +180,7 @@ public class StockTrader extends Stock {
 		
 		//clear the inventory
 		inventory.clear();
-		for ( StockItem item : this.stock.get(status.asStock()) )
+		for ( StockItem item : this.stock.get(baseStatus.asStock()) )
 		{
 			if ( !item.hasSlot() || item.getSlot() < 0 )
 				item.setSlot(inventory.firstEmpty());

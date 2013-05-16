@@ -88,7 +88,7 @@ public class LocaleManager {
 			{
 				localeFile.createNewFile();
 				
-			    InputStream stream = DtlTraders.getInstance().getResource("locale.en");
+			    InputStream stream = DtlTraders.getInstance().getResource("locales/locale.en");
 			    if (stream != null)
 			    {
 			        YamlConfiguration yconfig = YamlConfiguration.loadConfiguration(stream);

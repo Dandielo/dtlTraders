@@ -24,11 +24,16 @@ public class Server extends Trader {
 		//debug info
 		Debugger.info(this.getClass().getSimpleName(), " Trader left click event, by: ", player.getName());
 		
-		
 		if ( status.inManagementMode() )
+		{
+			locale.sendMessage(player, "trader-managermode-disabled", "npc", getNPC().getName());
 			status = getDefaultStatus();
+		}
 		else
+		{
+			locale.sendMessage(player, "trader-managermode-enabled", "npc", getNPC().getName());
 			parseStatus(getDefaultManagementStatus());
+		}
 	}
 
 	@Override
