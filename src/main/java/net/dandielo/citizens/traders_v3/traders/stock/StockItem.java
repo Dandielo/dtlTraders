@@ -181,7 +181,7 @@ public final class StockItem {
 
 		//save each attribute
 		for ( ItemAttr entry : attr.values() )
-			result += " " + entry.onSave();
+			result += " " + entry.toString();
 
 		//save each flag
 		for ( ItemFlag flag : flags.values() )

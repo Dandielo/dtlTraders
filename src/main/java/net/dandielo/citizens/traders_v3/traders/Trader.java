@@ -234,7 +234,7 @@ public abstract class Trader implements tNpc {
 		//get all item stack with the same type
 		for ( ItemStack item : inventory.all(selectedItem.getItem().getType()).values() )
 		{
-			if ( selectedItem.equals(ItemUtils.createStockItem(item)) )
+			if ( selectedItem.equalsWeak(ItemUtils.createStockItem(item)) )
 			{
 				if ( item.getAmount() + amountLeft <= item.getMaxStackSize() )
 					return true;
@@ -290,7 +290,7 @@ public abstract class Trader implements tNpc {
 
 		for ( ItemStack item : inventory.all(selectedItem.getItem().getType()).values() ) 
 		{
-			if ( selectedItem.equals(ItemUtils.createStockItem(item)) )
+			if ( selectedItem.equalsWeak(ItemUtils.createStockItem(item)) )
 			{
 				//add amount to an item in the inventory, its done
 				if ( item.getAmount() + amountLeft <= item.getMaxStackSize() ) {

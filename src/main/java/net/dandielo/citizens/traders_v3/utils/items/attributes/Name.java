@@ -11,7 +11,7 @@ import net.dandielo.citizens.traders_v3.utils.items.ItemAttr;
 public class Name extends ItemAttr {
 	private String name;
 
-	protected Name(String key)
+	public Name(String key)
 	{
 		super(key);
 		name = "";

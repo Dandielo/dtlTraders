@@ -15,7 +15,7 @@ public class Durability extends ItemAttr
 	private double durabilityPercent;
     private short durability;
 
-	protected Durability(String key) {
+	public Durability(String key) {
 		super(key);
 		durability = 0;
 		durabilityPercent = -1;

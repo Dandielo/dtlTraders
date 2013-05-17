@@ -20,7 +20,7 @@ public class Amount extends ItemAttr {
 	 * @param key
 	 *     attribute unique key
 	 */
-	protected Amount(String key) {
+	public Amount(String key) {
 		super(key);
 		//default value
 		amounts.add(1);

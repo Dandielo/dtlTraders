@@ -51,7 +51,7 @@ public abstract class ItemAttr {
 	 * @param key
 	 *     the attribute key
 	 */
-	protected ItemAttr(String key)
+	public ItemAttr(String key)
 	{
 		this.key = key;
 	}
@@ -177,7 +177,9 @@ public abstract class ItemAttr {
 		{
 			try 
 			{
-				result.add(attr.getValue().getConstructor(String.class).newInstance(attr.getKey().key()));
+				ItemAttr iAttr = attr.getValue().getConstructor(String.class).newInstance(attr.getKey().key());
+				iAttr.info = attr.getKey();
+				result.add(iAttr);
 			} 
 			catch (Exception e)
 			{

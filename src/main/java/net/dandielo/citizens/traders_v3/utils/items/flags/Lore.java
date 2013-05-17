@@ -8,17 +8,20 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import net.dandielo.citizens.traders_v3.core.exceptions.InvalidItemException;
 import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeValueNotFoundException;
+import net.dandielo.citizens.traders_v3.utils.items.Attribute;
 import net.dandielo.citizens.traders_v3.utils.items.ItemFlag;
 
+@Attribute(name="Lore", key=".lore")
 public class Lore extends ItemFlag {
-	private List<String> lore;
+	private List<String> lore = new ArrayList<String>();
 
-	protected Lore(String key) {
+	public Lore(String key) {
 		super(key);
 	}
 	
 	public void setLore(List<String> lore)
 	{
+		this.lore = lore;
 	}
 
 	@Override
