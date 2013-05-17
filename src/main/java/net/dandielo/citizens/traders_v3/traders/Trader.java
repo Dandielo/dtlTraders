@@ -310,7 +310,7 @@ public abstract class Trader implements tNpc {
 	public final void removeFromInventory(int slot, int scale) 
 	{
 		//debug info
-		Debugger.info("Adding item to players inventory");
+		Debugger.info("Removing item from players inventory");
 		Debugger.info("Player: ", player.getName(), ", item: ", selectedItem.getItem().getType().name().toLowerCase());
 				
 		_removeFromInventory(slot, selectedItem.getAmount(0) * scale);
@@ -322,7 +322,7 @@ public abstract class Trader implements tNpc {
 		PlayerInventory inventory = player.getInventory();
 		ItemStack item = inventory.getItem(slot);
 		
-		if ( item.getAmount() < amount )
+		if ( item.getAmount() > amount )
 		{
 			item.setAmount(item.getAmount() - amount);
 			inventory.setItem(slot, item);
@@ -475,7 +475,6 @@ public abstract class Trader implements tNpc {
 	 *     Returns true if the item was found, false otherwise   
 	 * @author dandielo
 	 */
-	//TODO This might be not needed
 	public boolean selectAndCheckItem(ItemStack item)
 	{
 		return (selectedItem = item != null && item.getTypeId() != 0 ? stock.getItem(ItemUtils.createStockItem(item), baseStatus.asStock()) : null ) != null;

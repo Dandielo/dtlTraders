@@ -597,7 +597,7 @@ public final class StockItem {
 		equals = equals && !ItemUtils.itemHasDurability(item.item) ? item.item.getDurability() == this.item.getDurability() : equals; 
 		
 		//checking attribute missmatching
-		equals = !attributeMissmatch(item);
+		equals = equals ? !attributeMissmatch(item) : equals;
 		
 		//now a if block to not make thousands of not needed checks 
 		if ( equals )
@@ -653,7 +653,7 @@ public final class StockItem {
 		equals = equals && !ItemUtils.itemHasDurability(item.item) ? item.item.getDurability() == this.item.getDurability() : equals; 
 
 		//checking attribute missmatching
-		equals = !attributeMissmatch(item);
+		equals = equals ? !attributeMissmatch(item) : equals;
 
 		Debugger.low("After ID and data check: ", equals);
 		

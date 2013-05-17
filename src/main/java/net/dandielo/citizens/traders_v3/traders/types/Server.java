@@ -263,6 +263,7 @@ public class Server extends Trader {
 	@ClickHandler(status = {Status.SELL, Status.BUY}, inventory = InventoryType.PLAYER)
 	public void buyItems(InventoryClickEvent e)
 	{
+		e.setCancelled(true);
 		clearSelection();
 		int slot = e.getSlot();
 		if ( e.isLeftClick() )
@@ -322,7 +323,7 @@ public class Server extends Trader {
 						
 						//send the transaction success message
 						locale.sendMessage(player, "trader-transaction-success", "trader", getNPC().getName(),
-								"player", player.getName(), "action", "#bought", "item", getSelectedItem().getName(),
+								"player", player.getName(), "action", "#sold", "item", getSelectedItem().getName(),
 								"amount", String.valueOf(getSelectedItem().getAmount()), "price", String.valueOf(stock.parsePrice(getSelectedItem(), 0)));
 					}
 				}
@@ -335,7 +336,6 @@ public class Server extends Trader {
 				}
 			}
 		}
-		e.setCancelled(true);
 	}
 	
 	
