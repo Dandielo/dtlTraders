@@ -16,7 +16,7 @@ status = {Status.BUY, Status.SELL, Status.SELL_AMOUNTS, Status.MANAGE_PRICE})
 public class Price extends ItemAttr {
 	private double price;
 
-	protected Price(String key) {
+	public Price(String key) {
 		super(key);
 		price = 0.0;
 	}
@@ -33,7 +33,7 @@ public class Price extends ItemAttr {
 	
 	public void decrease(double value)
 	{
-		price = price -= value < 0 ? 0 : price;
+		price = (price -= value) < 0 ? 0 : price;
 	}
 
 	@Override
