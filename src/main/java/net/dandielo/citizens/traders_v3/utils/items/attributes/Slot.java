@@ -10,16 +10,31 @@ import net.dandielo.citizens.traders_v3.utils.items.ItemAttr;
 public class Slot extends ItemAttr {
 	private int slot;
 	
+	/**
+	 * Default constructor 
+	 * @param key
+	 *     unique key to register 
+	 */
 	public Slot(String key) {
 		super(key);
 		slot = -1;
 	}
 	
+	/**
+	 * sets the slot with the given one
+	 * @param slot
+	 *     new slot value
+	 */
 	public void setSlot(int slot)
 	{
 		this.slot = slot;
 	}
 	
+	/**
+	 * Returns the item inventory slot value, -1 if item is not a stock item
+	 * @return
+	 *     inventory slot
+	 */
 	public int getSlot()
 	{
 		return slot;
@@ -47,16 +62,13 @@ public class Slot extends ItemAttr {
 	@Override
 	public void onAssign(ItemStack item)
 	{		
+		//unused
 	}
 
 	@Override
 	public void onFactorise(ItemStack item)
 	{
-	}
-	
-	public boolean equalsStrong(ItemAttr attr)
-	{
-		return true;// slot == ((Slot)attr).slot;
+		//unused
 	}
 	
 }
