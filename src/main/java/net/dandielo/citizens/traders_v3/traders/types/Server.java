@@ -1,5 +1,7 @@
 package net.dandielo.citizens.traders_v3.traders.types;
 
+import java.util.List;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
@@ -420,20 +422,44 @@ public class Server extends Trader {
 		//debug normal
 		Debugger.normal("Clearing the stock to set it with new items");
 		
+		List<StockItem> oldItems = stock.getStock(baseStatus.asStock());
+		Debugger.low("Old stock size: ", oldItems.size());
+		
 		stock.clearStock(baseStatus.asStock());
+		Debugger.low("Old stock size after clearing: ", oldItems.size());
 				
 		int slot = 0;
 		//save each item until stockSize() - uiSlots() are reached
 		for ( ItemStack bItem : inventory.getContents() )
 		{
+			//check if the given item is not null
 			if ( bItem != null && !stock.isUiSlot(slot) )
 			{
+				//to stock item
 				StockItem sItem = ItemUtils.createStockItem(bItem);
 				
-				//set the items new slot
-				sItem.setSlot(slot);
+				StockItem matchedItem = null;
+				//match old items to persist item data
+				for ( StockItem item : oldItems )
+					if ( matchedItem == null && item.equalsStrong(sItem) )
+						matchedItem = item; 
 				
-				stock.addItem(sItem, baseStatus.asStock());
+				if ( matchedItem != null )
+				{
+					//update just its slot
+					matchedItem.setSlot(slot);
+					
+					//add to the new stock
+					stock.addItem(matchedItem, baseStatus.asStock());
+				}
+				else
+				{
+					//set the items new slot
+					sItem.setSlot(slot);
+					
+					//add to stock
+					stock.addItem(sItem, baseStatus.asStock());
+				}
 			}
 			++slot;
 		}

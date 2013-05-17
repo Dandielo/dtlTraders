@@ -46,9 +46,13 @@ public abstract class Stock implements InventoryHolder {
 		return slot < getFinalInventorySize() && slot >= getFinalInventorySize() - 4;
 	}
 	
+	/**
+	 * Overrides the old list with a new one, that way all old items will persist opon clearing
+	 * @param stock
+	 */
 	public void clearStock(String stock)
 	{
-		this.stock.get(stock).clear();
+		this.stock.put(stock, new ArrayList<StockItem>());
 	}
 	
 	public void load(DataKey data) {
@@ -97,5 +101,10 @@ public abstract class Stock implements InventoryHolder {
 	public static String opositeStock(String stock)
 	{
 		return stock.equals("sell") ? "buy" : "sell"; 
+	}
+
+	public List<StockItem> getStock(String stock)
+	{
+		return this.stock.get(stock);
 	}
 }

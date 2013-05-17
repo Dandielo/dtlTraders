@@ -56,7 +56,7 @@ public class Slot extends ItemAttr {
 	
 	public boolean equalsStrong(ItemAttr attr)
 	{
-		return slot == ((Slot)attr).slot;
+		return true;// slot == ((Slot)attr).slot;
 	}
 	
 }

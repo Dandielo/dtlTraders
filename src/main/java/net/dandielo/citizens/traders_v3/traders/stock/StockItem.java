@@ -599,6 +599,8 @@ public final class StockItem {
 		//checking attribute missmatching
 		equals = equals ? !attributeMissmatch(item) : equals;
 		
+		Debugger.low("After ID and data check: ", equals);
+		
 		//now a if block to not make thousands of not needed checks 
 		if ( equals )
 		{
@@ -609,13 +611,24 @@ public final class StockItem {
 				if ( !equals ) break;
 				
 				//temporary false
-				equals = false;
+				equals = tAttr.getInfo().standalone();
+				
+				//debug low
+				Debugger.low("Before ", tAttr.getInfo().name() ," check: ", equals, ", with: ", tAttr.onSave());
 				
 				//check each item in the second item, if the attribute is found and strong equal continue
 				for ( ItemAttr iAttr : item.attr.values() )
+				{
+					//debug low
+					Debugger.info("Checking ", iAttr.getInfo().name() ," with: ", iAttr.onSave());
+					
 					//same attributes
 					if ( tAttr.getClass().equals(iAttr.getClass()) )
 						equals = tAttr.equalsStrong(iAttr);
+				}
+				
+				//debug low
+				Debugger.low("After ", tAttr.getInfo().name() ," check: ", equals);
 			}
 			
 			//for each attribute in this item
@@ -627,11 +640,13 @@ public final class StockItem {
 				//temporary false
 				equals = false;
 				
+				
 				//check each item in the second item, if the attribute is found and strong equal continue
 				for ( ItemFlag iFlag : item.flags.values() )
 					//same attributes
 					if ( tFlag.getClass().equals(iFlag.getClass()) )
 						equals = tFlag.equalsStrong(iFlag);
+				
 			}
 		}
 		return equals;
@@ -691,10 +706,10 @@ public final class StockItem {
 			for ( ItemFlag tFlag : flags.values() )
 			{
 				//if only once is false then return false
-				if ( !equals ) break;
+				if ( !equals ) tFlag.getInfo().standalone();
 				
 				//temporary false
-				equals = false;
+				equals = tFlag.getInfo().standalone();
 				
 				//check each item in the second item, if the attribute is found and strong equal continue
 				for ( ItemFlag iFlag : item.flags.values() )
