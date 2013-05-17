@@ -3,12 +3,7 @@ package net.dandielo.citizens.traders_v3.utils;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-import net.dandielo.citizens.traders_v3.bukkit.DtlTraders;
-import net.dandielo.citizens.traders_v3.core.Debugger;
-import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeValueNotFoundException;
 import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
-import net.dandielo.citizens.traders_v3.utils.items.ItemAttr;
-import net.dandielo.citizens.traders_v3.utils.items.flags.Lore;
 
 public class ItemUtils {
 

@@ -6,7 +6,6 @@ import java.util.Map;
 import org.bukkit.entity.Player;
 
 import net.citizensnpcs.api.npc.NPC;
-import net.dandielo.citizens.traders_v3.bukkit.DtlTraders;
 import net.dandielo.citizens.traders_v3.core.Debugger;
 import net.dandielo.citizens.traders_v3.core.exceptions.InvalidTraderTypeException;
 import net.dandielo.citizens.traders_v3.core.exceptions.TraderTypeNotFoundException;

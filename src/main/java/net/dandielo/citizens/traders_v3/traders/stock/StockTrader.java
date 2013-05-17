@@ -260,6 +260,7 @@ public class StockTrader extends Stock {
 
 	@Override
 	public double parsePrice(StockItem item, int slot) {
+		Debugger.high(item.getPrice());
 		return item.getPrice() * item.getAmount(slot);
 	}
 

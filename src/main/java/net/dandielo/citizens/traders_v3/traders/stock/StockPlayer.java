@@ -7,7 +7,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
 public class StockPlayer extends Stock {
-    private Player player;
+    @SuppressWarnings("unused")
+	private Player player;
 	
 	public StockPlayer(String name, int size, Player player) {
 		super(name, size);

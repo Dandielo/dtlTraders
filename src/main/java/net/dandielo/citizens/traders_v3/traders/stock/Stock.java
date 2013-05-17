@@ -69,7 +69,13 @@ public abstract class Stock implements InventoryHolder {
 	
 	public StockItem getItem(StockItem item, String stock)
 	{
-		return this.stock.get(stock).get(this.stock.get(stock).indexOf(item));
+		for ( StockItem sItem : this.stock.get(stock) )
+			if ( sItem.equalsWeak(item) )
+			{
+				Debugger.high(sItem.getPrice(), " ", item.getPrice());
+				return sItem;
+			}
+		return null;
 	}
 	
 	public abstract void addItem(StockItem item, String stock);

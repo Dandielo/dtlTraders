@@ -32,7 +32,7 @@ public class Server extends Trader {
 		if ( status.inManagementMode() )
 		{
 			locale.sendMessage(player, "trader-managermode-disabled", "npc", getNPC().getName());
-			status = getDefaultStatus();
+			parseStatus(getDefaultStatus());
 		}
 		else
 		{
@@ -51,6 +51,7 @@ public class Server extends Trader {
 			inventory = stock.getManagementInventory(baseStatus, status);
 		else
 			inventory = stock.getInventory(status);
+		parseStatus(status);
 		player.openInventory(inventory);
 	}
 
@@ -62,17 +63,17 @@ public class Server extends Trader {
 		{
 			if ( hitTest(slot, "buy") )
 			{
-				status = Status.BUY;
+				parseStatus(Status.BUY);
 			}
 			else
 			if ( hitTest(slot, "sell") )
 			{
-				status = Status.SELL;
+				parseStatus(Status.SELL);
 			}
 			else
 			if ( hitTest(slot, "back") )
 			{
-				status = Status.SELL;
+				parseStatus(Status.SELL);
 			}
 			stock.setInventory(inventory, getStatus());
 		}
@@ -233,20 +234,20 @@ public class Server extends Trader {
 					Debugger.low("Player has no space to buy this item");
 				}
 				else
-					if ( !sellTransaction(slot) )
-					{
+				if ( !sellTransaction(slot) )
+				{
 
-						//temp
-						Debugger.low("Player has no space to buy this item");
-					}
-					else
-					{
-						addToInventory(slot);
+			    	//temp
+					Debugger.low("Player has not enough money");
+				}
+				else
+				{
+					addToInventory(slot);
 
-						locale.sendMessage(player, "trader-transaction-success", "trader", getNPC().getName(),
-								"player", player.getName(), "action", "#bought", "item", getSelectedItem().getName(),
-								"amount", String.valueOf(getSelectedItem().getAmount()), "price", String.valueOf(stock.parsePrice(getSelectedItem(), slot)));
-					}
+					locale.sendMessage(player, "trader-transaction-success", "trader", getNPC().getName(),
+							"player", player.getName(), "action", "#bought", "item", getSelectedItem().getName(),
+							"amount", String.valueOf(getSelectedItem().getAmount()), "price", String.valueOf(stock.parsePrice(getSelectedItem(), slot)));
+				}
 			}
 			else
 			{
@@ -262,30 +263,77 @@ public class Server extends Trader {
 	@ClickHandler(status = {Status.SELL, Status.BUY}, inventory = InventoryType.PLAYER)
 	public void buyItems(InventoryClickEvent e)
 	{
-	//	int slot = e.getSlot();
+		clearSelection();
+		int slot = e.getSlot();
 		if ( e.isLeftClick() )
 		{
-		/*	if ( stock.getItem(slot, "sell") != null )
-			if ( handleClick(e.getRawSlot()) )
+			if ( selectAndCheckItem(e.getCurrentItem(), "buy") )
 			{
-				player.sendMessage("L" + stock.getItem(slot, "sell").<Double>getData("p").toString());
+				int scale = e.getCurrentItem().getAmount() / getSelectedItem().getAmount();
+				if ( scale == 0 ) return;
+				
+				if ( handleClick(e.getRawSlot()) )
+				{
+					if ( !buyTransaction(scale) )
+					{
+
+				    	//temp
+						Debugger.low("Trader has not enough money");
+					}
+					else
+					{
+						//remove the amount from inventory
+						removeFromInventory(slot, scale);
+
+						//send the transaction success message
+						locale.sendMessage(player, "trader-transaction-success", "trader", getNPC().getName(),
+								"player", player.getName(), "action", "#sold", "item", getSelectedItem().getName(),
+								"amount", String.valueOf(getSelectedItem().getAmount()*scale), "price", String.valueOf(stock.parsePrice(getSelectedItem(), 0)*scale));
+					}
+				}
+				else
+				{
+					//send the information message
+					locale.sendMessage(player, "trader-transaction-item",
+							"item", getSelectedItem().getName(), "amount", String.valueOf(getSelectedItem().getAmount()), 
+							"price", String.valueOf(stock.parsePrice(getSelectedItem(), 0)));
+				}
 			}
-			else
-			{
-				player.sendMessage("L" + stock.getItem(slot, "sell").toString());
-			}*/
 		}
 		else
 		{
-		/*	if ( stock.getItem(slot, "sell") != null )
-			if ( handleClick(e.getRawSlot()) )
+			if ( selectAndCheckItem(e.getCurrentItem(), "buy") )
 			{
-				player.sendMessage("R" + stock.getItem(slot, "sell").<Double>getData("p").toString());
+				int scale = e.getCurrentItem().getAmount() / getSelectedItem().getAmount();
+				if ( scale == 0 ) return;
+				
+				if ( handleClick(e.getRawSlot()) )
+				{
+					if ( !buyTransaction() )
+					{
+
+				    	//temp
+						Debugger.low("Trader has not enough money");
+					}
+					else
+					{
+						//remove the amount from inventory
+						removeFromInventory(slot);
+						
+						//send the transaction success message
+						locale.sendMessage(player, "trader-transaction-success", "trader", getNPC().getName(),
+								"player", player.getName(), "action", "#bought", "item", getSelectedItem().getName(),
+								"amount", String.valueOf(getSelectedItem().getAmount()), "price", String.valueOf(stock.parsePrice(getSelectedItem(), 0)));
+					}
+				}
+				else
+				{
+					//send the information message
+					locale.sendMessage(player, "trader-transaction-item",
+							"item", getSelectedItem().getName(), "amount", String.valueOf(getSelectedItem().getAmount()), 
+							"price", String.valueOf(stock.parsePrice(getSelectedItem(), 0)));
+				}
 			}
-			else
-			{
-				player.sendMessage("R" + stock.getItem(slot, "sell").toString());
-			}*/
 		}
 		e.setCancelled(true);
 	}
@@ -430,7 +478,6 @@ public class Server extends Trader {
 		Debugger.info("Inventory click, by: ", player.getName(), ", status: ", status.name().toLowerCase());
 		Debugger.info("slot: ", e.getSlot(), ", left: ", e.isLeftClick(), ", shift: ", e.isShiftClick());
 	}
-	
 	
 	
 	

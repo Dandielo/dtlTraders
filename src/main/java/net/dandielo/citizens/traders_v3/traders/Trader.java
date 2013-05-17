@@ -185,27 +185,20 @@ public abstract class Trader implements tNpc {
 	
 	public boolean buyTransaction()
 	{
-		return buyTransaction(0);
+		return buyTransaction(1);
 	}
 	
-	public boolean buyTransaction(int slot)
+	public boolean buyTransaction(int scale)
 	{
-		if ( wallet.withdraw(this, stock.parsePrice(selectedItem, slot)) )
+		if ( wallet.withdraw(this, stock.parsePrice(selectedItem, 0)*scale) )
 		{
-			wallet.deposit(player, stock.parsePrice(selectedItem, slot));
+			wallet.deposit(player, stock.parsePrice(selectedItem, 0)*scale);
 			return true;
 		}
 		return false;
 	}
 
 	/** Helper methods */
-/*	public void addToInventory()
-	{
-		//debug info
-		Debugger.info("Adding item to players inventory, player", player.getName());
-		
-		player.getInventory().addItem(selectedItem.getItem());
-	}*/
 	public final boolean inventoryHasPlace()
 	{
 		return inventoryHasPlace(0);
@@ -248,23 +241,6 @@ public abstract class Trader implements tNpc {
 			}
 		}
 		return false;
-			/*if ( item.getDurability() == selectedItem.getItemStack().getDurability() ) 
-			{
-				if ( MetaTools.getName(item).equals(selectedItem.getName()) ) 
-				{
-					if ( item.getAmount() + amountToAdd <= selectedItem.getItemStack().getMaxStackSize() )
-						return true;
-					
-					if ( item.getAmount() < 64 ) {
-						amountToAdd = ( item.getAmount() + amountToAdd ) % 64; 
-					}
-					
-					if ( amountToAdd <= 0 )
-						return true;
-				}
-			}*/
-
-		//if we still ahve some items to add, is there an empty slot for them?
 	}
 	
 	
@@ -325,7 +301,73 @@ public abstract class Trader implements tNpc {
 		return false;
 	}
 	
+
+	public final void removeFromInventory(int slot) 
+	{
+		removeFromInventory(slot, 1);
+	}
+
+	public final void removeFromInventory(int slot, int scale) 
+	{
+		//debug info
+		Debugger.info("Adding item to players inventory");
+		Debugger.info("Player: ", player.getName(), ", item: ", selectedItem.getItem().getType().name().toLowerCase());
+				
+		_removeFromInventory(slot, selectedItem.getAmount(0) * scale);
+	}
 	
+	
+	private final void _removeFromInventory(int slot, int amount) 
+	{
+		PlayerInventory inventory = player.getInventory();
+		ItemStack item = inventory.getItem(slot);
+		
+		if ( item.getAmount() < amount )
+		{
+			item.setAmount(item.getAmount() - amount);
+			inventory.setItem(slot, item);
+		}
+		else
+			inventory.setItem(slot, null);
+		
+	/*	int amountLeft = amount;
+
+		for ( ItemStack item : inventory.all(selectedItem.getItem().getType()).values() ) 
+		{
+			if ( selectedItem.equalsWeak(ItemUtils.createStockItem(item)) )
+			{
+				//add amount to an item in the inventory, its done
+				if ( item.getAmount() + amountLeft <= item.getMaxStackSize() ) {
+					item.setAmount( item.getAmount() + amountLeft );
+					return true;
+				} 
+				
+				//add amount to an item in the inventory, but we still got some left
+				if ( item.getAmount() < item.getMaxStackSize() ) {
+					amountLeft = ( item.getAmount() + amountLeft ) % item.getMaxStackSize(); 
+					item.setAmount(item.getMaxStackSize());
+				}
+					
+				//nothing left
+				if ( amountLeft <= 0 )
+					return true;
+			}
+		}
+
+		if ( inventory.firstEmpty() < inventory.getSize() 
+				&& inventory.firstEmpty() >= 0 ) 
+		{
+			
+			//new stack
+			ItemStack is = selectedItem.getItem();
+			is.setAmount(amountLeft);
+			
+			//set the item info the inv
+			inventory.setItem(inventory.firstEmpty(), is);
+			return true;
+		}
+		return false;*/
+	}
 	
 	
 	/**
@@ -362,7 +404,7 @@ public abstract class Trader implements tNpc {
 	 */
 	public StockItem selectItem(int slot)
 	{
-		return (selectedItem = stock.getItem(slot, status.asStock()));
+		return (selectedItem = stock.getItem(slot, baseStatus.asStock()));
 	}
 
 	/** 
@@ -376,7 +418,23 @@ public abstract class Trader implements tNpc {
 	 */
 	public StockItem selectItem(ItemStack item)
 	{
-		return stock.getItem(ItemUtils.createStockItem(item), status.asStock());
+		return stock.getItem(ItemUtils.createStockItem(item), baseStatus.asStock());
+	}
+	
+	/** 
+	 * Selects the item using a bukkit item to compare with and the target stock. If a similar item is found it will be stored.
+	 * 
+	 * @param item 
+	 *     Item to compare with
+	 * @param stock
+	 *     the stock to search for
+	 * @return 
+	 *     Returns the item found, or null otherwise
+	 * @author dandielo
+	 */
+	public StockItem selectItem(ItemStack item, String bStock)
+	{
+		return stock.getItem(ItemUtils.createStockItem(item), bStock);
 	}
 
 	/** 
@@ -405,7 +463,7 @@ public abstract class Trader implements tNpc {
 	 */
 	public boolean selectAndCheckItem(int slot)
 	{
-		return (selectedItem = stock.getItem(slot, status.asStock())) != null;
+		return (selectedItem = stock.getItem(slot, baseStatus.asStock())) != null;
 	}
 	
 	/** 
@@ -420,7 +478,23 @@ public abstract class Trader implements tNpc {
 	//TODO This might be not needed
 	public boolean selectAndCheckItem(ItemStack item)
 	{
-		return (selectedItem = item != null && item.getTypeId() != 0 ? stock.getItem(ItemUtils.createStockItem(item), status.asStock()) : null ) != null;
+		return (selectedItem = item != null && item.getTypeId() != 0 ? stock.getItem(ItemUtils.createStockItem(item), baseStatus.asStock()) : null ) != null;
+	}
+	
+	/** 
+	 * Selects the item using a bukkit item to compare with. If a similar item is found it will be stored.
+	 * 
+	 * @param item 
+	 *     Item to compare with
+	 * @param bStock
+	 *     stock to look for the item
+	 * @return 
+	 *     Returns true if the item was found, false otherwise   
+	 * @author dandielo
+	 */
+	public boolean selectAndCheckItem(ItemStack item, String bStock)
+	{
+		return (selectedItem = item != null && item.getTypeId() != 0 ? stock.getItem(ItemUtils.createStockItem(item), bStock) : null ) != null;
 	}
 	
 	/** 
@@ -501,7 +575,8 @@ public abstract class Trader implements tNpc {
 		
 		public static Status parseBaseManageStatus(Status oldStatus, Status newStatus)
 		{
-			return newStatus.equals(MANAGE_SELL) || newStatus.equals(MANAGE_BUY) ? newStatus : oldStatus;
+			return newStatus.equals(MANAGE_SELL) || newStatus.equals(MANAGE_BUY) ||
+					newStatus.equals(SELL) || newStatus.equals(BUY) ? newStatus : oldStatus;
 		}
 		
 		public static Status baseManagementStatus(String status)
