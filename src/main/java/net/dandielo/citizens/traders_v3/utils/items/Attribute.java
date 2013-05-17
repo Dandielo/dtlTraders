@@ -44,6 +44,13 @@ public @interface Attribute {
     public boolean required() default false;
     
     /**
+     * Determines if the Attribute needs to be present in both items when a weak or string check is done.  
+     * @return
+     *     true if only one instance is needed
+     */
+    public boolean standalone() default false;
+    
+    /**
      * Determines when should be additional lore information be assigned to an item in stock.
      * This lore will not persist, it's added only temporary
      * <br><br>

@@ -556,6 +556,31 @@ public final class StockItem {
 		return hasFlag(Lore.class) ? getFlag(Lore.class).getLore() : null;
 	}
 	
+	private boolean standaloneAttrCheck(StockItem item)
+	{
+		boolean containsAll = true;
+		for ( ItemAttr key : item.attr.values() )
+			containsAll = containsAll && !key.getInfo().standalone() ? this.attr.containsKey(key.getClass()) : containsAll;
+		for ( ItemAttr key : this.attr.values() )
+			containsAll = containsAll && !key.getInfo().standalone() ? item.attr.containsKey(key.getClass()) : containsAll;
+		return containsAll;
+	}
+	
+	private boolean standaloneFlagCheck(StockItem item)
+	{
+		boolean containsAll = true;
+		for ( ItemFlag key : item.flags.values() )
+			containsAll = containsAll && !key.getInfo().standalone() ? this.flags.containsKey(key.getClass()) : containsAll;
+		for ( ItemFlag key : this.flags.values() )
+			containsAll = containsAll && !key.getInfo().standalone() ? item.flags.containsKey(key.getClass()) : containsAll;
+		return containsAll;
+	}
+	
+	private boolean attributeMissmatch(StockItem item)
+	{
+		return !(standaloneAttrCheck(item) && standaloneFlagCheck(item));
+	}
+	
 	/**
 	 * Strong equality is needed when we need precise information if an item is equal, example: Stock placement
 	 * @param item
@@ -570,6 +595,9 @@ public final class StockItem {
 		equals = item.item.getTypeId() == this.item.getTypeId();
 		//if equals check data, if not durability
 		equals = equals && !ItemUtils.itemHasDurability(item.item) ? item.item.getDurability() == this.item.getDurability() : equals; 
+		
+		//checking attribute missmatching
+		equals = !attributeMissmatch(item);
 		
 		//now a if block to not make thousands of not needed checks 
 		if ( equals )
@@ -623,6 +651,11 @@ public final class StockItem {
 		equals = item.item.getTypeId() == this.item.getTypeId();
 		//if equals check data, if not durability
 		equals = equals && !ItemUtils.itemHasDurability(item.item) ? item.item.getDurability() == this.item.getDurability() : equals; 
+
+		//checking attribute missmatching
+		equals = !attributeMissmatch(item);
+
+		Debugger.low("After ID and data check: ", equals);
 		
 		//now a if block to not make thousands of not needed checks 
 		if ( equals )
@@ -634,13 +667,24 @@ public final class StockItem {
 				if ( !equals ) break;
 				
 				//temporary false
-				equals = false;
+				equals = tAttr.getInfo().standalone();
+
+				//debug low
+				Debugger.low("Before ", tAttr.getInfo().name() ," check: ", equals, ", with: ", tAttr.onSave());
 				
 				//check each item in the second item, if the attribute is found and strong equal continue
 				for ( ItemAttr iAttr : item.attr.values() )
+				{
+					//debug low
+					Debugger.info("Checking ", iAttr.getInfo().name() ," with: ", iAttr.onSave());
+					
 					//same attributes
 					if ( tAttr.getClass().equals(iAttr.getClass()) )
 						equals = tAttr.equalsWeak(iAttr);
+				}
+				
+				//debug low
+				Debugger.low("After ", tAttr.getInfo().name() ," check: ", equals);
 			}
 			
 			//for each attribute in this item

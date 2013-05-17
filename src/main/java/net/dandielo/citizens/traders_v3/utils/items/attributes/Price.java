@@ -11,7 +11,7 @@ import net.dandielo.citizens.traders_v3.utils.items.Attribute;
 import net.dandielo.citizens.traders_v3.utils.items.ItemAttr;
 
 @Attribute(
-name="Price", key = "p", 
+name="Price", key = "p", standalone = true,
 status = {Status.BUY, Status.SELL, Status.SELL_AMOUNTS, Status.MANAGE_PRICE})
 public class Price extends ItemAttr {
 	private double price;
