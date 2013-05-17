@@ -14,7 +14,7 @@ import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
 import net.dandielo.citizens.traders_v3.traits.TraderTrait;
 import net.dandielo.citizens.traders_v3.traits.WalletTrait;
 import net.dandielo.citizens.traders_v3.utils.ItemUtils;
-import net.dandielo.citizens.traders_v3.utils.items.data.Price;
+import net.dandielo.citizens.traders_v3.utils.items.attributes.Price;
 
 @TraderType(name="server", author="dandielo")
 public class Server extends Trader {
@@ -334,14 +334,12 @@ public class Server extends Trader {
 			{
 				//sends the message
 				locale.sendMessage(player, "key-value", 
-						"key", "#price", "value", getSelectedItem().getFormatedPrice());
+						"key", "#price", "value", getSelectedItem().getPriceFormated());
 			}
 			else
 			{
 				//adds the price attribute to the item
-				if ( !getSelectedItem().hasPrice() )
-					getSelectedItem().addData(new Price());
-				Price price = getSelectedItem().priceAttr();
+				Price price = getSelectedItem().getPriceAttr();
 				
 				//adds value to the current price
 				if ( e.isLeftClick() )
@@ -351,7 +349,7 @@ public class Server extends Trader {
 					
 					//sends a message
 					locale.sendMessage(player, "key-change", 
-							"key", "#price", "value", getSelectedItem().getFormatedPrice());
+							"key", "#price", "value", getSelectedItem().getPriceFormated());
 				}
 				else
 				//remove value from the current price
@@ -362,7 +360,7 @@ public class Server extends Trader {
 					
 					//sends a message
 					locale.sendMessage(player, "key-change", 
-							"key", "#price", "value", getSelectedItem().getFormatedPrice());
+							"key", "#price", "value", getSelectedItem().getPriceFormated());
 				}
 			}
 		}

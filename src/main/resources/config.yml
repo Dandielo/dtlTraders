@@ -48,7 +48,7 @@ trader:
     #special blocks used when setting prices and limits, format => 'item_id value'
     special-blocks:
     - dirt 0.01
-    - wooden_planks 0.1
+    - wood 0.1
     - log 10
     - cobblestone 100
     - stone 10000
@@ -97,8 +97,12 @@ trader:
     back: wool:14
     #item that will "link" to price managing
     price: wool:15
-    #item that will :link" to limit managing
+    #item that will "link" to limit managing
     limit: wool:3
+    #item that will "unlock" the stock for eiding
+    lock: wool:4
+    #item that will "lock" the stock (saving all changes)
+    unlock: wool:5
   #denizen support related settings
   denizen:
 banker:

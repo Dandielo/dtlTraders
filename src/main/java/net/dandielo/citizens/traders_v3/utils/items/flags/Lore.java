@@ -6,32 +6,24 @@ import java.util.List;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import net.dandielo.citizens.traders_v3.core.exceptions.ItemDataNotFoundException;
-import net.dandielo.citizens.traders_v3.utils.items.DataNode;
+import net.dandielo.citizens.traders_v3.core.exceptions.InvalidItemException;
+import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeValueNotFoundException;
 import net.dandielo.citizens.traders_v3.utils.items.ItemFlag;
 
-@DataNode(name="Lore", saveKey=".lore", byDefault = false)
 public class Lore extends ItemFlag {
-
 	private List<String> lore;
-	
-	public Lore(String key) {
+
+	protected Lore(String key) {
 		super(key);
 	}
 	
-	public Lore setLore(List<String> lore)
+	public void setLore(List<String> lore)
 	{
-		this.lore = lore;
-		return this;
-	}
-	
-	public List<String> getLore()
-	{
-		return lore;
 	}
 
 	@Override
-	public void assing(ItemStack item) {
+	public void onAssign(ItemStack item) throws InvalidItemException 
+	{
 		//get the existing lore
 		List<String> lore = item.getItemMeta().getLore();
 		if ( lore == null )
@@ -46,23 +38,21 @@ public class Lore extends ItemFlag {
 		item.setItemMeta(meta);
 	}
 	
-	public void peek(ItemStack item) throws ItemDataNotFoundException
+	public void onFactorize(ItemStack item) throws AttributeValueNotFoundException
 	{
 		if ( !item.getItemMeta().hasLore() )
-			throw new ItemDataNotFoundException();
+			throw new AttributeValueNotFoundException();
 		this.lore = item.getItemMeta().getLore();
 	}
 
-	@Override
-	public boolean getValue() {
-		return lore != null && !lore.isEmpty();
+	public List<String> getLore() {
+		return lore;
 	}
 	
+	
 	@Override
-	public boolean equals(Object o)
-	{
-		if ( !(o instanceof Lore) ) return false;
-		
+	public boolean equalsStrong(ItemFlag o)
+	{		
 		Lore lore = (Lore) o;
 		if ( !(lore.lore == null && this.lore == null) && !(lore.lore != null && this.lore != null) ) return false;
 		if ( lore.lore.size() != this.lore.size() ) return false;

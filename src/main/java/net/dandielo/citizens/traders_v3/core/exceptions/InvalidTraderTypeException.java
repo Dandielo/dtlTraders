@@ -1,12 +1,9 @@
 package net.dandielo.citizens.traders_v3.core.exceptions;
 
-public class InvalidTraderTypeException extends Throwable {
-	private String type;
-	
-	public InvalidTraderTypeException(String type) {
-		this.type = type;
-	}
+public class InvalidTraderTypeException extends Exception {
 
-	private static final long serialVersionUID = -2609821390326679752L;
+	public InvalidTraderTypeException(String type) {
+		// TODO Auto-generated constructor stub
+	}
 
 }

@@ -1,53 +1,122 @@
 package net.dandielo.citizens.traders_v3.utils.items;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import net.dandielo.citizens.traders_v3.core.Debugger;
-import net.dandielo.citizens.traders_v3.core.exceptions.InvalidDataNodeException;
+import net.dandielo.citizens.traders_v3.core.exceptions.InvalidItemException;
+import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeInvalidClassException;
+import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeInvalidValueException;
+import net.dandielo.citizens.traders_v3.core.tools.StringTools;
 import net.dandielo.citizens.traders_v3.traders.Trader.Status;
-import net.dandielo.citizens.traders_v3.utils.items.flags.Lore;
-import net.dandielo.citizens.traders_v3.utils.items.flags.Multiplier;
-import net.dandielo.citizens.traders_v3.utils.items.flags.PatternPrice;
+import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
 import net.dandielo.citizens.traders_v3.utils.items.flags.StackPrice;
 
+import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 
+/**
+ * This structure describes the item for what they are assigned. Each item can have only one flag of each type.
+ * Flags allow to store and get fast additional information, they are also used for pattern setups
+ * 
+ * @author dandielo
+ */
 public abstract class ItemFlag {
-    private final String key;
-    private DataNode info;
 	
-	public ItemFlag(String key)
+	/**
+	 * Attribute key, used for saving and identification (is Unique)
+	 */
+	private final String key;
+	
+	/**
+	 * All informations about this attribute 
+	 */
+	private Attribute info;
+	
+	/**
+	 * The item associated with the attribute
+	 */
+	protected StockItem item;
+	
+	/**
+	 * default constructor (needs a key)
+	 * @param key
+	 *     the flag key
+	 */
+	protected ItemFlag(String key)
 	{
 		this.key = key;
 	}
+
+	/**
+	 * Called when the given item needs flags re-set
+	 * @param item
+	 *     The item for which we set the flag values
+	 * @throws InvalidItemException
+	 */
+	public abstract void onAssign(ItemStack item) throws InvalidItemException; 
 	
-	public abstract boolean getValue();
-	public abstract void assing(ItemStack item);
-	public void assignLore(Status status, List<String> lore) { };
-	
-	public final void lore(Status status, List<String> lore) 
+	/**
+	 * Called when a status lore request is send for the given status set in the flags information.
+	 * @param status
+	 *     The calling status.
+	 * @param lore
+	 *     Lore list, allows to re-arrange previous assigned lore. 
+	 */
+	public void onStatusLoreRequest(Status status, List<String> lore)
 	{
-		//no lore assignment 
-		if ( !info.assignLore() ) return;
-		
-		//check if trader has the required status
-		boolean assign = false;
-		for ( int i = 0 ; i < info.assignStatus().length && !assign ; ++i )
-			assign = info.assignStatus()[i].equals(status);
-		
-		//wrong status = see ya 
-		if ( !assign ) return;
-		
-		//call the method that can be override
-		assignLore(status, lore);
 	}
 	
-	public String getKey()
+	/**
+	 * Called when a week equality is needed. Allows sometimes a value to be in range of another value, used for priority requests
+	 * @return
+	 *    true when equal, false instead 
+	 */
+	public boolean equalsWeak(ItemFlag flag)
+	{
+		return true;
+	}
+	
+	/**
+	 * Called when a strong equality is needed. Values are compared strict.
+	 * @return
+	 *    true when equal, false instead 
+	 */
+	public boolean equalsStrong(ItemFlag flag)
+	{
+		return true;
+	}
+	
+	/**
+	 * Returns information about the flag
+	 * @return
+	 */
+	public Attribute getInfo()
+	{
+		return info;
+	}
+	
+	/**
+	 * @return returns the flags save string.
+	 */
+	@Override
+	public final String toString()
 	{
 		return key;
 	}
+	
+	/**
+	 * @return
+	 *     the flags unique key
+	 */
+	public String getKey() {
+		return key;
+	}
+	
+	
+	
 	
 	@Override
 	public int hashCode()
@@ -56,65 +125,137 @@ public abstract class ItemFlag {
 	}
 	
 	@Override
-	public boolean equals(Object o)
+	public final boolean equals(Object o)
 	{
-		return true;
+		return key.equals(((ItemFlag)o).key);
 	}
 	
 	//getting item datas
-	private final static Map<DataNode, Class<? extends ItemFlag>> data = new HashMap<DataNode, Class<? extends ItemFlag>>();
+	private final static Map<Attribute, Class<? extends ItemFlag>> flags = new HashMap<Attribute, Class<? extends ItemFlag>>();
 	
-	public final static void registerFlag(Class<? extends ItemFlag> clazz) throws InvalidDataNodeException
+	/**
+	 * Registers a new flag to the system, should be done before Citizens2 loading.
+	 * @param clazz
+	 *     The falg class that should be registered.
+	 * @throws InvalidDataNodeException
+	 */
+	public final static void registerFlag(Class<? extends ItemFlag> clazz) throws AttributeInvalidClassException
 	{
-		if ( !clazz.isAnnotationPresent(DataNode.class) )
-			throw new InvalidDataNodeException();
+		if ( !clazz.isAnnotationPresent(Attribute.class) )
+			throw new AttributeInvalidClassException();
 		
-		data.put(clazz.getAnnotation(DataNode.class), clazz);
+		Attribute attr = clazz.getAnnotation(Attribute.class);
+
+		//debug low
+		Debugger.low("Registering flag \'", ChatColor.GREEN, attr.name(), ChatColor.RESET, "\' with key: ", attr.key());
+		
+		flags.put(attr, clazz);
 	}
 	
-	public final static ItemFlag createItemFlag(String key) throws InvalidDataNodeException
+	/**
+	 * Creates a flag based on the key. 
+	 * @param item
+	 *     The item associated with the flag
+	 * @param key
+	 *     The flag key, this is the unique key for each flag.
+	 * @return
+	 *     Returns the initialized flag if successful.
+	 * @throws AttributeInvalidClassException 
+	 * @throws AttributeInvalidValueException 
+	 */
+	public final static ItemFlag initFlag(StockItem item, String key) throws AttributeInvalidClassException
 	{
-		DataNode nodeInfo = null;
-		for ( DataNode info : data.keySet() )
-			if ( info.saveKey().equals(key) )
-				nodeInfo = info;
+		//Search for the attribute
+		Attribute attr = null;
+		for ( Attribute attrEntry : flags.keySet() )
+			if ( attrEntry.key().equals(key) )
+				attr = attrEntry;
+		
 		try 
 		{
-			ItemFlag itemFlag = data.get(nodeInfo).getConstructor(String.class).newInstance(key);
-			itemFlag.info = nodeInfo;
-			return itemFlag;
-		} 
-		catch (Exception e) 
-		{
-			//debug critical
-			Debugger.critical("Item flag could not be read, invalid flag set! Key: ", key);
-			Debugger.critical("Exception: ", e.getClass().getSimpleName());
+			//debug low
+			Debugger.low("Initializing new flag instance");
 			
-			//debug high
-			Debugger.high("Exception message: ", e.getMessage());
-			Debugger.high("Stack trace: ", e.getStackTrace());
-			throw new InvalidDataNodeException();
-		}
+			//get the attribute declaring class
+			ItemFlag itemflag = flags.get(attr).getConstructor(String.class).newInstance(key);
+			//assoc the item
+			itemflag.item = item;
+			//assigning attribute information
+			itemflag.info = attr;
+			//returning the initialized attribute
+			return itemflag;
+		} 
+		catch (InvocationTargetException e) 
+		{
+			debugInfo(attr, e);
+			throw new AttributeInvalidClassException();
+		} 
+		catch (InstantiationException e)
+		{
+			debugInfo(attr, e);
+			throw new AttributeInvalidClassException();
+		} 
+		catch (IllegalAccessException e) 
+		{
+			debugInfo(attr, e);
+			throw new AttributeInvalidClassException();
+		} 
+		catch (IllegalArgumentException e) 
+		{
+			debugInfo(attr, e);
+			throw new AttributeInvalidClassException();
+		} 
+		catch (NoSuchMethodException e)
+		{
+			debugInfo(attr, e);
+			throw new AttributeInvalidClassException();
+		} 
+		catch (SecurityException e)
+		{
+			debugInfo(attr, e);
+			throw new AttributeInvalidClassException();
+		} 
+		
+	}
+
+	/**
+	 * Debug information
+	 */
+	private final static void debugInfo(Attribute attr, Exception e)
+	{
+		//debug high
+		Debugger.high("Flag exception on initialization");
+		Debugger.high("Flag name: ", ChatColor.GREEN, attr.name());
+		
+		//debug normal
+		Debugger.normal("Exception: ", e.getClass().getSimpleName());
+		Debugger.normal("Stack trace: ", StringTools.stackTrace(e.getStackTrace()));
 	}
 	
+
+	/**
+	 * Registers all core flags
+	 */
 	public static void registerCoreFlags()
 	{
-		try
+		//debug info
+		Debugger.info("Registering core item flags");
+		
+		try 
 		{
-			registerFlag(Lore.class);
-			registerFlag(PatternPrice.class);
 			registerFlag(StackPrice.class);
-			registerFlag(Multiplier.class);
+		//	registerFlag(PaternPrice.class);
+		//	registerFlag(Price.class);
+		//	registerFlag(Slot.class);
 		} 
-		catch (InvalidDataNodeException e) 
+		catch (AttributeInvalidClassException e) 
 		{
 			//debug critical
-			Debugger.critical("Core item flag classes bugged");
-			Debugger.critical("Exception: ", e.getClass().getSimpleName());
-			
+			Debugger.critical("Core flags invalid");
+
 			//debug high
 			Debugger.high("Exception message: ", e.getMessage());
-			Debugger.high("Stack trace: ", e.getStackTrace());
+			Debugger.high("Stack trace: ", StringTools.stackTrace(e.getStackTrace()));
 		}
 	}
 }

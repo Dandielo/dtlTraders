@@ -14,7 +14,7 @@ import net.dandielo.citizens.traders_v3.traders.setting.TGlobalSettings;
 import net.dandielo.citizens.traders_v3.traders.types.Server;
 import net.dandielo.citizens.traders_v3.traits.TraderTrait;
 import net.dandielo.citizens.traders_v3.traits.WalletTrait;
-import net.dandielo.citizens.traders_v3.utils.items.ItemData;
+import net.dandielo.citizens.traders_v3.utils.items.ItemAttr;
 import net.dandielo.citizens.traders_v3.utils.items.ItemFlag;
 
 import org.bukkit.ChatColor;
@@ -64,7 +64,7 @@ public class DtlTraders extends JavaPlugin {
 		CitizensAPI.getTraitFactory().registerTrait(TraitInfo.create(WalletTrait.class).withName("wallet"));
 		
 		//registering core extensions
-		ItemData.registerCoreData();
+		ItemAttr.registerCoreAttributes();
 		ItemFlag.registerCoreFlags();
 		tNpcManager.registerTraderTypes();
 		

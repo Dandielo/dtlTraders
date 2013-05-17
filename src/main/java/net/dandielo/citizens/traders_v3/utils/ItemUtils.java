@@ -5,9 +5,9 @@ import org.bukkit.inventory.ItemStack;
 
 import net.dandielo.citizens.traders_v3.bukkit.DtlTraders;
 import net.dandielo.citizens.traders_v3.core.Debugger;
-import net.dandielo.citizens.traders_v3.core.exceptions.ItemDataNotFoundException;
+import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeValueNotFoundException;
 import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
-import net.dandielo.citizens.traders_v3.utils.items.ItemData;
+import net.dandielo.citizens.traders_v3.utils.items.ItemAttr;
 import net.dandielo.citizens.traders_v3.utils.items.flags.Lore;
 
 public class ItemUtils {
@@ -21,38 +21,11 @@ public class ItemUtils {
 	
 	public static StockItem createStockItem(ItemStack bItem)
 	{
-		Debugger.low("Item object present: ", bItem);
+		//creating a clean item
 		StockItem sItem = new StockItem(bItem);
-		for ( ItemData data : ItemData.itemDataList() )
-		{
-			try 
-			{
-				data.peek(bItem);
-				sItem.addData(data);
-			}
-			catch (ItemDataNotFoundException e)
-			{
-				//debug low
-				Debugger.low("Item data not found for this item");
-				Debugger.low("Exception: ", e.getClass().getSimpleName());
-				Debugger.low("data: ", data.getKey());
-			}
-		}
-
-		//try to the lore
-		try 
-		{
-			Lore lore = new Lore(".lore");
-			lore.peek(bItem);
-			sItem.addFlag(lore);
-		}
-		catch (ItemDataNotFoundException e)
-		{
-			//debug low
-			Debugger.low("Item lore not found for this item");
-			Debugger.low("Exception: ", e.getClass().getSimpleName());
-		}
-		
+		//getting data out of it (by force ;>)
+		sItem.factorize(bItem);
+		//returning the item
 		return sItem;
 	}
 	

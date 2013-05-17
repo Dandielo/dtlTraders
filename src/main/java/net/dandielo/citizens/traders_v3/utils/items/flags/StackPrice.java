@@ -2,16 +2,14 @@ package net.dandielo.citizens.traders_v3.utils.items.flags;
 
 import org.bukkit.inventory.ItemStack;
 
+import net.dandielo.citizens.traders_v3.core.exceptions.InvalidItemException;
 import net.dandielo.citizens.traders_v3.traders.Trader.Status; 
-import net.dandielo.citizens.traders_v3.utils.items.DataNode;
+import net.dandielo.citizens.traders_v3.utils.items.Attribute;
 import net.dandielo.citizens.traders_v3.utils.items.ItemFlag;
 
-@DataNode( 
-name="StackPrice", 
-saveKey = ".sp", 
-byDefault = false,
-assignLore = true,
-assignStatus = {Status.MANAGE_SELL, Status.MANAGE_BUY})
+@Attribute( 
+name="StackPrice", key = ".sp", 
+status = {Status.MANAGE_SELL, Status.MANAGE_BUY})
 public class StackPrice extends ItemFlag {
 
 	public StackPrice(String key) {
@@ -19,13 +17,8 @@ public class StackPrice extends ItemFlag {
 	}
 
 	@Override
-	public boolean getValue() {
-		return true;
-	}
-
-	@Override
-	public void assing(ItemStack item) {
-		//nothing to do here
+	public void onAssign(ItemStack item) throws InvalidItemException 
+	{
 	}
 
 }

@@ -9,6 +9,7 @@ import net.citizensnpcs.api.util.DataKey;
 import net.dandielo.citizens.traders_v3.core.Debugger;
 import net.dandielo.citizens.traders_v3.traders.Trader.Status;
 import net.dandielo.citizens.traders_v3.traders.setting.TGlobalSettings;
+import net.dandielo.citizens.traders_v3.utils.items.flags.Lore;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -108,7 +109,7 @@ public class StockTrader extends Stock {
 		
 		List<Object> sellList = new ArrayList<Object>();
 		for ( StockItem item : stock.get("sell") )
-			if ( item.hasFlag(".lore") )
+			if ( item.hasFlag(Lore.class) )
 			{
 				Map<String, List<String>> temp = new HashMap<String, List<String>>();
 				temp.put(item.toString(), item.getLore());
@@ -119,7 +120,7 @@ public class StockTrader extends Stock {
 
 		List<Object> buyList = new ArrayList<Object>();
 		for ( StockItem item : stock.get("buy") )
-			if ( item.hasFlag(".lore") )
+			if ( item.hasFlag(Lore.class) )
 			{
 				Map<String, List<String>> temp = new HashMap<String, List<String>>();
 				temp.put(item.toString(), item.getLore());
@@ -162,7 +163,7 @@ public class StockTrader extends Stock {
 		inventory.clear();
 		for ( StockItem item : this.stock.get(status.asStock()) )
 		{
-			if ( !item.hasSlot() || item.getSlot() < 0 )
+			if (  item.getSlot() < 0 )
 				item.setSlot(inventory.firstEmpty());
 
 			//set the lore
@@ -200,7 +201,7 @@ public class StockTrader extends Stock {
 		inventory.clear();
 		for ( StockItem item : this.stock.get(baseStatus.asStock()) )
 		{
-			if ( !item.hasSlot() || item.getSlot() < 0 )
+			if ( item.getSlot() < 0 )
 				item.setSlot(inventory.firstEmpty());
 
 			//set the lore

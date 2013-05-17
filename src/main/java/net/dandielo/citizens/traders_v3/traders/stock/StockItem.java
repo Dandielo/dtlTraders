@@ -7,101 +7,127 @@ import java.util.Map;
 import java.util.regex.Matcher;
 
 import net.dandielo.citizens.traders_v3.core.Debugger;
-import net.dandielo.citizens.traders_v3.core.exceptions.InvalidDataAssignmentException;
-import net.dandielo.citizens.traders_v3.core.exceptions.InvalidDataNodeException;
+import net.dandielo.citizens.traders_v3.core.exceptions.InvalidItemException;
+import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeInvalidClassException;
+import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeInvalidValueException;
+import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeValueNotFoundException;
 import net.dandielo.citizens.traders_v3.traders.Trader.Status;
 import net.dandielo.citizens.traders_v3.utils.ItemUtils;
 import net.dandielo.citizens.traders_v3.utils.RegexMatcher;
-import net.dandielo.citizens.traders_v3.utils.items.ItemData;
+import net.dandielo.citizens.traders_v3.utils.items.Attribute;
+import net.dandielo.citizens.traders_v3.utils.items.ItemAttr;
 import net.dandielo.citizens.traders_v3.utils.items.ItemFlag;
-import net.dandielo.citizens.traders_v3.utils.items.data.Amount;
-import net.dandielo.citizens.traders_v3.utils.items.data.Name;
-import net.dandielo.citizens.traders_v3.utils.items.data.Price;
-import net.dandielo.citizens.traders_v3.utils.items.data.Slot;
+import net.dandielo.citizens.traders_v3.utils.items.attributes.Amount;
+import net.dandielo.citizens.traders_v3.utils.items.attributes.Name;
+import net.dandielo.citizens.traders_v3.utils.items.attributes.Price;
+import net.dandielo.citizens.traders_v3.utils.items.attributes.Slot;
 import net.dandielo.citizens.traders_v3.utils.items.flags.Lore;
 
+import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 
-public class StockItem {
+/**
+ * Item structure using in each trader stock, this structure allows to save and store more data than the commom ItemStack bukkit structure.
+ * @author dandielo
+ */
+public final class StockItem {
+	/**
+	 * Pattern used for loading data form strings
+	 */
 	public static String ITEM_PATTERN = "(([^ :]+):([^ :]+))|([^ :]*)";
 
-	//Item info
+	/**
+	 * The bukkit representation of the item, this item is always saved without any data assigned. Assigning is done on a copy when needed.
+	 */
 	private ItemStack item;
-	private Map<String, ItemData> data = new HashMap<String, ItemData>();
-	private Map<String, ItemFlag> flags = new HashMap<String, ItemFlag>();
+	
+	/**
+	 * All additional data set for the item
+	 */
+	private Map<Class<? extends ItemAttr>, ItemAttr> attr = new HashMap<Class<? extends ItemAttr>, ItemAttr>();
+	
+	/**
+	 * Flags for checking some things fast
+	 */
+	private Map<Class<? extends ItemFlag>, ItemFlag> flags = new HashMap<Class<? extends ItemFlag>, ItemFlag>();
 
-	//constructors
+	/**
+	 * Creates a stock item base on the bukkit item provided. It only saves the id and data, nothing else.
+	 * @param item
+	 *     bukkit item stack item
+	 */
 	public StockItem(ItemStack item)
 	{
-		this.item = item;
-		ItemData.initWithDefaults(this);
+		this.item = new ItemStack(item.getType(), 1, ItemUtils.itemHasDurability(item) ? 0 : item.getDurability()); 
 	}
 
+	/**
+	 * Creates a stock item by using the given format string. It will also initialize with all attributes found in the format string.
+	 * Default attributes will also apply
+	 * @param format
+	 *     the formated save string
+	 */
 	public StockItem(String format)
 	{
-		//debug info
-		Debugger.info("Creating stock item");
-		Debugger.info(format);
-		
 		load(format);
 	}
 
+	/**
+	 * This constructor is called when a lore was found for the item. The lore will apply only if the format contains the <b>.lore</b> flag.  
+	 * @param format
+	 *     the formated save string
+	 * @param list
+	 *     the lore that should be applied to the item
+	 */
 	public StockItem(String format, List<String> list)
 	{
-		//debug info
-		Debugger.info("Creating stock item");
-		Debugger.info(format);
-		
-		//load
-		load(format);
+		//load the item
+		this(format);
 
-		Lore lore = new Lore(".lore").setLore(list);
-		if ( flags.containsKey(".lore") )
-			flags.put(".lore", lore);
+		//assign the lore if the flag  was found
+		if ( hasFlag(Lore.class) )
+			getFlag(Lore.class).setLore(list);
 	}
 
+	/**
+	 * Reads the format string and loads all attributes and flags into the structure.
+	 * @param
+	 *     the formated save string
+	 */
 	public void load(String format)
 	{
-		String[] itemFormat = format.split(" ", 2);
-		item = ItemUtils.createItemStack(itemFormat[0]);
-		ItemData.initWithDefaults(this);
+		//split the item format string
+		String[] itemData = format.split(" ", 2);
+		
+		//creating the item using ID and Data
+		item = ItemUtils.createItemStack(itemData[0]);
+		
+		//Reset all attributes
+		resetAttr();
+		
+	
+		//load the regex matcher
+		Matcher matcher = RegexMatcher.instance().getMatcher("item", itemData[1]);
 
-		Matcher matcher = RegexMatcher.instance().getMatcher("item", itemFormat[1]);
-
+		//temporary value
 		String value = "";
+		//temporary key
 		String key = "";
+		
+		//find matches
 		while(matcher.find())
 		{
 			if ( matcher.group(2) != null )
 			{
-				try 
-				{
-					if ( key.startsWith(".") )
-						flags.put(key, ItemFlag.createItemFlag(key));
-					else if ( !key.isEmpty() )
-						data.put(key, ItemData.createItemData(item, key, value.trim()));
-				}
-				catch (InvalidDataNodeException e) 
-				{
-					//debug high
-					Debugger.high("While loading a StockItem, a exception occured");
-					Debugger.high("Exception: ", e.getClass().getSimpleName());
-					
-					//debug normal
-					Debugger.normal("Exception message: ", e.getMessage());
-					Debugger.normal("StackTrace: ", e.getStackTrace());
-				}
-				catch (InvalidDataAssignmentException e) 
-				{
-					//debug normal
-					Debugger.normal("This data cannot be assigned to this item");
-					Debugger.normal("Key: ", key, ", value: ", value, ", item: ", item.getType().name().toLowerCase());
-					Debugger.normal("Exception: ", e.getClass().getSimpleName());
-					
-					//debug low
-					Debugger.low("Exception message: ", e.getMessage());
-					Debugger.low("StackTrace: ", e.getStackTrace());
-				}
+				//if the key starts with a dot then it's a flag
+				if ( key.startsWith(".") )
+					addFlag(key);
+				//else if it's not empty it's a attribute 
+				else 
+				if ( !key.isEmpty() )
+					addAttr(key, value.trim());
+				
+				//set new values
 				key = matcher.group(2);
 				value = matcher.group(3);
 			}
@@ -110,34 +136,15 @@ public class StockItem {
 			{
 				if ( matcher.group(4).startsWith(".") )
 				{
-					try 
-					{
-						if ( key.startsWith(".") )
-							flags.put(key, ItemFlag.createItemFlag(key));
-						else if ( !key.isEmpty() )
-							data.put(key, ItemData.createItemData(item, key, value.trim()));
-					}
-					catch (InvalidDataNodeException e) 
-					{
-						//debug high
-						Debugger.high("While loading a StockItem, a exception occured");
-						Debugger.high("Exception: ", e.getClass().getSimpleName());
-						
-						//debug normal
-						Debugger.normal("Exception message: ", e.getMessage());
-						Debugger.normal("StackTrace: ", e.getStackTrace());
-					}
-					catch (InvalidDataAssignmentException e) 
-					{
-						//debug normal
-						Debugger.normal("This data cannot be assigned to this item");
-						Debugger.normal("Key: ", key, ", value: ", value, ", item: ", item.getType().name().toLowerCase());
-						Debugger.normal("Exception: ", e.getClass().getSimpleName());
-						
-						//debug low
-						Debugger.low("Exception message: ", e.getMessage());
-						Debugger.low("StackTrace: ", e.getStackTrace());
-					}
+					//if the key starts with a dot then it's a flag
+					if ( key.startsWith(".") )
+						addFlag(key);
+					//else if it's not empty it's a attribute 
+					else 
+					if ( !key.isEmpty() )
+						addAttr(key, value.trim());
+					
+					//set new values
 					key = matcher.group(4);
 					value = "";
 				}
@@ -147,206 +154,547 @@ public class StockItem {
 				}
 			}
 		}
-		try 
-		{
-			if ( key.startsWith(".") )
-				flags.put(key, ItemFlag.createItemFlag(key));
-			else if ( !key.isEmpty() )
-				data.put(key, ItemData.createItemData(item, key, value.trim()));
-		}
-		catch (InvalidDataNodeException e) 
-		{
-			//debug high
-			Debugger.high("While loading a StockItem, a exception occured");
-			Debugger.high("Exception: ", e.getClass().getSimpleName());
-			
-			//debug normal
-			Debugger.normal("Exception message: ", e.getMessage());
-			Debugger.normal("StackTrace: ", e.getStackTrace());
-		} 
-		catch (InvalidDataAssignmentException e) 
-		{
-			//debug normal
-			Debugger.normal("This data cannot be assigned to this item");
-			Debugger.normal("Key: ", key, ", value: ", value, ", item: ", item.getType().name().toLowerCase());
-			Debugger.normal("Exception: ", e.getClass().getSimpleName());
-			
-			//debug low
-			Debugger.low("Exception message: ", e.getMessage());
-			Debugger.low("StackTrace: ", e.getStackTrace());
-		}
+		//if the key starts with a dot then it's a flag
+		if ( key.startsWith(".") )
+			addFlag(key);
+		//else if it's not empty it's a attribute 
+		else 
+		if ( !key.isEmpty() )
+			addAttr(key, value.trim());
 	}
 
+	/**
+	 * Creates a string representation of the item, used for saving. 
+	 * Only lores are saved in another way.
+	 * @return
+	 *     prepared save string
+	 */
 	public String save()
 	{		
+		//result string
 		String result = "";
+		
+		//add id and data information
 		result += item.getTypeId();
-		if ( !ItemUtils.itemHasDurability(item) )
+		if ( !ItemUtils.itemHasDurability(item) && item.getData().getData() != 0 )
 			result += ":" + item.getData().getData();
 
-		for ( ItemData entry : data.values() )
-			result += " " + entry.saveString();
+		//save each attribute
+		for ( ItemAttr entry : attr.values() )
+			result += " " + entry.onSave();
 
+		//save each flag
 		for ( ItemFlag flag : flags.values() )
-			if ( flag.getValue() )
-				result += " " + flag.getKey();		
+			result += " " + flag.getKey();		
+		
+		//return the result
 		return result;
 	}
 	
+	/**
+	 * Tries to factorize the given item getting all possible data out of it. The factorizing methods will create flags and attributes for the item. 
+	 * @param item
+	 *     item to factorize
+	 */
+	public void factorize(ItemStack item)
+	{
+		//debug low
+		Debugger.low("Factorizing item: ", item.getType().name().toLowerCase());
+		
+		for ( ItemAttr iAttr : ItemAttr.getAllAttributes() )
+		{
+			try 
+			{
+				iAttr.onFactorise(item);
+				attr.put(iAttr.getClass(), iAttr);
+			}
+			catch (AttributeValueNotFoundException e)
+			{
+				this.debugMsgValue(iAttr.getInfo(), "factorized");
+			}
+		}
+
+		Lore lore = null;
+		try 
+		{
+			lore = (Lore) ItemFlag.initFlag(this, ".lore");
+			lore.onFactorize(item);
+			flags.put(lore.getClass(), lore);
+		}
+		catch (AttributeValueNotFoundException e)
+		{
+			this.debugMsgValue(lore.getInfo(), "factorized");
+		}
+		catch (AttributeInvalidClassException e) 
+		{
+			this.debugMsgClass(".lore");
+		} 
+		
+	}
+	
+	/**
+	 * @param clazz
+	 *     flag class that should be checked for
+	 * @return
+	 *     true if the flag was found
+	 */
+	public boolean hasFlag(Class<? extends ItemFlag> clazz)
+	{
+		return flags.containsKey(clazz);
+	}
+	
+	/**
+	 * @param clazz
+	 *     flag class that will be retrieved
+	 * @return
+	 *     the flag if its present in the structure, nil otherwise
+	 */
+	@SuppressWarnings("unchecked")
+	public <T extends ItemFlag> T getFlag(Class<T> clazz)
+	{
+		return hasFlag(clazz) ? (T) flags.get(clazz) : null;
+	}
+	
+	/**
+	 * Looks for the flag declaration that has the specified <b>key</b>. If found it will add it automatically to the items structure. 
+	 * @param key
+	 *     the unique flag key
+	 */
+	public void addFlag(String key)
+	{
+		try
+		{
+			ItemFlag flag = ItemFlag.initFlag(this, key);
+			flags.put(flag.getClass(), flag);
+		} 
+		catch (Exception e)
+		{
+			debugMsgClass(key);
+		}
+	}
+	
+	/**
+	 * @param clazz
+	 *     attribute class that should be checked for
+	 * @return
+	 *     true if the attribute was found
+	 */
+	public boolean hasAttr(Class<? extends ItemAttr> clazz)
+	{
+		return attr.containsKey(clazz);
+	}
+	
+	/**
+	 * @param clazz
+	 *     attribute class that will be retrieved
+	 * @return
+	 *     the attribute if its present in the structure, nil otherwise
+	 */
+	@SuppressWarnings("unchecked")
+	public <T extends ItemAttr> T getAttr(Class<T> clazz)
+	{
+		return hasAttr(clazz) ? (T) attr.get(clazz) : null;
+	}
+
+	/**
+	 * Looks for the attribute declaration that has the specified <b>key</b>. 
+	 * If found it will add it automatically to the items structure and initialize with the given value. 
+	 * @param key
+	 *     the unique attribute key
+	 * @param value
+	 *     the value to initialize with
+	 */
+	@SuppressWarnings("null")
+	public void addAttr(String key, String value)
+	{
+		ItemAttr attr = null;
+		try
+		{
+			attr = ItemAttr.initAttribute(this, key, value);
+			this.attr.put(attr.getClass(), attr);
+		} 
+		catch (AttributeInvalidClassException e) 
+		{
+			debugMsgClass(key);
+		} 
+		catch (AttributeInvalidValueException e)
+		{
+			debugMsgValue(attr.getInfo(), value);
+		}
+	}
+
+	/**
+	 * Tries to get the specified attribute, if it's not assigned to this item, it will try to create a new instance and assign it to the item with default attribute values.
+	 * @param clazz
+	 *     the attribute to retrieve
+	 * @return
+	 *     the searched attribute
+	 */
+	private <T extends ItemAttr> T tryGetAttr(Class<T> clazz)
+	{
+		if ( hasAttr(clazz) ) return getAttr(clazz);
+		
+		T attr = null;
+		try
+		{
+			attr = ItemAttr.initAttribute(this, clazz);
+			this.attr.put(clazz, attr);
+		} 
+		catch (Exception e)
+		{
+			this.debugMsgClass(attr.getInfo().key());
+		}
+		return attr;
+	}
+	
+	/**
+	 * Removes all attributes and adds only the required ones.
+	 */
+	private void resetAttr()
+	{
+		attr.clear();
+		for ( ItemAttr reqAttr : ItemAttr.getRequiredAttributes() )
+			attr.put(reqAttr.getClass(), reqAttr);
+	}
+	
+	/**
+	 * Same as the save string representation
+	 */
 	@Override 
 	public String toString()
 	{
 		return save();
 	}
-
+	
+	/**
+	 * @return
+	 *     a Item Stack item with all attributes and flag data assigned to it.
+	 */
 	public ItemStack getItem()
 	{
+		//clone the "clean" item
 		ItemStack item = this.item.clone();
-		for ( ItemData info : data.values() )
-			info.assing(item);
+		
+		//assign attribute data to it
+		for ( ItemAttr attr : this.attr.values() )
+		{
+			try 
+			{
+				//try assign the attribute
+			    attr.onAssign(item);
+			} 
+			catch (InvalidItemException e)
+			{
+				debugMsgItem(attr.getInfo());
+			}
+		}
+		
 		for ( ItemFlag flag : flags.values() )
-			flag.assing(item);
+		{
+			try 
+			{
+				//try assign the flag
+				flag.onAssign(item);
+			} 
+			catch (InvalidItemException e)
+			{
+				debugMsgItem(flag.getInfo());
+			}
+		}
+		//returns the valid item
 		return item;
 	}
 
-	public List<String> getDataLore(Status status)
+	/**
+	 * Returns a list of temporary lore strings that should be applied depending on the traders status. 
+	 * @param status
+	 *     Status that is checked
+	 * @return
+	 *     List of lore strings
+	 */
+	public List<String> getTempLore(Status status)
 	{
+		//create a new list
 		List<String> lore = new ArrayList<String>();
-		for ( ItemData info : data.values() )
-			info.lore(status, lore);
+		
+		//for each attribute
+		for ( ItemAttr info : attr.values() )
+			info.onStatusLoreRequest(status, lore);
+		
+		//for each flag
+		for ( ItemFlag flag : flags.values() )
+			flag.onStatusLoreRequest(status, lore);
+		
+		//return the lore
 		return lore;
 	}
 
-	//unspecified data
-	public boolean hasData(String key)
-	{
-		return data.containsKey(key);
-	}
+	/**
+	 * Attribute helper methods, these methods are just shortcuts wti safety checks for some attributes.
+	 */
 
-	public <T> T getData(String key)
-	{
-		//debug info
-		Debugger.info("Getting data from StockItem, data key: ", key);
-		return data.get(key).<T>getValue(this);
-	}
-
-	public void addData(ItemData data)
-	{
-		this.data.put(data.getKey(), data);
-	}
-	
-	//flags
-	public boolean hasFlag(String key)
-	{
-		return flags.containsKey(key);
-	}
-
-	public void addFlag(ItemFlag flag)
-	{
-		flags.put(flag.getKey(), flag);
-	}
-
-	//price
+	/**
+	 * @return
+	 *     true if the price attribute is present
+	 */
 	public boolean hasPrice()
 	{
-		return data.containsKey("p");
+		return hasAttr(Price.class);
 	}
-
+	
+	/**
+	 * Gets the items price if the attribute is present.
+	 * @return
+	 *     the price set, or <b>-1.0</b> instead
+	 */
 	public double getPrice()
 	{
-		return ((Price) data.get("p")).getPrice();
+		return hasAttr(Price.class) ? getAttr(Price.class).getPrice() : -1.0;
 	}
 
-	//slot
-	public boolean hasSlot()
+	/**
+	 * @return
+	 *     the price values as a formated string
+	 */
+	public String getPriceFormated()
 	{
-		return data.containsKey("s");
+		return hasPrice() ? String.format("%.2f", getPrice()) : "none";
 	}
-
-	public void setSlot(int slot) {
-		data.put("s", new Slot("s").setSlot(slot));
+	
+	/**
+	 * @return
+	 *     the price attribute, if there is no attrib it will create one.
+	 */
+	public Price getPriceAttr()
+	{
+		return tryGetAttr(Price.class);
 	}
-
+	
+	/**
+	 * Gets the items slot attribute, always a valid value.
+	 * @return
+	 *     the items slot in stock. 
+	 */
 	public int getSlot()
 	{
-		return hasSlot() ? ((Slot) data.get("s")).getSlot() : -1;
+		return hasAttr(Slot.class) ? getAttr(Slot.class).getSlot() : -1;
 	}
 
-	//slot
+	/**
+	 * Checks if the given slot is equal to the items one.
+	 * @return
+	 *     true if slots are equal
+	 */
+	public boolean checkSlot(int slot)
+	{
+		return getAttr(Slot.class).getSlot() == slot;
+	}
+	
+	/**
+	 * Sets the slot attribute for the item
+	 * @param slot
+	 */
+	public void setSlot(int slot)
+	{
+		getAttr(Slot.class).setSlot(slot);
+	}
+	
+	/**
+	 * @return
+	 *     true if more than 1 amount is set
+	 */
 	public boolean hasMultipleAmounts()
 	{
-		return ((Amount) data.get("a")).hasMultipleAmounts();
+		return getAttr(Amount.class).hasMultipleAmounts();
 	}
 
+	/**
+	 * @return
+	 *    the first set amount, considered as the major one
+	 */
 	public int getAmount()
 	{
-		return ((Amount) data.get("a")).getAmount();
+		return getAttr(Amount.class).getAmount();
 	}
 
+	/**
+	 * @param i
+	 *     index of the amount to get
+	 * @return
+	 *     amount under the given index 
+	 */
 	public int getAmount(int i)
 	{
-		return ((Amount) data.get("a")).getAmount(i);
+		return getAttr(Amount.class).getAmount(i);
 	}
 	
+	/**
+	 * @return
+	 *     all saved amounts
+	 */
 	public List<Integer> getAmounts()
 	{
-		return ((Amount) data.get("a")).getAmounts();
+		return getAttr(Amount.class).getAmounts();
 	}
 	
-	//name
+	/**
+	 * This method returns the items name if its present. When no name is found it will use the material name, with lower case letters.  
+	 * @return
+	 *     the item name, or material name instead
+	 */
 	public String getName()
 	{
-		return hasData("n") ? ((Name)data.get("n")).getName() : item.getType().name().toLowerCase();
+		return hasAttr(Name.class) ? getAttr(Name.class).getName() : item.getType().name().toLowerCase();
 	}
 	
-	//lore
+	/**
+	 * @return
+	 *    the assigned lore, or null otherwise
+	 */
 	public List<String> getLore()
 	{
-		return ((Lore)flags.get(".lore")).getLore();
-	}
-
-	//get attributes
-	public Price priceAttr()
-	{
-		return (Price) data.get("p");
+		return hasFlag(Lore.class) ? getFlag(Lore.class).getLore() : null;
 	}
 	
-	//formated attributes
-	public String getFormatedPrice()
+	/**
+	 * Strong equality is needed when we need precise information if an item is equal, example: Stock placement
+	 * @param item
+	 *     item to compare against
+	 * @return
+	 *     true if equal 
+	 */
+	public final boolean equalsStrong(StockItem item)
 	{
-		return data.containsKey("p") ? String.valueOf(((Price) data.get("p")).getPrice()) : "none";
-	}
-	
-	//equality checks
-	public boolean equals(StockItem item)
-	{
-		//debug info (all)
-		Debugger.info("Check items if they are equal");
+		boolean equals;
+		//check id
+		equals = item.item.getTypeId() == this.item.getTypeId();
+		//if equals check data, if not durability
+		equals = equals && !ItemUtils.itemHasDurability(item.item) ? item.item.getDurability() == this.item.getDurability() : equals; 
 		
-		boolean equals = true;
-		//id check
-		equals = item.getItem().getTypeId() == this.item.getTypeId();
-		equals = equals && !ItemUtils.itemHasDurability(item.getItem()) ? 
-				this.item.getDurability() == item.item.getDurability() : 
-				equals;
-		for ( ItemData data : this.data.values() )
+		//now a if block to not make thousands of not needed checks 
+		if ( equals )
 		{
-			Debugger.info("Data: ", data.getClass().getSimpleName());
-			equals = equals ? item.data.containsValue(data) : equals;
-			Debugger.info("Result: ", equals);
+			//for each attribute in this item
+			for ( ItemAttr tAttr : attr.values() )
+			{
+				//if only once is false then return false
+				if ( !equals ) break;
+				
+				//temporary false
+				equals = false;
+				
+				//check each item in the second item, if the attribute is found and strong equal continue
+				for ( ItemAttr iAttr : item.attr.values() )
+					//same attributes
+					if ( tAttr.getClass().equals(iAttr.getClass()) )
+						equals = tAttr.equalsStrong(iAttr);
+			}
+			
+			//for each attribute in this item
+			for ( ItemFlag tFlag : flags.values() )
+			{
+				//if only once is false then return false
+				if ( !equals ) break;
+				
+				//temporary false
+				equals = false;
+				
+				//check each item in the second item, if the attribute is found and strong equal continue
+				for ( ItemFlag iFlag : item.flags.values() )
+					//same attributes
+					if ( tFlag.getClass().equals(iFlag.getClass()) )
+						equals = tFlag.equalsStrong(iFlag);
+			}
 		}
-		for ( ItemFlag flag : flags.values() )
+		return equals;
+	}
+	
+	/**
+	 * Weak equality is needed when we need only some informations about the equality, example: adding items to players inventory does not need amount equality.
+	 * @param item
+	 *     item to compare against
+	 * @return
+	 *     true if equal 
+	 */
+	public final boolean equalsWeak(StockItem item)
+	{
+		boolean equals;
+		//check id
+		equals = item.item.getTypeId() == this.item.getTypeId();
+		//if equals check data, if not durability
+		equals = equals && !ItemUtils.itemHasDurability(item.item) ? item.item.getDurability() == this.item.getDurability() : equals; 
+		
+		//now a if block to not make thousands of not needed checks 
+		if ( equals )
 		{
-			Debugger.info("Flag: ", flag.getClass().getSimpleName());
-		    equals = equals ? item.flags.containsValue(flag) : equals;
-			Debugger.info("Result: ", equals);
+			//for each attribute in this item
+			for ( ItemAttr tAttr : attr.values() )
+			{
+				//if only once is false then return false
+				if ( !equals ) break;
+				
+				//temporary false
+				equals = false;
+				
+				//check each item in the second item, if the attribute is found and strong equal continue
+				for ( ItemAttr iAttr : item.attr.values() )
+					//same attributes
+					if ( tAttr.getClass().equals(iAttr.getClass()) )
+						equals = tAttr.equalsWeak(iAttr);
+			}
+			
+			//for each attribute in this item
+			for ( ItemFlag tFlag : flags.values() )
+			{
+				//if only once is false then return false
+				if ( !equals ) break;
+				
+				//temporary false
+				equals = false;
+				
+				//check each item in the second item, if the attribute is found and strong equal continue
+				for ( ItemFlag iFlag : item.flags.values() )
+					//same attributes
+					if ( tFlag.getClass().equals(iFlag.getClass()) )
+						equals = tFlag.equalsWeak(iFlag);
+			}
 		}
 		return equals;
 	}
 
+	/**
+	 * uses strong equality
+	 */
 	@Override
-	public boolean equals(Object object)
+	public final boolean equals(Object object)
 	{
-		return equals((StockItem)object);
+		return equalsStrong((StockItem)object);
+	}
+	
+	/**
+	 * Debug messages for attribute and flag class errors
+	 */
+	private void debugMsgClass(String key)
+	{
+		Debugger.high("Attribute/Flag class exception, the attribute class is invalid");
+		Debugger.high("Attribute/Flag key: ", ChatColor.GOLD, key);
+	}
+
+	/**
+	 * Debug messages for attribute value errors
+	 */
+	private void debugMsgValue(Attribute attr, String value)
+	{
+		Debugger.normal("Attribute value initialization exception");
+		Debugger.normal("Attribute: ", attr.name(), ", value: ", ChatColor.GOLD, value);
+	}
+
+	/**
+	 * Debug messages for attribute and flag item incompatibility
+	 */
+	private void debugMsgItem(Attribute attr)
+	{
+		Debugger.normal("Attribute/Flag item incompatibility");
+		Debugger.normal("Attribute/Flag: ", attr.name(), ", item: ", ChatColor.GOLD, this.getName());
 	}
 }
