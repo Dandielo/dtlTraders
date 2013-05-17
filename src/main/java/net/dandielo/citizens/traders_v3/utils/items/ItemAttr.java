@@ -20,6 +20,7 @@ import net.dandielo.citizens.traders_v3.utils.items.attributes.Enchant;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Name;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Price;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Slot;
+import net.dandielo.citizens.traders_v3.utils.items.attributes.StoredEnchant;
 
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
@@ -406,7 +407,7 @@ public abstract class ItemAttr {
 			//	registerData(Book.class);
 			//	registerData(Color.class);
 			registerAttr(Enchant.class);
-			//	registerData(StoredEnchant.class);
+			registerAttr(StoredEnchant.class);
 			//	registerData(Firework.class);
 			//	registerData(Multiplier.class);
 			registerAttr(Name.class);
