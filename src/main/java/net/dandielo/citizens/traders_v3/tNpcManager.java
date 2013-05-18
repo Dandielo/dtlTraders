@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.bukkit.ChatColor;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 
 import net.citizensnpcs.api.npc.NPC;
@@ -13,52 +14,170 @@ import net.dandielo.citizens.traders_v3.core.exceptions.InvalidTraderTypeExcepti
 import net.dandielo.citizens.traders_v3.core.exceptions.TraderTypeNotFoundException;
 import net.dandielo.citizens.traders_v3.core.exceptions.TraderTypeRegistrationError;
 import net.dandielo.citizens.traders_v3.traders.Trader;
-import net.dandielo.citizens.traders_v3.traders.TraderType;
 import net.dandielo.citizens.traders_v3.traders.types.Server;
 import net.dandielo.citizens.traders_v3.traits.TraderTrait;
 import net.dandielo.citizens.traders_v3.traits.WalletTrait;
-import net.dandielo.citizens.traders_v3.utils.items.Attribute;
 
+/**
+ * Manages all tNPC and player interactions allowing to lets say, toggling manager mode.
+ * @author dandielo
+ */
 public class tNpcManager {
-	//instance
-	private static tNpcManager instance = new tNpcManager();
+	/**
+	 * private singleton instance
+	 */
+	private final static tNpcManager instance = new tNpcManager();
 	
+	/**
+	 * @return
+	 * tNpcManager instance
+	 */
 	public static tNpcManager instance()
 	{
 		return instance;
 	}
 	
-	//current trader registry
-	private Map<String, Trader> transactions = new HashMap<String, Trader>();
+	/**
+	 * tNpc registry, registers all ongoing tNpc <=> player relations, only one for each player
+	 */
+	private Map<String, tNpc> relations = new HashMap<String, tNpc>();
 
-	public void openTransaction(Player clicker, Trader trader) {
-		transactions.put(clicker.getName(), trader);
+	/**
+	 * Checks if the following player is in a relation with the given tNpc type.
+	 * @param player
+	 * player to check against
+	 * @param clazz
+	 * a valid tNpc type
+	 * @return
+	 * true if an relation is found with the given type 
+	 */
+	public boolean checkRelationType(String player, Class<? extends tNpc> clazz)
+	{
+		return inRelation(player) ? relations.get(player).getClass().equals(clazz) : false;
+	}
+	
+	/**
+	 * Checks if the player is in any relation with any tNpc
+	 * @param player
+	 * player to check
+	 * @return
+	 * true if a relation was found
+	 */
+	public boolean inRelation(Player player)
+	{
+		return inRelation(player.getName());
+	}
+	
+	/**
+	 * Checks if the player is in any relation with any tNpc
+	 * @param player
+	 * player to check
+	 * @return
+	 * true if a relation was found
+	 */
+	public boolean inRelation(String player)
+	{
+		return relations.containsKey(player);
+	}
+	
+	/**
+	 * Registers a new relation with the given player and tNpc.
+	 * @param player
+	 * in relation with the following trader
+	 * @param trader
+	 * a tNpc that is in relation with player
+	 */
+	public void registerRelation(Player player, tNpc npc) 
+	{
+		relations.put(player.getName(), npc);
+	}
+	
+	/**
+	 * Gets the relation for the given player
+	 * @param player
+	 * @param clazz
+	 * tNpc type
+	 * @return
+	 * existing relation of exists, null otherwise
+	 */
+	@SuppressWarnings("unchecked")
+	public <T extends tNpc> T getRelation(String player, Class<T> clazz)
+	{
+		return checkRelationType(player, clazz) ? (T) relations.get(player) : null;
 	}
 
-	public boolean inTransaction(Player player)
+
+	/**
+	 * Gets the trader relation for the given player. This method is a shortcut for <b>getRelation</b> method
+	 * @param player
+	 * @return
+	 * existing relation of exists, null otherwise
+	 */
+	public Trader getTraderRelation(HumanEntity player)
 	{
-		return transactions.containsKey(player.getName());
+		return getTraderRelation(player.getName());
 	}
 	
-	public Trader getTransactionTrader(Player player)
+	/**
+	 * Gets the trader relation for the given player. This method is a shortcut for <b>getRelation</b> method
+	 * @param player
+	 * @return
+	 * existing relation of exists, null otherwise
+	 */
+	public Trader getTraderRelation(Player player)
 	{
-		return transactions.get(player.getName());
+		return getTraderRelation(player.getName());
 	}
 	
-	public void closeTransaction(Player player)
+	/**
+	 * Gets the trader relation for the given player. This method is a shortcut for <b>getRelation</b> method
+	 * @param player name
+	 * @return
+	 * existing relation of exists, null otherwise
+	 */
+	public Trader getTraderRelation(String player)
 	{
-		transactions.remove(player.getName());
+		return getRelation(player, Trader.class);
 	}
-	//current banker registry
-	//private Map<String, Trader> traders = new HashMap<String, Trader>();
+
+
+	/**
+	 * Removes the relation for the given player
+	 * @param player
+	 */
+	public void removeRelation(HumanEntity player)
+	{
+		removeRelation(player.getName());
+	}
 	
-	//class definition
+	/**
+	 * Removes the relation for the given player
+	 * @param player
+	 */
+	public void removeRelation(Player player)
+	{
+		removeRelation(player.getName());
+	}
+
+	/**
+	 * Removes the relation for the given player
+	 * @param player name
+	 */
+	public void removeRelation(String player)
+	{
+		relations.remove(player);
+	}
+	
+	/**
+	 * Disallow creation of this class
+	 */
 	private tNpcManager()
 	{
-		//debug info
-		Debugger.info("Initializing tNpcManager");
 	}
 	
+	/**
+	 * Registers all core trader types
+	 */
 	public static void registerTraderTypes()
 	{
 		try
@@ -75,25 +194,44 @@ public class tNpcManager {
 		}
 	}
 	
+	/**
+	 * Type registry, stores all registered types
+	 */
+	private final static Map<tNpcType, Class<? extends Trader>> types = new HashMap<tNpcType, Class<? extends Trader>>();
 	
-	
-
-	//Type management
-	private final static Map<TraderType, Class<? extends Trader>> types = new HashMap<TraderType, Class<? extends Trader>>();
-	
+	/**
+	 * Registers the given class as a new type for use by this plugin. The class needs to have the tNpcType addnotation filled.
+	 * @param clazz
+	 * Class to register
+	 * @throws TraderTypeRegistrationError
+	 * Thrown when the class does not have the tNpcType addnotation
+	 */
 	public final static void registerType(Class<? extends Trader> clazz) throws TraderTypeRegistrationError
 	{
-		if ( !clazz.isAnnotationPresent(TraderType.class) ) throw new TraderTypeRegistrationError();
+		//check for addnotation
+		if ( !clazz.isAnnotationPresent(tNpcType.class) ) throw new TraderTypeRegistrationError();
 		
-		TraderType typeInfo = clazz.getAnnotation(TraderType.class);
-		types.put(typeInfo, clazz);
+		//save the class
+		types.put(clazz.getAnnotation(tNpcType.class), clazz);
 	}
 	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public final static Trader createTarder(NPC npc, String type, Player player) throws TraderTypeNotFoundException, InvalidTraderTypeException
+	/**
+	 * Creates a tNpc, used later for relation assigning, based on the type name provided. Each created tNpc is only for 1 player created. 
+	 * @param npc
+	 * the npc that will have tNpc interaction assigned 
+	 * @param type
+	 * the type name
+	 * @param player
+	 * player that will be assigned to this tNpc relation
+	 * @return
+	 * returns the tNpc created if the given type was found
+	 * @throws TraderTypeNotFoundException
+	 * @throws InvalidTraderTypeException
+	 */
+	public final static tNpc create_tNpc(NPC npc, String type, Player player) throws TraderTypeNotFoundException, InvalidTraderTypeException
 	{
-		TraderType typeInfo = null;
-		for ( TraderType info : types.keySet() )
+		tNpcType typeInfo = null;
+		for ( tNpcType info : types.keySet() )
 			if ( info.name().equals(type) )
 				typeInfo = info;
 		
@@ -101,24 +239,16 @@ public class tNpcManager {
 		if ( typeInfo == null ) throw new TraderTypeNotFoundException(type);
 		
 		//get the class of the type 
-		Class clazz = types.get(typeInfo);
-		Trader trader = null;
+		Class<? extends tNpc> clazz = types.get(typeInfo);
+		tNpc resultNpc = null;
 		try
 		{
 			if ( clazz.getConstructor(TraderTrait.class, WalletTrait.class, Player.class) != null )
 			{
-			    trader = (Trader) clazz
+				resultNpc = (Trader) clazz
 			        .getConstructor(TraderTrait.class, WalletTrait.class, Player.class)
 					.newInstance(npc.getTrait(TraderTrait.class), npc.getTrait(WalletTrait.class), player);
 			}
-			else
-			if ( clazz.getConstructor(TraderTrait.class, WalletTrait.class) != null )
-			{
-				trader = (Trader) clazz
-						.getConstructor(TraderTrait.class, WalletTrait.class)
-						.newInstance(npc.getTrait(TraderTrait.class), npc.getTrait(WalletTrait.class));
-			}
-			else throw new Exception();	
 		}
 		catch (Exception e)
 		{
@@ -126,7 +256,7 @@ public class tNpcManager {
 			Debugger.critical("Invalid trader type: " + typeInfo.name() + ", author: " + typeInfo.author());
 			throw new InvalidTraderTypeException(type);
 		}
-		return trader;
+		return resultNpc;
 	}
 	
 	/**
@@ -138,7 +268,7 @@ public class tNpcManager {
 	{
 		String result = "";
 		//format the string
-		for ( TraderType attr : types.keySet() )
+		for ( tNpcType attr : types.keySet() )
 			result += " ," + ChatColor.YELLOW + attr.name() + ChatColor.RESET;
 		
 		return ChatColor.WHITE + "[" + result.substring(2) + ChatColor.WHITE + "]";

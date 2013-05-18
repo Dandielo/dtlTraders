@@ -6,9 +6,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
+import net.dandielo.citizens.traders_v3.tNpcType;
 import net.dandielo.citizens.traders_v3.core.Debugger;
 import net.dandielo.citizens.traders_v3.traders.Trader;
-import net.dandielo.citizens.traders_v3.traders.TraderType;
 import net.dandielo.citizens.traders_v3.traders.clicks.ClickHandler;
 import net.dandielo.citizens.traders_v3.traders.clicks.InventoryType;
 import net.dandielo.citizens.traders_v3.traders.setting.Settings;
@@ -18,7 +18,7 @@ import net.dandielo.citizens.traders_v3.traits.WalletTrait;
 import net.dandielo.citizens.traders_v3.utils.ItemUtils;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Price;
 
-@TraderType(name="server", author="dandielo")
+@tNpcType(name="server", author="dandielo")
 public class Server extends Trader {
 
 	public Server(TraderTrait trader, WalletTrait wallet, Player player) {
