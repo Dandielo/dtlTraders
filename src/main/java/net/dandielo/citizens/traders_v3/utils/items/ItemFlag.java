@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.dandielo.citizens.traders_v3.bukkit.DtlTraders;
 import net.dandielo.citizens.traders_v3.core.Debugger;
 import net.dandielo.citizens.traders_v3.core.exceptions.InvalidItemException;
 import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeInvalidClassException;
@@ -249,6 +250,8 @@ public abstract class ItemFlag {
 		//	registerFlag(PaternPrice.class);
 		//	registerFlag(Price.class);
 		//	registerFlag(Slot.class);
+			
+			DtlTraders.info("Registered core flags: " + flagsAsString());
 		} 
 		catch (AttributeInvalidClassException e) 
 		{
@@ -259,5 +262,15 @@ public abstract class ItemFlag {
 			Debugger.high("Exception message: ", e.getMessage());
 			Debugger.high("Stack trace: ", StringTools.stackTrace(e.getStackTrace()));
 		}
+	}
+	
+	private static String flagsAsString()
+	{
+		String result = "";
+		//format the string
+		for ( Attribute attr : flags.keySet() )
+			result += " ," + ChatColor.YELLOW + attr.name() + ChatColor.RESET;
+		
+		return ChatColor.WHITE + "[" + result.substring(2) + ChatColor.WHITE + "]";
 	}
 }

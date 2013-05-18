@@ -10,6 +10,11 @@ import org.bukkit.command.ConsoleCommandSender;
  * @author dandielo
  */
 public class Debugger {
+	/**
+	 * Debugger prefix
+	 */
+	private static final String DEBUG = ChatColor.DARK_PURPLE + "[DEBUG]" + ChatColor.RESET;
+	
 	//private singleton instance
 	private static Debugger debugger = new Debugger();
 	
@@ -54,7 +59,7 @@ public class Debugger {
 				builder.append(arg);
 			}
 			
-			debugger.sender.sendMessage(mergeArgs(DtlTraders.PREFIX, ChatColor.RED, "[CRITICAL] ", ChatColor.RESET, ChatColor.GOLD, builder.toString()));
+			debugger.sender.sendMessage(mergeArgs(DtlTraders.PREFIX, DEBUG, ChatColor.RED, "[CRITICAL] ", ChatColor.RESET, ChatColor.GOLD, builder.toString()));
 		}
 	}
 
@@ -71,7 +76,7 @@ public class Debugger {
 				builder.append(arg);
 			}
 			
-			debugger.sender.sendMessage(mergeArgs(DtlTraders.PREFIX, ChatColor.GOLD, ChatColor.BOLD, "[SEVERE] ", ChatColor.RESET, builder.toString()));
+			debugger.sender.sendMessage(mergeArgs(DtlTraders.PREFIX, DEBUG, ChatColor.GOLD, ChatColor.BOLD, "[SEVERE] ", ChatColor.RESET, builder.toString()));
 		}
 	}
 
@@ -88,7 +93,7 @@ public class Debugger {
 				builder.append(arg);
 			}
 			
-			debugger.sender.sendMessage(mergeArgs(DtlTraders.PREFIX, ChatColor.YELLOW, "[NORMAL] ", ChatColor.RESET, builder.toString()));
+			debugger.sender.sendMessage(mergeArgs(DtlTraders.PREFIX, DEBUG, ChatColor.YELLOW, "[NORMAL] ", ChatColor.RESET, builder.toString()));
 		}
 	}
 
@@ -105,7 +110,7 @@ public class Debugger {
 				builder.append(arg);
 			}
 			
-			debugger.sender.sendMessage(mergeArgs(DtlTraders.PREFIX, ChatColor.AQUA, "[LOW] ", ChatColor.RESET, builder.toString()));
+			debugger.sender.sendMessage(mergeArgs(DtlTraders.PREFIX, DEBUG, ChatColor.AQUA, "[LOW] ", ChatColor.RESET, builder.toString()));
 		}
 	}
 
@@ -122,7 +127,7 @@ public class Debugger {
 				builder.append(arg);
 			}
 			
-			debugger.sender.sendMessage(mergeArgs(DtlTraders.PREFIX, ChatColor.GREEN, "[INFO] ", ChatColor.RESET, builder.toString()));
+			debugger.sender.sendMessage(mergeArgs(DtlTraders.PREFIX, DEBUG, ChatColor.GREEN, "[INFO] ", ChatColor.RESET, builder.toString()));
 		}
 	}
 	

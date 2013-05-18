@@ -3,9 +3,11 @@ package net.dandielo.citizens.traders_v3;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import net.citizensnpcs.api.npc.NPC;
+import net.dandielo.citizens.traders_v3.bukkit.DtlTraders;
 import net.dandielo.citizens.traders_v3.core.Debugger;
 import net.dandielo.citizens.traders_v3.core.exceptions.InvalidTraderTypeException;
 import net.dandielo.citizens.traders_v3.core.exceptions.TraderTypeNotFoundException;
@@ -15,6 +17,7 @@ import net.dandielo.citizens.traders_v3.traders.TraderType;
 import net.dandielo.citizens.traders_v3.traders.types.Server;
 import net.dandielo.citizens.traders_v3.traits.TraderTrait;
 import net.dandielo.citizens.traders_v3.traits.WalletTrait;
+import net.dandielo.citizens.traders_v3.utils.items.Attribute;
 
 public class tNpcManager {
 	//instance
@@ -63,6 +66,8 @@ public class tNpcManager {
 			//debug info
 			Debugger.info("Register server trader type");
 			registerType(Server.class);
+			
+			DtlTraders.info("Registered trader types: " + typesAsString());
 		} 
 		catch (TraderTypeRegistrationError e) 
 		{
@@ -122,5 +127,20 @@ public class tNpcManager {
 			throw new InvalidTraderTypeException(type);
 		}
 		return trader;
+	}
+	
+	/**
+	 * Creates a string with all registered core attribute names
+	 * @return 
+	 *     formated result string
+	 */
+	private static String typesAsString()
+	{
+		String result = "";
+		//format the string
+		for ( TraderType attr : types.keySet() )
+			result += " ," + ChatColor.YELLOW + attr.name() + ChatColor.RESET;
+		
+		return ChatColor.WHITE + "[" + result.substring(2) + ChatColor.WHITE + "]";
 	}
 }

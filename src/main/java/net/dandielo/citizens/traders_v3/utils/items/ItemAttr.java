@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.dandielo.citizens.traders_v3.bukkit.DtlTraders;
 import net.dandielo.citizens.traders_v3.core.Debugger;
 import net.dandielo.citizens.traders_v3.core.exceptions.InvalidItemException;
 import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeInvalidClassException;
@@ -414,6 +415,8 @@ public abstract class ItemAttr {
 			registerAttr(Name.class);
 			registerAttr(Price.class);
 			registerAttr(Slot.class);
+			
+			DtlTraders.info("Registered core attributes: " + attributesAsString());
 		} 
 		catch (AttributeInvalidClassException e) 
 		{
@@ -424,5 +427,20 @@ public abstract class ItemAttr {
 			Debugger.high("Exception message: ", e.getMessage());
 			Debugger.high("Stack trace: ", StringTools.stackTrace(e.getStackTrace()));
 		}
+	}
+	
+	/**
+	 * Creates a string with all registered core attribute names
+	 * @return 
+	 *     formated result string
+	 */
+	private static String attributesAsString()
+	{
+		String result = "";
+		//format the string
+		for ( Attribute attr : attributes.keySet() )
+			result += " ," + ChatColor.YELLOW + attr.name() + ChatColor.RESET;
+		
+		return ChatColor.WHITE + "[" + result.substring(2) + ChatColor.WHITE + "]";
 	}
 }

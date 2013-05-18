@@ -1,7 +1,5 @@
 package net.dandielo.citizens.traders_v3.bukkit;
 
-import java.util.logging.Logger;
-
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.trait.TraitInfo;
 import net.dandielo.citizens.traders_v3.tNpcListener;
@@ -17,6 +15,7 @@ import net.dandielo.citizens.traders_v3.utils.items.ItemAttr;
 import net.dandielo.citizens.traders_v3.utils.items.ItemFlag;
 
 import org.bukkit.ChatColor;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class DtlTraders extends JavaPlugin {
@@ -24,7 +23,8 @@ public class DtlTraders extends JavaPlugin {
 	public static final String PREFIX = "[dtlTraders]" + ChatColor.WHITE; 
 	
 	//bukkit resources
-	private static Logger logger = Logger.getLogger("Minecraft");
+	//private static Logger logger = Logger.getLogger("Minecraft");
+	private static ConsoleCommandSender console;
 	
 	//plugin instance
 	private static DtlTraders instance;
@@ -42,6 +42,9 @@ public class DtlTraders extends JavaPlugin {
 		//set the plugin instance
 		instance = this;
 		
+		//set the console sender
+		console = getServer().getConsoleSender();
+		
 		//init plugin settings
 		saveDefaultConfig();
 		PluginSettings.initPluginSettings();
@@ -53,8 +56,13 @@ public class DtlTraders extends JavaPlugin {
 		{
 			this.setEnabled(false);
 			this.getPluginLoader().disablePlugin(this);
+			
+			//Severe message
+			severe("Vault plugin not found, disabling plugin");
+			return;
 		}
 		
+		info("Loading config files");
 		//init global settings
 		TGlobalSettings.initGlobalSettings();
 		
@@ -80,6 +88,9 @@ public class DtlTraders extends JavaPlugin {
 		initDenizens();
 		//init Wallets
 		initWallets();
+		
+		//enabled info
+		info("Enabled");
 	}
 	
 	private void initDenizens()
@@ -109,19 +120,22 @@ public class DtlTraders extends JavaPlugin {
 	//static logger warning
 	public static void info(String message)
 	{
-		logger.info("["+instance.getDescription().getName()+"] " + message);
+		console.sendMessage(PREFIX + "[INFO] " + message);
+	//	logger.info("["+instance.getDescription().getName()+"] " + message);
 	}
 	
 	//static logger warning
 	public static void warning(String message)
 	{
-		logger.warning("["+instance.getDescription().getName()+"] " + message);
+		console.sendMessage(PREFIX + ChatColor.GOLD + "[WARNING] " + ChatColor.RESET + message);
+	//	logger.warning("["+instance.getDescription().getName()+"] " + message);
 	}
 	
 	//static logger severe
 	public static void severe(String message)
 	{
-		logger.severe("["+instance.getDescription().getName()+"] " + message);
+		console.sendMessage(PREFIX + ChatColor.RED + "[SEVERE] " + ChatColor.RESET + message);
+	//	logger.severe("["+instance.getDescription().getName()+"] " + message);
 	}
 }
  
