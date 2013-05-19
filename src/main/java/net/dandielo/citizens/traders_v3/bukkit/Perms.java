@@ -1,5 +1,6 @@
 package net.dandielo.citizens.traders_v3.bukkit;
 
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
@@ -31,8 +32,8 @@ public class Perms {
         }
 	}
 	
-	public boolean has(Player player, String perm)
+	public boolean has(CommandSender sender, String perm)
 	{
-		return permission != null ? permission.has(player, perm) : player.hasPermission(perm);
+		return permission != null ? permission.has(sender, perm) : sender.hasPermission(perm);
 	}
 }

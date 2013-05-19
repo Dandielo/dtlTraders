@@ -2,6 +2,8 @@ package net.dandielo.citizens.traders_v3.core.commands;
 
 import net.citizensnpcs.Citizens;
 import net.citizensnpcs.api.CitizensAPI;
+import net.dandielo.citizens.traders_v3.tNpc;
+import net.dandielo.citizens.traders_v3.tNpcManager;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -18,14 +20,14 @@ public class DtlCommandExecutor implements CommandExecutor {
 		citizens = (Citizens) CitizensAPI.getPlugin();
 	}
 	
-	//private static NpcManager traders = DtlTraders.getNpcEcoManager();
+	private static tNpcManager manager = tNpcManager.instance();
 	
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String name, String[] args) {
 		
 		if ( sender instanceof Player )
 		{
-		//	tNPC npc = traders.tNPC(sender);
+	    	tNpc npc = manager.getRelation(sender.getName(), tNpc.class);
 		//	return cManager.execute(name, sender, npc, args);
 		}
 		return true;
