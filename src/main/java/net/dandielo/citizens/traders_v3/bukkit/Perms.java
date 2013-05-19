@@ -1,7 +1,6 @@
 package net.dandielo.citizens.traders_v3.bukkit;
 
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 import net.milkbowl.vault.permission.Permission;

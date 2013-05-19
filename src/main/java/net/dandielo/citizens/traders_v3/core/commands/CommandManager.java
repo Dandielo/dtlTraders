@@ -11,6 +11,7 @@ import java.util.regex.Pattern;
 import net.dandielo.citizens.traders_v3.tNpc;
 import net.dandielo.citizens.traders_v3.bukkit.DtlTraders;
 import net.dandielo.citizens.traders_v3.bukkit.Perms;
+import net.dandielo.citizens.traders_v3.bukkit.commands.GeneralCommands;
 import net.dandielo.citizens.traders_v3.core.Debugger;
 import net.dandielo.citizens.traders_v3.core.locale.LocaleManager;
 import net.dandielo.citizens.traders_v3.core.tools.StringTools;
@@ -100,7 +101,7 @@ public class CommandManager {
 			if ( command != null )
 			{
 				//register information about the command (This is used by the "help command")
-		//		GeneralCommands.registerCommandInfo(annotation.name(), annotation);
+				GeneralCommands.registerCommandInfo(command.name(), command);
 				
 				//debug info
 			    Debugger.info("Registered command: '", ChatColor.GREEN, command.name(), " ", command.syntax(), ",");

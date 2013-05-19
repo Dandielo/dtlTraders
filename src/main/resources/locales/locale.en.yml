@@ -68,11 +68,14 @@ keywords:
   manage-stock: Stock
   stack-price: Stack price
   tab-price: Tab price
+  stock-start: Start stock
+  stock-size: Stock size
+  stock-name: Stock name
   pattern: Patterns
   wallet: Wallet
   bought: Bought
-  price: Price
   owner: Owner
+  price: Price
   sold: Sold
   enabled: Enabled
   disabled: Disabled
