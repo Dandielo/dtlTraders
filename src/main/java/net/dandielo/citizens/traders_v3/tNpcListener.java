@@ -84,7 +84,7 @@ public class tNpcListener implements Listener {
 				}
 			}
 			
-			trader.onLeftClick();
+			trader.onLeftClick(e.getClicker().getItemInHand());
 			
 			if ( !trader.getStatus().inManagementMode() )
 				manager.removeRelation(e.getClicker());
@@ -120,7 +120,7 @@ public class tNpcListener implements Listener {
 			else
 				trader = manager.getTraderRelation(e.getClicker());
 			
-			trader.onRightClick();
+			trader.onRightClick(e.getClicker().getItemInHand());
 		}
 		catch (TraderTypeNotFoundException e1) 
 		{

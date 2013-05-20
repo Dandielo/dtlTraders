@@ -21,8 +21,8 @@ public class TGlobalSettings extends PluginSettings {
 	//manage settings
 	protected static Map<ItemStack, Double> specialBlocks = new HashMap<ItemStack, Double>();
 	protected static String mmStockStart;
-	protected static ItemStack mmItemToggle;
-	protected static boolean mmRightToggle;
+	protected static ItemStack mmItemToggle; //TODO
+	protected static boolean mmRightToggle; //TODO
 
 	//stock settings
 	protected static int stockSize;
@@ -138,27 +138,66 @@ public class TGlobalSettings extends PluginSettings {
 		//load denizen settings
 	}
 
-	//static methods	
+	/**
+	 * @return
+	 * the default format for stock names
+	 */
 	public static String getGlobalStockNameFormat()
 	{
 		return stockNameFormat;
 	}
 
+	/**
+	 * @return
+	 * default stock size
+	 */
 	public static int getGlobalStockSize()
 	{
 		return stockSize;
 	}
+	
+	/**
+	 * @return
+	 * true if toggling manager mode should be done with right click instead of left click
+	 */
+	public static boolean mmRightToggle()
+	{
+		return mmRightToggle;
+	}
+	
+	/**
+	 * @return
+	 * the item that should be used for toggling. If air is set any item is valid.
+	 */
+	public static ItemStack mmItemToggle()
+	{
+		return mmItemToggle;
+	}
 
+	/**
+	 * @return
+	 * true if players need to min double click on an item to buy it
+	 */
 	public static boolean dClickEvent()
 	{
 		return doubleClick;
 	}
 
+	/**
+	 * @param item
+	 * checks the item if its a special block
+	 * @return
+	 * the special block value, or 1 if no block was found
+	 */
 	public static double getBlockValue(ItemStack item)
 	{
 		return specialBlocks.containsKey(item) ? specialBlocks.get(item) : 1.0;
 	}
 	
+	/**
+	 * gets all declared items to use in trader stock UI 
+	 * @return
+	 */
 	public static Map<String, ItemStack> getUiItems()
 	{
 		return uiItems;

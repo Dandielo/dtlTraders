@@ -2,6 +2,7 @@ package net.dandielo.citizens.traders_v3.traders.types;
 
 import java.util.List;
 
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
@@ -12,6 +13,7 @@ import net.dandielo.citizens.traders_v3.traders.Trader;
 import net.dandielo.citizens.traders_v3.traders.clicks.ClickHandler;
 import net.dandielo.citizens.traders_v3.traders.clicks.InventoryType;
 import net.dandielo.citizens.traders_v3.traders.setting.Settings;
+import net.dandielo.citizens.traders_v3.traders.setting.TGlobalSettings;
 import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
 import net.dandielo.citizens.traders_v3.traits.TraderTrait;
 import net.dandielo.citizens.traders_v3.traits.WalletTrait;
@@ -26,10 +28,55 @@ public class Server extends Trader {
 	}
 
 	@Override
-	public void onLeftClick()
+	public void onLeftClick(ItemStack itemInHand)
+	{
+		if ( TGlobalSettings.mmRightToggle() ) return;
+		
+		//if air every item in hand is valid
+		ItemStack itemToToggle = TGlobalSettings.mmItemToggle();
+		if ( !itemToToggle.getType().equals(Material.AIR) )
+		{
+			//if id are different then cancel the event
+			if ( itemToToggle.getTypeId() != itemInHand.getTypeId() ) return;
+		}
+		toggleManageMode("left");
+	}
+
+	@Override
+	public void onRightClick(ItemStack itemInHand)
+	{
+		//right click toggling is enabled, handle it
+		if ( TGlobalSettings.mmRightToggle() )
+		{
+			//if air then chane to stick item
+			ItemStack itemToToggle = TGlobalSettings.mmItemToggle();
+			if ( itemToToggle.getType().equals(Material.AIR) )
+				itemToToggle.setType(Material.STICK);
+
+			//if id's in hand and for toggling are the same manage the mode change
+			if ( itemToToggle.getTypeId() == itemInHand.getTypeId() ) 
+			{
+				toggleManageMode("right");
+				//stop event execution
+				return;
+			}
+		}
+			
+		//debug info
+		Debugger.info(this.getClass().getSimpleName(), " Trader right click event, by: ", player.getName());
+		
+		if ( status.inManagementMode() )
+			inventory = stock.getManagementInventory(baseStatus, status);
+		else
+			inventory = stock.getInventory(status);
+		parseStatus(status);
+		player.openInventory(inventory);
+	}
+	
+	public void toggleManageMode(String clickEvent)
 	{
 		//debug info
-		Debugger.info(this.getClass().getSimpleName(), " Trader left click event, by: ", player.getName());
+		Debugger.info(this.getClass().getSimpleName(), " Trader ", clickEvent, " click event, by: ", player.getName());
 		
 		if ( status.inManagementMode() )
 		{
@@ -41,20 +88,6 @@ public class Server extends Trader {
 			locale.sendMessage(player, "trader-managermode-enabled", "npc", getNPC().getName());
 			parseStatus(getDefaultManagementStatus());
 		}
-	}
-
-	@Override
-	public void onRightClick()
-	{
-		//debug info
-		Debugger.info(this.getClass().getSimpleName(), " Trader right click event, by: ", player.getName());
-		
-		if ( status.inManagementMode() )
-			inventory = stock.getManagementInventory(baseStatus, status);
-		else
-			inventory = stock.getInventory(status);
-		parseStatus(status);
-		player.openInventory(inventory);
 	}
 
 	@ClickHandler(status = {Status.SELL, Status.BUY, Status.SELL_AMOUNTS}, inventory = InventoryType.TRADER)

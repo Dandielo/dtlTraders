@@ -7,7 +7,7 @@ locale:
   auto-update: true
 #logging settings
 logging:
-  #should transactions be logged?, (not used at this moment)
+  #should transactions be logged? (false/FILE/SQL/WEB) , (not used at this moment)
   log: false
   #the foramt how transactions should be logged, (not used at this moment)
   log-format: ''
@@ -41,10 +41,11 @@ trader:
   managing:
     #the starting stock when opening a trader (buy/sell)
     start-stock: sell
+    #right click toggling (instead of left click, which is default from 3.0+) 
+    #if r.click toggling is enabled the item needs to be other than AIR. If not set to an item "stick" item will be used.
+    right-click: false
     #item used to toggle between modes (air counts for anything)
     item: 'air'
-    #right click toggling (instead of left click, which is default from 3.0+)
-    right-click: true
     #special blocks used when setting prices and limits, format => 'item_id value'
     special-blocks:
     - dirt 0.01
