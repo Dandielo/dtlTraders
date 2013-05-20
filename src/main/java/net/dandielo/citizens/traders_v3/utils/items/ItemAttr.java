@@ -20,6 +20,7 @@ import net.dandielo.citizens.traders_v3.utils.items.attributes.Durability;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Enchant;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.LeatherColor;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Name;
+import net.dandielo.citizens.traders_v3.utils.items.attributes.Potion;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Price;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Slot;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.StoredEnchant;
@@ -404,15 +405,19 @@ public abstract class ItemAttr {
 		
 		try 
 		{
+			//item related
 			registerAttr(Amount.class);
 			registerAttr(Durability.class);
 			//	registerData(Book.class);
 			registerAttr(LeatherColor.class);
 			registerAttr(Enchant.class);
 			registerAttr(StoredEnchant.class);
+			registerAttr(Potion.class);
 			//	registerData(Firework.class);
-			//	registerData(Multiplier.class);
 			registerAttr(Name.class);
+			
+			//Stock item related
+			//	registerData(Multiplier.class);
 			registerAttr(Price.class);
 			registerAttr(Slot.class);
 			

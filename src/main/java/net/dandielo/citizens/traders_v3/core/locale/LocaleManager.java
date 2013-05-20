@@ -26,7 +26,7 @@ public class LocaleManager {
 	public final static LocaleManager locale = new LocaleManager();
 
 	/** The current locale version */
-	public final static String localeVersion = "1.1.0"; 
+	public final static String localeVersion = "1.1.1"; 
 	
 	/* cached messages, keywords and lores */
 	private Map<LocaleEntry, String> messages;
