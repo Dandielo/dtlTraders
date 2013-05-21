@@ -63,11 +63,12 @@ public class tNpcListener implements Listener {
 	public void npcLeftClickEvent(NPCLeftClickEvent e)
 	{
 		if ( !e.getNPC().hasTrait(TraderTrait.class) ) return;
-		
+
 		TraderTrait traderTrait = e.getNPC().getTrait(TraderTrait.class);
 		Trader trader = null;
 		try 
 		{
+
 		    if ( !manager.inRelation(e.getClicker()) )
 			{
 				trader = (Trader) tNpcManager.create_tNpc(e.getNPC(), traderTrait.getType(), e.getClicker());
@@ -83,7 +84,7 @@ public class tNpcListener implements Listener {
 					manager.registerRelation(e.getClicker(), trader);
 				}
 			}
-			
+
 			trader.onLeftClick(e.getClicker().getItemInHand());
 			
 			if ( !trader.getStatus().inManagementMode() )
@@ -118,9 +119,18 @@ public class tNpcListener implements Listener {
 				manager.registerRelation(e.getClicker(), trader);
 			}
 			else
+			{
 				trader = manager.getTraderRelation(e.getClicker());
+			}
+
+			if ( !trader.onRightClick(e.getClicker().getItemInHand()) )
+				//check the mode 
+				if ( !trader.getStatus().inManagementMode() )
+					manager.removeRelation(e.getClicker());
+				
+
 			
-			trader.onRightClick(e.getClicker().getItemInHand());
+			
 		}
 		catch (TraderTypeNotFoundException e1) 
 		{

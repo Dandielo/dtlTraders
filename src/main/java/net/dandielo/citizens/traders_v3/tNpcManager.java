@@ -51,9 +51,9 @@ public class tNpcManager {
 	 * @return
 	 * true if an relation is found with the given type 
 	 */
-	public boolean checkRelationType(String player, Class<? extends tNpc> clazz)
+	public <T extends tNpc> boolean checkRelationType(String player, Class<T> clazz)
 	{
-		return inRelation(player) ? relations.get(player).getClass().equals(clazz) : false;
+		return inRelation(player) ? clazz.isInstance(relations.get(player)) : false;
 	}
 	
 	/**

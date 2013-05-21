@@ -31,10 +31,10 @@ public class Server extends Trader {
 	public void onLeftClick(ItemStack itemInHand)
 	{
 		if ( TGlobalSettings.mmRightToggle() ) return;
-		
+
 		//if air every item in hand is valid
 		ItemStack itemToToggle = TGlobalSettings.mmItemToggle();
-		if ( !itemToToggle.getType().equals(Material.AIR) )
+		if ( itemInHand != null && !itemToToggle.getType().equals(Material.AIR) )
 		{
 			//if id are different then cancel the event
 			if ( itemToToggle.getTypeId() != itemInHand.getTypeId() ) return;
@@ -43,7 +43,7 @@ public class Server extends Trader {
 	}
 
 	@Override
-	public void onRightClick(ItemStack itemInHand)
+	public boolean onRightClick(ItemStack itemInHand)
 	{
 		//right click toggling is enabled, handle it
 		if ( TGlobalSettings.mmRightToggle() )
@@ -54,11 +54,12 @@ public class Server extends Trader {
 				itemToToggle.setType(Material.STICK);
 
 			//if id's in hand and for toggling are the same manage the mode change
-			if ( itemToToggle.getTypeId() == itemInHand.getTypeId() ) 
+			if ( itemInHand != null && itemToToggle.getTypeId() == itemInHand.getTypeId() ) 
 			{
 				toggleManageMode("right");
+				
 				//stop event execution
-				return;
+				return false;
 			}
 		}
 			
@@ -71,6 +72,8 @@ public class Server extends Trader {
 			inventory = stock.getInventory(status);
 		parseStatus(status);
 		player.openInventory(inventory);
+		
+		return true;
 	}
 	
 	public void toggleManageMode(String clickEvent)

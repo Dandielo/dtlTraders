@@ -6,7 +6,7 @@ import org.bukkit.inventory.ItemStack;
 public interface tNpc {
 	
 	public void onLeftClick(ItemStack itemInHand);
-	public void onRightClick(ItemStack itemInHand);
+	public boolean onRightClick(ItemStack itemInHand);
 	
     public void onInventoryClick(InventoryClickEvent e);
     public void onManageInventoryClick(InventoryClickEvent e);
