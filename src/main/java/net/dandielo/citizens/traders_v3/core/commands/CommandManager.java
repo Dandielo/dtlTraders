@@ -25,9 +25,13 @@ import org.bukkit.command.CommandSender;
  */
 public class CommandManager {
 	/**
+	 * Singleton instance
+	 */
+	public static final CommandManager manager = new CommandManager();
+	
+	/**
 	 * Required instances
 	 */
-	private static DtlTraders plugin = DtlTraders.getInstance();
 	private static LocaleManager locale = LocaleManager.locale;
 	private static Perms perms = Perms.perms;
 	
@@ -49,13 +53,13 @@ public class CommandManager {
 	/**
 	 * Set defaults and executor for <b>trader</b> and <b>banker</b> commands
 	 */
-	public CommandManager()
+	private CommandManager()
 	{
 		commands = new HashMap<CommandSyntax, CommandBinding>();
 		executor = new DtlCommandExecutor(this);
-		
-		plugin.getCommand("trader").setExecutor(executor);
-		plugin.getCommand("banker").setExecutor(executor);
+
+		DtlTraders.getInstance().getCommand("trader").setExecutor(executor);
+	//	plugin.getCommand("banker").setExecutor(executor);
 	}
 	
 	/**
@@ -82,7 +86,7 @@ public class CommandManager {
 	 * @param clazz
 	 * Class with commands to register
 	 */
-	void registerCommands(Class<?> clazz)
+	public void registerCommands(Class<?> clazz)
 	{
 		//if it has been initialized once, do not do it a second time, its pointless...
 		if ( objects.containsKey(clazz) ) 
@@ -289,14 +293,14 @@ public class CommandManager {
 		 */
 		public Boolean execute(CommandSender sender, tNpc tNPC, String[] args)
 		{
-			if ( perms.has(sender, perm) )
+			if ( !perms.has(sender, perm) )
 			{
 				locale.sendMessage(sender, "error-nopermission-command");
 				return true;
 			}
 			try 
 			{
-				method.invoke(objects.get(clazz), plugin, sender, tNPC, syntax.commandArgs(args));
+				method.invoke(objects.get(clazz), DtlTraders.getInstance(), sender, tNPC, syntax.commandArgs(args));
 			}
 			catch (Exception e)
 			{

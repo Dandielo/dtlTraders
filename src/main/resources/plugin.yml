@@ -5,3 +5,7 @@ soft-depend: [Denizen,dtlWallets]
 version: 3.0 Snapshot
 description: >
              Citizens 2 trader and banker trait. 
+commands:
+  trader: 
+    aliases: dtrader
+    description: Dtl - CitizensTrader trader commands.

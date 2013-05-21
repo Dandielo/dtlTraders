@@ -74,6 +74,7 @@ public class Settings extends TGlobalSettings {
 		
 		//load trader settings
 		type = data.getString("type");
+		owner = data.getString("owner", "no owner");
 		
 		//load stock settings
 		stockSize = data.getInt("stock.size", TGlobalSettings.stockSize);
@@ -88,6 +89,7 @@ public class Settings extends TGlobalSettings {
 		
 		//save trader settings
 		data.setString("type", type);
+		data.setString("owner", owner);
 		data.setRaw("stock", null);
 		
 		//save stock settings

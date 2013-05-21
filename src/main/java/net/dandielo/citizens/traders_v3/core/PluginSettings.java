@@ -6,7 +6,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 
 public class PluginSettings {	
 	//plugin config file
-	protected static FileConfiguration config = DtlTraders.getInstance().getConfig();
+	protected static FileConfiguration config;
 
 	//debug settings
 	private static String debugLevel;
@@ -21,6 +21,9 @@ public class PluginSettings {
 	//load plugin settings
 	public static void initPluginSettings()
 	{
+		//set the config file
+		config = DtlTraders.getInstance().getConfig();
+		
 		//debug settings
 		debugLevel = config.getString("debug", "normal");
 		

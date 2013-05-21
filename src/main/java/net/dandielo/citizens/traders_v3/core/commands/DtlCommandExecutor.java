@@ -28,7 +28,7 @@ public class DtlCommandExecutor implements CommandExecutor {
 		if ( sender instanceof Player )
 		{
 	    	tNpc npc = manager.getRelation(sender.getName(), tNpc.class);
-		//	return cManager.execute(name, sender, npc, args);
+			return cManager.execute(name, args, sender, npc);
 		}
 		return true;
 	}

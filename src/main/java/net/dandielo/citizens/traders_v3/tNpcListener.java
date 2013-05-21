@@ -127,8 +127,6 @@ public class tNpcListener implements Listener {
 				//check the mode 
 				if ( !trader.getStatus().inManagementMode() )
 					manager.removeRelation(e.getClicker());
-				
-
 			
 			
 		}
