@@ -118,6 +118,7 @@ public class Server extends Trader {
 		e.setCancelled(true);
 	}
 	
+	@SuppressWarnings("static-access")
 	@ClickHandler(
 	status = {Status.MANAGE_SELL, Status.MANAGE_BUY, Status.MANAGE_UNLOCKED, Status.MANAGE_AMOUNTS, Status.MANAGE_PRICE, Status.MANAGE_LIMITS}, 
 	inventory = InventoryType.TRADER)
@@ -138,6 +139,11 @@ public class Server extends Trader {
 			else
 			if ( hitTest(slot, "back") )
 			{
+				//if its backing from amounts managing save those amounts
+				if ( status.equals(Status.MANAGE_AMOUNTS) )
+					stock.saveNewAmounts(inventory, getSelectedItem());
+				
+				//parse new status
 				parseStatus(baseStatus);
 			}
 			else
@@ -391,9 +397,21 @@ public class Server extends Trader {
 		Debugger.info("Unlocked stock click event");
 	}
 
-	@ClickHandler(status={Status.MANAGE_SELL, Status.MANAGE_BUY}, inventory=InventoryType.TRADER)
+	@ClickHandler(status={Status.MANAGE_SELL, Status.MANAGE_BUY}, inventory=InventoryType.TRADER, shift = true)
 	public void itemsAttribs(InventoryClickEvent e)
 	{
+		//debug info
+		Debugger.info("Item managing click event");
+		
+		//select the item that should have the price changed
+		if ( selectAndCheckItem(e.getSlot()) )
+		{
+			if ( e.isShiftClick() && e.isLeftClick() )
+			{
+				stock.setAmountsInventory(inventory, getSelectedItem());
+				parseStatus(Status.MANAGE_AMOUNTS);
+			}
+		}
 		e.setCancelled(true);
 	}
 	

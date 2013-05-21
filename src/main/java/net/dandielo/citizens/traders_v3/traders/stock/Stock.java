@@ -11,6 +11,7 @@ import net.dandielo.citizens.traders_v3.traders.Trader.Status;
 
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
+import org.bukkit.inventory.ItemStack;
 
 public abstract class Stock implements InventoryHolder {
 	protected final int size;
@@ -79,6 +80,23 @@ public abstract class Stock implements InventoryHolder {
 				return sItem;
 			}
 		return null;
+	}
+
+	/**
+	 * For the given item changes the items amounts attribute setting one or more new amounts to it, depending on them items the inventory has.
+	 * @param inventory
+	 * inventory to check for item amounts
+	 * @param si
+	 * stock item to apply this amounts to
+	 */
+	public static void saveNewAmounts(Inventory inventory, StockItem si) {
+		si.getAmounts().clear();
+		for ( ItemStack is : inventory.getContents() ) 
+			if ( is != null ) 
+				si.addAmount(is.getAmount());
+		
+		if ( si.getAmounts().size() > 1 )
+			si.getAmounts().remove(si.getAmounts().size()-1);
 	}
 	
 	public abstract void addItem(StockItem item, String stock);

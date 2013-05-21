@@ -44,6 +44,16 @@ public class Amount extends ItemAttr {
 	{
 		return amounts.get(i);
 	}
+
+	/**
+	 * adds an amount to the amounts list
+	 * @param a
+	 * amount that should be added
+	 */
+	public void addAmount(int a)
+	{
+		amounts.add(a);
+	}
 	
 	/**
 	 * @return

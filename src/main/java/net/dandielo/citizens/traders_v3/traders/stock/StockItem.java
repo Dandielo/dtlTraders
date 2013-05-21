@@ -538,6 +538,16 @@ public final class StockItem {
 	}
 	
 	/**
+	 * Adds a new amount to the stock item
+	 * @param a
+	 * amount that should be added
+	 */
+	public void addAmount(int a)
+	{
+		getAttr(Amount.class).addAmount(a);
+	}
+	
+	/**
 	 * This method returns the items name if its present. When no name is found it will use the material name, with lower case letters.  
 	 * @return
 	 *     the item name, or material name instead
