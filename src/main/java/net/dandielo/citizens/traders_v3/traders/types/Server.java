@@ -101,16 +101,28 @@ public class Server extends Trader {
 		{
 			if ( hitTest(slot, "buy") )
 			{
+				//send message
+				locale.sendMessage(player, "trader-stock-toggled", "{stock}", "#stock-buy");
+				
+				//change status
 				parseStatus(Status.BUY);
 			}
 			else
 			if ( hitTest(slot, "sell") )
 			{
+				//send message
+				locale.sendMessage(player, "trader-stock-toggled", "{stock}", "#stock-sell");
+				
+				//change status
 				parseStatus(Status.SELL);
 			}
 			else
 			if ( hitTest(slot, "back") )
 			{
+				//send message
+				locale.sendMessage(player, "trader-stock-back");
+				
+				//change status
 				parseStatus(Status.SELL);
 			}
 			stock.setInventory(inventory, getStatus());
@@ -129,11 +141,19 @@ public class Server extends Trader {
 		{
 			if ( hitTest(slot, "buy") )
 			{
+				//send message
+				locale.sendMessage(player, "trader-managermode-toggled", "mode", "#stock");
+				
+				//change status
 				parseStatus(Status.MANAGE_BUY);
 			}
 			else
 			if ( hitTest(slot, "sell") )
 			{
+				//send message
+				locale.sendMessage(player, "trader-managermode-toggled", "mode", "#stock");
+				
+				//change status
 				parseStatus(Status.MANAGE_SELL);
 			}
 			else
@@ -142,29 +162,48 @@ public class Server extends Trader {
 				//if its backing from amounts managing save those amounts
 				if ( status.equals(Status.MANAGE_AMOUNTS) )
 					stock.saveNewAmounts(inventory, getSelectedItem());
+
+				//send message
+				locale.sendMessage(player, "trader-managermode-toggled", "mode", "#stock");
 				
-				//parse new status
+				//change status
 				parseStatus(baseStatus);
 			}
 			else
 			if ( hitTest(slot, "price") )
 			{
+				//send message
+				locale.sendMessage(player, "trader-managermode-toggled", "mode", "#price");
+				
+				//change status
 				parseStatus(Status.MANAGE_PRICE);
 			}
 			else
 			if ( hitTest(slot, "lock") )
 			{
+				//send message
+				locale.sendMessage(player, "trader-managermode-locked");
+				
+				//change status
 				parseStatus(baseStatus);
 				saveItemsUpponLocking();
 			}
 			else
 			if ( hitTest(slot, "unlock") )
 			{
+				//send message
+				locale.sendMessage(player, "trader-managermode-unlocked");
+				
+				//change status
 				parseStatus(Status.MANAGE_UNLOCKED);
 			}
 			else
 			if ( hitTest(slot, "limit") )
 			{
+				//send message
+				locale.sendMessage(player, "trader-managermode-toggled", "mode", "#limit");
+				
+				//change status
 				parseStatus(Status.MANAGE_LIMITS);
 			}
 			stock.setManagementInventory(inventory, baseStatus, status);
@@ -184,6 +223,10 @@ public class Server extends Trader {
 			{
 				if ( getSelectedItem().hasMultipleAmounts() )
 				{
+					//send message
+					locale.sendMessage(player, "trader-stock-toggled", "{stock}", "#stock-amounts");
+					
+					//change status
 					status = Status.SELL_AMOUNTS;
 					stock.setAmountsInventory(inventory, getSelectedItem());
 				}
@@ -192,21 +235,20 @@ public class Server extends Trader {
 				{
 					if ( !inventoryHasPlace() )
 					{
-						
-						//temp
-						Debugger.low("Player has no space to buy this item");
+						//send message
+						locale.sendMessage(player, "trader-transaction-failed-inventory");
 					}
 					else
 					if ( !sellTransaction() )
 					{
-						
-						//temp
-						Debugger.low("Player has no space to buy this item");
+						//send message
+						locale.sendMessage(player, "trader-transaction-failed-player-money");
 					}
 					else
 					{
 						addToInventory();
 						
+						//send message
 						locale.sendMessage(player, "trader-transaction-success", "trader", getNPC().getName(),
 								"player", player.getName(), "action", "#bought", "item", getSelectedItem().getName(),
 								"amount", String.valueOf(getSelectedItem().getAmount()), "price", String.valueOf(getSelectedItem().getPrice()));
@@ -229,21 +271,20 @@ public class Server extends Trader {
 				{
 					if ( !inventoryHasPlace() )
 					{
-						
-						//temp
-						Debugger.low("Player has no space to buy this item");
+						//send message
+						locale.sendMessage(player, "trader-transaction-failed-inventory");
 					}
 					else
 					if ( !sellTransaction() )
 					{
-						
-						//temp
-						Debugger.low("Player has no space to buy this item");
+						//send message
+						locale.sendMessage(player, "trader-transaction-failed-player-money");
 					}
 					else
 					{
 						addToInventory();
 						
+						//send message
 						locale.sendMessage(player, "trader-transaction-success", "trader", getNPC().getName(),
 								"player", player.getName(), "action", "#bought", "item", getSelectedItem().getName(),
 								"amount", String.valueOf(getSelectedItem().getAmount()), "price", String.valueOf(getSelectedItem().getPrice()));
@@ -273,21 +314,20 @@ public class Server extends Trader {
 			{
 				if ( !inventoryHasPlace(slot) )
 				{
-
-					//temp
-					Debugger.low("Player has no space to buy this item");
+					//send message
+					locale.sendMessage(player, "trader-transaction-failed-inventory");
 				}
 				else
 				if ( !sellTransaction(slot) )
 				{
-
-			    	//temp
-					Debugger.low("Player has not enough money");
+					//send message
+					locale.sendMessage(player, "trader-transaction-failed-player-money");
 				}
 				else
 				{
 					addToInventory(slot);
 
+					//send message
 					locale.sendMessage(player, "trader-transaction-success", "trader", getNPC().getName(),
 							"player", player.getName(), "action", "#bought", "item", getSelectedItem().getName(),
 							"amount", String.valueOf(getSelectedItem().getAmount()), "price", String.valueOf(stock.parsePrice(getSelectedItem(), slot)));
@@ -321,9 +361,8 @@ public class Server extends Trader {
 				{
 					if ( !buyTransaction(scale) )
 					{
-
-				    	//temp
-						Debugger.low("Trader has not enough money");
+						//send message
+						locale.sendMessage(player, "trader-transaction-failed-trader-money", "npc", settings.getNPC().getName());
 					}
 					else
 					{
@@ -356,9 +395,8 @@ public class Server extends Trader {
 				{
 					if ( !buyTransaction() )
 					{
-
-				    	//temp
-						Debugger.low("Trader has not enough money");
+						//send message
+						locale.sendMessage(player, "trader-transaction-failed-trader-money", "npc", settings.getNPC().getName());
 					}
 					else
 					{

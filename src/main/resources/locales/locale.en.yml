@@ -9,12 +9,17 @@ messages:
   trader-stock-item-select: '^6Item selected'
   trader-stock-item-invalid: '^6Item is invalid'
   trader-stock-item-remove: '^6Item removed'
+  trader-stock-toggled: '^6You moved to ^3{stock}'
+  trader-stock-back: '^6You moved back to regular stock'
   trader-transaction-item: '^6{item}, price: ^e{price}'
   trader-transaction-success: '^6You {action} ^3{amount} ^6for ^3{price}'
   trader-transaction-failed-player-money: '^6You dont have enough money'
   trader-transaction-failed-trader-money: '^6{npc} does not have enought money'
   trader-transaction-failed-inventory: '^6You dont got enough place in your inventory'
   trader-transaction-failed-limit: '^6Limit for that item has been reached'
+  trader-managermode-stock-locked: '^6Saved all items and locked the stock'
+  trader-managermode-stock-unlocked: '^6Unlocked the stock'
+  trader-managermode-toggled: '^3{mode} ^6managing toggled' 
   trader-managermode-enabled: '^6Manager mode enabled for ^3{npc}' 
   trader-managermode-disabled: '^6Manager mode disabled for ^3{npc}' 
   pattern-save-fail-exists: '^6This pattern already exists {pattern}'
@@ -55,14 +60,15 @@ keywords:
   trader-player: Player Trader
   banker-money: Money Banker
   banker-private: Private Banker
-  manage-limit: Limit
-  manage-price: Price
-  manage-stock: Stock
   stack-price: Stack price
   tab-price: Tab price
+  stock-amounts: Amounts choosing
   stock-start: Start stock
   stock-size: Stock size
   stock-name: Stock name
+  stock-sell: Sell stock
+  stock-buy: Buy stock
+  stock: Stock
   pattern: Patterns
   wallet: Wallet
   bought: Bought

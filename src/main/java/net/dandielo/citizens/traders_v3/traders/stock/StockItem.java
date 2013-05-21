@@ -543,7 +543,7 @@ public final class StockItem {
 	 * amount that should be added
 	 */
 	public void addAmount(int a)
-	{
+	{ 
 		getAttr(Amount.class).addAmount(a);
 	}
 	
