@@ -6,9 +6,11 @@ import java.util.Map;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import net.dandielo.citizens.traders_v3.core.Debugger;
 import net.dandielo.citizens.traders_v3.core.PluginSettings;
+import net.dandielo.citizens.traders_v3.core.locale.LocaleManager;
 import net.dandielo.citizens.traders_v3.utils.ItemUtils;
 
 public class TGlobalSettings extends PluginSettings {
@@ -127,15 +129,41 @@ public class TGlobalSettings extends PluginSettings {
 		playerStockNameFormat = tConfig.getString("player.format", "{npc}\'s shop");
 
 		//load UI settings
-		uiItems.put("sell", ItemUtils.createItemStack(tConfig.getString("ui.sell", "wool:1")));
-		uiItems.put("buy", ItemUtils.createItemStack(tConfig.getString("ui.buy", "wool:2")));
-		uiItems.put("back", ItemUtils.createItemStack(tConfig.getString("ui.back", "wool:14")));
-		uiItems.put("price", ItemUtils.createItemStack(tConfig.getString("ui.price", "wool:15")));
-		uiItems.put("limit", ItemUtils.createItemStack(tConfig.getString("ui.limit", "wool:3")));
-		uiItems.put("lock", ItemUtils.createItemStack(tConfig.getString("ui.lock", "wool:4")));
-		uiItems.put("unlock", ItemUtils.createItemStack(tConfig.getString("ui.unlock", "wool:5")));
+		uiItems.put("sell", asUIItem("ui.sell", "wool:1"));
+		uiItems.put("buy", asUIItem("ui.buy", "wool:2"));
+		uiItems.put("back", asUIItem("ui.back", "wool:14"));
+		uiItems.put("price", asUIItem("ui.price", "wool:15"));
+		uiItems.put("limit", asUIItem("ui.limit", "wool:3"));
+		uiItems.put("lock", asUIItem("ui.lock", "wool:4"));
+		uiItems.put("unlock", asUIItem("ui.unlock", "wool:5"));
 		
 		//load denizen settings
+	}
+	
+	/**
+	 * Create as item used for the ui, this item will contain a name and lore with a description for the given option that it handles
+	 * @param ID
+	 * the item ID 
+	 * @param defID
+	 * the default ID
+	 * @return
+	 * the ready UI item
+	 */
+	private static ItemStack asUIItem(String ID, String defID)
+	{
+		//create the item
+		ItemStack item = ItemUtils.createItemStack(tConfig.getString(ID, defID));
+		ItemMeta meta = item.getItemMeta();
+		
+		//get the name and lore for the item
+		meta.setDisplayName(LocaleManager.locale.getName(ID.substring(3)));
+		meta.setLore(LocaleManager.locale.getLore(ID.substring(3)));
+		
+		//set the new meta
+		item.setItemMeta(meta);
+		
+		//return the UI item
+		return item;
 	}
 
 	/**
