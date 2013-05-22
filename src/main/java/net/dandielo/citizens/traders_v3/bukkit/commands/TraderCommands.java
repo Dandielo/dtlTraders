@@ -66,6 +66,9 @@ public class TraderCommands {
 			return;
 		}
 		
+		//if entity is still null set it to player
+		entity = EntityType.PLAYER;
+		
 		//Create the npc
 		NPC npc = CitizensAPI.getNPCRegistry().createNPC(entity, name);
 		
@@ -90,6 +93,7 @@ public class TraderCommands {
 		nTrader.getSettings().setType(type);
 		
 		//start with the unlocked status, to allow fast stock setting 
+		nTrader.parseStatus(Status.MANAGE_SELL);
 		nTrader.parseStatus(Status.MANAGE_UNLOCKED);
 		
 		//register the relation
@@ -98,6 +102,8 @@ public class TraderCommands {
 		//send messages
 		locale.sendMessage(sender, "trader-created", "player", sender.getName(), "trader", name);
 		locale.sendMessage(sender, "trader-managermode-enabled", "npc", npc.getName());
+		locale.sendMessage(sender, "trader-managermode-toggled", "mode", "#stock-sell");
+		
 	}
 	/*
 	@Command(

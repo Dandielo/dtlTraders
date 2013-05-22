@@ -45,6 +45,9 @@ public class WalletTrait extends Trait {
 	{
 		//debug info
 		Debugger.info("Wallet trait attached to: ", npc.getName());
+		
+		//set the wallet
+		wallet = new Wallet(type, money);
 	}
 	
 	//events

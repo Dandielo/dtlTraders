@@ -155,7 +155,7 @@ public class Server extends Trader {
 			if ( hitTest(slot, "buy") )
 			{
 				//send message
-				locale.sendMessage(player, "trader-managermode-toggled", "mode", "#stock");
+				locale.sendMessage(player, "trader-managermode-toggled", "mode", "#stock-buy");
 				
 				//change status
 				parseStatus(Status.MANAGE_BUY);
@@ -164,7 +164,7 @@ public class Server extends Trader {
 			if ( hitTest(slot, "sell") )
 			{
 				//send message
-				locale.sendMessage(player, "trader-managermode-toggled", "mode", "#stock");
+				locale.sendMessage(player, "trader-managermode-toggled", "mode", "#stock-sell");
 				
 				//change status
 				parseStatus(Status.MANAGE_SELL);

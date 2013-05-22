@@ -9,7 +9,7 @@ public class Settings extends TGlobalSettings {
     //the Npc associated with these settings
 	private final NPC npc;
 	private String owner;
-	private String type;
+	private String type = "server"; //needs to be here when some1 will apply it with the /trait command
 	
 	//npc related settings
 	private int stockSize = TGlobalSettings.stockSize;

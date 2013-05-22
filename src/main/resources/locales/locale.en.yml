@@ -2,7 +2,7 @@ ver: 1.1.2
 messages:
   plugin-reload: '^6Successfuly reloaded ^3dtlTraders'
   plugin-command-message: '^6== dtlTraders ^3{version} ^6=='
-  trader-created: '^6You created a new trader: {trader}'
+  trader-created: '^6You created a new trader: ^3{trader}'
   trader-hire-limit: '^6You cannot hire more traders'
   trader-stock-item-add: '^6Item added'
   trader-stock-item-update: '^6Item updated'
