@@ -9,7 +9,7 @@ public class Settings extends TGlobalSettings {
     //the Npc associated with these settings
 	private final NPC npc;
 	private String owner;
-	private String type = "server";
+	private String type;
 	
 	//npc related settings
 	private int stockSize = TGlobalSettings.stockSize;
@@ -29,6 +29,15 @@ public class Settings extends TGlobalSettings {
 	public String getType()
 	{
 		return type;
+	}
+	
+	/**
+	 * Should be used only when creating a new NPC and setting default values. 
+	 * Sets the traders type
+	 */
+	public void setType(String type)
+	{
+		this.type = type;
 	}
 	
 	//trader owner
