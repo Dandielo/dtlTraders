@@ -8,6 +8,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 import net.dandielo.citizens.traders_v3.tNpcType;
+import net.dandielo.citizens.traders_v3.bukkit.Perms;
 import net.dandielo.citizens.traders_v3.core.Debugger;
 import net.dandielo.citizens.traders_v3.traders.Trader;
 import net.dandielo.citizens.traders_v3.traders.clicks.ClickHandler;
@@ -22,6 +23,12 @@ import net.dandielo.citizens.traders_v3.utils.items.attributes.Price;
 
 @tNpcType(name="server", author="dandielo")
 public class Server extends Trader {
+	/**
+	 * Permissions manager instance
+	 */
+	Perms perms = Perms.perms;
+	
+	
 
 	public Server(TraderTrait trader, WalletTrait wallet, Player player) {
 		super(trader, wallet, player);
@@ -29,9 +36,13 @@ public class Server extends Trader {
 
 	@Override
 	public void onLeftClick(ItemStack itemInHand)
-	{
+    {
+		//check settings
 		if ( TGlobalSettings.mmRightToggle() ) return;
 
+		//check permission
+		if ( !perms.has(player, "dtl.trader.manage") ) return;
+		
 		//if air every item in hand is valid
 		ItemStack itemToToggle = TGlobalSettings.mmItemToggle();
 		if ( itemInHand != null && !itemToToggle.getType().equals(Material.AIR) )
@@ -39,14 +50,15 @@ public class Server extends Trader {
 			//if id are different then cancel the event
 			if ( itemToToggle.getTypeId() != itemInHand.getTypeId() ) return;
 		}
+		
 		toggleManageMode("left");
 	}
 
 	@Override
 	public boolean onRightClick(ItemStack itemInHand)
 	{
-		//right click toggling is enabled, handle it
-		if ( TGlobalSettings.mmRightToggle() )
+		//right click toggling is enabled, handle it and check permission
+		if ( TGlobalSettings.mmRightToggle() && perms.has(player, "dtl.trader.manage") )
 		{
 			//if air then chane to stick item
 			ItemStack itemToToggle = TGlobalSettings.mmItemToggle();
@@ -56,6 +68,7 @@ public class Server extends Trader {
 			//if id's in hand and for toggling are the same manage the mode change
 			if ( itemInHand != null && itemToToggle.getTypeId() == itemInHand.getTypeId() ) 
 			{
+				
 				toggleManageMode("right");
 				
 				//stop event execution
@@ -214,6 +227,10 @@ public class Server extends Trader {
 	@ClickHandler(status = {Status.SELL}, inventory = InventoryType.TRADER)
 	public void sellItems(InventoryClickEvent e)
 	{
+		e.setCancelled(true);
+		//check permission
+		if ( !perms.has(player, "dtl.trader.sell") ) return;
+		
 		int slot = e.getSlot();
 		if ( stock.isUiSlot(slot) ) return;
 
@@ -299,12 +316,15 @@ public class Server extends Trader {
 				}
 			}
 		}
-		e.setCancelled(true);
 	}
 	
 	@ClickHandler(status = {Status.SELL_AMOUNTS}, inventory = InventoryType.TRADER)
 	public void sellAmountsItems(InventoryClickEvent e)
 	{
+		e.setCancelled(true);
+		//check permission
+		if ( !perms.has(player, "dtl.trader.sell") ) return;
+		
 		int slot = e.getSlot();
 		if ( stock.isUiSlot(slot) ) return;
 
@@ -341,13 +361,15 @@ public class Server extends Trader {
 						"price", String.valueOf(stock.parsePrice(getSelectedItem(), slot)));
 			}
 		}
-		e.setCancelled(true);
 	}
 	
 	@ClickHandler(status = {Status.SELL, Status.BUY}, inventory = InventoryType.PLAYER)
 	public void buyItems(InventoryClickEvent e)
 	{
 		e.setCancelled(true);
+		//check permission
+		if ( !perms.has(player, "dtl.trader.buy") ) return;
+		
 		clearSelection();
 		int slot = e.getSlot();
 		if ( e.isLeftClick() )

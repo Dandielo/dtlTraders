@@ -2,6 +2,7 @@ package net.dandielo.citizens.traders_v3;
 
 import net.citizensnpcs.api.event.NPCLeftClickEvent;
 import net.citizensnpcs.api.event.NPCRightClickEvent;
+import net.dandielo.citizens.traders_v3.bukkit.Perms;
 import net.dandielo.citizens.traders_v3.core.Debugger;
 import net.dandielo.citizens.traders_v3.core.exceptions.InvalidTraderTypeException;
 import net.dandielo.citizens.traders_v3.core.exceptions.TraderTypeNotFoundException;
@@ -16,6 +17,11 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 
 public class tNpcListener implements Listener {
+	/**
+	 * Permissions manager instance
+	 */
+	Perms perms = Perms.perms;
+	
 	private static tNpcListener instance = new tNpcListener();
 	
 	public static tNpcListener instance()
@@ -62,7 +68,11 @@ public class tNpcListener implements Listener {
 	@EventHandler
 	public void npcLeftClickEvent(NPCLeftClickEvent e)
 	{
+		//check trait
 		if ( !e.getNPC().hasTrait(TraderTrait.class) ) return;
+		
+		//check permission
+		if ( !perms.has(e.getClicker(), "dtl.trader.use") ) return;
 
 		TraderTrait traderTrait = e.getNPC().getTrait(TraderTrait.class);
 		Trader trader = null;
@@ -107,7 +117,12 @@ public class tNpcListener implements Listener {
 	@EventHandler
 	public void npcRightClickEvent(NPCRightClickEvent e) 
 	{
+		//check trait
 		if ( !e.getNPC().hasTrait(TraderTrait.class) ) return;
+
+		//check permission
+		if ( !perms.has(e.getClicker(), "dtl.trader.use") ) return;
+		
 
 		TraderTrait traderTrait = e.getNPC().getTrait(TraderTrait.class);
 		Trader trader = null;
