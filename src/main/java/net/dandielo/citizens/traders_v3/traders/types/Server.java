@@ -256,7 +256,7 @@ public class Server extends Trader {
 				if ( getSelectedItem().hasMultipleAmounts() )
 				{
 					//send message
-					locale.sendMessage(player, "trader-stock-toggled", "{stock}", "#stock-amounts");
+					locale.sendMessage(player, "trader-stock-toggled", "stock", "#stock-amounts");
 					
 					//change status
 					status = Status.SELL_AMOUNTS;
