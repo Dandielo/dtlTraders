@@ -68,47 +68,32 @@ keywords:
   tab-price: Tabella prezzi
   bought: Acquistato
   sold: Venduto
-ui:
-  player-inventory:
-    lore:
-    - '^7Prezzo unitario: ^6{unit}'
-    - '^7Prezzo per stock: ^6{stack}'
-    - ^7Clicca per vendere
-  trader-inventory-sell:
-    lore:
-    - '^7Prezzo: ^6{price}$'
-    - ^7Clicca per acquistare
-  trader-inventory-buy:
-    lore:
-    - '^7Prezzo: ^6{price}$'
-  sell-tab:
+ui: 
+  buy:
     name: ^r^6Acquista stock
     lore:
-    - ^7Clicca per passare alla modalità vendita
-  buy-tab:
+    - ^7Clicca per passare alla modalità acquisto stock
+  sell:
     name: ^r^6Vendi stock
     lore:
-    - ^7Clicca per passare alla modalità acquisto
-  manage-price:
-    name: ^r^6Modifica prezzi
-    lore:
-    - ^7Clicca per modificare i prezzi
-  manage-global-limit:
-    name: ^r^6Modalità limite globale
-    lore:
-    - ^7Clicca per passare alla modalità limite globale
-  manage-player-limit:
-    name: ^r^6Limite per i players
-    lore:
-    - ^7Clicca per passare alla modalità limite players
-  manage-buy-limit:
-    name: ^r^6Acquista limite
-    lore:
-    - ^7ti permette di scegliere la quantità
-    - ^7vuole acquistare dai players
-  return:
+    - ^7Clicca per passare alla modalità vendita stock
+  back:
     name: ^r^6Indietro
     lore:
-    - ^7Torna alla modalità stock
-  amounts-return:
-    name: Back to stock
+    - ^7Ritorna allo stock
+  price:
+    name: ^r^6Modifica prezzi
+    lore:
+    - ^7Clicca per passare alla modalità modifica prezzi
+  limit:
+    name: ^r^6Modifica limite
+    lore:
+    - ^7Clicca per passare alla modalità modifica limite
+  lock:
+    name: ^r^6Chiudi stock
+    lore:
+    - ^7Clicca per salvare tutti gli oggetto dello stock e chiuderlo
+  unlock:
+    name: ^r^6Sblocca stock
+    lore:
+    - ^7Clicca per sbloccare lo stock e permettere l'inserimento e la rimozione degli oggetti
