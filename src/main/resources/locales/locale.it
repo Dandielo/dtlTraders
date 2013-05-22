@@ -1,0 +1,99 @@
+ver: 1.1.0
+messages:
+  plugin-reload: ^3dtlTraders ^6caricato con successo
+  plugin-command-message: ^6== dtlTraders ^3{version} ^6==
+  trader-managermode-toggle: ^6Passato alla modalità ^3{mode}
+  trader-created: '^6Hai creato un venditore: {trader}'
+  trader-hire-limit: ^6Non puoi assumere altri venditori
+  trader-stock-item-select: ^6Oggetto selezionato
+  trader-transaction-item: '^6{item}, price: {price}'
+  trader-stock-item-add: ^6Oggetto aggiunto
+  trader-stock-item-update: ^6Oggetto aggiornato
+  trader-stock-item-remove: ^6Oggetto rimosso
+  trader-stock-item-invalid: ^6Questo oggetto non è valido
+  trader-transaction-success: ^3Hai acquistato/venduto un oggetto
+  trader-transaction-failed-limit: ^6Il limite per quell'oggetto è stato raggiunto
+  trader-transaction-failed-inventory: ^6Non hai abbastanza spazio nell'inventario
+  trader-transaction-failed-player-money: ^6Non hai abbastanza denaro
+  trader-transaction-failed-trader-money: ^6{npc} non ha abbastanza denaro
+  trader-managermode-enabled: ^6Modalità gestione abilitata per ^3{npc}
+  trader-managermode-disabled: ^6Modalità gestione disabilitata per ^3{npc}
+  pattern-save-success: ^6Modello creato con successo ^3{pattern}
+  pattern-save-fail-exists: ^6Questo modello è già esistente ^3{pattern}  
+  banker-created: '^6Hai creato un nuovo banchiere: {banker}'
+  banker-item-update: ^6Oggetto aggiornato
+  banker-withdraw-success: ^6Oggetto ritirato
+  banker-tab-switch: ^6Cambio al ^3{tab}
+  banker-tab-buy-success: ^6Nuova cassaforte banca acquistata
+  banker-tab-select-item: ^6Seleziona un un nuova cassaforte
+  banker-tab-select-item-success: ^6Il nuovo oggetto è stato selezionato
+  banker-tab-select-item-canceled: ^6La selezione è stata annullata
+  banker-deposit-success: ^6Oggetto depositato
+  banker-withdraw-item: ^6Oggetto ritirato #this message will probably be deleted
+  wallet-balance: '^6Bilancio Wallet: ^3{amount}'
+  wallet-deposit: ^6Depositato ^3{amount}
+  wallet-deposit-fail: Non hai abbastanza denaro
+  wallet-withdraw: ^6Prelevato ^3{amount}
+  wallet-withdraw-fail: ^6C'è abbastanza denaro per prelevare da questo Wallet?
+  wallet-invalid: ^6Non puoi usare il commando su questo tipo di Wallet
+  denizen-item-hint: '{item}: {price}$'  
+  error-npc-not-selected: ^6Non hai selezionato nessun venditore  
+  error-nopermission: ^6Non hai i permessi per farlo
+  error-nopermission-creative: ^6Non hai i permessi per farlo nella ^3modalità creativa
+  error-managermode-enabled: ^6Non puoi farlo nella modalità gestione
+  error-command-invalid: ^6Questo commando non è valido
+  error-argument-missing: '^6L''argomento è mancante: {argument}'
+  error-argument-invalid: '^6L''argomento è invalido: ^3{argument}'
+  key-value: '^6{key}: ^3{value}'
+  key-change: '^6Cambiato {key}: ^3{value}'
+keywords:
+  type: Tipo
+  trader-type: Tipo di venditore
+  banker-type: Tipologia banchiere
+  trader-server: Venditore Server
+  trader-player: Venditore Player
+  trader-market: Venditore Mercato
+  banker-private: Banchiere privato
+  banker-money: Banchiere di denaro
+  manage-global-limit: Amministra il limite generale
+  manage-player-limit: Amministra limite per i player
+  manage-stock: Amministra Stock
+  manage-price: Amministra Prezzo
+  price: Prezzo
+  owner: Proprietario
+  wallet: Wallet
+  stack-price: Prezzo per stock
+  enabled: Abilitato
+  disabled: Disabilitato
+  tab-price: Tabella prezzi
+  bought: Acquistato
+  sold: Venduto
+ui: 
+  buy:
+    name: ^r^6Acquista stock
+    lore:
+    - ^7Clicca per passare alla modalità acquisto stock
+  sell:
+    name: ^r^6Vendi stock
+    lore:
+    - ^7Clicca per passare alla modalità vendita stock
+  back:
+    name: ^r^6Indietro
+    lore:
+    - ^7Ritorna allo stock
+  price:
+    name: ^r^6Modifica prezzi
+    lore:
+    - ^7Clicca per passare alla modalità modifica prezzi
+  limit:
+    name: ^r^6Modifica limite
+    lore:
+    - ^7Clicca per passare alla modalità modifica limite
+  lock:
+    name: ^r^6Chiudi stock
+    lore:
+    - ^7Clicca per salvare tutti gli oggetto dello stock e chiuderlo
+  unlock:
+    name: ^r^6Sblocca stock
+    lore:
+    - ^7Clicca per sbloccare lo stock e permettere l'inserimento e la rimozione degli oggetti
