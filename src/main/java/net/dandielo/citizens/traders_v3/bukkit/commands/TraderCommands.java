@@ -20,10 +20,28 @@ import net.dandielo.citizens.traders_v3.traders.setting.TGlobalSettings;
 import net.dandielo.citizens.traders_v3.traits.TraderTrait;
 import net.dandielo.citizens.traders_v3.traits.WalletTrait;
 
+/**
+ * Holds all Trader specific commands as methods
+ * @author dandielo
+ *
+ */
 public class TraderCommands {
 
 	private static LocaleManager locale = LocaleManager.locale;
 
+	/**
+	 * Creates a new trader on the senders position. For creating the trader this command needs to have specified his name. The name should be parsed as a entry in the args Map, under the "free" key.
+	 * @param plugin
+	 * This plugin
+	 * @param sender
+	 * The command sender
+	 * @param trader
+	 * that took part when the command was executed
+	 * @param args
+	 * additional arguments, like name, type and entity type
+	 * @throws TraderTypeNotFoundException
+	 * @throws InvalidTraderTypeException
+	 */
 	@Command(
 	name = "trader",
 	syntax = "create {args}",
