@@ -1,4 +1,4 @@
-package net.dandielo.citizens.traders_v3.api;
+package net.dandielo.api.traders;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
