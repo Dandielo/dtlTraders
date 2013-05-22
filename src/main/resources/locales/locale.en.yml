@@ -45,7 +45,7 @@ messages:
   error-nopermission-creative: '^6You dont have permissions to do this while in ^3creative mode'
   error-nopermission-command: '^6You dont have permissions to use this command'
   error-nopermission: '^6You dont have permissions to do this'
-  error-argument-missing: '^6Argument is missing'
+  error-argument-missing: '^6Argument is missing: ^3{argument}'
   error-argument-invalid: '^6Invalid argument was supplied: ^3{argument}'
   error-managermode-enabled: '^6Manager mode could not be enabled'
   error-command-invalid: '^6This command is invalid'
