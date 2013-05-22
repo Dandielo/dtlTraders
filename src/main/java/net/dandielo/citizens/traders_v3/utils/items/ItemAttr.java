@@ -435,7 +435,10 @@ public abstract class ItemAttr {
 			Debugger.high("Stack trace: ", StringTools.stackTrace(e.getStackTrace()));
 		}
 	}
-	
+	public static void main(String[] a)
+	{
+		System.out.print(3 << 1);
+	}
 	/**
 	 * Creates a string with all registered core attribute names
 	 * @return 
