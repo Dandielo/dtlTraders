@@ -45,7 +45,7 @@ public class StockPlayer extends Stock {
 	}
 
 	@Override
-	public void setAmountsInventory(Inventory inventory, StockItem item) {
+	public void setAmountsInventory(Inventory inventory, Status status, StockItem item) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -2,6 +2,7 @@ package net.dandielo.citizens.traders_v3.utils.items.attributes;
 
 import java.util.List;
 
+import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 
 import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeInvalidValueException;
@@ -69,7 +70,7 @@ public class Price extends ItemAttr {
 	@Override
 	public void onStatusLoreRequest(Status status, List<String> lore)
 	{
-		//TODO handle this request
+		lore.add(ChatColor.GOLD + "Price: " + ChatColor.GRAY + price);
 	}
 	
 }

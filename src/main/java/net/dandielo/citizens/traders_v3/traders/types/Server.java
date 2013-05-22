@@ -245,7 +245,7 @@ public class Server extends Trader {
 					
 					//change status
 					status = Status.SELL_AMOUNTS;
-					stock.setAmountsInventory(inventory, getSelectedItem());
+					stock.setAmountsInventory(inventory, status, getSelectedItem());
 				}
 				else
 				if ( handleClick(e.getRawSlot()) )
@@ -468,7 +468,7 @@ public class Server extends Trader {
 		{
 			if ( e.isShiftClick() && e.isLeftClick() )
 			{
-				stock.setAmountsInventory(inventory, getSelectedItem());
+				stock.setAmountsInventory(inventory, status, getSelectedItem());
 				parseStatus(Status.MANAGE_AMOUNTS);
 			}
 		}

@@ -110,7 +110,7 @@ public abstract class Stock implements InventoryHolder {
 	public abstract Inventory getInventory(Status status);
 	public abstract Inventory getManagementInventory(Status baseStatus, Status status);
 	public abstract void setInventory(Inventory inventory, Status status);
-	public abstract void setAmountsInventory(Inventory inventory, StockItem item);
+	public abstract void setAmountsInventory(Inventory inventory, Status status, StockItem item);
 	public abstract void setManagementInventory(Inventory inventory, Status baseStatus, Status status);
 
 	public abstract double parsePrice(StockItem item, int slot);

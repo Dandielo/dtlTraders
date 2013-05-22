@@ -15,6 +15,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 public class StockTrader extends Stock {
 
@@ -168,13 +169,17 @@ public class StockTrader extends Stock {
 
 			//set the lore
 			ItemStack itemStack = item.getItem();
-		//	itemStack.getItemMeta().setLore(item.getDataLore(status));
+			ItemMeta meta = itemStack.getItemMeta();
+			meta.setLore(item.getTempLore(status));
+			itemStack.setItemMeta(meta);
+			
+			//set the item 
 			inventory.setItem(item.getSlot(), itemStack);
 		}
 		setUi(inventory, null, status);
 	}
 	
-	public void setAmountsInventory(Inventory inventory, StockItem item)
+	public void setAmountsInventory(Inventory inventory, Status status, StockItem item)
 	{
 		//debug info
 		Debugger.info("Setting inventory, status: ", Status.SELL_AMOUNTS.name().toLowerCase());
@@ -183,10 +188,16 @@ public class StockTrader extends Stock {
 		inventory.clear();
 		for ( Integer amount : item.getAmounts() )
 		{
-			//set the lore
+			//set new amount
 			ItemStack itemStack = item.getItem();
 			itemStack.setAmount(amount);
-		//	itemStack.getItemMeta().setLore(item.getDataLore(status));
+			
+			//set the lore
+			ItemMeta meta = itemStack.getItemMeta();
+			meta.setLore(item.getTempLore(status));
+			itemStack.setItemMeta(meta);
+			
+			//set the item
 			inventory.setItem(inventory.firstEmpty(), itemStack);
 		}
 		setUi(inventory, null, Status.SELL_AMOUNTS);
@@ -206,7 +217,11 @@ public class StockTrader extends Stock {
 
 			//set the lore
 			ItemStack itemStack = item.getItem();
-		//	itemStack.getItemMeta().setLore(item.getDataLore(status));
+			ItemMeta meta = itemStack.getItemMeta();
+			meta.setLore(item.getTempLore(status));
+			itemStack.setItemMeta(meta);
+			
+			//set the item 
 			inventory.setItem(item.getSlot(), itemStack);
 		}
 		setUi(inventory, baseStatus, status);

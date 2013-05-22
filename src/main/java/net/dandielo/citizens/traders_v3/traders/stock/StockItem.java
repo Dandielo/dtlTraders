@@ -84,7 +84,7 @@ public final class StockItem {
 		//load the item
 		this(format);
 
-		//assign the lore if the flag  was found
+		//assign the lore if the flag  was found, or remove the flag
 		if ( hasFlag(Lore.class) )
 			getFlag(Lore.class).setLore(list);
 	}
@@ -105,7 +105,6 @@ public final class StockItem {
 		//Reset all attributes
 		resetAttr();
 		
-	
 		//load the regex matcher
 		Matcher matcher = RegexMatcher.instance().getMatcher("item", itemData[1]);
 
@@ -213,6 +212,9 @@ public final class StockItem {
 				this.debugMsgValue(iAttr.getInfo(), "factorized");
 			}
 		}
+		
+		//if the lore was already managed don't load it anymore
+		if ( loreManaged ) return;
 
 		Lore lore = null;
 		try 
@@ -271,6 +273,18 @@ public final class StockItem {
 		{
 			debugMsgClass(key);
 		}
+	}
+
+	/**
+	 * @param clazz
+	 *     flag class that should be removed
+	 * @return
+	 *     true if the flag that was removed
+	 */
+	@SuppressWarnings("unchecked")
+	public <T extends ItemFlag> T removeFlag(Class<T> clazz)
+	{
+		return (T) flags.remove(clazz);
 	}
 	
 	/**
@@ -416,6 +430,10 @@ public final class StockItem {
 	{
 		//create a new list
 		List<String> lore = new ArrayList<String>();
+		
+		//check and add if there is already lore attached
+		if ( this.hasFlag(Lore.class) )
+			lore.addAll(this.getLore());
 		
 		//for each attribute
 		for ( ItemAttr info : attr.values() )
@@ -564,6 +582,21 @@ public final class StockItem {
 	public List<String> getLore()
 	{
 		return hasFlag(Lore.class) ? getFlag(Lore.class).getLore() : null;
+	}
+
+	/**
+	 * holds info if the lore was managed by another plugin
+	 */
+	private boolean loreManaged = false;
+	
+	/**
+	 * This function tells the item factorizer should load the lore or if it skip it because some other attribute has managed it. 
+	 * @param managed
+	 * true if the lore loading should be skipped
+	 */
+	public void loreManaged(boolean managed)
+	{
+		loreManaged = managed;
 	}
 	
 	private boolean standaloneAttrCheck(StockItem item)

@@ -103,6 +103,14 @@ public abstract class ItemAttr {
 	}
 	
 	/**
+	 * Tells the item factorizing function to not check the lore anymore because it was already checked, retrieved and saved somewhere else. 
+	 */
+	public void loreManaged()
+	{
+		item.loreManaged(true);
+	}
+	
+	/**
 	 * Called when a week equality is needed. Allows sometimes a value to be in range of another value, used for priority requests
 	 * @return
 	 *    true when equal, false instead 
