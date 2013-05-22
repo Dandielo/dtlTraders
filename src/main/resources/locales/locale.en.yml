@@ -74,6 +74,7 @@ keywords:
   bought: Bought
   owner: Owner
   price: Price
+  name: Name
   sold: Sold
   enabled: Enabled
   disabled: Disabled

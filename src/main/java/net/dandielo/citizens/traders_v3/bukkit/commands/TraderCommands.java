@@ -43,7 +43,7 @@ public class TraderCommands {
 		
 		if ( name == null )
 		{
-			locale.sendMessage(sender, "error-argument-missing");
+			locale.sendMessage(sender, "error-argument-missing", "argument", "#name");
 			return;
 		}
 		
@@ -71,8 +71,9 @@ public class TraderCommands {
 		//register the relation
 		tNpcManager.instance().registerRelation(sender, nTrader);
 		
-		//send message
+		//send messages
 		locale.sendMessage(sender, "trader-created", "player", sender.getName(), "trader", name);
+		locale.sendMessage(sender, "trader-managermode-enabled", "npc", npc.getName());
 	}
 	/*
 	@Command(
