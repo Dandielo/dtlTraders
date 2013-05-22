@@ -20,6 +20,20 @@ public class WalletTrait extends Trait {
 		super("wallet");
 	}
 	
+	//set wallet settings
+	public void setType(String type)
+	{
+		this.type = type;
+		wallet.setType(type);
+	}
+	
+	//set money
+	public void setMoney(double money)
+	{
+		this.money = money;
+		wallet.setMoney(money);
+	}
+	
 	//get the actual wallet object
 	public Wallet getWallet()
 	{
@@ -30,7 +44,7 @@ public class WalletTrait extends Trait {
 	public void onAttach()
 	{
 		//debug info
-		Debugger.info("Wallet trait attached to:", npc.getName());
+		Debugger.info("Wallet trait attached to: ", npc.getName());
 	}
 	
 	//events
@@ -43,6 +57,6 @@ public class WalletTrait extends Trait {
 	@Override
 	public void save(DataKey data)
 	{
-		
+		money = wallet.getMoney();
 	}
 }

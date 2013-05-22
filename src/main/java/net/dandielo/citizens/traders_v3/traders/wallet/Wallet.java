@@ -15,6 +15,24 @@ public class Wallet {
 		this.type = Type.fromString(type);
 	}
 	
+	//set type
+	public void setType(String type)
+	{
+		this.type = Type.fromString(type);
+	}
+	
+	//set money
+	public void setMoney(double money)
+	{
+		this.money = money;
+	}
+	
+	//get money
+	public double getMoney()
+	{
+		return money;
+	}
+	
 	//deposit to player or trader
 	public boolean deposit(Player player, double amount)
 	{

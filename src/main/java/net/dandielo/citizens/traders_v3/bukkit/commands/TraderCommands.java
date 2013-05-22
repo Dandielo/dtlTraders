@@ -16,6 +16,7 @@ import net.dandielo.citizens.traders_v3.core.exceptions.TraderTypeNotFoundExcept
 import net.dandielo.citizens.traders_v3.core.locale.LocaleManager;
 import net.dandielo.citizens.traders_v3.traders.Trader;
 import net.dandielo.citizens.traders_v3.traders.Trader.Status;
+import net.dandielo.citizens.traders_v3.traders.setting.TGlobalSettings;
 import net.dandielo.citizens.traders_v3.traits.TraderTrait;
 import net.dandielo.citizens.traders_v3.traits.WalletTrait;
 
@@ -53,6 +54,11 @@ public class TraderCommands {
 		//add Traits
 		npc.addTrait(TraderTrait.class);
 		npc.addTrait(WalletTrait.class);
+		
+		//set the walet trait
+		WalletTrait wallet = npc.getTrait(WalletTrait.class);
+		wallet.setType(TGlobalSettings.getDefaultWallet());
+		wallet.setMoney(TGlobalSettings.getWalletStartBalance());
 		
 		//set the mob type
 		npc.addTrait(MobType.class);

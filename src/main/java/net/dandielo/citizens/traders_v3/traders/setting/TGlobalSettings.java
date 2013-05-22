@@ -230,4 +230,14 @@ public class TGlobalSettings extends PluginSettings {
 	{
 		return uiItems;
 	}
+
+	public static String getDefaultWallet()
+	{
+		return walletType;
+	}
+	
+	public static double getWalletStartBalance()
+	{
+		return walletMoney;
+	}
 }
