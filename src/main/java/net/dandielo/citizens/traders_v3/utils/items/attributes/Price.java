@@ -70,13 +70,13 @@ public class Price extends ItemAttr {
 	/**
 	 * Counts how many lores where already requested in the Status = SELL_AMOUNTS
 	 */
-	private int amountsLoreCount; 
+	private int amountsLoreCount = 0; 
 	
 	@Override
 	public void onStatusLoreRequest(Status status, List<String> lore)
 	{
 		int a = 1;
-		if ( status.equals(Status.MANAGE_AMOUNTS) )
+		if ( status.equals(Status.SELL_AMOUNTS) )
 		{
 			if ( amountsLoreCount >= item.getAmounts().size() )
 				amountsLoreCount = 0;
