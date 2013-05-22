@@ -67,10 +67,25 @@ public class Price extends ItemAttr {
 		throw new AttributeValueNotFoundException();
 	}
 	
+	/**
+	 * Counts how many lores where already requested in the Status = SELL_AMOUNTS
+	 */
+	private int amountsLoreCount; 
+	
 	@Override
 	public void onStatusLoreRequest(Status status, List<String> lore)
 	{
-		lore.add(ChatColor.GOLD + "Price: " + ChatColor.GRAY + price);
+		int a = 1;
+		if ( status.equals(Status.MANAGE_AMOUNTS) )
+		{
+			if ( amountsLoreCount >= item.getAmounts().size() )
+				amountsLoreCount = 0;
+			
+			a = item.getAmount(amountsLoreCount);
+			
+			++amountsLoreCount;
+		}
+		lore.add(ChatColor.GOLD + "Price: " + ChatColor.GRAY + (price*a));
 	}
 	
 }

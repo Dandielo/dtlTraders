@@ -109,13 +109,22 @@ public class Server extends Trader {
 	@ClickHandler(status = {Status.SELL, Status.BUY, Status.SELL_AMOUNTS}, inventory = InventoryType.TRADER)
 	public void generalUI(InventoryClickEvent e)
 	{
+		//debug info
+		Debugger.info("General UI checking");
+		
 		int slot = e.getSlot();
 		if ( stock.isUiSlot(slot) )
 		{
+			//debug info
+			Debugger.info("Hit tests");
+			
 			if ( hitTest(slot, "buy") )
 			{
+				//debug low
+				Debugger.low("Buy stock hit test");
+				
 				//send message
-				locale.sendMessage(player, "trader-stock-toggled", "{stock}", "#stock-buy");
+				locale.sendMessage(player, "trader-stock-toggled", "stock", "#stock-buy");
 				
 				//change status
 				parseStatus(Status.BUY);
@@ -123,8 +132,11 @@ public class Server extends Trader {
 			else
 			if ( hitTest(slot, "sell") )
 			{
+				//debug low
+				Debugger.low("Sell stock hit test");
+				
 				//send message
-				locale.sendMessage(player, "trader-stock-toggled", "{stock}", "#stock-sell");
+				locale.sendMessage(player, "trader-stock-toggled", "stock", "#stock-sell");
 				
 				//change status
 				parseStatus(Status.SELL);
@@ -132,6 +144,9 @@ public class Server extends Trader {
 			else
 			if ( hitTest(slot, "back") )
 			{
+				//debug low
+				Debugger.low("Babck to stock hit test");
+				
 				//send message
 				locale.sendMessage(player, "trader-stock-back");
 				
@@ -195,7 +210,7 @@ public class Server extends Trader {
 			if ( hitTest(slot, "lock") )
 			{
 				//send message
-				locale.sendMessage(player, "trader-managermode-locked");
+				locale.sendMessage(player, "trader-managermode-stock-locked");
 				
 				//change status
 				parseStatus(baseStatus);
@@ -205,7 +220,7 @@ public class Server extends Trader {
 			if ( hitTest(slot, "unlock") )
 			{
 				//send message
-				locale.sendMessage(player, "trader-managermode-unlocked");
+				locale.sendMessage(player, "trader-managermode-stock-unlocked");
 				
 				//change status
 				parseStatus(Status.MANAGE_UNLOCKED);

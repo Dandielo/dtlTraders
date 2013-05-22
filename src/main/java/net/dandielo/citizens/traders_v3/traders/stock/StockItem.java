@@ -425,7 +425,7 @@ public final class StockItem {
 	 *     Status that is checked
 	 * @return
 	 *     List of lore strings
-	 */
+	 */ 
 	public List<String> getTempLore(Status status)
 	{
 		//create a new list
@@ -436,12 +436,16 @@ public final class StockItem {
 			lore.addAll(this.getLore());
 		
 		//for each attribute
-		for ( ItemAttr info : attr.values() )
-			info.onStatusLoreRequest(status, lore);
+		for ( ItemAttr attr : this.attr.values() )
+			for ( Status attrStatus : attr.getInfo().status() )
+				if ( attrStatus.equals(status) )
+			        attr.onStatusLoreRequest(status, lore);
 		
 		//for each flag
 		for ( ItemFlag flag : flags.values() )
-			flag.onStatusLoreRequest(status, lore);
+			for ( Status attrStatus : flag.getInfo().status() )
+				if ( attrStatus.equals(status) )
+			        flag.onStatusLoreRequest(status, lore);
 		
 		//return the lore
 		return lore;

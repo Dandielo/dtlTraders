@@ -33,7 +33,7 @@ messages:
   banker-tab-buy-success: '^6Bought a new tab'
   banker-deposit-success: '^6Item deposited'
   banker-withdraw-success: '^6Item withdrawed'
-  banker-withdraw-item: '^3Check the locale, this message is not set! #this message will probably be deleted'
+  banker-withdraw-item: '^3Check the locale, this message is not set!'
   wallet-balance: '^6Wallet balance: ^3{amount}'
   wallet-invalid: '^6You can not use this command on this wallet type'
   wallet-withdraw: '^6Withdrawed ^3{amount}'
@@ -73,6 +73,7 @@ keywords:
   wallet: Wallet
   bought: Bought
   owner: Owner
+  limt: Limit
   price: Price
   name: Name
   sold: Sold
@@ -106,5 +107,6 @@ ui:
   unlock:
     name: ^r^6Unlock stock
     lore:
-    - ^7Click to unlock the stock and enable item putting/removing from stock
+    - ^7Click to unlock the stock
+    - ^7Enables item adding/removing from stock
 
