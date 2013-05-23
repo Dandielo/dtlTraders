@@ -84,6 +84,8 @@ public class Server extends Trader {
 			inventory = stock.getInventory(status);
 		parseStatus(status);
 		
+		updateInventory();
+		
 		//open the traders inventory
 		player.openInventory(inventory);
 		

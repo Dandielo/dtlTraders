@@ -1,5 +1,8 @@
 package net.dandielo.citizens.traders_v3;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import net.citizensnpcs.api.event.NPCLeftClickEvent;
 import net.citizensnpcs.api.event.NPCRightClickEvent;
 import net.dandielo.citizens.traders_v3.bukkit.Perms;
@@ -8,6 +11,7 @@ import net.dandielo.citizens.traders_v3.core.exceptions.InvalidTraderTypeExcepti
 import net.dandielo.citizens.traders_v3.core.exceptions.TraderTypeNotFoundException;
 import net.dandielo.citizens.traders_v3.traders.Trader;
 import net.dandielo.citizens.traders_v3.traits.TraderTrait;
+import net.dandielo.citizens.traders_v3.utils.NBTUtils;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -15,12 +19,15 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.inventory.ItemStack;
 
 public class tNpcListener implements Listener {
 	/**
 	 * Permissions manager instance
 	 */
 	Perms perms = Perms.perms;
+	
+	InventoryCleaner cleaner = new InventoryCleaner();
 	
 	private static tNpcListener instance = new tNpcListener();
 	
@@ -34,6 +41,7 @@ public class tNpcListener implements Listener {
 
 	public tNpcListener()
 	{
+		cleaner.start();
 	}
 	
 	//general events
@@ -64,6 +72,9 @@ public class tNpcListener implements Listener {
 		{			
 			//remove the relation
 			manager.removeRelation((Player) e.getPlayer());
+			
+			//clean his inventory
+			cleaner.addPlayer((Player) e.getPlayer());
 		}
 	}
 
@@ -162,4 +173,62 @@ public class tNpcListener implements Listener {
 		}
 	}
 
+	/**
+	 * Cleans the players inventory from any "dtltrader" lore that is applied to ease the way of using traders. 
+	 * @author dandielo
+	 */
+	static class InventoryCleaner 
+	{		
+		/**
+		 * The timer that will shoot ech TimedTask 
+		 */
+		private Timer timer;
+		
+		/**
+		 * The list that contains players that should be cleaned on the next tick
+		 */
+	//	private List<Player> players = Collections.synchronizedList(new ArrayList<Player>());
+		
+		/**
+		 * Adds a player to the list, that will clean his inventory for dtltrader lores
+		 * @param player
+		 */
+		public void addPlayer(final Player player)
+		{
+		//	players.listIterator().add(player);
+			
+			TimerTask task = new TimerTask()
+			{
+				private Player thisPlayer = player;
+				
+				@Override
+				public void run()
+				{
+					int i = 0;
+					for ( ItemStack item : thisPlayer.getInventory().getContents() )
+					{
+						if ( item != null )
+							thisPlayer.getInventory().setItem(i, NBTUtils.cleanItem(item));
+						++i;
+					}
+				}
+			};
+
+			//so this one for a fast cleanup
+			timer.schedule(task, 100);
+			
+			//the second one if the first fails
+		//	timer.schedule(task, 1500);
+		}
+		
+		public void start()
+		{
+			if ( timer != null ) 
+			{
+				timer.cancel();
+			}
+			
+			timer = new Timer("DtlDescription-Cleaner");
+		}
+	}
 }

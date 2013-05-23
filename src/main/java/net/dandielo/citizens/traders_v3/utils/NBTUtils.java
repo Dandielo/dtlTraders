@@ -27,8 +27,6 @@ public class NBTUtils {
 		//create a NMS copy
 		net.minecraft.server.v1_5_R3.ItemStack nms = CraftItemStack.asNMSCopy(i);
 		
-		System.out.print(1);
-		
 		//get the "tag" tag
 		NBTTagCompound tag = null;
 		if(nms.tag != null) tag = nms.tag;
@@ -37,7 +35,6 @@ public class NBTUtils {
 		    tag = new NBTTagCompound();
 		    nms.tag = tag;
 		}
-		System.out.print(11);
 		
 		//get the display tag
 		NBTTagCompound display;
@@ -48,7 +45,6 @@ public class NBTUtils {
 			display = new NBTTagCompound();
 			tag.set("display", display);
 		}
-		System.out.print(111);
 		
 		//get the Lore tag
 		NBTTagList list;
@@ -57,16 +53,13 @@ public class NBTUtils {
 		else
 			list = new NBTTagList();
 
-		System.out.print(12);
 		//add the lore
 		for ( String line : lore )
 			list.add(new NBTTagString("dtltrader", line));
 
-		System.out.print(13);
 		//set the new list
 		display.set("Lore", list);
 
-		System.out.print(14);
 		//return the new item;
 		return CraftItemStack.asCraftMirror(nms);
 	}
@@ -115,4 +108,8 @@ public class NBTUtils {
 		return result;
 	}
 	
+	public static ItemStack cleanItem(ItemStack i)
+	{
+		return ItemUtils.createStockItem(i).getItem();
+	}
 }

@@ -26,6 +26,7 @@ import net.dandielo.citizens.traders_v3.traders.wallet.Wallet;
 import net.dandielo.citizens.traders_v3.traits.TraderTrait;
 import net.dandielo.citizens.traders_v3.traits.WalletTrait;
 import net.dandielo.citizens.traders_v3.utils.ItemUtils;
+import net.dandielo.citizens.traders_v3.utils.NBTUtils;
 
 public abstract class Trader implements tNpc {
 	//Click handlers
@@ -203,6 +204,24 @@ public abstract class Trader implements tNpc {
 			return true;
 		}
 		return false;
+	}
+	
+	public void updateInventory()
+	{
+		Inventory inv = player.getInventory();
+		
+		int i = 0;
+		for ( ItemStack item : inv.getContents() )
+		{
+			if ( selectAndCheckItem(item, "buy") )
+			{
+				//check if a lore cann be added
+				if ( item.getAmount() >= selectedItem.getAmount() )
+				    //set the new lore
+				    inv.setItem(i, NBTUtils.addLore(item, selectedItem.getTempLore(status)));
+			}
+			i++;
+		}
 	}
 
 	/** Helper methods */
