@@ -8,6 +8,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import net.dandielo.citizens.traders_v3.core.exceptions.InvalidItemException;
 import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeValueNotFoundException;
+import net.dandielo.citizens.traders_v3.utils.NBTUtils;
 import net.dandielo.citizens.traders_v3.utils.items.Attribute;
 import net.dandielo.citizens.traders_v3.utils.items.ItemFlag;
 
@@ -32,6 +33,8 @@ public class Lore extends ItemFlag {
 		if ( lore == null )
 			lore = new ArrayList<String>();
 		
+		System.out.print("ADDING! " + this.lore.get(0));
+		
 		//add this lore
 		lore.addAll(this.lore);
 
@@ -45,7 +48,16 @@ public class Lore extends ItemFlag {
 	{
 		if ( !item.getItemMeta().hasLore() )
 			throw new AttributeValueNotFoundException();
-		this.lore = item.getItemMeta().getLore();
+		
+		//get the lore without any dtlTrader lore lines
+		List<String> cleanedLore = NBTUtils.getLore(item);
+		if ( cleanedLore.isEmpty() )
+			throw new AttributeValueNotFoundException();
+		
+		for ( String l : cleanedLore )
+		System.out.print(l);
+		
+		this.lore = cleanedLore;//item.getItemMeta().getLore();
 	}
 
 	public List<String> getLore() {

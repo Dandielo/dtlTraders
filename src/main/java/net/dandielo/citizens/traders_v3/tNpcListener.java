@@ -61,7 +61,10 @@ public class tNpcListener implements Listener {
 	{
 		Trader trader = manager.getTraderRelation(e.getPlayer());
 		if ( trader != null && !trader.getStatus().inManagementMode() )
+		{			
+			//remove the relation
 			manager.removeRelation((Player) e.getPlayer());
+		}
 	}
 
 	//npc events

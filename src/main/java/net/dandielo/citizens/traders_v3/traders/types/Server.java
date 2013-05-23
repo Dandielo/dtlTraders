@@ -28,7 +28,6 @@ public class Server extends Trader {
 	 */
 	Perms perms = Perms.perms;
 	
-	
 
 	public Server(TraderTrait trader, WalletTrait wallet, Player player) {
 		super(trader, wallet, player);
@@ -84,6 +83,8 @@ public class Server extends Trader {
 		else
 			inventory = stock.getInventory(status);
 		parseStatus(status);
+		
+		//open the traders inventory
 		player.openInventory(inventory);
 		
 		return true;

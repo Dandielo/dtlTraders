@@ -9,3 +9,14 @@ commands:
   trader: 
     aliases: dtrader
     description: Dtl - CitizensTrader trader commands.
+permissions:
+  dtl.trader.commands.*:
+    default: op
+  dtl.trader.manage:
+    default: op
+  dtl.trader.use:
+    default: true
+  dtl.trader.sell:
+    default: true
+  dtl.trader.buy:
+    default: true

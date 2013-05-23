@@ -54,8 +54,15 @@ public abstract class Trader implements tNpc {
 	protected Settings settings;
 	protected Wallet wallet;
 	protected Stock stock;
+	
+	/**
+	 * Player related settings
+	 */
 	protected Player player;
 	
+	/**
+	 * Traders inventory
+	 */
 	protected Inventory inventory;
 	protected Status baseStatus;
 	protected Status status;
@@ -243,8 +250,6 @@ public abstract class Trader implements tNpc {
 		return false;
 	}
 	
-	
-	
 	public final boolean addToInventory() 
 	{
 		return addToInventory(0);
@@ -255,13 +260,14 @@ public abstract class Trader implements tNpc {
 		//debug info
 		Debugger.info("Adding item to players inventory");
 		Debugger.info("Player: ", player.getName(), ", item: ", selectedItem.getItem().getType().name().toLowerCase());
-				
-		return _addToInventory(selectedItem.getAmount(slot));
+		
+		//adds the item to the "eventInventory" 
+		return _addToInventory(player.getInventory(), selectedItem.getAmount(slot));
 	}
 	
-	private final boolean _addToInventory(int amount) 
+	private final boolean _addToInventory(Inventory inventory, int amount) 
 	{
-		PlayerInventory inventory = player.getInventory();
+	//	PlayerInventory inventory = player.getInventory();
 		int amountLeft = amount;
 
 		for ( ItemStack item : inventory.all(selectedItem.getItem().getType()).values() ) 
@@ -313,13 +319,13 @@ public abstract class Trader implements tNpc {
 		Debugger.info("Removing item from players inventory");
 		Debugger.info("Player: ", player.getName(), ", item: ", selectedItem.getItem().getType().name().toLowerCase());
 				
-		_removeFromInventory(slot, selectedItem.getAmount(0) * scale);
+		//removes from the event inventory
+		_removeFromInventory(player.getInventory(), slot, selectedItem.getAmount(0) * scale);
 	}
 	
 	
-	private final void _removeFromInventory(int slot, int amount) 
+	private final void _removeFromInventory(Inventory inventory, int slot, int amount) 
 	{
-		PlayerInventory inventory = player.getInventory();
 		ItemStack item = inventory.getItem(slot);
 		
 		if ( item.getAmount() > amount )
@@ -329,48 +335,12 @@ public abstract class Trader implements tNpc {
 		}
 		else
 			inventory.setItem(slot, null);
-		
-	/*	int amountLeft = amount;
-
-		for ( ItemStack item : inventory.all(selectedItem.getItem().getType()).values() ) 
-		{
-			if ( selectedItem.equalsWeak(ItemUtils.createStockItem(item)) )
-			{
-				//add amount to an item in the inventory, its done
-				if ( item.getAmount() + amountLeft <= item.getMaxStackSize() ) {
-					item.setAmount( item.getAmount() + amountLeft );
-					return true;
-				} 
-				
-				//add amount to an item in the inventory, but we still got some left
-				if ( item.getAmount() < item.getMaxStackSize() ) {
-					amountLeft = ( item.getAmount() + amountLeft ) % item.getMaxStackSize(); 
-					item.setAmount(item.getMaxStackSize());
-				}
-					
-				//nothing left
-				if ( amountLeft <= 0 )
-					return true;
-			}
-		}
-
-		if ( inventory.firstEmpty() < inventory.getSize() 
-				&& inventory.firstEmpty() >= 0 ) 
-		{
-			
-			//new stack
-			ItemStack is = selectedItem.getItem();
-			is.setAmount(amountLeft);
-			
-			//set the item info the inv
-			inventory.setItem(inventory.firstEmpty(), is);
-			return true;
-		}
-		return false;*/
 	}
-	
+
 	
 	/**
+	 * 
+	 * @param item
 	 */
 	public void selectNewItem(ItemStack item)
 	{

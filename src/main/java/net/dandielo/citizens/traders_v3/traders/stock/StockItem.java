@@ -88,7 +88,7 @@ public final class StockItem {
 		if ( hasFlag(Lore.class) )
 			getFlag(Lore.class).setLore(list);
 	}
-
+ 
 	/**
 	 * Reads the format string and loads all attributes and flags into the structure.
 	 * @param
