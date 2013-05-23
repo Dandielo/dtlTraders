@@ -29,7 +29,7 @@ messages:
   banker-tab-select-item-success: ^6Il nuovo oggetto è stato selezionato
   banker-tab-select-item-canceled: ^6La selezione è stata annullata
   banker-deposit-success: ^6Oggetto depositato
-  banker-withdraw-item: ^6Oggetto ritirato #this message will probably be deleted
+  banker-withdraw-item: ^6Oggetto ritirato
   wallet-balance: '^6Bilancio Wallet: ^3{amount}'
   wallet-deposit: ^6Depositato ^3{amount}
   wallet-deposit-fail: Non hai abbastanza denaro
@@ -60,6 +60,7 @@ keywords:
   manage-stock: Amministra Stock
   manage-price: Amministra Prezzo
   price: Prezzo
+  limit: Limit
   owner: Proprietario
   wallet: Wallet
   stack-price: Prezzo per stock
@@ -96,4 +97,5 @@ ui:
   unlock:
     name: ^r^6Sblocca stock
     lore:
-    - ^7Clicca per sbloccare lo stock e permettere l'inserimento e la rimozione degli oggetti
+    - ^7Clicca per sbloccare lo stock
+    - ^7Permette l'inserimento e la rimozione degli stock
