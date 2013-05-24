@@ -124,7 +124,7 @@ public class TraderCommands {
 			//check the argument
 			if ( args.get("free") == null )
 			{
-				locale.sendMessage(sender, "error-argument-missing", "{args}");
+				locale.sendMessage(sender, "error-argument-missing", "argument", "{args}");
 			}
 			
 			//set the new stock name
@@ -159,7 +159,7 @@ public class TraderCommands {
 		//send a error message
 		else
 		{
-			locale.sendMessage(sender, "error-argument-invalid", "<action>");
+			locale.sendMessage(sender, "error-argument-invalid", "argument", "<action>");
 		}
 	}
 	
@@ -180,11 +180,18 @@ public class TraderCommands {
 			//check the argument
 			if ( args.get("size") == null )
 			{
-				locale.sendMessage(sender, "error-argument-missing", "(size)");
+				locale.sendMessage(sender, "error-argument-missing", "argument", "(size)");
+			}
+			
+			//is the size valid?
+			int size = Integer.parseInt(args.get("size"));
+			if ( size < 0 || size > 6 )
+			{
+				locale.sendMessage(sender, "error-argument-invalid", "argument", "(size)");
 			}
 			
 			//set the new stock name
-			trader.getSettings().setStockSize( Integer.parseInt(args.get("size")) );
+			trader.getSettings().setStockSize( size );
 			
 			//send a message
 			locale.sendMessage(sender, "key-change", 
@@ -215,7 +222,7 @@ public class TraderCommands {
 		//send a error message
 		else
 		{
-			locale.sendMessage(sender, "error-argument-invalid", "<action>");
+			locale.sendMessage(sender, "error-argument-invalid", "argument", "<action>");
 		}
 	}
 	
@@ -236,7 +243,7 @@ public class TraderCommands {
 			//check the argument
 			if ( args.get("stock") == null )
 			{
-				locale.sendMessage(sender, "error-argument-missing", "(stock)");
+				locale.sendMessage(sender, "error-argument-missing", "argument", "(stock)");
 			}
 			
 			//set the new stock name
@@ -271,7 +278,7 @@ public class TraderCommands {
 		//send a error message
 		else
 		{
-			locale.sendMessage(sender, "error-argument-invalid", "<action>");
+			locale.sendMessage(sender, "error-argument-invalid", "argument", "<action>");
 		}
 	}
 	/*
