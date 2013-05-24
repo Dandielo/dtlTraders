@@ -243,6 +243,54 @@ public class Server extends Trader {
 		}
 	}
 	
+	@ClickHandler(status = {Status.SELL_AMOUNTS}, inventory = InventoryType.TRADER)
+	public void sellAmountsItems(InventoryClickEvent e)
+	{
+		e.setCancelled(true);
+		//check permission
+		if ( !perms.has(player, "dtl.trader.sell") ) return;
+		
+		int slot = e.getSlot();
+		if ( stock.isUiSlot(slot) ) return;
+
+		if ( checkItemAmount(slot) )
+		{
+			if ( handleClick(e.getRawSlot()) )
+			{
+				if ( !inventoryHasPlace(slot) )
+				{
+					//send message
+					locale.sendMessage(player, "trader-transaction-failed-inventory");
+				}
+				else
+				if ( !sellTransaction(slot) )
+				{
+					//send message
+					locale.sendMessage(player, "trader-transaction-failed-player-money");
+				}
+				else
+				{
+					addToInventory(slot);
+
+					//send message
+					locale.sendMessage(player, "trader-transaction-success", "trader", getNPC().getName(),
+							"player", player.getName(), "action", "#bought", "item", getSelectedItem().getName(),
+							"amount", String.valueOf(getSelectedItem().getAmount()), "price", String.valueOf(stock.parsePrice(getSelectedItem(), slot)));
+					
+					//update inventory - lore
+					updateInventory();
+				}
+			}
+			else
+			{
+				//informations about the item some1 wants to buy
+				locale.sendMessage(player, "trader-transaction-item",
+						"item", getSelectedItem().getName(), "amount", String.valueOf(getSelectedItem().getAmount()), 
+						"price", String.valueOf(stock.parsePrice(getSelectedItem(), slot)));
+			}
+		}
+	}
+	
 	@ClickHandler(status = {Status.SELL}, inventory = InventoryType.TRADER)
 	public void sellItems(InventoryClickEvent e)
 	{
@@ -347,54 +395,6 @@ public class Server extends Trader {
 	public void sellAmountsSec(InventoryClickEvent e)
 	{
 		e.setCancelled(true);
-	}
-	
-	@ClickHandler(status = {Status.SELL_AMOUNTS}, inventory = InventoryType.TRADER)
-	public void sellAmountsItems(InventoryClickEvent e)
-	{
-		e.setCancelled(true);
-		//check permission
-		if ( !perms.has(player, "dtl.trader.sell") ) return;
-		
-		int slot = e.getSlot();
-		if ( stock.isUiSlot(slot) ) return;
-
-		if ( checkItemAmount(slot) )
-		{
-			if ( handleClick(e.getRawSlot()) )
-			{
-				if ( !inventoryHasPlace(slot) )
-				{
-					//send message
-					locale.sendMessage(player, "trader-transaction-failed-inventory");
-				}
-				else
-				if ( !sellTransaction(slot) )
-				{
-					//send message
-					locale.sendMessage(player, "trader-transaction-failed-player-money");
-				}
-				else
-				{
-					addToInventory(slot);
-
-					//send message
-					locale.sendMessage(player, "trader-transaction-success", "trader", getNPC().getName(),
-							"player", player.getName(), "action", "#bought", "item", getSelectedItem().getName(),
-							"amount", String.valueOf(getSelectedItem().getAmount()), "price", String.valueOf(stock.parsePrice(getSelectedItem(), slot)));
-					
-					//update inventory - lore
-					updateInventory();
-				}
-			}
-			else
-			{
-				//informations about the item some1 wants to buy
-				locale.sendMessage(player, "trader-transaction-item",
-						"item", getSelectedItem().getName(), "amount", String.valueOf(getSelectedItem().getAmount()), 
-						"price", String.valueOf(stock.parsePrice(getSelectedItem(), slot)));
-			}
-		}
 	}
 	
 	@ClickHandler(status = {Status.SELL, Status.BUY}, inventory = InventoryType.PLAYER)
