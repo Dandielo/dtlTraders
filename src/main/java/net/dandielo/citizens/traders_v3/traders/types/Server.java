@@ -287,6 +287,9 @@ public class Server extends Trader {
 						locale.sendMessage(player, "trader-transaction-success", "trader", getNPC().getName(),
 								"player", player.getName(), "action", "#bought", "item", getSelectedItem().getName(),
 								"amount", String.valueOf(getSelectedItem().getAmount()), "price", String.valueOf(getSelectedItem().getPrice()));
+						
+						//update inventory - lore
+						updateInventory();
 					}
 				}
 				else
@@ -323,6 +326,9 @@ public class Server extends Trader {
 						locale.sendMessage(player, "trader-transaction-success", "trader", getNPC().getName(),
 								"player", player.getName(), "action", "#bought", "item", getSelectedItem().getName(),
 								"amount", String.valueOf(getSelectedItem().getAmount()), "price", String.valueOf(getSelectedItem().getPrice()));
+						
+						//update inventory - lore
+						updateInventory();
 					}
 				}
 				else
@@ -334,6 +340,12 @@ public class Server extends Trader {
 				}
 			}
 		}
+	}
+
+	@ClickHandler(status = {Status.SELL_AMOUNTS}, inventory = InventoryType.PLAYER)
+	public void sellAmountsSec(InventoryClickEvent e)
+	{
+		e.setCancelled(true);
 	}
 	
 	@ClickHandler(status = {Status.SELL_AMOUNTS}, inventory = InventoryType.TRADER)
@@ -369,6 +381,9 @@ public class Server extends Trader {
 					locale.sendMessage(player, "trader-transaction-success", "trader", getNPC().getName(),
 							"player", player.getName(), "action", "#bought", "item", getSelectedItem().getName(),
 							"amount", String.valueOf(getSelectedItem().getAmount()), "price", String.valueOf(stock.parsePrice(getSelectedItem(), slot)));
+					
+					//update inventory - lore
+					updateInventory();
 				}
 			}
 			else
@@ -413,6 +428,9 @@ public class Server extends Trader {
 						locale.sendMessage(player, "trader-transaction-success", "trader", getNPC().getName(),
 								"player", player.getName(), "action", "#sold", "item", getSelectedItem().getName(),
 								"amount", String.valueOf(getSelectedItem().getAmount()*scale), "price", String.valueOf(stock.parsePrice(getSelectedItem(), 0)*scale));
+						
+						//update the inventory lore
+						updateInventory();
 					}
 				}
 				else
@@ -447,6 +465,9 @@ public class Server extends Trader {
 						locale.sendMessage(player, "trader-transaction-success", "trader", getNPC().getName(),
 								"player", player.getName(), "action", "#sold", "item", getSelectedItem().getName(),
 								"amount", String.valueOf(getSelectedItem().getAmount()), "price", String.valueOf(stock.parsePrice(getSelectedItem(), 0)));
+
+						//update the inventory lore
+						updateInventory();
 					}
 				}
 				else

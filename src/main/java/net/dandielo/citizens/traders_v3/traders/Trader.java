@@ -210,6 +210,9 @@ public abstract class Trader implements tNpc {
 	{
 		Inventory inv = player.getInventory();
 		
+		//save the selectedItem temporary
+		StockItem selected = selectedItem;
+		
 		int i = 0;
 		for ( ItemStack item : inv.getContents() )
 		{
@@ -217,11 +220,18 @@ public abstract class Trader implements tNpc {
 			{
 				//check if a lore cann be added
 				if ( item.getAmount() >= selectedItem.getAmount() )
+				{
 				    //set the new lore
-				    inv.setItem(i, NBTUtils.addLore(item, selectedItem.getTempLore(status)));
+				    inv.setItem(i, NBTUtils.addLore(NBTUtils.cleanItem(item), selectedItem.getTempLore(status, item.clone())));
+				}
+				else
+					inv.setItem(i, NBTUtils.cleanItem(item));
 			}
 			i++;
 		}
+		
+		//reassign the last selected item
+		selectedItem = selected;
 	}
 
 	/** Helper methods */
@@ -375,6 +385,9 @@ public abstract class Trader implements tNpc {
 		return (selectedItem = item != null && item.getTypeId() != 0 ? ItemUtils.createStockItem(item) : null) != null;
 	}
 	
+	/**
+	 * Clears the current selection
+	 */
 	public void clearSelection()
 	{
 		selectedItem = null;

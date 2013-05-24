@@ -423,10 +423,12 @@ public final class StockItem {
 	 * Returns a list of temporary lore strings that should be applied depending on the traders status. 
 	 * @param status
 	 *     Status that is checked
+	 * @param target
+	 *     The a copy of item that gets the lore assigned
 	 * @return
 	 *     List of lore strings
 	 */ 
-	public List<String> getTempLore(Status status)
+	public List<String> getTempLore(Status status, ItemStack target)
 	{
 		//create a new list
 		List<String> lore = new ArrayList<String>();
@@ -439,7 +441,7 @@ public final class StockItem {
 		for ( ItemAttr attr : this.attr.values() )
 			for ( Status attrStatus : attr.getInfo().status() )
 				if ( attrStatus.equals(status) )
-			        attr.onStatusLoreRequest(status, lore);
+			        attr.onStatusLoreRequest(status, target, lore);
 		
 		//for each flag
 		for ( ItemFlag flag : flags.values() )

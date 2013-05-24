@@ -10,6 +10,7 @@ import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeValu
 import net.dandielo.citizens.traders_v3.traders.Trader.Status;
 import net.dandielo.citizens.traders_v3.utils.items.Attribute;
 import net.dandielo.citizens.traders_v3.utils.items.ItemAttr;
+import net.dandielo.citizens.traders_v3.utils.items.flags.StackPrice;
 
 @Attribute(
 name="Price", key = "p", standalone = true,
@@ -67,25 +68,28 @@ public class Price extends ItemAttr {
 		throw new AttributeValueNotFoundException();
 	}
 	
-	/**
-	 * Counts how many lores where already requested in the Status = SELL_AMOUNTS
-	 */
-	private int amountsLoreCount = 0; 
-	
 	@Override
-	public void onStatusLoreRequest(Status status, List<String> lore)
+	public void onStatusLoreRequest(Status status, ItemStack target, List<String> lore)
 	{
-		int a = 1;
+		double m;
+		//has the item the stack price flag?
+	//	if ( item.hasFlag(StackPrice.class) )
+	//		m = 1;
+	//	else
+			m = item.getAmount();
+
+		//assign a multiplier to each item sold in the amounts inventory
 		if ( status.equals(Status.SELL_AMOUNTS) )
 		{
-			if ( amountsLoreCount >= item.getAmounts().size() )
-				amountsLoreCount = 0;
-			
-			a = item.getAmount(amountsLoreCount);
-			
-			++amountsLoreCount;
+			m *= target.getAmount() / item.getAmount();
 		}
-		lore.add(ChatColor.GOLD + "Price: " + ChatColor.GRAY + (price*a));
+		//multiplier for items in player stock
+		else
+		{
+		    m *= (int) ( target.getAmount() / item.getAmount() );
+		}
+		
+		lore.add(ChatColor.GOLD + "Price: " + ChatColor.GRAY + (price*m));
 	}
 	
 }
