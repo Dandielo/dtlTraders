@@ -117,12 +117,12 @@ public final class StockItem {
 		while(matcher.find())
 		{
 			if ( matcher.group(2) != null )
-			{
+			{ 
 				//if the key starts with a dot then it's a flag
 				if ( key.startsWith(".") )
 					addFlag(key);
 				//else if it's not empty it's a attribute 
-				else 
+				else /* compatibility start */ if ( !key.startsWith("!") && value != null ) /* compatibility end */ 
 				if ( !key.isEmpty() )
 					addAttr(key, value.trim());
 				

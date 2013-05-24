@@ -107,6 +107,11 @@ public class Settings extends TGlobalSettings {
 		type = data.getString("type");
 		owner = data.getString("owner", "no owner");
 		
+		/* compatibility start */
+		if ( type.equals("trader") )
+			type = data.getString("trader");
+	    /* compatibility end */
+		
 		//load stock settings
 		stockSize = data.getInt("stock.size", TGlobalSettings.stockSize);
 		stockNameFormat = data.getString("stock.format", TGlobalSettings.stockNameFormat);
