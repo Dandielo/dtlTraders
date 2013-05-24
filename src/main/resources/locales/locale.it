@@ -1,4 +1,4 @@
-ver: 1.1.0
+ver: 1.1.3
 messages:
   plugin-reload: ^3dtlTraders ^6caricato con successo
   plugin-command-message: ^6== dtlTraders ^3{version} ^6==
@@ -61,6 +61,14 @@ keywords:
   manage-price: Amministra Prezzo
   price: Prezzo
   limit: Limit
+  stock-amounts: Amounts choosing
+  stock-start: Inizia stock
+  stock-size: Dimensione stock
+  stock-name: Nome stock
+  stock-sell: Vendi stock
+  stock-buy: Acuista stock
+  stock: Stock
+  pattern: Patterns
   owner: Proprietario
   wallet: Wallet
   stack-price: Prezzo per stock
