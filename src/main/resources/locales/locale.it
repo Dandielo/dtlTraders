@@ -93,7 +93,8 @@ ui:
   lock:
     name: ^r^6Chiudi stock
     lore:
-    - ^7Clicca per salvare tutti gli oggetto dello stock e chiuderlo
+    - ^7Clicca per salvare tutti 
+    - ^7gli oggetti dello stock e chiuderlo
   unlock:
     name: ^r^6Sblocca stock
     lore:
