@@ -20,6 +20,7 @@ import net.dandielo.citizens.traders_v3.traits.TraderTrait;
 import net.dandielo.citizens.traders_v3.traits.WalletTrait;
 import net.dandielo.citizens.traders_v3.utils.ItemUtils;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Price;
+import net.dandielo.citizens.traders_v3.utils.items.flags.StackPrice;
 
 @tNpcType(name="server", author="dandielo")
 public class Server extends Trader {
@@ -505,10 +506,35 @@ public class Server extends Trader {
 		//select the item that should have the price changed
 		if ( selectAndCheckItem(e.getSlot()) )
 		{
-			if ( e.isShiftClick() && e.isLeftClick() )
+			if ( e.isShiftClick() )
 			{
-				stock.setAmountsInventory(inventory, status, getSelectedItem());
-				parseStatus(Status.MANAGE_AMOUNTS);
+				if ( e.isLeftClick() )
+				{
+					stock.setAmountsInventory(inventory, status, getSelectedItem());
+					parseStatus(Status.MANAGE_AMOUNTS);
+				}
+				else //if it's a shift rightclick
+				{
+					
+				}
+			}
+			else //no shift click
+			{
+				if ( e.isLeftClick() )
+				{
+					if ( getSelectedItem().hasFlag(StackPrice.class) )
+						getSelectedItem().removeFlag(StackPrice.class);
+					else
+						getSelectedItem().addFlag(".sp");
+					
+					locale.sendMessage(player, "key-change", 
+							"key", "#stack-price", 
+							"value", String.valueOf(getSelectedItem().hasFlag(StackPrice.class)));
+				}
+				else //if it's a shift rightclick
+				{
+					
+				}
 			}
 		}
 		e.setCancelled(true);
@@ -597,11 +623,22 @@ public class Server extends Trader {
 					if ( matchedItem == null && item.equalsStrong(sItem) )
 						matchedItem = item; 
 				
-				//update just its slot
-				matchedItem.setSlot(slot);
-				
-				//add to the new stock
-				stock.addItem(matchedItem, baseStatus.asStock());
+				if ( matchedItem != null ) 
+				{ 
+					//update just its slot 
+					matchedItem.setSlot(slot); 
+
+					//add to the new stock 
+					stock.addItem(matchedItem, baseStatus.asStock()); 
+				} 
+				else 
+				{ 
+					//set the items new slot 
+					sItem.setSlot(slot); 
+
+					//add to stock 
+					stock.addItem(sItem, baseStatus.asStock()); 
+				}
 			}
 			
 			++slot;
