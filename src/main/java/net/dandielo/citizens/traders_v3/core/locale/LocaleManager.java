@@ -26,7 +26,7 @@ public class LocaleManager {
 	public final static LocaleManager locale = new LocaleManager();
 
 	/** The current locale version */
-	public final static String localeVersion = "1.1.2"; 
+	public final static String localeVersion = "1.1.3"; 
 	
 	/* cached messages, keywords and lores */
 	private Map<LocaleEntry, String> messages;
@@ -88,7 +88,7 @@ public class LocaleManager {
 			{
 				localeFile.createNewFile();
 				
-			    InputStream stream = DtlTraders.getInstance().getResource("locales/locale.en.yml");
+			    InputStream stream = DtlTraders.getInstance().getResource("locales/locale." + PluginSettings.getLocale() + ".yml");
 			    if (stream != null)
 			    {
 			        YamlConfiguration yconfig = YamlConfiguration.loadConfiguration(stream);
