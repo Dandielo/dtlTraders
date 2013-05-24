@@ -53,7 +53,7 @@ public class Price extends ItemAttr {
 	@Override
 	public String onSave()
 	{
-		return String.format("%.2f", price);
+		return String.format("%.2f", price).replace(',', '.');
 	}
 
 	@Override
