@@ -275,7 +275,7 @@ public class Server extends Trader {
 					//send message
 					locale.sendMessage(player, "trader-transaction-success", "trader", getNPC().getName(),
 							"player", player.getName(), "action", "#bought", "item", getSelectedItem().getName(),
-							"amount", String.valueOf(getSelectedItem().getAmount()), "price", String.valueOf(stock.parsePrice(getSelectedItem(), slot)));
+							"amount", String.valueOf(getSelectedItem().getAmount()), "price", String.format("%.2f", stock.parsePrice(getSelectedItem(), slot)).replace(',', '.'));
 					
 					//update inventory - lore
 					updateInventory();
@@ -286,7 +286,7 @@ public class Server extends Trader {
 				//informations about the item some1 wants to buy
 				locale.sendMessage(player, "trader-transaction-item",
 						"item", getSelectedItem().getName(), "amount", String.valueOf(getSelectedItem().getAmount()), 
-						"price", String.valueOf(stock.parsePrice(getSelectedItem(), slot)));
+						"price", String.format("%.2f", stock.parsePrice(getSelectedItem(), slot)).replace(',', '.'));
 			}
 		}
 	}

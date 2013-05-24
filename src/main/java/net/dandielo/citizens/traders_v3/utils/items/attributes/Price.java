@@ -81,7 +81,7 @@ public class Price extends ItemAttr {
 		//assign a multiplier to each item sold in the amounts inventory
 		if ( status.equals(Status.SELL_AMOUNTS) )
 		{
-			m *= target.getAmount() / item.getAmount();
+			m *= (double) target.getAmount() / (double) item.getAmount();
 		}
 		//multiplier for items in player stock
 		else
@@ -89,7 +89,8 @@ public class Price extends ItemAttr {
 		    m *= (int) ( target.getAmount() / item.getAmount() );
 		}
 		
-		lore.add(ChatColor.GOLD + "Price: " + ChatColor.GRAY + (price*m));
+		lore.add(ChatColor.GOLD + "Price: " + ChatColor.GRAY + 
+				String.format("%.2f", price*m).replace(',', '.'));
 	}
 	
 }

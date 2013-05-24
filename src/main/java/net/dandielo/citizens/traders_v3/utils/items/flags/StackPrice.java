@@ -8,7 +8,7 @@ import net.dandielo.citizens.traders_v3.utils.items.Attribute;
 import net.dandielo.citizens.traders_v3.utils.items.ItemFlag;
 
 @Attribute( 
-name="StackPrice", key = ".sp", 
+name="StackPrice", key = ".sp", standalone = true,
 status = {Status.MANAGE_SELL, Status.MANAGE_BUY})
 public class StackPrice extends ItemFlag {
 

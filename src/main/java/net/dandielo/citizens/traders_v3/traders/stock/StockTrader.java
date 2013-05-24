@@ -11,6 +11,7 @@ import net.dandielo.citizens.traders_v3.traders.Trader.Status;
 import net.dandielo.citizens.traders_v3.traders.setting.Settings;
 import net.dandielo.citizens.traders_v3.traders.setting.TGlobalSettings;
 import net.dandielo.citizens.traders_v3.utils.items.flags.Lore;
+import net.dandielo.citizens.traders_v3.utils.items.flags.StackPrice;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -277,8 +278,13 @@ public class StockTrader extends Stock {
 
 	@Override
 	public double parsePrice(StockItem item, int slot) {
-		Debugger.high(item.getPrice());
-		return item.getPrice() * item.getAmount(slot);
+		//debug low
+		Debugger.low(item.getPrice());
+		
+		if ( item.hasFlag(StackPrice.class) )
+			return item.getPrice() * item.getAmount(slot) / item.getAmount();
+		else
+		    return item.getPrice() * item.getAmount(slot);
 	}
 
 }
