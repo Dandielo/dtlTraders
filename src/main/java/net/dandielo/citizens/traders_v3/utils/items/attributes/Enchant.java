@@ -80,6 +80,7 @@ public class Enchant extends ItemAttr {
 			enchants.put(enchant.getKey(), enchant.getValue());
 	}
 
+	@Override
 	public boolean equalsStrong(ItemAttr data)
 	{
 		if ( ((Enchant)data).enchants.size() != enchants.size() ) return false;
@@ -95,6 +96,7 @@ public class Enchant extends ItemAttr {
 		return equals;
 	}
 	
+	@Override
 	public boolean equalsWeak(ItemAttr data)
 	{
 		return equalsStrong(data);

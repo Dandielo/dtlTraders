@@ -126,7 +126,7 @@ public abstract class Trader implements tNpc {
 		inventoryClickParser(e);
 	}
 	
-	private final void inventoryClickParser(InventoryClickEvent e)
+	private void inventoryClickParser(InventoryClickEvent e)
 	{		
 		//debug info
 		Debugger.low("Parsing click event");
@@ -294,7 +294,7 @@ public abstract class Trader implements tNpc {
 		return _addToInventory(player.getInventory(), selectedItem.getAmount(slot));
 	}
 	
-	private final boolean _addToInventory(Inventory inventory, int amount) 
+	private boolean _addToInventory(Inventory inventory, int amount) 
 	{
 	//	PlayerInventory inventory = player.getInventory();
 		int amountLeft = amount;
@@ -353,7 +353,7 @@ public abstract class Trader implements tNpc {
 	}
 	
 	
-	private final void _removeFromInventory(Inventory inventory, int slot, int amount) 
+	private void _removeFromInventory(Inventory inventory, int slot, int amount) 
 	{
 		ItemStack item = inventory.getItem(slot);
 		

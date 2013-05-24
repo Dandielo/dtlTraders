@@ -597,23 +597,13 @@ public class Server extends Trader {
 					if ( matchedItem == null && item.equalsStrong(sItem) )
 						matchedItem = item; 
 				
-				if ( matchedItem != null )
-				{
-					//update just its slot
-					matchedItem.setSlot(slot);
-					
-					//add to the new stock
-					stock.addItem(matchedItem, baseStatus.asStock());
-				}
-				else
-				{
-					//set the items new slot
-					sItem.setSlot(slot);
-					
-					//add to stock
-					stock.addItem(sItem, baseStatus.asStock());
-				}
+				//set the items new slot
+				sItem.setSlot(slot);
+				
+				//add to stock
+				stock.addItem(sItem, baseStatus.asStock());
 			}
+			
 			++slot;
 		}
 	}

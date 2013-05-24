@@ -60,6 +60,7 @@ public class TraderTrait extends Trait {
 		stock.load(data);
 	}
 
+	@Override
 	public void save(DataKey data)
 	{
 		//save settings

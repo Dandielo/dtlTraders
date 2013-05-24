@@ -54,6 +54,6 @@ public class LocaleEntry {
 	@Override 
 	public boolean equals(Object o)
 	{
-		return key.equals(((LocaleEntry)o).key);
+		return (o instanceof LocaleEntry && key.equals(((LocaleEntry)o).key));
 	}
 }

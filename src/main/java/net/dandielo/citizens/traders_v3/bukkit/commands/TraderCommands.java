@@ -68,7 +68,7 @@ public class TraderCommands {
 		}
 		
 		//if entity is still null set it to player
-		entity = EntityType.PLAYER;
+		if(entity == null) entity = EntityType.PLAYER;
 		
 		//Create the npc
 		NPC npc = CitizensAPI.getNPCRegistry().createNPC(entity, name);

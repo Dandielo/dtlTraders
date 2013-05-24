@@ -162,7 +162,7 @@ public abstract class ItemAttr {
 	@SuppressWarnings("all")
 	public final boolean equals(Object o)
 	{
-		return key.equals(((ItemAttr)o).key);
+		return (o instanceof ItemAttr && key.equals(((ItemAttr)o).key));
 	}
 	
 	@Override

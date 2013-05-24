@@ -10,7 +10,6 @@ import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeValu
 import net.dandielo.citizens.traders_v3.traders.Trader.Status;
 import net.dandielo.citizens.traders_v3.utils.items.Attribute;
 import net.dandielo.citizens.traders_v3.utils.items.ItemAttr;
-import net.dandielo.citizens.traders_v3.utils.items.flags.StackPrice;
 
 @Attribute(
 name="Price", key = "p", standalone = true,

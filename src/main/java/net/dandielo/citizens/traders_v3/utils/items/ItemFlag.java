@@ -129,7 +129,7 @@ public abstract class ItemFlag {
 	@Override
 	public final boolean equals(Object o)
 	{
-		return key.equals(((ItemFlag)o).key);
+		return (o instanceof ItemFlag && key.equals(((ItemFlag)o).key));
 	}
 	
 	//getting item datas
@@ -141,7 +141,7 @@ public abstract class ItemFlag {
 	 *     The falg class that should be registered.
 	 * @throws InvalidDataNodeException
 	 */
-	public final static void registerFlag(Class<? extends ItemFlag> clazz) throws AttributeInvalidClassException
+	public static void registerFlag(Class<? extends ItemFlag> clazz) throws AttributeInvalidClassException
 	{
 		if ( !clazz.isAnnotationPresent(Attribute.class) )
 			throw new AttributeInvalidClassException();
@@ -165,7 +165,7 @@ public abstract class ItemFlag {
 	 * @throws AttributeInvalidClassException 
 	 * @throws AttributeInvalidValueException 
 	 */
-	public final static ItemFlag initFlag(StockItem item, String key) throws AttributeInvalidClassException
+	public static ItemFlag initFlag(StockItem item, String key) throws AttributeInvalidClassException
 	{
 		//Search for the attribute
 		Attribute attr = null;
@@ -223,7 +223,7 @@ public abstract class ItemFlag {
 	/**
 	 * Debug information
 	 */
-	private final static void debugInfo(Attribute attr, Exception e)
+	private static void debugInfo(Attribute attr, Exception e)
 	{
 		//debug high
 		Debugger.high("Flag exception on initialization");

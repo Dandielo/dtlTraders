@@ -137,7 +137,9 @@ public class LocaleManager {
 	        locale.setDefaults(yconfig);
 	        locale.options().copyDefaults(true);
 	    }
-		locale.options().pathSeparator(PATH_SEPARATOR);
+	
+	    if(locale != null) locale.options().pathSeparator(PATH_SEPARATOR);
+	    
 	    return locale;
 	}
 	

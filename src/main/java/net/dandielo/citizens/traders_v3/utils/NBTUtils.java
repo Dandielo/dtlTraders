@@ -28,7 +28,7 @@ public class NBTUtils {
 		net.minecraft.server.v1_5_R3.ItemStack nms = CraftItemStack.asNMSCopy(i);
 		
 		//get the "tag" tag
-		NBTTagCompound tag = null;
+		NBTTagCompound tag;
 		if(nms.tag != null) tag = nms.tag;
 		else
 		{
@@ -70,7 +70,7 @@ public class NBTUtils {
 		net.minecraft.server.v1_5_R3.ItemStack nms = CraftItemStack.asNMSCopy(i);
 
 		//get the "tag" tag
-		NBTTagCompound tag = null;
+		NBTTagCompound tag;
 		if(nms.tag != null) tag = nms.tag;
 		else
 		{
@@ -101,8 +101,6 @@ public class NBTUtils {
 		for ( int j = 0 ; j < list.size() ; ++j )
 			if ( !((NBTTagString)list.get(j)).getName().equals("dtltrader") )
 				result.add(((NBTTagString)list.get(j)).data);
-			else
-				System.out.print("rem" + " " + ((NBTTagString)list.get(j)));
 
 		//return the new item;
 		return result;

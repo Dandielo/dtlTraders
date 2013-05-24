@@ -206,7 +206,7 @@ public class tNpcManager {
 	 * @throws TraderTypeRegistrationError
 	 * Thrown when the class does not have the tNpcType addnotation
 	 */
-	public final static void registerType(Class<? extends Trader> clazz) throws TraderTypeRegistrationError
+	public static void registerType(Class<? extends Trader> clazz) throws TraderTypeRegistrationError
 	{
 		//check for addnotation
 		if ( !clazz.isAnnotationPresent(tNpcType.class) ) throw new TraderTypeRegistrationError();
@@ -228,7 +228,7 @@ public class tNpcManager {
 	 * @throws TraderTypeNotFoundException
 	 * @throws InvalidTraderTypeException
 	 */
-	public final static tNpc create_tNpc(NPC npc, String type, Player player) throws TraderTypeNotFoundException, InvalidTraderTypeException
+	public static tNpc create_tNpc(NPC npc, String type, Player player) throws TraderTypeNotFoundException, InvalidTraderTypeException
 	{
 		tNpcType typeInfo = null;
 		for ( tNpcType info : types.keySet() )

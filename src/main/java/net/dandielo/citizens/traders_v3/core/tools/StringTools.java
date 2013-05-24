@@ -8,7 +8,7 @@ public class StringTools {
 		builder.append("\n");
 		builder.append("---\n");
 		for ( StackTraceElement element : elements )
-			builder.append(element + "\n");
+			builder.append(element).append("\n");
 		builder.append("---\n");
 		return builder.toString();
 	}

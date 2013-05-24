@@ -225,7 +225,7 @@ public final class StockItem {
 		}
 		catch (AttributeValueNotFoundException e)
 		{
-			this.debugMsgValue(lore.getInfo(), "factorized");
+			this.debugMsgValue(lore != null ? lore.getInfo() : null, "factorized");
 		}
 		catch (AttributeInvalidClassException e) 
 		{
@@ -321,11 +321,11 @@ public final class StockItem {
 	@SuppressWarnings("null")
 	public void addAttr(String key, String value)
 	{
-		ItemAttr attr = null;
+		ItemAttr itemAttr = null;
 		try
 		{
-			attr = ItemAttr.initAttribute(this, key, value);
-			this.attr.put(attr.getClass(), attr);
+			itemAttr = ItemAttr.initAttribute(this, key, value);
+			this.attr.put(itemAttr.getClass(), itemAttr);
 		} 
 		catch (AttributeInvalidClassException e) 
 		{
@@ -333,7 +333,7 @@ public final class StockItem {
 		} 
 		catch (AttributeInvalidValueException e)
 		{
-			debugMsgValue(attr.getInfo(), value);
+			debugMsgValue(itemAttr.getInfo(), value);
 		}
 	}
 
@@ -348,17 +348,17 @@ public final class StockItem {
 	{
 		if ( hasAttr(clazz) ) return getAttr(clazz);
 		
-		T attr = null;
+		T itemAttr = null;
 		try
 		{
-			attr = ItemAttr.initAttribute(this, clazz);
-			this.attr.put(clazz, attr);
+			itemAttr = ItemAttr.initAttribute(this, clazz);
+			this.attr.put(clazz, itemAttr);
 		} 
 		catch (Exception e)
 		{
-			this.debugMsgClass(attr.getInfo().key());
+			this.debugMsgClass(itemAttr != null ? itemAttr.getInfo().key() : null);
 		}
-		return attr;
+		return itemAttr;
 	}
 	
 	/**
@@ -387,19 +387,19 @@ public final class StockItem {
 	public ItemStack getItem()
 	{
 		//clone the "clean" item
-		ItemStack item = this.item.clone();
+		ItemStack clone = this.item.clone();
 		
 		//assign attribute data to it
-		for ( ItemAttr attr : this.attr.values() )
+		for ( ItemAttr itemAttr : this.attr.values() )
 		{
 			try 
 			{
 				//try assign the attribute
-			    attr.onAssign(item);
+			    itemAttr.onAssign(clone);
 			} 
 			catch (InvalidItemException e)
 			{
-				debugMsgItem(attr.getInfo());
+				debugMsgItem(itemAttr.getInfo());
 			}
 		}
 		
@@ -408,7 +408,7 @@ public final class StockItem {
 			try 
 			{
 				//try assign the flag
-				flag.onAssign(item);
+				flag.onAssign(clone);
 			} 
 			catch (InvalidItemException e)
 			{
@@ -416,7 +416,7 @@ public final class StockItem {
 			}
 		}
 		//returns the valid item
-		return item;
+		return clone;
 	}
 
 	/**
@@ -438,10 +438,10 @@ public final class StockItem {
 			lore.addAll(this.getLore());
 		
 		//for each attribute
-		for ( ItemAttr attr : this.attr.values() )
-			for ( Status attrStatus : attr.getInfo().status() )
+		for ( ItemAttr itemAttr : this.attr.values() )
+			for ( Status attrStatus : itemAttr.getInfo().status() )
 				if ( attrStatus.equals(status) )
-			        attr.onStatusLoreRequest(status, target, lore);
+			        itemAttr.onStatusLoreRequest(status, target, lore);
 		
 		//for each flag
 		for ( ItemFlag flag : flags.values() )
@@ -776,7 +776,19 @@ public final class StockItem {
 	@Override
 	public final boolean equals(Object object)
 	{
-		return equalsStrong((StockItem)object);
+		return (object instanceof StockItem && equalsStrong((StockItem)object));
+	}
+	
+	@Override
+	public int hashCode() {
+	    int hash = 7;
+	    
+	    hash = 73 * hash + (this.item != null ? this.item.hashCode() : 0);
+	    hash = 73 * hash + (this.attr != null ? this.attr.hashCode() : 0);
+	    hash = 73 * hash + (this.flags != null ? this.flags.hashCode() : 0);
+	    hash = 73 * hash + (this.loreManaged ? 1 : 0);
+	    
+	    return hash;
 	}
 	
 	/**
@@ -794,7 +806,7 @@ public final class StockItem {
 	private void debugMsgValue(Attribute attr, String value)
 	{
 		Debugger.normal("Attribute value initialization exception");
-		Debugger.normal("Attribute: ", attr.name(), ", value: ", ChatColor.GOLD, value);
+		Debugger.normal("Attribute: ", (attr != null ? attr.name() : "null"), ", value: ", ChatColor.GOLD, value);
 	}
 
 	/**
@@ -803,6 +815,6 @@ public final class StockItem {
 	private void debugMsgItem(Attribute attr)
 	{
 		Debugger.normal("Attribute/Flag item incompatibility");
-		Debugger.normal("Attribute/Flag: ", attr.name(), ", item: ", ChatColor.GOLD, this.getName());
+		Debugger.normal("Attribute/Flag: ", (attr != null ? attr.name() : "null"), ", item: ", ChatColor.GOLD, this.getName());
 	}
 }

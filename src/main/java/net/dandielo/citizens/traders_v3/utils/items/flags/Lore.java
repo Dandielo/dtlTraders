@@ -29,18 +29,16 @@ public class Lore extends ItemFlag {
 	public void onAssign(ItemStack item) throws InvalidItemException 
 	{
 		//get the existing lore
-		List<String> lore = item.getItemMeta().getLore();
-		if ( lore == null )
-			lore = new ArrayList<String>();
-		
-		System.out.print("ADDING! " + this.lore.get(0));
+		List<String> itemLore = item.getItemMeta().getLore();
+		if ( itemLore == null )
+			itemLore = new ArrayList<String>();
 		
 		//add this lore
-		lore.addAll(this.lore);
+		itemLore.addAll(this.lore);
 
 		//save the new lore
 		ItemMeta meta = item.getItemMeta();
-		meta.setLore(lore);
+		meta.setLore(itemLore);
 		item.setItemMeta(meta);
 	}
 	
@@ -55,7 +53,6 @@ public class Lore extends ItemFlag {
 			throw new AttributeValueNotFoundException();
 		
 		for ( String l : cleanedLore )
-		System.out.print(l);
 		
 		this.lore = cleanedLore;//item.getItemMeta().getLore();
 	}
@@ -68,13 +65,13 @@ public class Lore extends ItemFlag {
 	@Override
 	public boolean equalsStrong(ItemFlag o)
 	{		
-		Lore lore = (Lore) o;
-		if ( !(lore.lore == null && this.lore == null) && !(lore.lore != null && this.lore != null) ) return false;
-		if ( lore.lore.size() != this.lore.size() ) return false;
+		Lore itemLore = (Lore) o;
+		if ( !(itemLore.lore == null && this.lore == null) && !(itemLore.lore != null && this.lore != null) ) return false;
+		if ( itemLore.lore.size() != this.lore.size() ) return false;
 
 		boolean equals = true;
-		for ( int i = 0 ; i < lore.lore.size() && equals ; ++i )
-			equals = lore.lore.get(i).equals(this.lore.get(i));
+		for ( int i = 0 ; i < itemLore.lore.size() && equals ; ++i )
+			equals = itemLore.lore.get(i).equals(this.lore.get(i));
 		return equals;
 	}
 

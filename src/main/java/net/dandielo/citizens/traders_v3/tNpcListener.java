@@ -89,7 +89,7 @@ public class tNpcListener implements Listener {
 		if ( !perms.has(e.getClicker(), "dtl.trader.use") ) return;
 
 		TraderTrait traderTrait = e.getNPC().getTrait(TraderTrait.class);
-		Trader trader = null;
+		Trader trader;
 		try 
 		{
 
@@ -139,7 +139,7 @@ public class tNpcListener implements Listener {
 		
 
 		TraderTrait traderTrait = e.getNPC().getTrait(TraderTrait.class);
-		Trader trader = null;
+		Trader trader;
 		try 
 		{
 			if ( !manager.inRelation(e.getClicker()) )
