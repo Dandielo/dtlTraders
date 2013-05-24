@@ -52,7 +52,7 @@ public class Lore extends ItemFlag {
 		if ( cleanedLore.isEmpty() )
 			throw new AttributeValueNotFoundException();
 		
-		this.lore = cleanedLore;//item.getItemMeta().getLore();
+		this.lore = cleanedLore;
 	}
 
 	public List<String> getLore() {

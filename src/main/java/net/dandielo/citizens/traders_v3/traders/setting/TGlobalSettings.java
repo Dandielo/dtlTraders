@@ -174,6 +174,15 @@ public class TGlobalSettings extends PluginSettings {
 	{
 		return stockNameFormat;
 	}
+	
+	/**
+	 * @return
+	 * the default starting stock for each trader
+	 */
+	public static String getGlobalStockStart()
+	{
+		return stockStart;
+	}
 
 	/**
 	 * @return

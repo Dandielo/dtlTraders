@@ -110,8 +110,8 @@ public class TraderCommands {
 	@Command(
 	name = "trader",
 	syntax = "stockname <action> {args}",
-	perm = "dtl.trader.commands.setting",
-	desc = "Shows/removes or changes the stock name",
+	perm = "dtl.trader.commands.stockname",
+	desc = "Shows/resets or changes the stock name",
 	usage = "- /trader stockname set Santas Stock",
 	npc = true)
 	public void settingStockName(DtlTraders plugin, Player sender, Trader trader, Map<String, String> args)
@@ -119,8 +119,14 @@ public class TraderCommands {
 		String action = args.get("action");
 		
 		//if we should set the setting
-		if ( action.equals("set") && args.get("free") != null )
+		if ( action.equals("set") )
 		{
+			//check the argument
+			if ( args.get("free") == null )
+			{
+				locale.sendMessage(sender, "error-argument-missing", "{args}");
+			}
+			
 			//set the new stock name
 			trader.getSettings().setStockFormat(args.get("free"));
 			
@@ -149,6 +155,118 @@ public class TraderCommands {
 			locale.sendMessage(sender, "key-value", 
 					"key", "#stock-name", 
 					"value", trader.getSettings().getStockFormat());
+		}
+		//send a error message
+		else
+		{
+			locale.sendMessage(sender, "error-argument-invalid", "<action>");
+		}
+	}
+	
+	@Command(
+	name = "trader",
+	syntax = "stocksize <action> (size)",
+	perm = "dtl.trader.commands.stocksize",
+	desc = "Shows/resets or changes the stock size",
+	usage = "- /trader stocksize set 5",
+	npc = true)
+	public void settingStockSize(DtlTraders plugin, Player sender, Trader trader, Map<String, String> args)
+	{
+		String action = args.get("action");
+		
+		//if we should set the setting
+		if ( action.equals("set") )
+		{
+			//check the argument
+			if ( args.get("size") == null )
+			{
+				locale.sendMessage(sender, "error-argument-missing", "(size)");
+			}
+			
+			//set the new stock name
+			trader.getSettings().setStockSize( Integer.parseInt(args.get("size")) );
+			
+			//send a message
+			locale.sendMessage(sender, "key-change", 
+					"key", "#stock-size", 
+					"value", String.valueOf(trader.getSettings().getStockSize()));
+		}
+		else
+	    //reset the setting to the global default
+		if ( action.equals("reset") )
+		{
+			//set to default
+			trader.getSettings().setStockSize( Settings.getGlobalStockSize() );
+			
+			//send a message
+			locale.sendMessage(sender, "key-change", 
+					"key", "#stock-size", 
+					"value", String.valueOf(trader.getSettings().getStockSize()));
+		}
+		else
+		//show the setting
+		if ( action.equals("show") )
+		{
+			//send the current setting
+			locale.sendMessage(sender, "key-value", 
+					"key", "#stock-size", 
+					"value", String.valueOf(trader.getSettings().getStockSize()));
+		}
+		//send a error message
+		else
+		{
+			locale.sendMessage(sender, "error-argument-invalid", "<action>");
+		}
+	}
+	
+	@Command(
+	name = "trader",
+	syntax = "startstock <action> (stock)",
+	perm = "dtl.trader.commands.startstock",
+	desc = "Shows/resets or changes the starting stock (buy|sell)",
+	usage = "- /trader startstock set buy",
+	npc = true)
+	public void settingStockStart(DtlTraders plugin, Player sender, Trader trader, Map<String, String> args)
+	{
+		String action = args.get("action");
+		
+		//if we should set the setting
+		if ( action.equals("set") )
+		{
+			//check the argument
+			if ( args.get("stock") == null )
+			{
+				locale.sendMessage(sender, "error-argument-missing", "(stock)");
+			}
+			
+			//set the new stock name
+			trader.getSettings().setStockStart( args.get("stock") );
+			
+			//send a message
+			locale.sendMessage(sender, "key-change", 
+					"key", "#stock-start", 
+					"value", trader.getSettings().getStockStart());
+		}
+		else
+	    //reset the setting to the global default
+		if ( action.equals("reset") )
+		{
+			//set to default
+			trader.getSettings().setStockStart( Settings.getGlobalStockStart() );
+			
+			//send a message
+			locale.sendMessage(sender, "key-change", 
+					"key", "#stock-start", 
+					"value", trader.getSettings().getStockStart());
+		}
+		else
+		//show the setting
+		if ( action.equals("show") )
+		{
+			//send the current setting
+			locale.sendMessage(sender, "key-value", 
+					"key", "#stock-start", 
+					"value", trader.getSettings().getStockStart());
 		}
 		//send a error message
 		else
