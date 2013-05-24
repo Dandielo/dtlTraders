@@ -87,7 +87,7 @@ public class LocaleManager {
 			try 
 			{
 				localeFile.createNewFile();
-				
+				 
 			    InputStream stream = DtlTraders.getInstance().getResource("locales/locale." + PluginSettings.getLocale() + ".yml");
 			    if (stream != null)
 			    {
