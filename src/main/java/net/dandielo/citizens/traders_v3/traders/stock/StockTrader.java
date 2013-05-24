@@ -8,6 +8,7 @@ import java.util.Map;
 import net.citizensnpcs.api.util.DataKey;
 import net.dandielo.citizens.traders_v3.core.Debugger;
 import net.dandielo.citizens.traders_v3.traders.Trader.Status;
+import net.dandielo.citizens.traders_v3.traders.setting.Settings;
 import net.dandielo.citizens.traders_v3.traders.setting.TGlobalSettings;
 import net.dandielo.citizens.traders_v3.utils.items.flags.Lore;
 
@@ -19,14 +20,15 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 public class StockTrader extends Stock {
 
-	public StockTrader(String name, int size)
+	public StockTrader(Settings settings)
 	{
-		super(name, size);
+		super(settings);
+		this.settings = settings;
 	}
 
 	public StockPlayer toPlayerStock(Player player)
 	{
-		StockPlayer stock = new StockPlayer(name, size, player);
+		StockPlayer stock = new StockPlayer(settings.getStockName(), settings.getStockSize(), player);
 		return stock;
 	}
 
@@ -138,7 +140,7 @@ public class StockTrader extends Stock {
 	@Override
 	public Inventory getInventory()
 	{
-		return Bukkit.createInventory(this, getFinalInventorySize(), name);
+		return Bukkit.createInventory(this, getFinalInventorySize(), settings.getStockName());
 	}
 
 	@Override

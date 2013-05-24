@@ -16,6 +16,7 @@ import net.dandielo.citizens.traders_v3.core.exceptions.TraderTypeNotFoundExcept
 import net.dandielo.citizens.traders_v3.core.locale.LocaleManager;
 import net.dandielo.citizens.traders_v3.traders.Trader;
 import net.dandielo.citizens.traders_v3.traders.Trader.Status;
+import net.dandielo.citizens.traders_v3.traders.setting.Settings;
 import net.dandielo.citizens.traders_v3.traders.setting.TGlobalSettings;
 import net.dandielo.citizens.traders_v3.traits.TraderTrait;
 import net.dandielo.citizens.traders_v3.traits.WalletTrait;
@@ -104,6 +105,56 @@ public class TraderCommands {
 		locale.sendMessage(sender, "trader-managermode-enabled", "npc", npc.getName());
 		locale.sendMessage(sender, "trader-managermode-toggled", "mode", "#stock-sell");
 		
+	}
+	
+	@Command(
+	name = "trader",
+	syntax = "stockname <action> {args}",
+	perm = "dtl.trader.commands.setting",
+	desc = "Shows/removes or changes the stock name",
+	usage = "- /trader stockname set Santas Stock",
+	npc = true)
+	public void settingStockName(DtlTraders plugin, Player sender, Trader trader, Map<String, String> args)
+	{
+		String action = args.get("action");
+		
+		//if we should set the setting
+		if ( action.equals("set") && args.get("free") != null )
+		{
+			//set the new stock name
+			trader.getSettings().setStockFormat(args.get("free"));
+			
+			//send a message
+			locale.sendMessage(sender, "key-change", 
+					"key", "#stock-name", 
+					"value", trader.getSettings().getStockFormat());
+		}
+		else
+	    //reset the setting to the global default
+		if ( action.equals("reset") )
+		{
+			//set to default
+			trader.getSettings().setStockFormat(Settings.getGlobalStockNameFormat());
+			
+			//send a message
+			locale.sendMessage(sender, "key-change", 
+					"key", "#stock-name", 
+					"value", trader.getSettings().getStockFormat());
+		}
+		else
+		//show the setting
+		if ( action.equals("show") )
+		{
+			//send the current setting
+			locale.sendMessage(sender, "key-value", 
+					"key", "#stock-name", 
+					"value", trader.getSettings().getStockFormat());
+		}
+		//send a error message
+		else
+		{
+			locale.sendMessage(sender, "error-argument-invalid", "<action>");
+		}
 	}
 	/*
 	@Command(

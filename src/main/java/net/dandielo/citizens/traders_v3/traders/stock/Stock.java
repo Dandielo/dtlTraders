@@ -8,27 +8,30 @@ import java.util.Map;
 import net.citizensnpcs.api.util.DataKey;
 import net.dandielo.citizens.traders_v3.core.Debugger;
 import net.dandielo.citizens.traders_v3.traders.Trader.Status;
+import net.dandielo.citizens.traders_v3.traders.setting.Settings;
 
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
 public abstract class Stock implements InventoryHolder {
-	protected final int size;
-	protected final String name;
+//	protected final int size;
+//	protected final String name;
 	
 	protected final Map<String, List<StockItem>> stock = new HashMap<String, List<StockItem>>();
 	
-	protected Stock(String name, int size)
+	protected Settings settings;
+	
+	protected Stock(Settings settings)
 	{
 		//debug info
-		Debugger.info("Creating stock with name: ", name, ", size: ", size);
+		int size = settings.getStockSize();
+		Debugger.info("Creating stock with name: ", settings.getStockName(), ", size: ", size);
 		
         if( size <= 0 || size > 6 ){
         	throw new IllegalArgumentException("Size must be between 1 and 6");}
         
-		this.name = name;
-		this.size = size;
+        this.settings = settings;
         
         stock.put("sell", new ArrayList<StockItem>());
         stock.put("buy", new ArrayList<StockItem>());
@@ -39,7 +42,7 @@ public abstract class Stock implements InventoryHolder {
 	//inventory size
 	public final int getFinalInventorySize()
 	{
-		return size*9;
+		return settings.getStockSize()*9;
 	}
 
 	public boolean isUiSlot(int slot)

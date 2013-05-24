@@ -47,7 +47,7 @@ public class TraderTrait extends Trait {
 		Debugger.info("Trader trait attached to:", npc.getName());
 		
 		settings = new Settings(this.npc);
-		stock = new StockTrader(settings.getStockName(), settings.getStockSize());
+		stock = new StockTrader(settings);
 	}
 	
 	@Override

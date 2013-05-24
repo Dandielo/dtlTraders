@@ -61,15 +61,37 @@ public class Settings extends TGlobalSettings {
 		return stockSize;
 	}
 	
+	public void setStockSize(int size)
+	{
+		stockSize = size;
+	}
+	
+	//stock name format
 	public String getStockName() {
 		return stockNameFormat.replace("{npc}", npc.getName());
 	}
 	
+	public String getStockFormat() {
+		return stockNameFormat;
+	}
+	
+	public void setStockFormat(String format)
+	{
+		stockNameFormat = format;
+	}
+	
+	//start stock
 	public String getStockStart()
 	{
 		return stockStart;
 	}
 	
+	public void setStockStart(String stock)
+	{
+		stockStart = stock;
+	}
+	
+	//other
 	public String getManagerStockStart()
 	{
 		return mmStockStart;

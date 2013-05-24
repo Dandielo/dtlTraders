@@ -11,13 +11,13 @@ public class StockPlayer extends Stock {
 	private Player player;
 	
 	public StockPlayer(String name, int size, Player player) {
-		super(name, size);
+		super(null);
 		this.player = player;
 	}
 
 	@Override
 	public Inventory getInventory() {
-		return Bukkit.createInventory(this, getFinalInventorySize(), name);
+		return Bukkit.createInventory(this, getFinalInventorySize(), "");
 	}
 
 	@Override
