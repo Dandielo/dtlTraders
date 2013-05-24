@@ -52,8 +52,6 @@ public class Lore extends ItemFlag {
 		if ( cleanedLore.isEmpty() )
 			throw new AttributeValueNotFoundException();
 		
-		for ( String l : cleanedLore )
-		
 		this.lore = cleanedLore;//item.getItemMeta().getLore();
 	}
 
