@@ -45,7 +45,7 @@ public abstract class ItemAttr {
 	/**
 	 * All informations about this attribute 
 	 */
-	private Attribute info;
+	protected Attribute info;
 	
 	/**
 	 * The item associated with the attribute
@@ -185,7 +185,7 @@ public abstract class ItemAttr {
 	 * @return
 	 *     A list of each attribute instance
 	 */
-	public static final List<ItemAttr> getAllAttributes()
+	public static List<ItemAttr> getAllAttributes()
 	{
 		//create the list holding all attribute instances
 		List<ItemAttr> result = new ArrayList<ItemAttr>();
@@ -216,7 +216,7 @@ public abstract class ItemAttr {
 	 * @return
 	 *     A list of each attribute instance
 	 */
-	public static final List<ItemAttr> getRequiredAttributes()
+	public static List<ItemAttr> getRequiredAttributes()
 	{
 		//create the list holding all attribute instances
 		List<ItemAttr> result = new ArrayList<ItemAttr>();
@@ -247,7 +247,7 @@ public abstract class ItemAttr {
 	 *     The attribute class that should be registered.
 	 * @throws InvalidDataNodeException
 	 */
-	public final static void registerAttr(Class<? extends ItemAttr> clazz) throws AttributeInvalidClassException
+	public static void registerAttr(Class<? extends ItemAttr> clazz) throws AttributeInvalidClassException
 	{
 		if ( !clazz.isAnnotationPresent(Attribute.class) )
 			throw new AttributeInvalidClassException();
@@ -271,7 +271,7 @@ public abstract class ItemAttr {
 	 * @throws AttributeInvalidClassException 
 	 * @throws AttributeInvalidValueException 
 	 */
-	public final static <T extends ItemAttr> T initAttribute(StockItem item, Class<T> clazz) throws AttributeInvalidClassException, AttributeInvalidValueException
+	public static <T extends ItemAttr> T initAttribute(StockItem item, Class<T> clazz) throws AttributeInvalidClassException, AttributeInvalidValueException
 	{
 		Attribute attr = clazz.getAnnotation(Attribute.class);
 		try 
@@ -334,7 +334,7 @@ public abstract class ItemAttr {
 	 * @throws AttributeInvalidClassException 
 	 * @throws AttributeInvalidValueException 
 	 */
-	public final static ItemAttr initAttribute(StockItem item, String key, String value) throws AttributeInvalidClassException, AttributeInvalidValueException
+	public static ItemAttr initAttribute(StockItem item, String key, String value) throws AttributeInvalidClassException, AttributeInvalidValueException
 	{
 		//Search for the attribute
 		Attribute attr = null;
@@ -394,7 +394,7 @@ public abstract class ItemAttr {
 	/**
 	 * Debug information
 	 */
-	private final static void debugInfo(Attribute attr, Exception e)
+	private static void debugInfo(Attribute attr, Exception e)
 	{
 		//debug high
 		Debugger.high("Attribute exception on initialization");
