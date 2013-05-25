@@ -51,16 +51,9 @@ public class Debugger {
 	 */
 	public static void critical(Object... args)
 	{
-		if ( debugger.levelEnabled(DebugLevel.CRITICAL) )
-		{
-			StringBuilder builder = new StringBuilder();
-			for ( Object arg : args )
-			{
-				builder.append(arg);
-			}
-			
-			debugger.sender.sendMessage(mergeArgs(DtlTraders.PREFIX, DEBUG, ChatColor.RED, "[CRITICAL] ", ChatColor.RESET, ChatColor.GOLD, builder.toString()));
-		}
+		if ( !debugger.levelEnabled(DebugLevel.CRITICAL) ) return;
+		
+		debugger.sender.sendMessage(mergeArgs(DtlTraders.PREFIX, DEBUG, ChatColor.RED, "[CRITICAL] ", ChatColor.RESET, ChatColor.GOLD, args));
 	}
 
 	/**
@@ -68,16 +61,9 @@ public class Debugger {
 	 */
 	public static void high(Object... args)
 	{
-		if ( debugger.levelEnabled(DebugLevel.HIGH) )
-		{
-			StringBuilder builder = new StringBuilder();
-			for ( Object arg : args )
-			{
-				builder.append(arg);
-			}
-			
-			debugger.sender.sendMessage(mergeArgs(DtlTraders.PREFIX, DEBUG, ChatColor.GOLD, ChatColor.BOLD, "[SEVERE] ", ChatColor.RESET, builder.toString()));
-		}
+		if ( !debugger.levelEnabled(DebugLevel.HIGH) ) return;
+		
+		debugger.sender.sendMessage(mergeArgs(DtlTraders.PREFIX, DEBUG, ChatColor.GOLD, ChatColor.BOLD, "[SEVERE] ", ChatColor.RESET, args));
 	}
 
 	/**
@@ -85,16 +71,9 @@ public class Debugger {
 	 */
 	public static void normal(Object... args)
 	{
-		if ( debugger.levelEnabled(DebugLevel.NORMAL) )
-		{
-			StringBuilder builder = new StringBuilder();
-			for ( Object arg : args )
-			{
-				builder.append(arg);
-			}
-			
-			debugger.sender.sendMessage(mergeArgs(DtlTraders.PREFIX, DEBUG, ChatColor.YELLOW, "[NORMAL] ", ChatColor.RESET, builder.toString()));
-		}
+		if ( !debugger.levelEnabled(DebugLevel.NORMAL) ) return;
+		
+		debugger.sender.sendMessage(mergeArgs(DtlTraders.PREFIX, DEBUG, ChatColor.YELLOW, "[NORMAL] ", ChatColor.RESET, args));
 	}
 
 	/**
@@ -102,16 +81,9 @@ public class Debugger {
 	 */
 	public static void low(Object... args)
 	{
-		if ( debugger.levelEnabled(DebugLevel.LOW) )
-		{
-			StringBuilder builder = new StringBuilder();
-			for ( Object arg : args )
-			{
-				builder.append(arg);
-			}
-			
-			debugger.sender.sendMessage(mergeArgs(DtlTraders.PREFIX, DEBUG, ChatColor.AQUA, "[LOW] ", ChatColor.RESET, builder.toString()));
-		}
+		if ( !debugger.levelEnabled(DebugLevel.LOW) ) return;
+		
+		debugger.sender.sendMessage(mergeArgs(DtlTraders.PREFIX, DEBUG, ChatColor.AQUA, "[LOW] ", ChatColor.RESET, args));
 	}
 
 	/**
@@ -119,16 +91,9 @@ public class Debugger {
 	 */
 	public static void info(Object... args)
 	{
-		if ( debugger.levelEnabled(DebugLevel.INFO) )
-		{
-			StringBuilder builder = new StringBuilder();
-			for ( Object arg : args )
-			{
-				builder.append(arg);
-			}
-			
-			debugger.sender.sendMessage(mergeArgs(DtlTraders.PREFIX, DEBUG, ChatColor.GREEN, "[INFO] ", ChatColor.RESET, builder.toString()));
-		}
+		if ( !debugger.levelEnabled(DebugLevel.INFO) ) return;
+		
+		debugger.sender.sendMessage(mergeArgs(DtlTraders.PREFIX, DEBUG, ChatColor.GREEN, "[INFO] ", ChatColor.RESET, args));
 	}
 	
 	/**
@@ -142,10 +107,20 @@ public class Debugger {
 	private static String mergeArgs(Object... args)
 	{
 		StringBuilder builder = new StringBuilder();
+		
 		for ( Object arg : args )
 		{
+			if(arg.getClass().isArray()) {
+				for(Object o : (Object[]) arg) {
+					builder.append(o);
+				}
+				
+				continue;
+			}
+			
 			builder.append(arg);
 		}
+		
 		return builder.toString();
 	}
 	
