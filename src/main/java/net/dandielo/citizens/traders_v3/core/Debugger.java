@@ -10,26 +10,21 @@ import org.bukkit.command.ConsoleCommandSender;
  * @author dandielo
  */
 public class Debugger {
-	/**
-	 * Debugger prefix
-	 */
-	private static final String DEBUG = ChatColor.DARK_PURPLE + "[DEBUG]" + ChatColor.RESET;
+	/** Debugger prefix */
+	private static final String DEBUG;
 	
-	//private singleton instance
-	private static Debugger debugger = new Debugger();
+	/** Debugger settings */
+	private static DebugLevel debugLevel;
 	
-	//debugger settings
-	private DebugLevel debugLevel = DebugLevel.valueOf(PluginSettings.debugLevel());
+	/** ConsoleSender where whe should display those messages */
+	private static ConsoleCommandSender sender;
 	
-	//ConsoleSender where whe should display those messages
-	private ConsoleCommandSender sender = DtlTraders.getInstance().getServer().getConsoleSender();
-	
-	/**
-	 * Debugger instance
-	 * @author dandielo
-	 */
-	private Debugger()
+	// Static "constructor"
+	static
 	{
+		DEBUG = ChatColor.DARK_PURPLE + "[DEBUG]" + ChatColor.RESET;
+		debugLevel = DebugLevel.valueOf(PluginSettings.debugLevel());
+		sender = DtlTraders.getInstance().getServer().getConsoleSender();
 	}
 	
 	/**
@@ -41,7 +36,7 @@ public class Debugger {
 	 *     
 	 * @author dandielo
 	 */
-	public boolean levelEnabled(DebugLevel level)
+	public static boolean levelEnabled(DebugLevel level)
 	{
 		return debugLevel.levelEnabled(level);
 	}
@@ -51,16 +46,9 @@ public class Debugger {
 	 */
 	public static void critical(Object... args)
 	{
-		if ( debugger.levelEnabled(DebugLevel.CRITICAL) )
-		{
-			StringBuilder builder = new StringBuilder();
-			for ( Object arg : args )
-			{
-				builder.append(arg);
-			}
-			
-			debugger.sender.sendMessage(mergeArgs(DtlTraders.PREFIX, DEBUG, ChatColor.RED, "[CRITICAL] ", ChatColor.RESET, ChatColor.GOLD, builder.toString()));
-		}
+		if ( !levelEnabled(DebugLevel.CRITICAL) ) return;
+		
+		sendMessage(ChatColor.RED, "CRITICAL", ChatColor.GOLD, args);
 	}
 
 	/**
@@ -68,16 +56,9 @@ public class Debugger {
 	 */
 	public static void high(Object... args)
 	{
-		if ( debugger.levelEnabled(DebugLevel.HIGH) )
-		{
-			StringBuilder builder = new StringBuilder();
-			for ( Object arg : args )
-			{
-				builder.append(arg);
-			}
-			
-			debugger.sender.sendMessage(mergeArgs(DtlTraders.PREFIX, DEBUG, ChatColor.GOLD, ChatColor.BOLD, "[SEVERE] ", ChatColor.RESET, builder.toString()));
-		}
+		if ( !levelEnabled(DebugLevel.HIGH) ) return;
+		
+		sendMessage(ChatColor.GOLD, "SEVERE", ChatColor.BOLD, args);
 	}
 
 	/**
@@ -85,16 +66,9 @@ public class Debugger {
 	 */
 	public static void normal(Object... args)
 	{
-		if ( debugger.levelEnabled(DebugLevel.NORMAL) )
-		{
-			StringBuilder builder = new StringBuilder();
-			for ( Object arg : args )
-			{
-				builder.append(arg);
-			}
-			
-			debugger.sender.sendMessage(mergeArgs(DtlTraders.PREFIX, DEBUG, ChatColor.YELLOW, "[NORMAL] ", ChatColor.RESET, builder.toString()));
-		}
+		if ( !levelEnabled(DebugLevel.NORMAL) ) return;
+		
+		sendMessage(ChatColor.YELLOW, "NORMAL", args);
 	}
 
 	/**
@@ -102,16 +76,9 @@ public class Debugger {
 	 */
 	public static void low(Object... args)
 	{
-		if ( debugger.levelEnabled(DebugLevel.LOW) )
-		{
-			StringBuilder builder = new StringBuilder();
-			for ( Object arg : args )
-			{
-				builder.append(arg);
-			}
-			
-			debugger.sender.sendMessage(mergeArgs(DtlTraders.PREFIX, DEBUG, ChatColor.AQUA, "[LOW] ", ChatColor.RESET, builder.toString()));
-		}
+		if ( !levelEnabled(DebugLevel.LOW) ) return;
+		
+		sendMessage(ChatColor.AQUA, "LOW", args);
 	}
 
 	/**
@@ -119,16 +86,9 @@ public class Debugger {
 	 */
 	public static void info(Object... args)
 	{
-		if ( debugger.levelEnabled(DebugLevel.INFO) )
-		{
-			StringBuilder builder = new StringBuilder();
-			for ( Object arg : args )
-			{
-				builder.append(arg);
-			}
-			
-			debugger.sender.sendMessage(mergeArgs(DtlTraders.PREFIX, DEBUG, ChatColor.GREEN, "[INFO] ", ChatColor.RESET, builder.toString()));
-		}
+		if ( !levelEnabled(DebugLevel.INFO) ) return;
+		
+		sendMessage(ChatColor.GREEN, "INFO", args);
 	}
 	
 	/**
@@ -142,11 +102,27 @@ public class Debugger {
 	private static String mergeArgs(Object... args)
 	{
 		StringBuilder builder = new StringBuilder();
+		
 		for ( Object arg : args )
 		{
+			if(arg.getClass().isArray()) {
+				for(Object o : (Object[]) arg) {
+					builder.append(o);
+				}
+				
+				continue;
+			}
+			
 			builder.append(arg);
 		}
+		
 		return builder.toString();
+	}
+	
+	/** Helper function to send messages to console */
+	private static void sendMessage(ChatColor color, String prefix, Object... args)
+	{
+		sender.sendMessage(mergeArgs(DtlTraders.PREFIX, DEBUG, color, "[" + prefix + "] ", ChatColor.RESET, args));
 	}
 	
 	/**
