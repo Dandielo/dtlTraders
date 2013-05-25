@@ -1,6 +1,7 @@
 package net.dandielo.citizens.traders_v3.core.events.trader;
 
 import org.bukkit.entity.Player;
+import org.bukkit.event.HandlerList;
 
 import net.dandielo.citizens.traders_v3.core.events.TraderEvent;
 import net.dandielo.citizens.traders_v3.traders.Trader;
@@ -14,6 +15,22 @@ import net.dandielo.citizens.traders_v3.traders.Trader;
  *
  */
 public class TraderClickEvent extends TraderEvent {
+	/**
+	 * Handlers
+	 */
+	private static final HandlerList handlers = new HandlerList();
+	 
+	public HandlerList getHandlers() {
+	    return handlers;
+	}
+	 
+	public static HandlerList getHandlerList() {
+	    return handlers;
+	}
+	
+	/**
+	 * Custom Event111 
+	 */
 
 	protected boolean mmToggling;
 	protected boolean leftClick; 
@@ -29,7 +46,7 @@ public class TraderClickEvent extends TraderEvent {
 	 * @param leftClick
 	 * if the event was a left click
 	 */
-	protected TraderClickEvent(Trader npc, Player player, boolean mmToggling, boolean leftClick)
+	public TraderClickEvent(Trader npc, Player player, boolean mmToggling, boolean leftClick)
 	{
 		super(npc, player);
 	}

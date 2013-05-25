@@ -10,6 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import net.dandielo.citizens.traders_v3.tNpcType;
 import net.dandielo.citizens.traders_v3.bukkit.Perms;
 import net.dandielo.citizens.traders_v3.core.Debugger;
+import net.dandielo.citizens.traders_v3.core.events.trader.TraderClickEvent;
 import net.dandielo.citizens.traders_v3.traders.Trader;
 import net.dandielo.citizens.traders_v3.traders.clicks.ClickHandler;
 import net.dandielo.citizens.traders_v3.traders.clicks.InventoryType;
@@ -37,8 +38,11 @@ public class Server extends Trader {
 	@Override
 	public void onLeftClick(ItemStack itemInHand)
     {
+		//send a event
+		TraderClickEvent e = (TraderClickEvent) new TraderClickEvent(this, player, !TGlobalSettings.mmRightToggle(), true).callEvent();
+		
 		//check settings
-		if ( TGlobalSettings.mmRightToggle() ) return;
+		if ( e.isManagerToggling() ) return;
 
 		//check permission
 		if ( !perms.has(player, "dtl.trader.manage") ) return;
@@ -57,6 +61,7 @@ public class Server extends Trader {
 	@Override
 	public boolean onRightClick(ItemStack itemInHand)
 	{
+		
 		//right click toggling is enabled, handle it and check permission
 		if ( TGlobalSettings.mmRightToggle() && perms.has(player, "dtl.trader.manage") )
 		{
@@ -68,13 +73,32 @@ public class Server extends Trader {
 			//if id's in hand and for toggling are the same manage the mode change
 			if ( itemInHand != null && itemToToggle.getTypeId() == itemInHand.getTypeId() ) 
 			{
+				//send a event when manager mode toggling
+				TraderClickEvent e = (TraderClickEvent) new TraderClickEvent(this, player, true, false).callEvent();
 				
-				toggleManageMode("right");
+				//we can still stop mmToggling
+				if ( e.isManagerToggling() )
+				{
+					toggleManageMode("right");
+					
+					//stop event execution
+					return false;
+				}
+			}
+			else
+			{
+				//maybe we can do this bit more nicer?
 				
-				//stop event execution
-				return false;
+				//send a event withoug toggling
+				new TraderClickEvent(this, player, false, false).callEvent();
 			}
 		}
+		else
+		{
+			//send a event withoug toggling
+			new TraderClickEvent(this, player, false, false).callEvent();
+		}
+		
 			
 		//debug info
 		Debugger.info(this.getClass().getSimpleName(), " Trader right click event, by: ", player.getName());

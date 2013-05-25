@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
  * @author dandielo
  *
  */
-public class TraderEvent extends tEvent {
+public abstract class TraderEvent extends tEvent {
 
 	/**
 	 * A trader event base

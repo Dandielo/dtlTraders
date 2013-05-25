@@ -1,15 +1,17 @@
 package net.dandielo.citizens.traders_v3.core.events;
 
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 
 import net.dandielo.citizens.traders_v3.tNpc;
+import net.dandielo.citizens.traders_v3.bukkit.DtlTraders;
 
 /**
  * tNpc event base
  * @author dandielo
  *
  */
-public abstract class tEvent {
+public abstract class tEvent extends Event {
 	/**
 	 * The tNpc that takes part in the event
 	 */
@@ -38,5 +40,15 @@ public abstract class tEvent {
 	public Player getParticipate()
 	{
 		return player;
+	}
+	
+	/**
+	 * Call the event
+	 * @return 
+	 */
+	public tEvent callEvent()
+	{
+		DtlTraders.getInstance().getServer().getPluginManager().callEvent(this);
+		return this;
 	}
 }
