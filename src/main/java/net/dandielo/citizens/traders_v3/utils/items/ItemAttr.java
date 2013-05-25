@@ -18,6 +18,7 @@ import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Amount;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Durability;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Enchant;
+import net.dandielo.citizens.traders_v3.utils.items.attributes.Firework;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.LeatherColor;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Name;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Potion;
@@ -425,7 +426,7 @@ public abstract class ItemAttr {
 			registerAttr(StoredEnchant.class);
 			registerAttr(Potion.class);
 			registerAttr(Skull.class);
-			//	registerData(Firework.class);
+			registerAttr(Firework.class);
 			registerAttr(Name.class);
 			
 			//Stock item related
