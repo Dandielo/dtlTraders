@@ -139,7 +139,7 @@ public final class StockItem {
 					if ( key.startsWith(".") )
 						addFlag(key);
 					//else if it's not empty it's a attribute 
-					else 
+					else /* compatibility start */ if ( !key.startsWith("!") && value != null ) /* compatibility end */
 					if ( !key.isEmpty() )
 						addAttr(key, value.trim());
 					
@@ -157,7 +157,7 @@ public final class StockItem {
 		if ( key.startsWith(".") )
 			addFlag(key);
 		//else if it's not empty it's a attribute 
-		else 
+		else /* compatibility start */ if ( !key.startsWith("!") && value != null ) /* compatibility end */
 		if ( !key.isEmpty() )
 			addAttr(key, value.trim());
 	}
