@@ -155,6 +155,9 @@ public abstract class ItemFlag {
 		List<ItemFlag> result = new ArrayList<ItemFlag>();
 		for ( Map.Entry<Attribute, Class<? extends ItemFlag>> flag : flags.entrySet() )
 		{
+			//we don't want the lore flag in here
+			if ( flag.getValue().equals(Lore.class) ) continue;
+			
 			try 
 			{
 				ItemFlag iFlag = flag.getValue().getConstructor(String.class).newInstance(flag.getKey().key());
