@@ -213,6 +213,20 @@ public final class StockItem {
 			}
 		}
 		
+		//factorize flags
+		for ( ItemFlag iFlag : ItemFlag.getAllFlags() )
+		{
+		//	try 
+			{
+			//	iFlag.onFactorise(item);
+				flags.put(iFlag.getClass(), iFlag);
+			}
+		//	catch (AttributeValueNotFoundException e)
+			{
+		//		this.debugMsgValue(iFlag.getInfo(), "factorized");
+			}
+		}
+		
 		//if the lore was already managed don't load it anymore
 		if ( loreManaged ) return;
 

@@ -1,6 +1,7 @@
 package net.dandielo.citizens.traders_v3.utils.items;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +11,7 @@ import net.dandielo.citizens.traders_v3.core.Debugger;
 import net.dandielo.citizens.traders_v3.core.exceptions.InvalidItemException;
 import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeInvalidClassException;
 import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeInvalidValueException;
+import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeValueNotFoundException;
 import net.dandielo.citizens.traders_v3.core.tools.StringTools;
 import net.dandielo.citizens.traders_v3.traders.Trader.Status;
 import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
@@ -72,6 +74,16 @@ public abstract class ItemFlag {
 	}
 	
 	/**
+	 * Called when trying to get flag data information from the given item. If no valid data for this flag is found then it throws an exception.
+	 * @param item
+	 * @throws AttributeValueNotFoundException
+	 */
+	public void onFactorize(ItemStack item) throws AttributeValueNotFoundException
+	{
+		throw new AttributeValueNotFoundException();
+	}
+	
+	/**
 	 * Called when a week equality is needed. Allows sometimes a value to be in range of another value, used for priority requests
 	 * @return
 	 *    true when equal, false instead 
@@ -117,9 +129,6 @@ public abstract class ItemFlag {
 		return key;
 	}
 	
-	
-	
-	
 	@Override
 	public int hashCode()
 	{
@@ -134,6 +143,37 @@ public abstract class ItemFlag {
 	
 	//getting item datas
 	private final static Map<Attribute, Class<? extends ItemFlag>> flags = new HashMap<Attribute, Class<? extends ItemFlag>>();
+	
+	/**
+	 * Returns all flag instances in a list. This list is used later to factorize data from a item.
+	 * @return
+	 *     A list of each flag instance
+	 */
+	public static List<ItemFlag> getAllFlags()
+	{
+		//create the list holding all flag instances
+		List<ItemFlag> result = new ArrayList<ItemFlag>();
+		for ( Map.Entry<Attribute, Class<? extends ItemFlag>> flag : flags.entrySet() )
+		{
+			try 
+			{
+				ItemFlag iFlag = flag.getValue().getConstructor(String.class).newInstance(flag.getKey().key());
+				iFlag.info = flag.getKey();
+				result.add(iFlag);
+			} 
+			catch (Exception e)
+			{
+				//debug normal
+				Debugger.normal("Flag exception on initialization");
+				Debugger.normal("Flag name: ", ChatColor.GREEN, flag.getKey().name());
+				
+				//debug low
+				Debugger.low("Exception: ", e.getClass().getSimpleName());
+				Debugger.low("Stack trace: ", StringTools.stackTrace(e.getStackTrace()));
+			}
+		}
+		return result;
+	}
 	
 	/**
 	 * Registers a new flag to the system, should be done before Citizens2 loading.
