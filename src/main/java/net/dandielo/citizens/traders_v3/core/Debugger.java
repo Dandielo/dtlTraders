@@ -102,20 +102,30 @@ public class Debugger {
 	private static String mergeArgs(Object... args)
 	{
 		StringBuilder builder = new StringBuilder();
-		
-		for ( Object arg : args )
+
+		for( Object arg : args )
 		{
-			if(arg.getClass().isArray()) {
-				for(Object o : (Object[]) arg) {
-					builder.append(o);
+			if( arg.getClass().isArray() )
+			{
+				for( Object o : (Object[]) arg )
+				{
+					if( o.getClass().isArray() )
+					{
+						for( Object co : (Object[]) o )
+						{
+							builder.append(co);
+						}
+					}
+					else
+						builder.append(o);
 				}
-				
+
 				continue;
 			}
-			
+
 			builder.append(arg);
 		}
-		
+
 		return builder.toString();
 	}
 	
