@@ -69,7 +69,7 @@ public class Enchant extends ItemAttr {
 	}
 
 	@Override
-	public void onFactorise(ItemStack item)
+	public void onFactorize(ItemStack item)
 			throws AttributeValueNotFoundException
 	{
 		//if enchants are not present the just say goodbye ;)

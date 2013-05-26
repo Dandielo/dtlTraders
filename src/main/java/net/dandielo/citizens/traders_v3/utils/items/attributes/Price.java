@@ -63,7 +63,7 @@ public class Price extends ItemAttr {
 	}
 
 	@Override
-	public void onFactorise(ItemStack item)	throws AttributeValueNotFoundException 
+	public void onFactorize(ItemStack item)	throws AttributeValueNotFoundException 
 	{
 		throw new AttributeValueNotFoundException();
 	}

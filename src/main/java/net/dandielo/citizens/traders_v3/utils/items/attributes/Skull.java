@@ -49,7 +49,7 @@ public class Skull extends ItemAttr {
 	}
 
 	@Override
-	public void onFactorise(ItemStack item)
+	public void onFactorize(ItemStack item)
 			throws AttributeValueNotFoundException
 	{
 		//check the item meta

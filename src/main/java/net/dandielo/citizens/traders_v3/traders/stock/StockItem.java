@@ -204,7 +204,7 @@ public final class StockItem {
 		{
 			try 
 			{
-				iAttr.onFactorise(item);
+				iAttr.onFactorize(item);
 				attr.put(iAttr.getClass(), iAttr);
 			}
 			catch (AttributeValueNotFoundException e)
@@ -216,14 +216,14 @@ public final class StockItem {
 		//factorize flags
 		for ( ItemFlag iFlag : ItemFlag.getAllFlags() )
 		{
-		//	try 
+			try 
 			{
-			//	iFlag.onFactorise(item);
+				iFlag.onFactorize(item);
 				flags.put(iFlag.getClass(), iFlag);
 			}
-		//	catch (AttributeValueNotFoundException e)
+	    	catch (AttributeValueNotFoundException e)
 			{
-		//		this.debugMsgValue(iFlag.getInfo(), "factorized");
+				this.debugMsgValue(iFlag.getInfo(), "factorized");
 			}
 		}
 		

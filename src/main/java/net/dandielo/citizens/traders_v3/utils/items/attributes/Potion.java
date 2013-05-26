@@ -78,7 +78,7 @@ public class Potion extends ItemAttr {
 	}
 
 	@Override
-	public void onFactorise(ItemStack item)
+	public void onFactorize(ItemStack item)
 			throws AttributeValueNotFoundException
 	{
 		if ( !item.hasItemMeta() || !item.getType().equals(Material.POTION) ) 

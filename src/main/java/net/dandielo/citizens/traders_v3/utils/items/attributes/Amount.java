@@ -104,7 +104,7 @@ public class Amount extends ItemAttr {
 	}
 
 	@Override
-	public void onFactorise(ItemStack item)
+	public void onFactorize(ItemStack item)
 	{
 		amounts.clear();
 		amounts.add(item.getAmount());

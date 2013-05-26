@@ -79,7 +79,7 @@ public class StoredEnchant extends ItemAttr {
 	}
 
 	@Override
-	public void onFactorise(ItemStack item)
+	public void onFactorize(ItemStack item)
 			throws AttributeValueNotFoundException
 	{
 		//if its the wrong item

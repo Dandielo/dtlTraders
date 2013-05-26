@@ -170,7 +170,7 @@ public class Firework extends ItemAttr {
 	}
 
 	@Override
-	public void onFactorise(ItemStack item)
+	public void onFactorize(ItemStack item)
 			throws AttributeValueNotFoundException
 	{
 		//if the item is not a firework item

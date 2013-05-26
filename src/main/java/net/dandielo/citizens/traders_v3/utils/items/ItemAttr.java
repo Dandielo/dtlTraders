@@ -91,7 +91,7 @@ public abstract class ItemAttr {
 	 * @param item
 	 * @throws AttributeValueNotFoundException
 	 */
-	public abstract void onFactorise(ItemStack item) throws AttributeValueNotFoundException;
+	public abstract void onFactorize(ItemStack item) throws AttributeValueNotFoundException;
 	
 	/**
 	 * Called when a status lore request is send for the given status set in the attributes information.

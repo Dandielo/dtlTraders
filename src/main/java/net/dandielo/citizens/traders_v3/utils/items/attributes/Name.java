@@ -43,7 +43,7 @@ public class Name extends ItemAttr {
 	}
 
 	@Override
-	public void onFactorise(ItemStack item) throws AttributeValueNotFoundException 
+	public void onFactorize(ItemStack item) throws AttributeValueNotFoundException 
 	{
 		if ( !item.hasItemMeta() ) throw new AttributeValueNotFoundException();
 		

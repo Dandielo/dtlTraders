@@ -96,7 +96,7 @@ public class Book extends ItemAttr {
 	}
 
 	@Override
-	public void onFactorise(ItemStack item)
+	public void onFactorize(ItemStack item)
 			throws AttributeValueNotFoundException
 	{
 		if ( !(item.getItemMeta() instanceof BookMeta) ) throw new AttributeValueNotFoundException();
