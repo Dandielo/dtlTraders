@@ -55,7 +55,7 @@ public class Durability extends ItemAttr
 	public String onSave() 
 	{
 		if ( durabilityPercent > -1 )
-			return String.valueOf(durabilityPercent*100);
+			return String.format("%.0f%%", durabilityPercent*100);
 		return String.valueOf(durability);
 	}
 
