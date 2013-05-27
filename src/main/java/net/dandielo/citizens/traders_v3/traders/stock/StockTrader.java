@@ -10,6 +10,7 @@ import net.dandielo.citizens.traders_v3.core.Debugger;
 import net.dandielo.citizens.traders_v3.traders.Trader.Status;
 import net.dandielo.citizens.traders_v3.traders.setting.Settings;
 import net.dandielo.citizens.traders_v3.traders.setting.TGlobalSettings;
+import net.dandielo.citizens.traders_v3.utils.NBTUtils;
 import net.dandielo.citizens.traders_v3.utils.items.flags.Lore;
 import net.dandielo.citizens.traders_v3.utils.items.flags.StackPrice;
 
@@ -177,7 +178,7 @@ public class StockTrader extends Stock {
 			itemStack.setItemMeta(meta);
 			
 			//set the item 
-			inventory.setItem(item.getSlot(), itemStack);
+			inventory.setItem(item.getSlot(), NBTUtils.markItem(itemStack));
 		}
 		setUi(inventory, null, status);
 	}
@@ -201,7 +202,7 @@ public class StockTrader extends Stock {
 			itemStack.setItemMeta(meta);
 			
 			//set the item
-			inventory.setItem(inventory.firstEmpty(), itemStack);
+			inventory.setItem(inventory.firstEmpty(), NBTUtils.markItem(itemStack));
 		}
 		setUi(inventory, null, Status.SELL_AMOUNTS);
 	}
@@ -225,7 +226,7 @@ public class StockTrader extends Stock {
 			itemStack.setItemMeta(meta);
 			
 			//set the item 
-			inventory.setItem(item.getSlot(), itemStack);
+			inventory.setItem(item.getSlot(), NBTUtils.markItem(itemStack));
 		}
 		setUi(inventory, baseStatus, status);
 	}
