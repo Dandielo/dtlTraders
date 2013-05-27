@@ -13,6 +13,7 @@ import net.dandielo.citizens.traders_v3.traders.Trader;
 import net.dandielo.citizens.traders_v3.traits.TraderTrait;
 import net.dandielo.citizens.traders_v3.utils.NBTUtils;
 
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -58,10 +59,41 @@ public class tNpcListener implements Listener {
 			    trader.onInventoryClick(e);
 		}
 	}
+
+	//remove marked items on inventory click events
+	@EventHandler
+	public void markedItemRemoval(InventoryClickEvent e)
+	{		
+		int i = 0;
+		for ( ItemStack item : e.getWhoClicked().getInventory().getContents() )
+		{
+			if ( item != null )
+			{
+				if ( NBTUtils.isMarked(item) )
+				{
+					e.getWhoClicked().getInventory().setItem(i, null);
+				}
+			}
+			++i;
+		}
+	}
 	
+	//remove marked items on inventory open events
 	@EventHandler
 	public void inventoryOpenEvent(InventoryOpenEvent e)
 	{
+/*		int i = 0;
+		for ( ItemStack item : e.getPlayer().getInventory().getContents() )
+		{
+			if ( item != null )
+			{
+				if ( NBTUtils.isMarked(item) )
+				{
+					e.getPlayer().getInventory().setItem(i, null);
+				}
+			}
+			++i;
+		}*/
 	}
 	
 	@EventHandler
@@ -208,7 +240,11 @@ public class tNpcListener implements Listener {
 					for ( ItemStack item : thisPlayer.getInventory().getContents() )
 					{
 						if ( item != null )
+						{
+							//if the item is marked then some1 could only steal it ;) 
+							//so we are cleaning the inventory from marked items
 							thisPlayer.getInventory().setItem(i, NBTUtils.cleanItem(item));
+						}
 						++i;
 					}
 				}
