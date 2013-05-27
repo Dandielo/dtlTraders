@@ -12,16 +12,78 @@ import org.bukkit.inventory.ItemStack;
 
 public class NBTUtils {	
 	
+	/*
+     * Some static methods for dealing with Minecraft NBT data, which is used to store
+     * custom NBT.
+     * 
+     * All credits to Denizen - Aufdemrand
+     */
+
+    public static boolean hasCustomNBT(ItemStack item, String key) {
+        NBTTagCompound tag;
+        net.minecraft.server.v1_5_R3.ItemStack cis = CraftItemStack.asNMSCopy(item);
+        if (!cis.hasTag()) return false;
+        tag = cis.getTag();
+        // if this item has the NBTData for 'stockitem', there is an mark.
+        return tag.hasKey(key);
+    }
+
+    public static String getCustomNBT(ItemStack item, String key) {
+        net.minecraft.server.v1_5_R3.ItemStack cis = CraftItemStack.asNMSCopy(item);
+        NBTTagCompound tag;
+        if (!cis.hasTag())
+            cis.setTag(new NBTTagCompound());
+        tag = cis.getTag();
+        // if this item has the NBTData for 'stockitem', return the value, which is the playername of the 'stockitem'.
+        if (tag.hasKey(key)) return tag.getString(key);
+        return null;
+
+    }
+
+    public static ItemStack removeCustomNBT(ItemStack item, String key) {
+        net.minecraft.server.v1_5_R3.ItemStack cis = CraftItemStack.asNMSCopy(item);
+        NBTTagCompound tag;
+        if (!cis.hasTag())
+            cis.setTag(new NBTTagCompound());
+        tag = cis.getTag();
+        // remove 'stockitem' NBTData
+        tag.remove(key);
+        return CraftItemStack.asCraftMirror(cis);
+    }
+
+    public static ItemStack addCustomNBT(ItemStack item, String key, String value) {
+        net.minecraft.server.v1_5_R3.ItemStack cis = CraftItemStack.asNMSCopy(item);
+        NBTTagCompound tag = null;
+        // Do stuff with tag
+        if (!cis.hasTag())
+            cis.setTag(new NBTTagCompound());
+        tag = cis.getTag();
+        tag.setString(key, value);
+        return CraftItemStack.asCraftMirror(cis);
+    }
+	
+	/*
+	 * marking and demarking an item
+	 */
+    
+    public static ItemStack removeMark(ItemStack i)
+    {
+    	return removeCustomNBT(i, "stockitem");
+    }
+	
 	public static boolean isMarked(ItemStack i)
 	{
-		return false;
+		return hasCustomNBT(i, "stockitem");
 	}
 	
-	public static void markItem(ItemStack i)
+	public static ItemStack markItem(ItemStack i)
 	{
-		
+		return addCustomNBT(i, "stockitem", "player");
 	}
 	
+	/*
+	 * adding and removing lores
+	 */
 	public static ItemStack addLore(ItemStack i, List<String> lore)
 	{		
 		//create a NMS copy
