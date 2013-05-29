@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.dandielo.citizens.traders_v3.tNpcStatus;
 import net.dandielo.citizens.traders_v3.bukkit.DtlTraders;
 import net.dandielo.citizens.traders_v3.core.Debugger;
 import net.dandielo.citizens.traders_v3.core.exceptions.InvalidItemException;
@@ -13,7 +14,6 @@ import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeInva
 import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeValueNotFoundException;
 import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeInvalidValueException;
 import net.dandielo.citizens.traders_v3.core.tools.StringTools;
-import net.dandielo.citizens.traders_v3.traders.Trader.Status;
 import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Amount;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Book;
@@ -102,7 +102,7 @@ public abstract class ItemAttr {
 	 * @param lore
 	 *     Lore list, allows to re-arrange previous assigned lore. 
 	 */
-	public void onStatusLoreRequest(Status status, ItemStack target, List<String> lore)
+	public void onStatusLoreRequest(tNpcStatus status, ItemStack target, List<String> lore)
 	{
 	}
 	

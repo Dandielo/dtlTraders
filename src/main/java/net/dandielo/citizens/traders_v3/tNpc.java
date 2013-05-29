@@ -10,4 +10,5 @@ public interface tNpc {
 	
     public void onInventoryClick(InventoryClickEvent e);
     public void onManageInventoryClick(InventoryClickEvent e);
+    
 }

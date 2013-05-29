@@ -6,12 +6,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 
+import net.dandielo.citizens.traders_v3.tNpcStatus;
 import net.dandielo.citizens.traders_v3.core.Debugger;
 import net.dandielo.citizens.traders_v3.core.exceptions.InvalidItemException;
 import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeInvalidClassException;
 import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeInvalidValueException;
 import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeValueNotFoundException;
-import net.dandielo.citizens.traders_v3.traders.Trader.Status;
 import net.dandielo.citizens.traders_v3.utils.ItemUtils;
 import net.dandielo.citizens.traders_v3.utils.RegexMatcher;
 import net.dandielo.citizens.traders_v3.utils.items.Attribute;
@@ -442,7 +442,7 @@ public final class StockItem {
 	 * @return
 	 *     List of lore strings
 	 */ 
-	public List<String> getTempLore(Status status, ItemStack target)
+	public List<String> getTempLore(tNpcStatus status, ItemStack target)
 	{
 		//create a new list
 		List<String> lore = new ArrayList<String>();
@@ -453,13 +453,13 @@ public final class StockItem {
 		
 		//for each attribute
 		for ( ItemAttr itemAttr : this.attr.values() )
-			for ( Status attrStatus : itemAttr.getInfo().status() )
+			for ( tNpcStatus attrStatus : itemAttr.getInfo().status() )
 				if ( attrStatus.equals(status) )
 			        itemAttr.onStatusLoreRequest(status, target, lore);
 		
 		//for each flag
 		for ( ItemFlag flag : flags.values() )
-			for ( Status attrStatus : flag.getInfo().status() )
+			for ( tNpcStatus attrStatus : flag.getInfo().status() )
 				if ( attrStatus.equals(status) )
 			        flag.onStatusLoreRequest(status, lore);
 		

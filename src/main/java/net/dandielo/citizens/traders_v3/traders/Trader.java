@@ -15,6 +15,7 @@ import org.bukkit.inventory.PlayerInventory;
 
 import net.citizensnpcs.api.npc.NPC;
 import net.dandielo.citizens.traders_v3.tNpc;
+import net.dandielo.citizens.traders_v3.tNpcStatus;
 import net.dandielo.citizens.traders_v3.core.Debugger;
 import net.dandielo.citizens.traders_v3.core.locale.LocaleManager;
 import net.dandielo.citizens.traders_v3.core.tools.StringTools;
@@ -65,8 +66,8 @@ public abstract class Trader implements tNpc {
 	 * Traders inventory
 	 */
 	protected Inventory inventory;
-	protected Status baseStatus;
-	protected Status status;
+	protected tNpcStatus baseStatus;
+	protected tNpcStatus status;
 	
 	//constructor
 	public Trader(TraderTrait trader, WalletTrait wallet, Player player)
@@ -87,7 +88,7 @@ public abstract class Trader implements tNpc {
 		return settings;
 	}
 	
-	public Status getStatus() 
+	public tNpcStatus getStatus() 
 	{
 		return status;
 	}
@@ -97,10 +98,10 @@ public abstract class Trader implements tNpc {
 		return settings.getNPC();
 	}
 	
-	public void parseStatus(Status newStatus)
+	public void parseStatus(tNpcStatus newStatus)
 	{
 	    status = newStatus;
-		baseStatus = Status.parseBaseManageStatus(baseStatus, newStatus);
+		baseStatus = tNpcStatus.parseBaseManageStatus(baseStatus, newStatus);
 	}
 	
 	public Stock getStock()
@@ -525,9 +526,9 @@ public abstract class Trader implements tNpc {
 	 *    
 	 * @author dandielo
 	 */
-	public boolean checkStatusWith(Status[] stat)
+	public boolean checkStatusWith(tNpcStatus[] stat)
 	{
-		for ( Status s : stat )
+		for ( tNpcStatus s : stat )
 			if ( s.equals(status) )
 				return true;
 		return false;
@@ -565,7 +566,7 @@ public abstract class Trader implements tNpc {
 	}
 
 	//Trader status enum
-	public static enum Status
+/*	public static enum Status
 	{
 		SELL, BUY, SELL_AMOUNTS, MANAGE_SELL, MANAGE_BUY, MANAGE_PRICE, MANAGE_AMOUNTS, MANAGE_LIMITS, MANAGE_UNLOCKED;
 		
@@ -597,17 +598,17 @@ public abstract class Trader implements tNpc {
 		public String asStock() {
 			return this.equals(BUY) || this.equals(MANAGE_BUY) ? "buy" : "sell";
 		}
-	}
+	}*/
 	
-	public Status getDefaultStatus()
+	public tNpcStatus getDefaultStatus()
 	{
-		return Status.baseStatus(settings.getStockStart());
+		return tNpcStatus.baseStatus(settings.getStockStart());
 	}
 	
-	public Status getDefaultManagementStatus()
+	public tNpcStatus getDefaultManagementStatus()
 	{
-		return Status.baseManagementStatus(settings.getManagerStockStart());
+		return tNpcStatus.baseManagementStatus(settings.getManagerStockStart());
 	}
-	
+
 	
 }

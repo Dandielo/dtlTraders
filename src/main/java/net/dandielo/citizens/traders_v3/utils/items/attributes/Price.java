@@ -7,14 +7,14 @@ import org.bukkit.inventory.ItemStack;
 
 import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeInvalidValueException;
 import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeValueNotFoundException;
-import net.dandielo.citizens.traders_v3.traders.Trader.Status;
+import net.dandielo.citizens.traders_v3.tNpcStatus;
 import net.dandielo.citizens.traders_v3.utils.items.Attribute;
 import net.dandielo.citizens.traders_v3.utils.items.ItemAttr;
 import net.dandielo.citizens.traders_v3.utils.items.flags.StackPrice;
 
 @Attribute(
 name="Price", key = "p", standalone = true,
-status = {Status.BUY, Status.SELL, Status.SELL_AMOUNTS, Status.MANAGE_PRICE})
+status = {tNpcStatus.BUY, tNpcStatus.SELL, tNpcStatus.SELL_AMOUNTS, tNpcStatus.MANAGE_PRICE})
 public class Price extends ItemAttr {
 	private double price;
 
@@ -69,7 +69,7 @@ public class Price extends ItemAttr {
 	}
 	
 	@Override
-	public void onStatusLoreRequest(Status status, ItemStack target, List<String> lore)
+	public void onStatusLoreRequest(tNpcStatus status, ItemStack target, List<String> lore)
 	{
 		double m;
 		//has the item the stack price flag?
@@ -79,7 +79,7 @@ public class Price extends ItemAttr {
 			m = item.getAmount();
 
 		//assign a multiplier to each item sold in the amounts inventory
-		if ( status.equals(Status.SELL_AMOUNTS) )
+		if ( status.equals(tNpcStatus.SELL_AMOUNTS) )
 		{
 			m *= (double) target.getAmount() / (double) item.getAmount();
 		}

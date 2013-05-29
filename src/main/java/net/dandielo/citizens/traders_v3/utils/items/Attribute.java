@@ -6,7 +6,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import net.dandielo.citizens.traders_v3.traders.Trader.Status;
+import net.dandielo.citizens.traders_v3.tNpcStatus;
+
+//import net.dandielo.citizens.traders_v3.traders.Trader.Status;
 
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
@@ -58,5 +60,5 @@ public @interface Attribute {
      * @return
      *     Status array when it should appear
      */
-    public Status[] status() default { };
+    public tNpcStatus[] status() default { };
 }

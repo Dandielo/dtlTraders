@@ -1,11 +1,14 @@
 package net.dandielo.citizens.traders_v3;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 
 import net.citizensnpcs.api.npc.NPC;
 import net.dandielo.citizens.traders_v3.bukkit.DtlTraders;
@@ -166,6 +169,43 @@ public class tNpcManager {
 	public void removeRelation(String player)
 	{
 		relations.remove(player);
+	}
+	
+	/**
+	 * Inventory registry, holds all open trader inventories
+	 */
+	private Set<Inventory> tNpcInventories = new HashSet<Inventory>();
+	
+	/**
+	 * Checks if the given inventory is a trader, banker or acution npc inventory
+	 * @param inventory
+	 * the inventory to check
+	 * @return
+	 * true if the inventory is listed
+	 */
+	public boolean tNpcInventory(Inventory inventory)
+	{
+		return tNpcInventories.contains(inventory);
+	}
+	
+	/**
+	 * Registers the given inventory as a trader inventory, it will stay as it as long some1 does not unregisters it.
+	 * @param inventory
+	 * the inventory to register
+	 */
+	public void registerInventory(Inventory inventory)
+	{
+		tNpcInventories.add(inventory);
+	}
+	
+	/**
+	 * Removes the given inventory from the registry if it's there.
+	 * @param inventory
+	 * the inventory that should be removed
+	 */
+	public void removeInventory(Inventory inventory)
+	{
+		tNpcInventories.remove(inventory);
 	}
 	
 	/**

@@ -1,6 +1,6 @@
 package net.dandielo.citizens.traders_v3.traders.stock;
 
-import net.dandielo.citizens.traders_v3.traders.Trader.Status;
+import net.dandielo.citizens.traders_v3.tNpcStatus;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -21,31 +21,31 @@ public class StockPlayer extends Stock {
 	}
 
 	@Override
-	public Inventory getInventory(Status status) {
+	public Inventory getInventory(tNpcStatus status) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Inventory getManagementInventory(Status baseStatus, Status status) {
+	public Inventory getManagementInventory(tNpcStatus baseStatus, tNpcStatus status) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void setInventory(Inventory inventory, Status status) {
+	public void setInventory(Inventory inventory, tNpcStatus status) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void setManagementInventory(Inventory inventory, Status baseStatus, Status status) {
+	public void setManagementInventory(Inventory inventory, tNpcStatus baseStatus, tNpcStatus status) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void setAmountsInventory(Inventory inventory, Status status, StockItem item) {
+	public void setAmountsInventory(Inventory inventory, tNpcStatus status, StockItem item) {
 		// TODO Auto-generated method stub
 		
 	}

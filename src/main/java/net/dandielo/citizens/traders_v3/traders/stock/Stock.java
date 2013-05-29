@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import net.citizensnpcs.api.util.DataKey;
+import net.dandielo.citizens.traders_v3.tNpcStatus;
 import net.dandielo.citizens.traders_v3.core.Debugger;
-import net.dandielo.citizens.traders_v3.traders.Trader.Status;
 import net.dandielo.citizens.traders_v3.traders.setting.Settings;
 
 import org.bukkit.inventory.Inventory;
@@ -110,11 +110,11 @@ public abstract class Stock implements InventoryHolder {
 	}*/
 	
 	/*abstract methods*/
-	public abstract Inventory getInventory(Status status);
-	public abstract Inventory getManagementInventory(Status baseStatus, Status status);
-	public abstract void setInventory(Inventory inventory, Status status);
-	public abstract void setAmountsInventory(Inventory inventory, Status status, StockItem item);
-	public abstract void setManagementInventory(Inventory inventory, Status baseStatus, Status status);
+	public abstract Inventory getInventory(tNpcStatus status);
+	public abstract Inventory getManagementInventory(tNpcStatus baseStatus, tNpcStatus status);
+	public abstract void setInventory(Inventory inventory, tNpcStatus status);
+	public abstract void setAmountsInventory(Inventory inventory, tNpcStatus status, StockItem item);
+	public abstract void setManagementInventory(Inventory inventory, tNpcStatus baseStatus, tNpcStatus status);
 
 	public abstract double parsePrice(StockItem item, int slot);
 	

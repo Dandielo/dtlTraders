@@ -13,7 +13,6 @@ import net.dandielo.citizens.traders_v3.traders.Trader;
 import net.dandielo.citizens.traders_v3.traits.TraderTrait;
 import net.dandielo.citizens.traders_v3.utils.NBTUtils;
 
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -100,13 +99,20 @@ public class tNpcListener implements Listener {
 	public void inventoryCloseEvent(InventoryCloseEvent e)
 	{
 		Trader trader = manager.getTraderRelation(e.getPlayer());
-		if ( trader != null && !trader.getStatus().inManagementMode() )
-		{			
-			//remove the relation
-			manager.removeRelation((Player) e.getPlayer());
+		if ( trader != null )
+		{
+			//unregister the inventory as a traderInventory
+			manager.removeInventory(e.getInventory());
 			
-			//clean his inventory
-			cleaner.addPlayer((Player) e.getPlayer());
+			//if the trader is not in mm, remove the relation too
+		    if ( !trader.getStatus().inManagementMode() )
+		    {			
+		    	//remove the relation
+		    	manager.removeRelation((Player) e.getPlayer());
+
+		    	//clean his inventory
+		    	cleaner.addPlayer((Player) e.getPlayer());
+		    }
 		}
 	}
 

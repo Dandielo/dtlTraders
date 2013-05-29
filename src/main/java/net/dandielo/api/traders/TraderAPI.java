@@ -2,10 +2,12 @@ package net.dandielo.api.traders;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import net.dandielo.citizens.traders_v3.tNpcManager;
+import net.dandielo.citizens.traders_v3.tNpcStatus;
 import net.dandielo.citizens.traders_v3.traders.Trader;
-import net.dandielo.citizens.traders_v3.traders.Trader.Status;
 import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
 
 public class TraderAPI {
@@ -30,7 +32,7 @@ public class TraderAPI {
 	{
 	}
 	
-	public void toggleStatus(Player player, Trader trader, Status status)
+	public void toggleStatus(Player player, Trader trader, tNpcStatus status)
 	{
 		
 	}
@@ -54,6 +56,19 @@ public class TraderAPI {
 	public boolean buyItem(Player player, Trader trader, StockItem item)
 	{
 		return false;
+	}
+	
+	//request for API function that checks if an inventory is a trader inventory
+	/**
+	 * Checks if the given inventory is a trader, banker or aution npc inventory
+	 * @param inventory
+	 * the inventory that will be checked
+	 * @return
+	 * true if the inventory was found in the registry
+	 */
+	public boolean isTraderInventory(Inventory inventory)
+	{
+		return tNpcManager.instance().tNpcInventory(inventory);
 	}
 	
 	//Stock related

@@ -1,5 +1,7 @@
 package net.dandielo.citizens.traders_v3.bankers;
 
-public class Banker {
+import net.dandielo.citizens.traders_v3.tNpc;
+
+public abstract class Banker implements tNpc {
 
 }
