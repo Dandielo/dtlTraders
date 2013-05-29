@@ -59,17 +59,6 @@ public class TraderAPI {
 	}
 	
 	//request for API function that checks if an inventory is a trader inventory
-	/**
-	 * Checks if the given inventory is a trader, banker or aution npc inventory
-	 * @param inventory
-	 * the inventory that will be checked
-	 * @return
-	 * true if the inventory was found in the registry
-	 */
-	public boolean isTraderInventory(Inventory inventory)
-	{
-		return tNpcManager.instance().tNpcInventory(inventory);
-	}
 	
 	//Stock related
 	public void removeItem(Trader trader, String stock, ItemStack item)
