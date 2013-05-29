@@ -15,6 +15,7 @@ import net.dandielo.citizens.traders_v3.utils.NBTUtils;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -95,7 +96,7 @@ public class tNpcListener implements Listener {
 		}*/
 	}
 	
-	@EventHandler
+	@EventHandler(priority = EventPriority.LOW)
 	public void inventoryCloseEvent(InventoryCloseEvent e)
 	{
 		Trader trader = manager.getTraderRelation(e.getPlayer());
