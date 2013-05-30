@@ -114,7 +114,7 @@ public class Server extends Trader {
 		updateInventory();
 		
 		//register the inventory as a traderInventory
-		tNpcManager.instance().registerInventory(inventory);
+		tNpcManager.instance().registerOpenedInventory(player, inventory);
 		
 		//open the traders inventory
 		player.openInventory(inventory);

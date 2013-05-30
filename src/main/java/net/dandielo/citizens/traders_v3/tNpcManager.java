@@ -1,5 +1,6 @@
 package net.dandielo.citizens.traders_v3;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -174,7 +175,7 @@ public class tNpcManager {
 	/**
 	 * Inventory registry, holds all open trader inventories
 	 */
-	private Set<Inventory> tNpcInventories = new HashSet<Inventory>();
+	private Map<String, Inventory> tNpcInventories = new HashMap<String, Inventory>();
 	
 	/**
 	 * Checks if the given inventory is a trader, banker or acution npc inventory
@@ -183,9 +184,9 @@ public class tNpcManager {
 	 * @return
 	 * true if the inventory is listed
 	 */
-	public boolean tNpcInventory(Inventory inventory)
+	public boolean tNpcInventoryOpened(Player player)
 	{
-		return tNpcInventories.contains(inventory);
+		return tNpcInventories.containsKey(player.getName());
 	}
 	
 	/**
@@ -193,9 +194,17 @@ public class tNpcManager {
 	 * @param inventory
 	 * the inventory to register
 	 */
-	public void registerInventory(Inventory inventory)
+	public void registerOpenedInventory(Player player, Inventory inventory)
 	{
-		tNpcInventories.add(inventory);
+		tNpcInventories.put(player.getName(), inventory);
+	}
+	
+	/*
+	 * Test methods
+	 */
+	public Collection<Inventory> getInventories()
+	{
+		return tNpcInventories.values();
 	}
 	
 	/**
@@ -203,9 +212,9 @@ public class tNpcManager {
 	 * @param inventory
 	 * the inventory that should be removed
 	 */
-	public void removeInventory(Inventory inventory)
+	public void removeOpenedInventory(Player player)
 	{
-		tNpcInventories.remove(inventory);
+		tNpcInventories.remove(player.getName());
 	}
 	
 	/**

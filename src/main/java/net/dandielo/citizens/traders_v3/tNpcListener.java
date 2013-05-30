@@ -103,7 +103,7 @@ public class tNpcListener implements Listener {
 		if ( trader != null )
 		{
 			//unregister the inventory as a traderInventory
-			manager.removeInventory(e.getInventory());
+			manager.removeOpenedInventory((Player) e.getPlayer());
 			
 			//if the trader is not in mm, remove the relation too
 		    if ( !trader.getStatus().inManagementMode() )
