@@ -106,11 +106,12 @@ public class TraderCommands {
 		locale.sendMessage(sender, "trader-managermode-enabled", "npc", npc.getName());
 		locale.sendMessage(sender, "trader-managermode-toggled", "mode", "#stock-sell");
 		
+		//send the Trader Create event
 		new TraderCreateEvent(nTrader, sender).callEvent();
 	}
 	
 	/**
-	 * Allows to changte the stock name for a specified trader
+	 * Allows to change the stock name for a specified trader
 	 * @param plugin
 	 * This plugin
 	 * @param sender

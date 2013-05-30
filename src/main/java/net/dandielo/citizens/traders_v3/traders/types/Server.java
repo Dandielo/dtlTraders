@@ -27,10 +27,6 @@ import net.dandielo.citizens.traders_v3.utils.items.flags.StackPrice;
 
 @tNpcType(name="server", author="dandielo")
 public class Server extends Trader {
-	/**
-	 * Permissions manager instance
-	 */
-	Perms perms = Perms.perms;
 	
 
 	public Server(TraderTrait trader, WalletTrait wallet, Player player) {
@@ -111,7 +107,7 @@ public class Server extends Trader {
 			inventory = stock.getInventory(status);
 		parseStatus(status);
 		
-		updateInventory();
+		updatePlayerInventory();
 		
 		//register the inventory as a traderInventory
 		tNpcManager.instance().registerOpenedInventory(player, inventory);
@@ -307,7 +303,7 @@ public class Server extends Trader {
 							"amount", String.valueOf(getSelectedItem().getAmount()), "price", String.format("%.2f", stock.parsePrice(getSelectedItem(), slot)).replace(',', '.'));
 					
 					//update inventory - lore
-					updateInventory();
+					updatePlayerInventory();
 				}
 			}
 			else
@@ -367,7 +363,7 @@ public class Server extends Trader {
 								"amount", String.valueOf(getSelectedItem().getAmount()), "price", String.valueOf(getSelectedItem().getPrice()));
 						
 						//update inventory - lore
-						updateInventory();
+						updatePlayerInventory();
 					}
 				}
 				else
@@ -406,7 +402,7 @@ public class Server extends Trader {
 								"amount", String.valueOf(getSelectedItem().getAmount()), "price", String.valueOf(getSelectedItem().getPrice()));
 						
 						//update inventory - lore
-						updateInventory();
+						updatePlayerInventory();
 					}
 				}
 				else
@@ -460,7 +456,7 @@ public class Server extends Trader {
 								"amount", String.valueOf(getSelectedItem().getAmount()*scale), "price", String.valueOf(stock.parsePrice(getSelectedItem(), 0)*scale));
 						
 						//update the inventory lore
-						updateInventory();
+						updatePlayerInventory();
 					}
 				}
 				else
@@ -497,7 +493,7 @@ public class Server extends Trader {
 								"amount", String.valueOf(getSelectedItem().getAmount()), "price", String.valueOf(stock.parsePrice(getSelectedItem(), 0)));
 
 						//update the inventory lore
-						updateInventory();
+						updatePlayerInventory();
 					}
 				}
 				else
@@ -714,142 +710,4 @@ public class Server extends Trader {
 		Debugger.info("slot: ", e.getSlot(), ", left: ", e.isLeftClick(), ", shift: ", e.isShiftClick());
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	/*
-	@Override
-	public void onInventoryClick(InventoryClickEvent e) { 
-		boolean top = e.getView().convertSlot(e.getRawSlot()) == e.getRawSlot();
-
-		if ( top )
-			topClick(e);
-		else
-			bottomClick(e);
-	}*/
-
-	/*
-	public void topClick(InventoryClickEvent e)
-	{
-		
-		if ( e.isShiftClick() )
-		{
-			e.setCancelled(true);
-			return;
-		}
-			
-		int slot = e.getSlot();
-		if ( stock.isUiSlot(slot) )
-		{
-			if ( hitTest(slot, "buy") )
-			{
-				status = tNpcStatus.BUY;
-			}
-			else
-			if ( hitTest(slot, "sell") )
-			{
-				status = tNpcStatus.SELL;
-			}
-			else
-			if ( hitTest(slot, "back") )
-			{
-				status = tNpcStatus.SELL;
-			}
-			stock.setInventory(inventory, getStatus());
-		}
-		else
-		{
-			if ( status.equals(tNpcStatus.SELL) )
-			{
-				if ( e.isRightClick() )
-				{
-					if ( handleClick(e.getRawSlot()) )
-					{
-						player.sendMessage(stock.getItem(slot, "sell").<Double>getData("p").toString());
-					}
-					else
-					{
-						player.sendMessage(stock.getItem(slot, "sell").toString());
-					}
-				}
-				else
-				{
-					if ( handleClick(e.getRawSlot()) )
-					{
-						player.sendMessage(stock.getItem(slot, "sell").<Double>getData("p").toString());
-					}
-					else
-					{
-						player.sendMessage(stock.getItem(slot, "sell").toString());
-					}
-				}
-			}
-			else
-			if ( status.equals(tNpcStatus.SELL_AMOUNTS) )
-			{
-				if ( handleClick(e.getRawSlot()) )
-				{
-					player.sendMessage(stock.getItem(slot, "sell").<Double>getData("p").toString());
-				}
-				else
-				{
-					player.sendMessage(stock.getItem(slot, "sell").toString());
-				}
-			}
-			else
-			if ( status.equals(tNpcStatus.BUY) )
-			{
-				if ( e.isRightClick() )
-				{
-					if ( handleClick(e.getRawSlot()) )
-					{
-						
-					}
-					else
-					{
-						
-					}
-				}
-				else
-				{
-					if ( handleClick(e.getRawSlot()) )
-					{
-						
-					}
-					else
-					{
-						
-					}
-				}
-			}
-		}
-		e.setCancelled(true);
-	}
-
-	public void bottomClick(InventoryClickEvent e)
-	{
-
-	}*/
-
 }
