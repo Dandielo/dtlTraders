@@ -285,6 +285,10 @@ public class tNpcManager {
 		//if the types is not registered throw an exception
 		if ( typeInfo == null ) throw new TraderTypeNotFoundException(type);
 		
+		//add the required wallet trait if not set
+		if ( npc.hasTrait(WalletTrait.class) )
+			npc.addTrait(WalletTrait.class);
+		
 		//get the class of the type 
 		Class<? extends tNpc> clazz = types.get(typeInfo);
 		tNpc resultNpc = null;
