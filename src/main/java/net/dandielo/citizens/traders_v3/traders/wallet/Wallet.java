@@ -7,6 +7,8 @@ import net.dandielo.citizens.traders_v3.core.Debugger;
 import net.dandielo.citizens.traders_v3.traders.Trader;
 
 public class Wallet {
+	String player = null;
+	
 	private double money;
 	private Type type;
 	
@@ -33,6 +35,17 @@ public class Wallet {
 		return money;
 	}
 	
+	//set target player
+	public void setPlayer(String player)
+	{
+		this.player = player;
+	}
+	
+	public String getPlayer()
+	{
+		return player;
+	}
+	
 	//deposit to player or trader
 	public boolean deposit(Player player, double amount)
 	{
@@ -56,6 +69,13 @@ public class Wallet {
 		if ( type.equals(Type.OWNER) )
 		{
 			return econ.deposit(trader.getSettings().getOwner(), amount);
+		}
+		else
+		if ( type.equals(Type.PLAYER) )
+		{
+			if ( player != null )
+			    return econ.deposit(player, amount);
+			return false;
 		}
 		return true;
 	} 
@@ -83,15 +103,22 @@ public class Wallet {
 			return money - amount >= 0 ? (money -= amount) >= 0 : false;
 		}
 		else
+		if ( type.equals(Type.OWNER) ) 
 		{
 			return econ.withdraw(trader.getSettings().getOwner(), amount);
+		}
+		else
+		{
+			if ( player != null )
+				return econ.withdraw(player, amount);
+			return false;
 		}
 	}
 	
 	//Type enum
 	static enum Type
 	{
-		INFINITE, OWNER, PRIVATE;
+		INFINITE, OWNER, PRIVATE, PLAYER;
 		
 		@Override
 		public String toString()
