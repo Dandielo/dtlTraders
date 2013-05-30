@@ -18,6 +18,7 @@ import net.dandielo.citizens.traders_v3.core.locale.LocaleManager;
 import net.dandielo.citizens.traders_v3.traders.Trader;
 import net.dandielo.citizens.traders_v3.traders.setting.Settings;
 import net.dandielo.citizens.traders_v3.traders.setting.TGlobalSettings;
+import net.dandielo.citizens.traders_v3.traders.wallet.Wallet;
 import net.dandielo.citizens.traders_v3.traits.TraderTrait;
 import net.dandielo.citizens.traders_v3.traits.WalletTrait;
 
@@ -107,6 +108,19 @@ public class TraderCommands {
 		
 	}
 	
+	/**
+	 * Allows to changte the stock name for a specified trader
+	 * @param plugin
+	 * This plugin
+	 * @param sender
+	 * The command sender
+	 * @param trader
+	 * that took part when the command was executed
+	 * @param args
+	 * additional arguments, like name, type and entity type
+	 * @throws TraderTypeNotFoundException
+	 * @throws InvalidTraderTypeException
+	 */
 	@Command(
 	name = "trader",
 	syntax = "stockname <action> {args}",
@@ -125,6 +139,7 @@ public class TraderCommands {
 			if ( args.get("free") == null )
 			{
 				locale.sendMessage(sender, "error-argument-missing", "argument", "{args}");
+				return;
 			}
 			
 			//set the new stock name
@@ -163,6 +178,19 @@ public class TraderCommands {
 		}
 	}
 	
+	/**
+	 * Allows to change the stock size for a specified trader 
+	 * @param plugin
+	 * This plugin
+	 * @param sender
+	 * The command sender
+	 * @param trader
+	 * that took part when the command was executed
+	 * @param args
+	 * additional arguments, like name, type and entity type
+	 * @throws TraderTypeNotFoundException
+	 * @throws InvalidTraderTypeException
+	 */
 	@Command(
 	name = "trader",
 	syntax = "stocksize <action> (size)",
@@ -181,6 +209,7 @@ public class TraderCommands {
 			if ( args.get("size") == null )
 			{
 				locale.sendMessage(sender, "error-argument-missing", "argument", "(size)");
+				return;
 			}
 			
 			//is the size valid?
@@ -188,6 +217,7 @@ public class TraderCommands {
 			if ( size < 0 || size > 6 )
 			{
 				locale.sendMessage(sender, "error-argument-invalid", "argument", "(size)");
+				return;
 			}
 			
 			//set the new stock name
@@ -226,6 +256,19 @@ public class TraderCommands {
 		}
 	}
 	
+	/**
+	 * Allows to change the starting stock for the specified trader
+	 * @param plugin
+	 * This plugin
+	 * @param sender
+	 * The command sender
+	 * @param trader
+	 * that took part when the command was executed
+	 * @param args
+	 * additional arguments, like name, type and entity type
+	 * @throws TraderTypeNotFoundException
+	 * @throws InvalidTraderTypeException
+	 */
 	@Command(
 	name = "trader",
 	syntax = "startstock <action> (stock)",
@@ -244,6 +287,7 @@ public class TraderCommands {
 			if ( args.get("stock") == null )
 			{
 				locale.sendMessage(sender, "error-argument-missing", "argument", "(stock)");
+				return;
 			}
 			
 			//set the new stock name
@@ -276,6 +320,126 @@ public class TraderCommands {
 					"value", trader.getSettings().getStockStart());
 		}
 		//send a error message
+		else
+		{
+			locale.sendMessage(sender, "error-argument-invalid", "argument", "<action>");
+		}
+	}
+
+	/**
+	 * Allows to change the traders wallet and it's settings
+	 * @param plugin
+	 * This plugin
+	 * @param sender
+	 * The command sender
+	 * @param trader
+	 * that took part when the command was executed
+	 * @param args
+	 * additional arguments, like name, type and entity type
+	 * @throws TraderTypeNotFoundException
+	 * @throws InvalidTraderTypeException
+	 */
+	@Command(
+	name = "trader",
+	syntax = "wallet <option> <action> (value)",
+	perm = "dtl.trader.commands.wallet",
+	desc = "Shows/sets the wallet type or its settings (infinite|private|owner|player)",
+	usage = "- /trader wallet set type player",
+	npc = true)
+	public void settingWallet(DtlTraders plugin, Player sender, Trader trader, Map<String, String> args)
+	{
+		String option = args.get("option");
+		String action = args.get("action");
+		
+		if ( action.equals("set") )
+		{
+			//get the value
+			String value = args.get("value");
+			
+			//throw an error if the value is null
+			if ( value == null )
+			{
+				locale.sendMessage(sender, "error-argument-missing", "argument", "(value)");
+				return;
+			}
+			
+			//depending on the option set the new value
+			WalletTrait wallet = trader.getNPC().getTrait(WalletTrait.class);
+			if ( option.equals("type") )
+			{
+				//set the new wallet type
+				wallet.setType(value);
+				
+				//send a message
+				locale.sendMessage(sender, "key-change", 
+						"key", "#wallet-type", 
+						"value", wallet.getType());
+			}
+			else
+			if ( option.equals("player") )
+			{
+				wallet.setPlayer(value);
+				
+				//send a message
+				locale.sendMessage(sender, "key-change", 
+						"key", "#wallet-player", 
+						"value", wallet.getPlayer());
+			}
+			else
+			if ( option.equals("amount") )
+			{
+				try
+				{
+				    wallet.setMoney(Double.parseDouble(value));
+					
+					//send a message
+					locale.sendMessage(sender, "key-change", 
+							"key", "#wallet-balance", 
+							"value", String.valueOf(wallet.getBalance()) );
+				}
+				catch(NumberFormatException e)
+				{
+					locale.sendMessage(sender, "error-argument-invalid", "argument", "(value)");
+				}
+			}
+			else
+			{
+				locale.sendMessage(sender, "error-argument-invalid", "argument", "<option>");
+			}
+		}
+		else 
+		if ( action.equals("show") )
+		{
+			//depending on the option show the value
+			WalletTrait wallet = trader.getNPC().getTrait(WalletTrait.class);
+			if ( option.equals("type") )
+			{
+				//send a message
+				locale.sendMessage(sender, "key-value", 
+						"key", "#wallet-type", 
+						"value", wallet.getType());
+			}
+			else
+			if ( option.equals("player") )
+			{
+				//send a message
+				locale.sendMessage(sender, "key-value", 
+						"key", "#wallet-player", 
+						"value", wallet.getPlayer());
+			}
+			else
+			if ( option.equals("amount") )
+			{
+				//send a message
+				locale.sendMessage(sender, "key-value", 
+						"key", "#wallet-balance", 
+						"value", String.valueOf(wallet.getBalance()) );
+			}
+			else
+			{
+				locale.sendMessage(sender, "error-argument-invalid", "argument", "<option>");
+			}
+		}
 		else
 		{
 			locale.sendMessage(sender, "error-argument-invalid", "argument", "<action>");

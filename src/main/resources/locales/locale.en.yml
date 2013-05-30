@@ -71,6 +71,11 @@ keywords:
   stock: Stock
   pattern: Patterns
   wallet: Wallet
+  wallet-type: Wallet type
+  wallet-player: Target player
+  wallet-balance: Balance
+  wallet-deposit: Deposited
+  wallet-withdraw: Withdrawed
   bought: Bought
   owner: Owner
   limit: Limit

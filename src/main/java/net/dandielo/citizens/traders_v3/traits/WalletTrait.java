@@ -12,12 +12,21 @@ public class WalletTrait extends Trait {
 	@Persist String type = "infinite";
 	@Persist double money = 0.0;
 	
+	@Persist String player;
+	
 	//wallet object
 	private Wallet wallet;
 	
 	public WalletTrait()
 	{
 		super("wallet");
+	}
+	
+	//set wallet settings
+	public void setPlayer(String player)
+	{
+		this.player = player;
+		wallet.setPlayer(player);
 	}
 	
 	//set wallet settings
@@ -32,6 +41,21 @@ public class WalletTrait extends Trait {
 	{
 		this.money = money;
 		wallet.setMoney(money);
+	}
+
+	public  double getBalance()
+	{
+		return wallet.getMoney();
+	}
+
+	public String getPlayer()
+	{
+		return player;
+	}
+
+	public String getType()
+	{
+		return type;
 	}
 	
 	//get the actual wallet object
@@ -48,6 +72,7 @@ public class WalletTrait extends Trait {
 		
 		//set the wallet
 		wallet = new Wallet(type, money);
+		wallet.setPlayer(player);
 	}
 	
 	//events
@@ -55,6 +80,7 @@ public class WalletTrait extends Trait {
 	public void load(DataKey data)
 	{
 		wallet = new Wallet(type, money);
+		wallet.setPlayer(player);
 	}
 	
 	@Override
