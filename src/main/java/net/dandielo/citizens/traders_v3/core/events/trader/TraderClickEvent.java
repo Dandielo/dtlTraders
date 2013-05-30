@@ -20,6 +20,7 @@ public class TraderClickEvent extends TraderEvent {
 	 */
 	private static final HandlerList handlers = new HandlerList();
 	 
+	@Override
 	public HandlerList getHandlers() {
 	    return handlers;
 	}
@@ -28,10 +29,9 @@ public class TraderClickEvent extends TraderEvent {
 	    return handlers;
 	}
 	
-	/**
-	 * Custom Event111 
+	/*
+	 * Custom Event
 	 */
-
 	protected boolean mmToggling;
 	protected boolean leftClick; 
 	

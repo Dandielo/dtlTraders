@@ -12,13 +12,13 @@ import net.dandielo.citizens.traders_v3.tNpcManager;
 import net.dandielo.citizens.traders_v3.tNpcStatus;
 import net.dandielo.citizens.traders_v3.bukkit.DtlTraders;
 import net.dandielo.citizens.traders_v3.core.commands.Command;
+import net.dandielo.citizens.traders_v3.core.events.trader.TraderCreateEvent;
 import net.dandielo.citizens.traders_v3.core.exceptions.InvalidTraderTypeException;
 import net.dandielo.citizens.traders_v3.core.exceptions.TraderTypeNotFoundException;
 import net.dandielo.citizens.traders_v3.core.locale.LocaleManager;
 import net.dandielo.citizens.traders_v3.traders.Trader;
 import net.dandielo.citizens.traders_v3.traders.setting.Settings;
 import net.dandielo.citizens.traders_v3.traders.setting.TGlobalSettings;
-import net.dandielo.citizens.traders_v3.traders.wallet.Wallet;
 import net.dandielo.citizens.traders_v3.traits.TraderTrait;
 import net.dandielo.citizens.traders_v3.traits.WalletTrait;
 
@@ -106,6 +106,7 @@ public class TraderCommands {
 		locale.sendMessage(sender, "trader-managermode-enabled", "npc", npc.getName());
 		locale.sendMessage(sender, "trader-managermode-toggled", "mode", "#stock-sell");
 		
+		new TraderCreateEvent(nTrader, sender).callEvent();
 	}
 	
 	/**
