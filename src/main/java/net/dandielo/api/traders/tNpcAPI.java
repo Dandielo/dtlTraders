@@ -1,7 +1,6 @@
 package net.dandielo.api.traders;
 
 import java.util.Collection;
-import java.util.Set;
 
 import net.dandielo.citizens.traders_v3.tNpc;
 import net.dandielo.citizens.traders_v3.tNpcManager;
