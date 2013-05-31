@@ -10,7 +10,6 @@ import org.bukkit.inventory.ItemStack;
 import net.dandielo.citizens.traders_v3.tNpcManager;
 import net.dandielo.citizens.traders_v3.tNpcStatus;
 import net.dandielo.citizens.traders_v3.tNpcType;
-import net.dandielo.citizens.traders_v3.bukkit.Perms;
 import net.dandielo.citizens.traders_v3.core.Debugger;
 import net.dandielo.citizens.traders_v3.core.events.trader.TraderClickEvent;
 import net.dandielo.citizens.traders_v3.traders.Trader;

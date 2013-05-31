@@ -111,8 +111,8 @@ public class Book extends ItemAttr {
 		//get pages
 		pages.addAll(book.getPages());
 		
-		//generate an Id 
-		bookId = title.replace(" ", "_") + new Random().nextInt(1000);
+		//generate an Id (fixed a null ptr when no title is set)
+		bookId = (title != null ? title.replace(" ", "_") : "bookAndQuil" + new Random().nextInt(100)) + new Random().nextInt(1000);
 	}
 	
 	/**
