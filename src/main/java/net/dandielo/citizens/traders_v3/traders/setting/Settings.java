@@ -8,7 +8,7 @@ import net.dandielo.citizens.traders_v3.core.Debugger;
 public class Settings extends TGlobalSettings {	
     //the Npc associated with these settings
 	private final NPC npc;
-	private String owner;
+	private String owner = "no owner";
 	private String type = "server"; //needs to be here when some1 will apply it with the /trait command
 	
 	//npc related settings
