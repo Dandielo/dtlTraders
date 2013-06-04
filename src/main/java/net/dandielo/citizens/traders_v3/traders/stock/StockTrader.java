@@ -235,6 +235,7 @@ public class StockTrader extends Stock {
 	{
 		Map<String, ItemStack> items = TGlobalSettings.getUiItems();
 
+		//TODO mark items
 		//Switch betwean all status values
 		switch(status)
 		{

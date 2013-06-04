@@ -91,6 +91,7 @@ public class Price extends ItemAttr {
 		
 		lore.add(ChatColor.GOLD + "Price: " + ChatColor.GRAY + 
 				String.format("%.2f", price*m).replace(',', '.'));
+		
 	}
 	
 }

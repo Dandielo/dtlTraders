@@ -263,6 +263,10 @@ public class Server extends Trader {
 				parseStatus(tNpcStatus.MANAGE_LIMIT);
 			}
 			stock.setManagementInventory(inventory, baseStatus, status);
+			
+			//TODO add lores to special blocks
+			setSpecialBlockPrices();
+			
 			e.setCancelled(true);
 		}
 	}

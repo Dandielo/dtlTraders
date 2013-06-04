@@ -12,6 +12,7 @@ import net.dandielo.citizens.traders_v3.core.Debugger;
 import net.dandielo.citizens.traders_v3.core.PluginSettings;
 import net.dandielo.citizens.traders_v3.core.locale.LocaleManager;
 import net.dandielo.citizens.traders_v3.utils.ItemUtils;
+import net.dandielo.citizens.traders_v3.utils.NBTUtils;
 
 public class TGlobalSettings extends PluginSettings {
 	//the trader soncig section
@@ -228,7 +229,9 @@ public class TGlobalSettings extends PluginSettings {
 	 */
 	public static double getBlockValue(ItemStack item)
 	{
-		return specialBlocks.containsKey(item) ? specialBlocks.get(item) : 1.0;
+		ItemStack tempItem = NBTUtils.cleanItem(item.clone());
+		tempItem.setAmount(1);
+		return specialBlocks.containsKey(tempItem) ? specialBlocks.get(tempItem) : 1.0;
 	}
 	
 	/**

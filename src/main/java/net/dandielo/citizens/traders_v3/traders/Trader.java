@@ -22,6 +22,7 @@ import net.dandielo.citizens.traders_v3.core.locale.LocaleManager;
 import net.dandielo.citizens.traders_v3.core.tools.StringTools;
 import net.dandielo.citizens.traders_v3.traders.clicks.ClickHandler;
 import net.dandielo.citizens.traders_v3.traders.setting.Settings;
+import net.dandielo.citizens.traders_v3.traders.setting.TGlobalSettings;
 import net.dandielo.citizens.traders_v3.traders.stock.Stock;
 import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
 import net.dandielo.citizens.traders_v3.traders.wallet.Wallet;
@@ -307,6 +308,52 @@ public abstract class Trader implements tNpc {
 				else
 					//clean the item from any lore
 					inv.setItem(i, NBTUtils.cleanItem(item));
+			}
+			//next item please
+			i++;
+		}
+		
+		//reassign the last selected item
+		selectedItem = selected;
+	}
+	
+	/**
+	 * Updates the players inventory resetting all transaction lores.
+	 */
+	protected void setSpecialBlockPrices()
+	{
+		//the inventory that will be reseted
+		Inventory inv = player.getInventory();
+		
+		//save the selectedItem temporary
+		StockItem selected = selectedItem;
+		
+		int i = 0;
+		for ( ItemStack item : inv.getContents() )
+		{
+			if ( selectAndCheckNewItem(item) && status.equals(tNpcStatus.MANAGE_PRICE) )
+			{
+				double value = TGlobalSettings.getBlockValue(item);
+				if ( value != 1.0 )
+				{
+					List<String> lore = new ArrayList<String>();
+					lore.add(ChatColor.GOLD + "Block value: " + ChatColor.YELLOW + String.format("%.2f", value) );
+					inv.setItem(i, NBTUtils.addLore(NBTUtils.cleanItem(item), lore));
+				}
+			//	check if a lore cann be added
+			//	if ( item.getAmount() >= selectedItem.getAmount() )
+			//	{
+				    //set the new lore
+			//	    inv.setItem(i, NBTUtils.addLore(NBTUtils.cleanItem(item), selectedItem.getTempLore(status, item.clone())));
+			//	}
+			//	else
+			//		//clean the item from any lore
+			//		inv.setItem(i, NBTUtils.cleanItem(item));
+			}
+			else
+			{
+				if ( item != null )
+				    inv.setItem(i, NBTUtils.cleanItem(item));
 			}
 			//next item please
 			i++;
