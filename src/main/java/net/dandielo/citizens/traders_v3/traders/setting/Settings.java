@@ -1,5 +1,7 @@
 package net.dandielo.citizens.traders_v3.traders.setting;
 
+import org.bukkit.ChatColor;
+
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.trait.trait.Owner;
 import net.citizensnpcs.api.util.DataKey;
@@ -68,7 +70,9 @@ public class Settings extends TGlobalSettings {
 	
 	//stock name format
 	public String getStockName() {
-		return stockNameFormat.replace("{npc}", npc.getName());
+		//get the npc name and change all abstract color codes into real ones
+		//#request 3 on PiratePad 
+		return stockNameFormat.replace("{npc}", ChatColor.RESET + npc.getName().replace('&', '§') + ChatColor.RESET);
 	}
 	
 	public String getStockFormat() {
