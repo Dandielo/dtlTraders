@@ -341,7 +341,7 @@ public final class StockItem {
 		try
 		{
 			itemAttr = ItemAttr.initAttribute(this, key, value);
-			if ( attr != null )
+			if ( itemAttr != null )
 			    this.attr.put(itemAttr.getClass(), itemAttr);
 			else
 			{

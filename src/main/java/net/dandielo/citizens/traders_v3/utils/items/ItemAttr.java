@@ -344,6 +344,9 @@ public abstract class ItemAttr {
 			if ( attrEntry.key().equals(key) )
 				attr = attrEntry;
 		
+		//if attribute key is not valid return null
+		if ( attr == null ) return null;
+		
 		try 
 		{
 			//debug low
