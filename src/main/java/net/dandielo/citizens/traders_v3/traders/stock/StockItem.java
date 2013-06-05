@@ -149,7 +149,9 @@ public final class StockItem {
 				}
 				else if ( !matcher.group(4).isEmpty() )
 				{
-					value += " " + matcher.group(4);
+					//fix for 2.5 compatibility
+					if ( !matcher.group(4).startsWith("!") )
+					    value += " " + matcher.group(4);
 				}
 			}
 		}
@@ -339,7 +341,14 @@ public final class StockItem {
 		try
 		{
 			itemAttr = ItemAttr.initAttribute(this, key, value);
-			this.attr.put(itemAttr.getClass(), itemAttr);
+			if ( attr != null )
+			    this.attr.put(itemAttr.getClass(), itemAttr);
+			else
+			{
+				//debug message that this key does not exists
+				Debugger.high("The given key is not registered, skipping...");
+				Debugger.high("key: ", key);
+			}
 		} 
 		catch (AttributeInvalidClassException e) 
 		{
