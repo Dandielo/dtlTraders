@@ -10,6 +10,7 @@ import net.dandielo.citizens.traders_v3.core.Debugger;
 import net.dandielo.citizens.traders_v3.core.exceptions.InvalidTraderTypeException;
 import net.dandielo.citizens.traders_v3.core.exceptions.TraderTypeNotFoundException;
 import net.dandielo.citizens.traders_v3.traders.Trader;
+import net.dandielo.citizens.traders_v3.traders.types.Server;
 import net.dandielo.citizens.traders_v3.traits.TraderTrait;
 import net.dandielo.citizens.traders_v3.utils.NBTUtils;
 
@@ -82,18 +83,6 @@ public class tNpcListener implements Listener {
 	@EventHandler
 	public void inventoryOpenEvent(InventoryOpenEvent e)
 	{
-/*		int i = 0;
-		for ( ItemStack item : e.getPlayer().getInventory().getContents() )
-		{
-			if ( item != null )
-			{
-				if ( NBTUtils.isMarked(item) )
-				{
-					e.getPlayer().getInventory().setItem(i, null);
-				}
-			}
-			++i;
-		}*/
 	}
 	
 	@EventHandler(priority = EventPriority.LOW)
@@ -113,6 +102,15 @@ public class tNpcListener implements Listener {
 
 		    	//clean his inventory
 		    	cleaner.addPlayer((Player) e.getPlayer());
+		    }
+		    //in the mode is MANAGE_UNLOCKED, lock it and save items
+		    else
+		    {
+		    	if ( trader.getStatus().equals(tNpcStatus.MANAGE_UNLOCKED) )
+		    	{
+		    		//lock and save the inventory
+		    		((Server)trader).lockAndSave();
+		    	}
 		    }
 		}
 	}

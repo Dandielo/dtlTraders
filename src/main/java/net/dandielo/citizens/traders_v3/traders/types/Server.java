@@ -271,6 +271,19 @@ public class Server extends Trader {
 		}
 	}
 	
+	/**
+	 * Function to lock and save the traders inventory on inventory closing
+	 */
+	public void lockAndSave()
+	{
+		//send message
+		locale.sendMessage(player, "trader-managermode-stock-locked");
+		
+		//change status
+		parseStatus(baseStatus);
+		saveItemsUpponLocking();
+	}
+	
 	@ClickHandler(status = {tNpcStatus.SELL_AMOUNTS}, inventory = InventoryType.TRADER)
 	public void sellAmountsItems(InventoryClickEvent e)
 	{
