@@ -28,7 +28,6 @@ public interface tNpc {
 	 */
 	public boolean onRightClick(ItemStack itemInHand);
 
-	
 	/**
 	 * Handles the inventory click event the for normal mode
 	 * @param e
@@ -43,4 +42,9 @@ public interface tNpc {
 	 */
     public void onManageInventoryClick(InventoryClickEvent e);
     
+    /**
+     * @return
+     * the currents tNpc status
+     */
+    public tNpcStatus getStatus();
 }

@@ -308,7 +308,7 @@ public abstract class Trader implements tNpc {
 				else
 					//clean the item from any lore
 					inv.setItem(i, NBTUtils.cleanItem(item));
-			}
+			}			
 			//next item please
 			i++;
 		}
@@ -340,15 +340,6 @@ public abstract class Trader implements tNpc {
 					lore.add(ChatColor.GOLD + "Block value: " + ChatColor.YELLOW + String.format("%.2f", value) );
 					inv.setItem(i, NBTUtils.addLore(NBTUtils.cleanItem(item), lore));
 				}
-			//	check if a lore cann be added
-			//	if ( item.getAmount() >= selectedItem.getAmount() )
-			//	{
-				    //set the new lore
-			//	    inv.setItem(i, NBTUtils.addLore(NBTUtils.cleanItem(item), selectedItem.getTempLore(status, item.clone())));
-			//	}
-			//	else
-			//		//clean the item from any lore
-			//		inv.setItem(i, NBTUtils.cleanItem(item));
 			}
 			else
 			{

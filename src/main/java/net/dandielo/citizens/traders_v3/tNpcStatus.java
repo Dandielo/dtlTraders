@@ -16,11 +16,14 @@ public enum tNpcStatus
 	MANAGE_AMOUNTS(TRADER, "mAmounts"),
 	MANAGE_PRICE(TRADER, "mPrice"),
 	MANAGE_LIMIT(TRADER, "mLimit"), 
-	MANAGE_UNLOCKED(TRADER, "mUnlocked")
+	MANAGE_UNLOCKED(TRADER, "mUnlocked"),
 	
 	/*
 	 * Banker status declarations
 	 */
+	ACCOUNT_LOCKED(BANKER, "aLocked"),
+	ACCOUNT_UNLOCKED(BANKER, "aUnlocked"),
+	ACCOUNT_MANAGE(BANKER, "aManage"),
 	
 	
 	/*
@@ -41,7 +44,8 @@ public enum tNpcStatus
 	 */
 	tNpcStatus(StatusType type, String statusName)
 	{
-		
+		this.type = type;
+		this.statusName = statusName;
 	}
 	
 	/**
@@ -69,7 +73,7 @@ public enum tNpcStatus
 	
 	public boolean inManagementMode()
 	{
-		return !( this.equals(SELL) || this.equals(BUY) || this.equals(SELL_AMOUNTS) ); 
+		return !( this.equals(SELL) || this.equals(BUY) || this.equals(SELL_AMOUNTS) || this.type.equals(BANKER) ); 
 	}
 	
 	public static tNpcStatus parseBaseManageStatus(tNpcStatus oldStatus, tNpcStatus newStatus)

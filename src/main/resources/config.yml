@@ -99,5 +99,9 @@ trader:
   #denizen support related settings
   denizen:
 banker:
+  account:
+    format: 'Your Bank ;)'
+    max-tabs: 9
+    tab-size: 4
 auction:
 #planned

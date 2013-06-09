@@ -8,6 +8,7 @@ import org.bukkit.inventory.ItemStack;
 import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeInvalidValueException;
 import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeValueNotFoundException;
 import net.dandielo.citizens.traders_v3.tNpcStatus;
+import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
 import net.dandielo.citizens.traders_v3.utils.items.Attribute;
 import net.dandielo.citizens.traders_v3.utils.items.ItemAttr;
 import net.dandielo.citizens.traders_v3.utils.items.flags.StackPrice;
@@ -71,6 +72,9 @@ public class Price extends ItemAttr {
 	@Override
 	public void onStatusLoreRequest(tNpcStatus status, ItemStack target, List<String> lore)
 	{
+		//as because this is the price attribute it can only apply for stock items
+		StockItem item = (StockItem) this.item;
+		
 		double m;
 		//has the item the stack price flag?
 		if ( item.hasFlag(StackPrice.class) )

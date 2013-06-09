@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.dandielo.citizens.traders_v3.tNpcItem;
 import net.dandielo.citizens.traders_v3.tNpcStatus;
 import net.dandielo.citizens.traders_v3.bukkit.DtlTraders;
 import net.dandielo.citizens.traders_v3.core.Debugger;
@@ -14,7 +15,6 @@ import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeInva
 import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeInvalidValueException;
 import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeValueNotFoundException;
 import net.dandielo.citizens.traders_v3.core.tools.StringTools;
-import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
 import net.dandielo.citizens.traders_v3.utils.items.flags.Lore;
 import net.dandielo.citizens.traders_v3.utils.items.flags.StackPrice;
 
@@ -42,7 +42,7 @@ public abstract class ItemFlag {
 	/**
 	 * The item associated with the attribute
 	 */
-	protected StockItem item;
+	protected tNpcItem item;
 	
 	/**
 	 * default constructor (needs a key)
@@ -208,7 +208,7 @@ public abstract class ItemFlag {
 	 * @throws AttributeInvalidClassException 
 	 * @throws AttributeInvalidValueException 
 	 */
-	public static ItemFlag initFlag(StockItem item, String key) throws AttributeInvalidClassException
+	public static ItemFlag initFlag(tNpcItem item, String key) throws AttributeInvalidClassException
 	{
 		//Search for the attribute
 		Attribute attr = null;

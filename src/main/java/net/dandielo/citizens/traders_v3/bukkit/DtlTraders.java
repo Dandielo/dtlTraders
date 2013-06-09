@@ -4,6 +4,7 @@ import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.trait.TraitInfo;
 import net.dandielo.citizens.traders_v3.tNpcListener;
 import net.dandielo.citizens.traders_v3.tNpcManager;
+import net.dandielo.citizens.traders_v3.bankers.setting.BGlobalSettings;
 import net.dandielo.citizens.traders_v3.bukkit.commands.GeneralCommands;
 import net.dandielo.citizens.traders_v3.bukkit.commands.TraderCommands;
 import net.dandielo.citizens.traders_v3.core.Debugger;
@@ -12,6 +13,7 @@ import net.dandielo.citizens.traders_v3.core.commands.CommandManager;
 import net.dandielo.citizens.traders_v3.traders.Trader;
 import net.dandielo.citizens.traders_v3.traders.setting.TGlobalSettings;
 import net.dandielo.citizens.traders_v3.traders.types.Server;
+import net.dandielo.citizens.traders_v3.traits.BankerTrait;
 import net.dandielo.citizens.traders_v3.traits.TraderTrait;
 import net.dandielo.citizens.traders_v3.traits.WalletTrait;
 import net.dandielo.citizens.traders_v3.utils.items.ItemAttr;
@@ -68,15 +70,17 @@ public class DtlTraders extends JavaPlugin {
 		info("Loading config files");
 		//init global settings
 		TGlobalSettings.initGlobalSettings();
+		BGlobalSettings.initGlobalSettings();
 		
 		//register traits
 		CitizensAPI.getTraitFactory().registerTrait(TraitInfo.create(TraderTrait.class).withName("trader"));
+		CitizensAPI.getTraitFactory().registerTrait(TraitInfo.create(BankerTrait.class).withName("banker"));
 		CitizensAPI.getTraitFactory().registerTrait(TraitInfo.create(WalletTrait.class).withName("wallet"));
 		
 		//registering core extensions
 		ItemAttr.registerCoreAttributes();
 		ItemFlag.registerCoreFlags();
-		tNpcManager.registerTraderTypes();
+		tNpcManager.registerTypes();
 		
 		//register type handlers
 		Trader.registerHandlers(Server.class);

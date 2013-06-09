@@ -91,7 +91,7 @@ public class TraderCommands {
 		npc.spawn(sender.getLocation());
 
 		//create a test Trader Npc
-		Trader nTrader = (Trader) tNpcManager.create_tNpc(npc, type, sender);
+		Trader nTrader = (Trader) tNpcManager.create_tNpc(npc, type, sender, TraderTrait.class);
 		nTrader.getSettings().setType(type);
 		
 		//start with the unlocked status, to allow fast stock setting 

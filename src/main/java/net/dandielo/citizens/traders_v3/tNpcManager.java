@@ -10,6 +10,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
 import net.citizensnpcs.api.npc.NPC;
+import net.citizensnpcs.api.trait.Trait;
+import net.dandielo.citizens.traders_v3.bankers.types.Private;
 import net.dandielo.citizens.traders_v3.bukkit.DtlTraders;
 import net.dandielo.citizens.traders_v3.core.Debugger;
 import net.dandielo.citizens.traders_v3.core.exceptions.InvalidTraderTypeException;
@@ -225,7 +227,7 @@ public class tNpcManager {
 	/**
 	 * Registers all core trader types
 	 */
-	public static void registerTraderTypes()
+	public static void registerTypes()
 	{
 		try
 		{
@@ -233,7 +235,10 @@ public class tNpcManager {
 			Debugger.info("Register server trader type");
 			registerType(Server.class);
 			
-			DtlTraders.info("Registered trader types: " + typesAsString());
+			Debugger.info("Register private banker type");
+			registerType(Private.class);
+			
+			DtlTraders.info("Registered types: " + typesAsString());
 		} 
 		catch (TraderTypeRegistrationError e) 
 		{
@@ -244,22 +249,22 @@ public class tNpcManager {
 	/**
 	 * Type registry, stores all registered types
 	 */
-	private final static Map<tNpcType, Class<? extends Trader>> types = new HashMap<tNpcType, Class<? extends Trader>>();
+	private final static Map<tNpcType, Class<? extends tNpc>> types = new HashMap<tNpcType, Class<? extends tNpc>>();
 	
 	/**
 	 * Registers the given class as a new type for use by this plugin. The class needs to have the tNpcType addnotation filled.
-	 * @param clazz
+	 * @param class1
 	 * Class to register
 	 * @throws TraderTypeRegistrationError
 	 * Thrown when the class does not have the tNpcType addnotation
 	 */
-	public static void registerType(Class<? extends Trader> clazz) throws TraderTypeRegistrationError
+	public static void registerType(Class<? extends tNpc> class1) throws TraderTypeRegistrationError
 	{
 		//check for addnotation
-		if ( !clazz.isAnnotationPresent(tNpcType.class) ) throw new TraderTypeRegistrationError();
+		if ( !class1.isAnnotationPresent(tNpcType.class) ) throw new TraderTypeRegistrationError();
 		
 		//save the class
-		types.put(clazz.getAnnotation(tNpcType.class), clazz);
+		types.put(class1.getAnnotation(tNpcType.class), class1);
 	}
 	
 	/**
@@ -275,7 +280,7 @@ public class tNpcManager {
 	 * @throws TraderTypeNotFoundException
 	 * @throws InvalidTraderTypeException
 	 */
-	public static tNpc create_tNpc(NPC npc, String type, Player player) throws TraderTypeNotFoundException, InvalidTraderTypeException
+	public static tNpc create_tNpc(NPC npc, String type, Player player, Class<? extends Trait> traitClazz) throws TraderTypeNotFoundException, InvalidTraderTypeException
 	{
 		tNpcType typeInfo = null;
 		for ( tNpcType info : types.keySet() )
@@ -294,17 +299,17 @@ public class tNpcManager {
 		tNpc resultNpc = null;
 		try
 		{
-			if ( clazz.getConstructor(TraderTrait.class, WalletTrait.class, Player.class) != null )
+			if ( clazz.getConstructor(traitClazz, WalletTrait.class, Player.class) != null )
 			{
-				resultNpc = (Trader) clazz
-			        .getConstructor(TraderTrait.class, WalletTrait.class, Player.class)
-					.newInstance(npc.getTrait(TraderTrait.class), npc.getTrait(WalletTrait.class), player);
+				resultNpc = clazz
+			        .getConstructor(traitClazz, WalletTrait.class, Player.class)
+					.newInstance(npc.getTrait(traitClazz), npc.getTrait(WalletTrait.class), player);
 			}
 		}
 		catch (Exception e)
 		{
 			//debug critical
-			Debugger.critical("Invalid trader type: " + typeInfo.name() + ", author: " + typeInfo.author());
+			Debugger.critical("Invalid type: " + typeInfo.name() + ", author: " + typeInfo.author());
 			throw new InvalidTraderTypeException(type);
 		}
 		return resultNpc;

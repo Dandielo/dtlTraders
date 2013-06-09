@@ -1,4 +1,4 @@
-package net.dandielo.citizens.traders_v3.traders.stock;
+package net.dandielo.citizens.traders_v3.bankers.tabs;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,7 +20,6 @@ import net.dandielo.citizens.traders_v3.utils.items.ItemAttr;
 import net.dandielo.citizens.traders_v3.utils.items.ItemFlag;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Amount;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Name;
-import net.dandielo.citizens.traders_v3.utils.items.attributes.Price;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Slot;
 import net.dandielo.citizens.traders_v3.utils.items.flags.Lore;
 
@@ -31,7 +30,8 @@ import org.bukkit.inventory.ItemStack;
  * Item structure using in each trader stock, this structure allows to save and store more data than the commom ItemStack bukkit structure.
  * @author dandielo
  */
-public final class StockItem extends tNpcItem {
+@SuppressWarnings({"all"})
+public final class BankItem extends tNpcItem {
 	/**
 	 * Pattern used for loading data form strings
 	 */
@@ -57,7 +57,7 @@ public final class StockItem extends tNpcItem {
 	 * @param item
 	 *     bukkit item stack item
 	 */
-	public StockItem(ItemStack item)
+	public BankItem(ItemStack item)
 	{
 		this.item = new ItemStack(item.getType(), 1, ItemUtils.itemHasDurability(item) ? 0 : item.getDurability()); 
 	}
@@ -68,7 +68,7 @@ public final class StockItem extends tNpcItem {
 	 * @param format
 	 *     the formated save string
 	 */
-	public StockItem(String format)
+	public BankItem(String format)
 	{
 		load(format);
 	}
@@ -80,7 +80,7 @@ public final class StockItem extends tNpcItem {
 	 * @param list
 	 *     the lore that should be applied to the item
 	 */
-	public StockItem(String format, List<String> list)
+	public BankItem(String format, List<String> list)
 	{
 		//load the item
 		this(format);
@@ -478,46 +478,9 @@ public final class StockItem extends tNpcItem {
 	}
 
 	/**
-	 * Attribute helper methods, these methods are just shortcuts wti safety checks for some attributes.
+	 * Attribute helper methods, these methods are just shortcuts with safety checks for some attributes.
 	 */
 
-	/**
-	 * @return
-	 *     true if the price attribute is present
-	 */
-	public boolean hasPrice()
-	{
-		return hasAttr(Price.class);
-	}
-	
-	/**
-	 * Gets the items price if the attribute is present.
-	 * @return
-	 *     the price set, or <b>-1.0</b> instead
-	 */
-	public double getPrice()
-	{
-		return hasAttr(Price.class) ? getAttr(Price.class).getPrice() : -1.0;
-	}
-
-	/**
-	 * @return
-	 *     the price values as a formated string
-	 */
-	public String getPriceFormated()
-	{
-		return hasPrice() ? String.format("%.2f", getPrice()) : "none";
-	}
-	
-	/**
-	 * @return
-	 *     the price attribute, if there is no attrib it will create one.
-	 */
-	public Price getPriceAttr()
-	{
-		return tryGetAttr(Price.class);
-	}
-	
 	/**
 	 * Gets the items slot attribute, always a valid value.
 	 * @return
@@ -546,15 +509,6 @@ public final class StockItem extends tNpcItem {
 	{
 		getAttr(Slot.class).setSlot(slot);
 	}
-	
-	/**
-	 * @return
-	 *     true if more than 1 amount is set
-	 */
-	public boolean hasMultipleAmounts()
-	{
-		return getAttr(Amount.class).hasMultipleAmounts();
-	}
 
 	/**
 	 * @return
@@ -574,25 +528,6 @@ public final class StockItem extends tNpcItem {
 	public int getAmount(int i)
 	{
 		return getAttr(Amount.class).getAmount(i);
-	}
-	
-	/**
-	 * @return
-	 *     all saved amounts
-	 */
-	public List<Integer> getAmounts()
-	{
-		return getAttr(Amount.class).getAmounts();
-	}
-	
-	/**
-	 * Adds a new amount to the stock item
-	 * @param a
-	 * amount that should be added
-	 */
-	public void addAmount(int a)
-	{ 
-		getAttr(Amount.class).addAmount(a);
 	}
 	
 	/**
@@ -629,7 +564,7 @@ public final class StockItem extends tNpcItem {
 		loreManaged = managed;
 	}
 	
-	private boolean standaloneAttrCheck(StockItem item)
+	private boolean standaloneAttrCheck(BankItem item)
 	{
 		boolean containsAll = true;
 		for ( ItemAttr key : item.attr.values() )
@@ -639,7 +574,7 @@ public final class StockItem extends tNpcItem {
 		return containsAll;
 	}
 	
-	private boolean standaloneFlagCheck(StockItem item)
+	private boolean standaloneFlagCheck(BankItem item)
 	{
 		boolean containsAll = true;
 		for ( ItemFlag key : item.flags.values() )
@@ -649,7 +584,7 @@ public final class StockItem extends tNpcItem {
 		return containsAll;
 	}
 	
-	private boolean attributeMissmatch(StockItem item)
+	private boolean attributeMissmatch(BankItem item)
 	{
 		return !(standaloneAttrCheck(item) && standaloneFlagCheck(item));
 	}
@@ -661,7 +596,7 @@ public final class StockItem extends tNpcItem {
 	 * @return
 	 *     true if equal 
 	 */
-	public final boolean equalsStrong(StockItem item)
+	public final boolean equalsStrong(BankItem item)
 	{
 		boolean equals;
 		//check id
@@ -732,7 +667,7 @@ public final class StockItem extends tNpcItem {
 	 * @return
 	 *     true if equal 
 	 */
-	public final boolean equalsWeak(StockItem item)
+	public final boolean equalsWeak(BankItem item)
 	{
 		boolean equals;
 		//check id
@@ -800,7 +735,7 @@ public final class StockItem extends tNpcItem {
 	@Override
 	public final boolean equals(Object object)
 	{
-		return (object instanceof StockItem && equalsStrong((StockItem)object));
+		return (object instanceof BankItem && equalsStrong((BankItem)object));
 	}
 	
 	@Override

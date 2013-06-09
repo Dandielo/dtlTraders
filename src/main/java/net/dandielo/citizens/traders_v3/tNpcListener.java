@@ -5,12 +5,14 @@ import java.util.TimerTask;
 
 import net.citizensnpcs.api.event.NPCLeftClickEvent;
 import net.citizensnpcs.api.event.NPCRightClickEvent;
+import net.dandielo.citizens.traders_v3.bankers.Banker;
 import net.dandielo.citizens.traders_v3.bukkit.Perms;
 import net.dandielo.citizens.traders_v3.core.Debugger;
 import net.dandielo.citizens.traders_v3.core.exceptions.InvalidTraderTypeException;
 import net.dandielo.citizens.traders_v3.core.exceptions.TraderTypeNotFoundException;
 import net.dandielo.citizens.traders_v3.traders.Trader;
 import net.dandielo.citizens.traders_v3.traders.types.Server;
+import net.dandielo.citizens.traders_v3.traits.BankerTrait;
 import net.dandielo.citizens.traders_v3.traits.TraderTrait;
 import net.dandielo.citizens.traders_v3.utils.NBTUtils;
 
@@ -50,7 +52,7 @@ public class tNpcListener implements Listener {
 	@EventHandler
 	public void inventoryClickEvent(InventoryClickEvent e)
 	{
-		Trader trader = manager.getTraderRelation(e.getWhoClicked());
+		tNpc trader = manager.getRelation(e.getWhoClicked().getName(), tNpc.class);
 
 		if ( trader != null )
 		{
@@ -88,14 +90,14 @@ public class tNpcListener implements Listener {
 	@EventHandler(priority = EventPriority.LOW)
 	public void inventoryCloseEvent(InventoryCloseEvent e)
 	{
-		Trader trader = manager.getTraderRelation(e.getPlayer());
-		if ( trader != null )
+		tNpc npc = manager.getRelation(e.getPlayer().getName(), tNpc.class);
+		if ( npc != null )
 		{
 			//unregister the inventory as a traderInventory
 			manager.removeOpenedInventory((Player) e.getPlayer());
-			
+
 			//if the trader is not in mm, remove the relation too
-		    if ( !trader.getStatus().inManagementMode() )
+		    if ( !npc.getStatus().inManagementMode() )
 		    {			
 		    	//remove the relation
 		    	manager.removeRelation((Player) e.getPlayer());
@@ -106,17 +108,17 @@ public class tNpcListener implements Listener {
 		    //in the mode is MANAGE_UNLOCKED, lock it and save items
 		    else
 		    {
-		    	if ( trader.getStatus().equals(tNpcStatus.MANAGE_UNLOCKED) )
+		    	if ( npc.getStatus().equals(tNpcStatus.MANAGE_UNLOCKED) )
 		    	{
 		    		//lock and save the inventory
-		    		((Server)trader).lockAndSave();
+		    		((Server)npc).lockAndSave();
 		    	}
 		    }
 		}
 	}
 
-	//npc events
-	@EventHandler
+	//npc events for traders
+	@EventHandler(priority=EventPriority.HIGHEST)
 	public void npcLeftClickEvent(NPCLeftClickEvent e)
 	{
 		//check trait
@@ -132,7 +134,7 @@ public class tNpcListener implements Listener {
 
 		    if ( !manager.inRelation(e.getClicker()) )
 			{
-				trader = (Trader) tNpcManager.create_tNpc(e.getNPC(), traderTrait.getType(), e.getClicker());
+				trader = (Trader) tNpcManager.create_tNpc(e.getNPC(), traderTrait.getType(), e.getClicker(), TraderTrait.class);
 				manager.registerRelation(e.getClicker(), trader);
 			}
 			else
@@ -141,7 +143,7 @@ public class tNpcListener implements Listener {
 				if ( !trader.equals(e.getNPC()) )
 				{
 					manager.removeRelation(e.getClicker());
-					trader = (Trader) tNpcManager.create_tNpc(e.getNPC(), traderTrait.getType(), e.getClicker());
+					trader = (Trader) tNpcManager.create_tNpc(e.getNPC(), traderTrait.getType(), e.getClicker(), TraderTrait.class);
 					manager.registerRelation(e.getClicker(), trader);
 				}
 			}
@@ -165,7 +167,7 @@ public class tNpcListener implements Listener {
 		}
 	}
 
-	@EventHandler
+	@EventHandler(priority=EventPriority.HIGHEST)
 	public void npcRightClickEvent(NPCRightClickEvent e) 
 	{
 		//check trait
@@ -181,12 +183,20 @@ public class tNpcListener implements Listener {
 		{
 			if ( !manager.inRelation(e.getClicker()) )
 			{
-				trader = (Trader) tNpcManager.create_tNpc(e.getNPC(), traderTrait.getType(), e.getClicker());
+				trader = (Trader) tNpcManager.create_tNpc(e.getNPC(), traderTrait.getType(), e.getClicker(), TraderTrait.class);
 				manager.registerRelation(e.getClicker(), trader);
 			}
 			else
 			{
 				trader = manager.getTraderRelation(e.getClicker());
+				
+				//check if its the same NPC if not then close the old manager mode and open the next NPC i normal mode
+				if ( !trader.equals(e.getNPC()) )
+				{
+					manager.removeRelation(e.getClicker());
+					trader = (Trader) tNpcManager.create_tNpc(e.getNPC(), traderTrait.getType(), e.getClicker(), TraderTrait.class);
+					manager.registerRelation(e.getClicker(), trader);
+				}
 			}
 
 			if ( !trader.onRightClick(e.getClicker().getItemInHand()) )
@@ -209,6 +219,72 @@ public class tNpcListener implements Listener {
 			Debugger.critical("Contact the dev to fix this!");
 		}
 	}
+	
+	
+	//npc events for bankers
+	@EventHandler(priority=EventPriority.HIGHEST)
+	public void bankerLeftClickEvent(NPCLeftClickEvent e)
+	{
+		//check trait
+		if ( !e.getNPC().hasTrait(BankerTrait.class) ) return;
+
+		//check permission
+		if ( !perms.has(e.getClicker(), "dtl.banker.use") ) return;
+
+		BankerTrait bankerTrait = e.getNPC().getTrait(BankerTrait.class);
+		Banker banker;
+		try 
+		{
+			banker = (Banker) tNpcManager.create_tNpc(e.getNPC(), bankerTrait.getType(), e.getClicker(), BankerTrait.class);
+			manager.registerRelation(e.getClicker(), banker);
+
+			banker.onLeftClick(e.getClicker().getItemInHand());
+		}
+		catch (TraderTypeNotFoundException e1) 
+		{
+			//debug critical
+			Debugger.critical("Banker type was not found, type: ", bankerTrait.getType());
+			Debugger.critical("Did you changed the save file?");
+		} 
+		catch (InvalidTraderTypeException e1) 
+		{
+			//debug critical
+			Debugger.critical("TBanker type is invalid, type: ", bankerTrait.getType());
+			Debugger.critical("Contact the dev to fix this!");
+		}
+	}
+
+	@EventHandler(priority=EventPriority.HIGHEST)
+	public void bankerightClickEvent(NPCRightClickEvent e) 
+	{
+		//check trait
+		if ( !e.getNPC().hasTrait(BankerTrait.class) ) return;
+
+		//check permission
+		if ( !perms.has(e.getClicker(), "dtl.banker.use") ) return;
+
+		BankerTrait bankerTrait = e.getNPC().getTrait(BankerTrait.class);
+		Banker banker;
+		try 
+		{
+			banker = (Banker) tNpcManager.create_tNpc(e.getNPC(), bankerTrait.getType(), e.getClicker(), BankerTrait.class);
+			manager.registerRelation(e.getClicker(), banker);
+
+			banker.onRightClick(e.getClicker().getItemInHand());
+		}
+		catch (TraderTypeNotFoundException e1) 
+		{
+			//debug critical
+			Debugger.critical("Banker type was not found, type: ", bankerTrait.getType());
+			Debugger.critical("Did you changed the save file?");
+		} 
+		catch (InvalidTraderTypeException e1) 
+		{
+			//debug critical
+			Debugger.critical("TBanker type is invalid, type: ", bankerTrait.getType());
+			Debugger.critical("Contact the dev to fix this!");
+		}
+	}
 
 	/**
 	 * Cleans the players inventory from any "dtltrader" lore that is applied to ease the way of using traders. 
@@ -222,18 +298,11 @@ public class tNpcListener implements Listener {
 		private Timer timer;
 		
 		/**
-		 * The list that contains players that should be cleaned on the next tick
-		 */
-	//	private List<Player> players = Collections.synchronizedList(new ArrayList<Player>());
-		
-		/**
 		 * Adds a player to the list, that will clean his inventory for dtltrader lores
 		 * @param player
 		 */
 		public void addPlayer(final Player player)
-		{
-		//	players.listIterator().add(player);
-			
+		{			
 			TimerTask task = new TimerTask()
 			{
 				private Player thisPlayer = player;
@@ -246,8 +315,7 @@ public class tNpcListener implements Listener {
 					{
 						if ( item != null )
 						{
-							//if the item is marked then some1 could only steal it ;) 
-							//so we are cleaning the inventory from marked items
+							//clean transaction lores 
 							thisPlayer.getInventory().setItem(i, NBTUtils.cleanItem(item));
 						}
 						++i;
@@ -258,8 +326,6 @@ public class tNpcListener implements Listener {
 			//so this one for a fast cleanup
 			timer.schedule(task, 100);
 			
-			//the second one if the first fails
-		//	timer.schedule(task, 1500);
 		}
 		
 		public void start()
