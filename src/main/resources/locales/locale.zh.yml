@@ -1,0 +1,116 @@
+ver: 1.1.3
+messages:
+  plugin-reload: ^6Successfuly reloaded ^3dtlTraders
+  plugin-command-message: 'Unknown command. Type "trader help" for help.'
+  trader-created: '^6聘請了店員：^3{trader}'
+  trader-hire-limit: "^6不能再聘請更多店員了！"
+  trader-stock-item-add: "^6已添加。"
+  trader-stock-item-update: "^6已更新。"
+  trader-stock-item-select: "^6已選擇。"
+  trader-stock-item-invalid: "^6無效物品。"
+  trader-stock-item-remove: "^6已移除。"
+  trader-stock-toggled: "^6已切換到^3{stock}^6模式。"
+  trader-stock-back: "^6已切換到正常模式。"
+  trader-transaction-item: '^6{item}, 價格：^e{price}'
+  trader-transaction-success: "§e用 ^3{price} §e{action} 了 ^3{amount} §e個此物品。"
+  trader-transaction-failed-player-money: "§e[Shopkeeper] -> You: 你沒有足夠的錢買這個。"
+  trader-transaction-failed-trader-money: "§e[Shopkeeper] -> You: 呃，我已經沒錢買入這個了。要不幫忙光顧一下我的小店？"
+  trader-transaction-failed-inventory: "§c背包已滿。"
+  trader-transaction-failed-limit: "§c物品限制已達上限。"
+  trader-managermode-stock-locked: "^6已保存所有物品到庫存並上鎖。"
+  trader-managermode-stock-unlocked: "^6已解鎖庫存。"
+  trader-managermode-toggled: "^6已切換到 ^3{mode} ^6模式。"
+  trader-managermode-enabled: "^6已切換 ^3{npc} ^6到管理模式。"
+  trader-managermode-disabled: "^6已切換 ^3{npc} ^6到銷售模式。"
+  pattern-save-fail-exists: ^6This pattern already exists {pattern}
+  pattern-save-success: ^6Successfuly created ^3{pattern} ^6pattern
+  banker-created: '^6You created a new banker: {banker}'
+  banker-item-update: ^6Item updated
+  banker-tab-switch: ^6Switched to ^3{tab}
+  banker-tab-select-item: ^6Select a new tab item
+  banker-tab-select-item-success: ^6New item was set
+  banker-tab-select-item-canceled: ^6Selecting was aborted
+  banker-tab-buy-success: ^6Bought a new tab
+  banker-deposit-success: ^6Item deposited
+  banker-withdraw-success: ^6Item withdrawed
+  banker-withdraw-item: ^3Check the locale, this message is not set!
+  wallet-balance: '^6Wallet balance: ^3{amount}'
+  wallet-invalid: ^6You can not use this command on this wallet type
+  wallet-withdraw: ^6Withdrawed ^3{amount}
+  wallet-deposit: ^6Deposited ^3{amount}
+  wallet-withdraw-fail: ^6Is there enough money to withdraw from this wallet?
+  wallet-deposit-fail: You dont have enought money
+  denizen-item-hint: '{item}: {price}'
+  error-npc-not-selected: "^6未選擇任何店員。"
+  error-nopermission-creative: "^6沒有在創造模式下編輯的權限。"
+  error-nopermission-command: "^6沒有使用此命令的權限。"
+  error-nopermission: "^6沒有這樣做的權限。"
+  error-argument-missing: '^6缺少變量：^3{argument}'
+  error-argument-invalid: '^6錯誤變量：^3{argument}'
+  error-managermode-enabled: "^6無法開啟管理模式。"
+  error-command-invalid: 'Unknown command. Type "help" for help.'
+  key-value: '^6{key}: ^3{value}'
+  key-change: '^6已更改 {key}: ^3{value}'
+keywords:
+  type: "類型"
+  trader-type: "商店"
+  banker-type: Banker
+  trader-market: "市場店員"
+  trader-server: "服務器店員"
+  trader-player: "玩家店員"
+  banker-money: Money Banker
+  banker-private: Private Banker
+  stack-price: Stack price
+  tab-price: Tab price
+  stock-amounts: Amounts choosing
+  stock-start: Start stock
+  stock-size: Stock size
+  stock-name: Stock name
+  stock-sell: "購入"
+  stock-buy: "出售"
+  stock: "編輯庫存"
+  pattern: Patterns
+  wallet: Wallet
+  wallet-type: Wallet type
+  wallet-player: Target player
+  wallet-balance: Balance
+  wallet-deposit: Deposited
+  wallet-withdraw: Withdrawed
+  bought: 購入
+  owner: Owner
+  limit: Limit
+  price: "價格"
+  name: Name
+  sold: 售出
+  enabled: Enabled
+  disabled: Disabled
+ui:
+  buy:
+    name: "^r^6購入模式"
+    lore:
+    - "^7點擊切換到出售模式"
+  sell:
+    name: "^r^6出售模式"
+    lore:
+    - "^7點擊切換到購入模式"
+  back:
+    name: "^r^6返回"
+    lore:
+    - "^7返回到庫存列表"
+  price:
+    name: "^r^6價格管理"
+    lore:
+    - "^7點擊切換到價格管理模式"
+  limit:
+    name: "^r^6上限管理"
+    lore:
+    - "^7點擊切換到上限管理模式"
+  lock:
+    name: "^r^6上鎖"
+    lore:
+    - "^7點擊保存所有物品到庫存并上锁"
+  unlock:
+    name: "^r^6解鎖"
+    lore:
+    - "^7點擊解鎖庫存"
+    - "^7開啟物品編輯模式"
