@@ -16,6 +16,7 @@ import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeInva
 import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeValueNotFoundException;
 import net.dandielo.citizens.traders_v3.core.tools.StringTools;
 import net.dandielo.citizens.traders_v3.utils.items.flags.Lore;
+import net.dandielo.citizens.traders_v3.utils.items.flags.Splash;
 import net.dandielo.citizens.traders_v3.utils.items.flags.StackPrice;
 
 import org.bukkit.ChatColor;
@@ -289,6 +290,7 @@ public abstract class ItemFlag {
 		try 
 		{
 			registerFlag(StackPrice.class);
+			registerFlag(Splash.class);
 			registerFlag(Lore.class);
 		//	registerFlag(PaternPrice.class);
 		//	registerFlag(Price.class);
