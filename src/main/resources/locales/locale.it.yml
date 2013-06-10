@@ -78,6 +78,11 @@ keywords:
   stock-sell: Vendi stock
   stock-amounts: Quantità stock
   stock: Stock
+  wallet-type: Tipo Wallet
+  wallet-player: Player bersaglio
+  wallet-balance: Bilancio
+  wallet-deposit: Depositato
+  wallet-withdraw: Ritirato
 ui:
   limit:
     name: ^r^6Modifica limite
