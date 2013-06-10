@@ -3,6 +3,7 @@ package net.dandielo.citizens.traders_v3.utils;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
+import net.dandielo.citizens.traders_v3.bankers.tabs.BankItem;
 import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
 
 public class ItemUtils {
@@ -14,12 +15,12 @@ public class ItemUtils {
 		return ( id >= 298 && id <= 317 ) || ( id >= 290 && id <= 294 ) || ( id >= 283 && id <= 286 ) || ( id >= 267 && id <= 279 ) || ( id >= 256 && id <= 259 ) || id == 261;// ? true : false );
 	}
 	
-	public static StockItem createStockItem(ItemStack bItem)
+	public static StockItem createStockItem(ItemStack vItem)
 	{
 		//creating a clean item
-		StockItem sItem = new StockItem(bItem);
+		StockItem sItem = new StockItem(vItem);
 		//getting data out of it (by force ;>)
-		sItem.factorize(bItem);
+		sItem.factorize(vItem);
 		//returning the item
 		return sItem;
 	}
@@ -37,5 +38,15 @@ public class ItemUtils {
 			return new ItemStack(mat, 1, Byte.parseByte(d[1]));
 		else
 			return new ItemStack(mat);
+	}
+
+	public static BankItem createBankItem(ItemStack vItem)
+	{
+		//creating a clean item
+		BankItem bItem = new BankItem(vItem);
+		//getting data out of it (by force ;>)
+		bItem.factorize(vItem); 
+		//returning the item
+		return bItem;
 	}
 }

@@ -1,5 +1,6 @@
 package net.dandielo.citizens.traders_v3.bukkit;
 
+import org.bukkit.ChatColor;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 import net.milkbowl.vault.economy.Economy;
@@ -22,7 +23,7 @@ public class Econ {
         {
         	//economy exists, plugin enabled
         	economy = rspEcon.getProvider();
-        	DtlTraders.info("Economy plugin: " + economy.getName());
+        	DtlTraders.info("Economy plugin: " + ChatColor.YELLOW + economy.getName());
         	enabled = true;
         } 
         else 

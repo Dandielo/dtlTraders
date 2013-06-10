@@ -4,15 +4,14 @@ import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.trait.TraitInfo;
 import net.dandielo.citizens.traders_v3.tNpcListener;
 import net.dandielo.citizens.traders_v3.tNpcManager;
+import net.dandielo.citizens.traders_v3.bankers.backend.AccountLoader;
 import net.dandielo.citizens.traders_v3.bankers.setting.BGlobalSettings;
 import net.dandielo.citizens.traders_v3.bukkit.commands.GeneralCommands;
 import net.dandielo.citizens.traders_v3.bukkit.commands.TraderCommands;
 import net.dandielo.citizens.traders_v3.core.Debugger;
 import net.dandielo.citizens.traders_v3.core.PluginSettings;
 import net.dandielo.citizens.traders_v3.core.commands.CommandManager;
-import net.dandielo.citizens.traders_v3.traders.Trader;
 import net.dandielo.citizens.traders_v3.traders.setting.TGlobalSettings;
-import net.dandielo.citizens.traders_v3.traders.types.Server;
 import net.dandielo.citizens.traders_v3.traits.BankerTrait;
 import net.dandielo.citizens.traders_v3.traits.TraderTrait;
 import net.dandielo.citizens.traders_v3.traits.WalletTrait;
@@ -35,6 +34,7 @@ public class DtlTraders extends JavaPlugin {
 	private static DtlTraders instance;
 	
 	//plugin resources
+	AccountLoader accLoader;
 	
 	@Override
 	public void onLoad()
@@ -82,9 +82,6 @@ public class DtlTraders extends JavaPlugin {
 		ItemFlag.registerCoreFlags();
 		tNpcManager.registerTypes();
 		
-		//register type handlers
-		Trader.registerHandlers(Server.class);
-		
 		//register events
 		getServer().getPluginManager().registerEvents(tNpcListener.instance(), this);
 		
@@ -100,8 +97,18 @@ public class DtlTraders extends JavaPlugin {
 		//init Wallets
 		initWallets();
 		
+		//load all accounts
+		accLoader = AccountLoader.accLoader;
+		info("Accounts loaded: " + ChatColor.YELLOW + accLoader.accountsLoaded());
+		
 		//enabled info
 		info("Enabled");
+	}
+	
+	@Override
+	public void onDisable()
+	{
+		accLoader.save();
 	}
 	
 	private void initDenizens()

@@ -1,5 +1,6 @@
 package net.dandielo.citizens.traders_v3.bukkit;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
@@ -22,7 +23,7 @@ public class Perms {
         if (permissionProvider != null)
         {
             permission = permissionProvider.getProvider();
-        	DtlTraders.info("Permission plugin: " + permission.getName());
+        	DtlTraders.info("Permission plugin: " + ChatColor.YELLOW + permission.getName());
         }
         else
         {

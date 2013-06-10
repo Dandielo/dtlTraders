@@ -82,6 +82,7 @@ public class AccountLoader {
 
 		//reload the config (load accounts into memory)
 		reload();
+		save();
 	}
 	
 	private FileConfiguration _tryLoad(File file)
@@ -127,6 +128,13 @@ public class AccountLoader {
 	{
 		try
 		{
+			pAccFC = new YamlConfiguration(); 
+			for ( Account account : accounts.values() )
+			{
+				pAccFC.set(account.getOwner() + ".type", account.getType().name().toLowerCase());
+				account.onSave(pAccFC.getConfigurationSection(account.getOwner()));
+			}
+			
 			//save to file
 			pAccFC.save(pAccFile);
 		}
@@ -155,6 +163,9 @@ public class AccountLoader {
 		//save the data
 		account.onSave(pAccFC.getConfigurationSection(owner));
 
+		//save to file
+		save();
+		
 		//return the new acc
 		return account;
 	}
@@ -177,5 +188,10 @@ public class AccountLoader {
 		    account.onLoad(section);
 		
 		return account;
+	}
+	
+	public int accountsLoaded()
+	{
+		return accounts.size();
 	}
 }

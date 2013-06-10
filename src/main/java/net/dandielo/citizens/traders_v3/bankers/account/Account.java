@@ -146,6 +146,15 @@ public abstract class Account implements InventoryHolder {
 	}
 	
 	/**
+	 * @return
+	 * true if the given slot is in the UI row
+	 */
+	public boolean isUIRow(int slot)
+	{
+		return slot >= (tabSize-1)*9 && slot < (tabSize*9);
+	}
+	
+	/**
 	 * Returns the new created inventory that fits the account and banker settings
 	 */
 	@Override
@@ -154,15 +163,16 @@ public abstract class Account implements InventoryHolder {
 		Inventory inventory = Bukkit.createInventory(this, tabSize*9, 
 				name.replace("{player}", owner).replace("{npc}", settings.getNpcName())
 				);
-		
-		for ( BankItem item : tabs.get(0).getItems() )
-		{
-			//add the item to the inventory
-			inventory.setItem(item.getSlot(), item.getItem());
-		}
-		
 		return inventory;
 	}
+	
+	public abstract void tabSwitch(Tab tab, Inventory inventory);
+	
+	/**
+	 * Sets the UI part of the bankers inventory, is different for guild and private bankers. 
+	 * Guild bankers UI depends on a members status.
+	 */
+	public abstract void setTabUI(Inventory inventory);
 	
 	/**
 	 * Adds a new tab to the account

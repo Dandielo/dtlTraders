@@ -10,8 +10,8 @@ import org.bukkit.inventory.ItemStack;
 
 public abstract class Tab {
 
-	protected String name;
-	protected ItemStack icon;
+	protected String name = "Bank tab";
+	protected ItemStack icon = new BankItem("35 a:1 s:0 n:" + name).getItem();
 	protected List<String> desc;
 	
 	protected List<BankItem> items = new ArrayList<BankItem>();	

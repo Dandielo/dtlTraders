@@ -11,6 +11,7 @@ import org.bukkit.inventory.Inventory;
 
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.trait.Trait;
+import net.dandielo.citizens.traders_v3.bankers.Banker;
 import net.dandielo.citizens.traders_v3.bankers.types.Private;
 import net.dandielo.citizens.traders_v3.bukkit.DtlTraders;
 import net.dandielo.citizens.traders_v3.core.Debugger;
@@ -238,6 +239,11 @@ public class tNpcManager {
 			Debugger.info("Register private banker type");
 			registerType(Private.class);
 			
+			//register type handlers
+			Trader.registerHandlers(Server.class);
+			Banker.registerHandlers(Private.class);
+			
+			//send message with registered types 
 			DtlTraders.info("Registered types: " + typesAsString());
 		} 
 		catch (TraderTypeRegistrationError e) 

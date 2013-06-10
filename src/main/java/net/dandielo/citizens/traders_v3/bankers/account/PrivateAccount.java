@@ -1,9 +1,12 @@
 package net.dandielo.citizens.traders_v3.bankers.account;
 
+import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 
+import net.dandielo.citizens.traders_v3.bankers.tabs.BankItem;
 import net.dandielo.citizens.traders_v3.bankers.tabs.Tab;
 
 public class PrivateAccount extends Account {
@@ -17,6 +20,14 @@ public class PrivateAccount extends Account {
 	{
 		//clear the inventory
 		inventory.clear();
+		
+		this.setTabUI(inventory);
+		
+		for ( BankItem item : tab.getItems() )
+		{
+			//add the item to the inventory
+			inventory.setItem(item.getSlot(), item.getItem());
+		}
 	}
 
 	@Override
@@ -25,6 +36,8 @@ public class PrivateAccount extends Account {
 		maxSize = data.getInt("max-size", maxSize);
 	    tabSize = data.getInt("tab-size", tabSize);
 		name = data.getString("name", name);
+		
+		tabs.clear();
 		
 		ConfigurationSection tabs = data.getConfigurationSection("tabs");
 		for ( String tabId : tabs.getKeys(false) )
@@ -48,6 +61,21 @@ public class PrivateAccount extends Account {
 			tab.onSave(data.getConfigurationSection("tabs.tab_" + i));
 			
 			++i;
+		}
+	}
+
+	@Override
+	public void setTabUI(Inventory inventory)
+	{
+		int i = (tabSize-1)*9, j = 0;
+		for ( Tab tab : tabs )
+		{
+			inventory.setItem(i++, tab.getIcon());
+			++j;
+		}
+		for ( ; j < maxSize ; ++j )
+		{
+			inventory.setItem(i++, new ItemStack(Material.WOOL));
 		}
 	}
 

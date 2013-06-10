@@ -7,8 +7,8 @@ import net.citizensnpcs.api.util.DataKey;
 
 public class Settings extends BGlobalSettings {
 	
-	private String accountName;
-	private int maxVisibleTabs;
+	private String accountName = getDefaultAccountNameFormat();
+	private int maxVisibleTabs = getDefaultMaxTabs();
 
 //	private double withdrawFee;
 //	private double depositFee;

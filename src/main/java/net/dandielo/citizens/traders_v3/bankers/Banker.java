@@ -10,20 +10,25 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 
 import net.citizensnpcs.api.npc.NPC;
 import net.dandielo.citizens.traders_v3.tNpc;
 import net.dandielo.citizens.traders_v3.tNpcStatus;
 import net.dandielo.citizens.traders_v3.bankers.account.Account;
 import net.dandielo.citizens.traders_v3.bankers.setting.Settings;
+import net.dandielo.citizens.traders_v3.bankers.tabs.BankItem;
+import net.dandielo.citizens.traders_v3.bankers.tabs.Tab;
 import net.dandielo.citizens.traders_v3.bukkit.Perms;
 import net.dandielo.citizens.traders_v3.core.Debugger;
 import net.dandielo.citizens.traders_v3.core.locale.LocaleManager;
 import net.dandielo.citizens.traders_v3.core.tools.StringTools;
 import net.dandielo.citizens.traders_v3.traders.clicks.ClickHandler;
+import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
 import net.dandielo.citizens.traders_v3.traders.wallet.Wallet;
 import net.dandielo.citizens.traders_v3.traits.BankerTrait;
 import net.dandielo.citizens.traders_v3.traits.WalletTrait;
+import net.dandielo.citizens.traders_v3.utils.ItemUtils;
 
 public abstract class Banker implements tNpc {
 
@@ -70,6 +75,7 @@ public abstract class Banker implements tNpc {
 	 */
 	protected Player player;
 	protected Account account;
+	protected Tab tab;
 	
 	/*
 	 * Temporary trader data
@@ -212,4 +218,33 @@ public abstract class Banker implements tNpc {
 				return true;
 		return false;
 	}
+	
+	public void saveItemsUpponLocking()
+	{
+		//debug normal
+		Debugger.normal("Clearing the stock to set it with new items");
+		
+		//clear
+		tab.getItems().clear();
+				
+		int slot = 0;
+		for ( ItemStack vItem : inventory.getContents() )
+		{
+			//check if the given item is not null
+			if ( vItem != null && !account.isUIRow(slot) )
+			{
+				//to bank item
+				BankItem bItem = ItemUtils.createBankItem(vItem);
+				
+				//set the items new slot 
+				bItem.setSlot(slot); 
+				
+				//add to tab 
+				tab.addItem(bItem); 
+			}
+			
+			++slot;
+		}
+	}
+	
 }
