@@ -7,7 +7,7 @@ import java.util.Map;
 
 import net.citizensnpcs.api.npc.NPC;
 import net.dandielo.citizens.traders_v3.bukkit.DtlTraders;
-import net.dandielo.citizens.traders_v3.core.Debugger;
+import net.dandielo.citizens.traders_v3.core.dB;
 import net.dandielo.citizens.traders_v3.core.PluginSettings;
 import net.dandielo.citizens.traders_v3.core.commands.Command;
 import net.dandielo.citizens.traders_v3.core.locale.LocaleManager;
@@ -188,7 +188,7 @@ public class GeneralCommands {
 		List<Command> cmds = commands.get("trader");
 		
 	    if ( cmds == null )
-			Debugger.high("Command informations are not loaded");
+			dB.high("Command informations are not loaded");
 		
 		sender.sendMessage(ChatColor.GOLD + "== " + ChatColor.YELLOW + "Trader commands" + ChatColor.GOLD + " ==");
 		sender.sendMessage("");

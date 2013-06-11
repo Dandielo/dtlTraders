@@ -14,7 +14,7 @@ import net.citizensnpcs.api.trait.Trait;
 import net.dandielo.citizens.traders_v3.bankers.Banker;
 import net.dandielo.citizens.traders_v3.bankers.types.Private;
 import net.dandielo.citizens.traders_v3.bukkit.DtlTraders;
-import net.dandielo.citizens.traders_v3.core.Debugger;
+import net.dandielo.citizens.traders_v3.core.dB;
 import net.dandielo.citizens.traders_v3.core.exceptions.InvalidTraderTypeException;
 import net.dandielo.citizens.traders_v3.core.exceptions.TraderTypeNotFoundException;
 import net.dandielo.citizens.traders_v3.core.exceptions.TraderTypeRegistrationError;
@@ -233,10 +233,10 @@ public class tNpcManager {
 		try
 		{
 			//debug info
-			Debugger.info("Register server trader type");
+			dB.info("Register server trader type");
 			registerType(Server.class);
 			
-			Debugger.info("Register private banker type");
+			dB.info("Register private banker type");
 			registerType(Private.class);
 			
 			//register type handlers
@@ -315,7 +315,7 @@ public class tNpcManager {
 		catch (Exception e)
 		{
 			//debug critical
-			Debugger.critical("Invalid type: " + typeInfo.name() + ", author: " + typeInfo.author());
+			dB.critical("Invalid type: " + typeInfo.name() + ", author: " + typeInfo.author());
 			throw new InvalidTraderTypeException(type);
 		}
 		return resultNpc;

@@ -10,7 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import net.dandielo.citizens.traders_v3.tNpcManager;
 import net.dandielo.citizens.traders_v3.tNpcStatus;
 import net.dandielo.citizens.traders_v3.tNpcType;
-import net.dandielo.citizens.traders_v3.core.Debugger;
+import net.dandielo.citizens.traders_v3.core.dB;
 import net.dandielo.citizens.traders_v3.core.events.trader.TraderClickEvent;
 import net.dandielo.citizens.traders_v3.traders.Trader;
 import net.dandielo.citizens.traders_v3.traders.clicks.ClickHandler;
@@ -98,7 +98,7 @@ public class Server extends Trader {
 		
 			
 		//debug info
-		Debugger.info(this.getClass().getSimpleName(), " Trader right click event, by: ", player.getName());
+		dB.info(this.getClass().getSimpleName(), " Trader right click event, by: ", player.getName());
 		
 		if ( status.inManagementMode() )
 			inventory = stock.getManagementInventory(baseStatus, status);
@@ -120,7 +120,7 @@ public class Server extends Trader {
 	public void toggleManageMode(String clickEvent)
 	{
 		//debug info
-		Debugger.info(this.getClass().getSimpleName(), " Trader ", clickEvent, " click event, by: ", player.getName());
+		dB.info(this.getClass().getSimpleName(), " Trader ", clickEvent, " click event, by: ", player.getName());
 		
 		if ( status.inManagementMode() )
 		{
@@ -138,18 +138,18 @@ public class Server extends Trader {
 	public void generalUI(InventoryClickEvent e)
 	{
 		//debug info
-		Debugger.info("General UI checking");
+		dB.info("General UI checking");
 		
 		int slot = e.getSlot();
 		if ( stock.isUiSlot(slot) )
 		{
 			//debug info
-			Debugger.info("Hit tests");
+			dB.info("Hit tests");
 			
 			if ( hitTest(slot, "buy") )
 			{
 				//debug low
-				Debugger.low("Buy stock hit test");
+				dB.low("Buy stock hit test");
 				
 				//send message
 				locale.sendMessage(player, "trader-stock-toggled", "stock", "#stock-buy");
@@ -161,7 +161,7 @@ public class Server extends Trader {
 			if ( hitTest(slot, "sell") )
 			{
 				//debug low
-				Debugger.low("Sell stock hit test");
+				dB.low("Sell stock hit test");
 				
 				//send message
 				locale.sendMessage(player, "trader-stock-toggled", "stock", "#stock-sell");
@@ -173,7 +173,7 @@ public class Server extends Trader {
 			if ( hitTest(slot, "back") )
 			{
 				//debug low
-				Debugger.low("Babck to stock hit test");
+				dB.low("Babck to stock hit test");
 				
 				//send message
 				locale.sendMessage(player, "trader-stock-back");
@@ -269,19 +269,6 @@ public class Server extends Trader {
 			
 			e.setCancelled(true);
 		}
-	}
-	
-	/**
-	 * Function to lock and save the traders inventory on inventory closing
-	 */
-	public void lockAndSave()
-	{
-		//send message
-		locale.sendMessage(player, "trader-managermode-stock-locked");
-		
-		//change status
-		parseStatus(baseStatus);
-		saveItemsUpponLocking();
 	}
 	
 	@ClickHandler(status = {tNpcStatus.SELL_AMOUNTS}, inventory = InventoryType.TRADER)
@@ -529,20 +516,20 @@ public class Server extends Trader {
 	@ClickHandler(status={tNpcStatus.MANAGE_UNLOCKED}, inventory=InventoryType.TRADER)
 	public void setStock(InventoryClickEvent e)
 	{
-		Debugger.info("Unlocked stock click event");
+		dB.info("Unlocked stock click event");
 	}
 	
 	@ClickHandler(status={tNpcStatus.MANAGE_UNLOCKED}, inventory=InventoryType.PLAYER)
 	public void getStock(InventoryClickEvent e)
 	{
-		Debugger.info("Unlocked stock click event");
+		dB.info("Unlocked stock click event");
 	}
 
 	@ClickHandler(status={tNpcStatus.MANAGE_SELL, tNpcStatus.MANAGE_BUY}, inventory=InventoryType.TRADER, shift = true)
 	public void itemsAttribs(InventoryClickEvent e)
 	{
 		//debug info
-		Debugger.info("Item managing click event");
+		dB.info("Item managing click event");
 		
 		//select the item that should have the price changed
 		if ( selectAndCheckItem(e.getSlot()) )
@@ -594,7 +581,7 @@ public class Server extends Trader {
 	public void managePrices(InventoryClickEvent e)
 	{
 		//debug info
-		Debugger.info("Price managing click event");
+		dB.info("Price managing click event");
 		
 		//select the item that should have the price changed
 		if ( selectAndCheckItem(e.getSlot()) )
@@ -637,56 +624,6 @@ public class Server extends Trader {
 		e.setCancelled(true);
 	}
 	
-	public void saveItemsUpponLocking()
-	{
-		//debug normal
-		Debugger.normal("Clearing the stock to set it with new items");
-		
-		List<StockItem> oldItems = stock.getStock(baseStatus.asStock());
-		Debugger.low("Old stock size: ", oldItems.size());
-		
-		stock.clearStock(baseStatus.asStock());
-		Debugger.low("Old stock size after clearing: ", oldItems.size());
-				
-		int slot = 0;
-		//save each item until stockSize() - uiSlots() are reached
-		for ( ItemStack bItem : inventory.getContents() )
-		{
-			//check if the given item is not null
-			if ( bItem != null && !stock.isUiSlot(slot) )
-			{
-				//to stock item
-				StockItem sItem = ItemUtils.createStockItem(bItem);
-				
-				StockItem matchedItem = null;
-				//match old items to persist item data
-				for ( StockItem item : oldItems )
-					if ( matchedItem == null && item.equalsStrong(sItem) )
-						matchedItem = item; 
-				
-				if ( matchedItem != null ) 
-				{ 
-					//update just its slot 
-					matchedItem.setSlot(slot); 
-
-					//add to the new stock 
-					stock.addItem(matchedItem, baseStatus.asStock()); 
-				} 
-				else 
-				{ 
-					//set the items new slot 
-					sItem.setSlot(slot); 
-
-					//add to stock 
-					stock.addItem(sItem, baseStatus.asStock()); 
-				}
-			}
-			
-			++slot;
-		}
-	}
-	
-	
 	
 	
 	
@@ -714,16 +651,16 @@ public class Server extends Trader {
 	public void topDebug(InventoryClickEvent e)
 	{
 		//debug info
-		Debugger.info("Inventory click, by: ", player.getName(), ", status: ", status.name().toLowerCase());
-		Debugger.info("slot: ", e.getSlot(), ", left: ", e.isLeftClick(), ", shift: ", e.isShiftClick());
+		dB.info("Inventory click, by: ", player.getName(), ", status: ", status.name().toLowerCase());
+		dB.info("slot: ", e.getSlot(), ", left: ", e.isLeftClick(), ", shift: ", e.isShiftClick());
 	}
 	
 	@ClickHandler(status = {tNpcStatus.SELL, tNpcStatus.BUY, tNpcStatus.SELL_AMOUNTS, tNpcStatus.MANAGE_SELL, tNpcStatus.MANAGE_BUY, tNpcStatus.MANAGE_AMOUNTS, tNpcStatus.MANAGE_PRICE, tNpcStatus.MANAGE_LIMIT}, shift = true, inventory = InventoryType.PLAYER)
 	public void botDebug(InventoryClickEvent e)
 	{
 		//debug info
-		Debugger.info("Inventory click, by: ", player.getName(), ", status: ", status.name().toLowerCase());
-		Debugger.info("slot: ", e.getSlot(), ", left: ", e.isLeftClick(), ", shift: ", e.isShiftClick());
+		dB.info("Inventory click, by: ", player.getName(), ", status: ", status.name().toLowerCase());
+		dB.info("slot: ", e.getSlot(), ", left: ", e.isLeftClick(), ", shift: ", e.isShiftClick());
 	}
 	
 }

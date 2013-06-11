@@ -7,7 +7,7 @@ import java.util.Map;
 
 import net.citizensnpcs.api.util.DataKey;
 import net.dandielo.citizens.traders_v3.tNpcStatus;
-import net.dandielo.citizens.traders_v3.core.Debugger;
+import net.dandielo.citizens.traders_v3.core.dB;
 import net.dandielo.citizens.traders_v3.traders.setting.Settings;
 import net.dandielo.citizens.traders_v3.traders.setting.TGlobalSettings;
 import net.dandielo.citizens.traders_v3.utils.NBTUtils;
@@ -51,7 +51,7 @@ public class StockTrader extends Stock {
 	public void load(DataKey data) 
 	{
 		//debug info
-		Debugger.info("Loading traders stock");
+		dB.info("Loading traders stock");
 		
 		if ( data.keyExists("sell") )
 		{
@@ -110,7 +110,7 @@ public class StockTrader extends Stock {
 	public void save(DataKey data)
 	{
 		//debug info
-		Debugger.info("Saving traders stock");
+		dB.info("Saving traders stock");
 		
 		List<Object> sellList = new ArrayList<Object>();
 		for ( StockItem item : stock.get("sell") )
@@ -162,7 +162,7 @@ public class StockTrader extends Stock {
 	public void setInventory(Inventory inventory, tNpcStatus status)
 	{
 		//debug info
-		Debugger.info("Setting inventory, status: ", status.name().toLowerCase());
+		dB.info("Setting inventory, status: ", status.name().toLowerCase());
 		
 		//clear the inventory
 		inventory.clear();
@@ -186,7 +186,7 @@ public class StockTrader extends Stock {
 	public void setAmountsInventory(Inventory inventory, tNpcStatus status, StockItem item)
 	{
 		//debug info
-		Debugger.info("Setting inventory, status: ", tNpcStatus.SELL_AMOUNTS.name().toLowerCase());
+		dB.info("Setting inventory, status: ", tNpcStatus.SELL_AMOUNTS.name().toLowerCase());
 		
 		//clear the inventory
 		inventory.clear();
@@ -210,7 +210,7 @@ public class StockTrader extends Stock {
 	public void setManagementInventory(Inventory inventory, tNpcStatus baseStatus, tNpcStatus status)
 	{
 		//debug info
-		Debugger.info("Setting management inventory, status: ", status.name().toLowerCase(), ", base status: ", baseStatus.name().toLowerCase());
+		dB.info("Setting management inventory, status: ", status.name().toLowerCase(), ", base status: ", baseStatus.name().toLowerCase());
 		
 		//clear the inventory
 		inventory.clear();
@@ -281,7 +281,7 @@ public class StockTrader extends Stock {
 	@Override
 	public double parsePrice(StockItem item, int slot) {
 		//debug low
-		Debugger.low(item.getPrice());
+		dB.low(item.getPrice());
 		
 		if ( item.hasFlag(StackPrice.class) )
 			return item.getPrice() * item.getAmount(slot) / item.getAmount();

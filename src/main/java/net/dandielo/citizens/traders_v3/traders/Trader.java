@@ -17,7 +17,7 @@ import net.citizensnpcs.api.npc.NPC;
 import net.dandielo.citizens.traders_v3.tNpc;
 import net.dandielo.citizens.traders_v3.tNpcStatus;
 import net.dandielo.citizens.traders_v3.bukkit.Perms;
-import net.dandielo.citizens.traders_v3.core.Debugger;
+import net.dandielo.citizens.traders_v3.core.dB;
 import net.dandielo.citizens.traders_v3.core.locale.LocaleManager;
 import net.dandielo.citizens.traders_v3.core.tools.StringTools;
 import net.dandielo.citizens.traders_v3.traders.clicks.ClickHandler;
@@ -46,7 +46,7 @@ public abstract class Trader implements tNpc {
 	public static void registerHandlers(Class<? extends Trader> clazz)
 	{
 		//debug info
-		Debugger.info("Registering click handlers for trader type: ", clazz.getSimpleName());
+		dB.info("Registering click handlers for trader type: ", clazz.getSimpleName());
 		
 		List<Method> methods = new ArrayList<Method>();
 		for ( Method method : clazz.getMethods() )
@@ -102,7 +102,7 @@ public abstract class Trader implements tNpc {
 	public Trader(TraderTrait trader, WalletTrait wallet, Player player)
 	{
 		//debug info
-		Debugger.low("Creating a trader, for: ", player.getName());
+		dB.low("Creating a trader, for: ", player.getName());
 		
 		//set all constant data
 		settings = trader.getSettings();
@@ -186,7 +186,7 @@ public abstract class Trader implements tNpc {
 	private void inventoryClickHandler(InventoryClickEvent e)
 	{		
 		//debug info
-		Debugger.low("Handling click event");
+		dB.low("Handling click event");
 		
 		//check if the clicked inventoru=y is the tope or the bottom one
         boolean top = e.getView().convertSlot(e.getRawSlot()) == e.getRawSlot();
@@ -198,30 +198,26 @@ public abstract class Trader implements tNpc {
 			//get the handler information
 			ClickHandler handler = method.getAnnotation(ClickHandler.class);
 
-		//	//debug info (we don't need so much debug)
-		//	Debugger.info("Checking shift click requirement");
 			if ( !handler.shift() ? !e.isShiftClick() : true )
 			{
-			//	//debug info (we don't need so much debug)
-			//	Debugger.info("Checking trader status requirement");
 				if ( checkStatusWith(handler.status()) && handler.inventory().equals(top) )
 				{
 					try 
 					{
 						//debug info
-						Debugger.low("Executing method: ", ChatColor.AQUA, method.getName());
+						dB.low("Executing method: ", ChatColor.AQUA, method.getName());
 						method.invoke(this, e);
 					} 
 					catch (Exception ex) 
 					{
 						//debug info
-						Debugger.critical("While executing inventory click event");
-						Debugger.critical("Exception: ", ex.getClass().getSimpleName());
-						Debugger.critical("Method: ", method.getName());
-						Debugger.critical("Trader: ", this.getSettings().getNPC().getName(), ", player: ", player.getName());
-						Debugger.critical(" ");
-						Debugger.critical("Exception message: ", ex.getMessage());
-						Debugger.high("Stack trace: ", StringTools.stackTrace(ex.getStackTrace()));
+						dB.critical("While executing inventory click event");
+						dB.critical("Exception: ", ex.getClass().getSimpleName());
+						dB.critical("Method: ", method.getName());
+						dB.critical("Trader: ", this.getSettings().getNPC().getName(), ", player: ", player.getName());
+						dB.critical(" ");
+						dB.critical("Exception message: ", ex.getMessage());
+						dB.high("Stack trace: ", StringTools.stackTrace(ex.getStackTrace()));
 						
 						//cancel the event because of the exception!
 						e.setCancelled(true);
@@ -230,7 +226,7 @@ public abstract class Trader implements tNpc {
 			}
 		}
 		//debug info, shows if the event was canceled or not
-		Debugger.info("Event cancelled: ", e.isCancelled());
+		dB.info("Event cancelled: ", e.isCancelled());
 	}
 	
 	/**
@@ -358,6 +354,70 @@ public abstract class Trader implements tNpc {
 	 * Methods that helps us to choose and execute all actions we want
 	 */
 	
+	//TODO documentation
+	public void saveItemsUpponLocking()
+	{
+		//debug normal
+		dB.normal("Clearing the stock to set it with new items");
+		
+		List<StockItem> oldItems = stock.getStock(baseStatus.asStock());
+		dB.low("Old stock size: ", oldItems.size());
+		
+		stock.clearStock(baseStatus.asStock());
+		dB.low("Old stock size after clearing: ", oldItems.size());
+				
+		int slot = 0;
+		//save each item until stockSize() - uiSlots() are reached
+		for ( ItemStack bItem : inventory.getContents() )
+		{
+			//check if the given item is not null
+			if ( bItem != null && !stock.isUiSlot(slot) )
+			{
+				//to stock item
+				StockItem sItem = ItemUtils.createStockItem(bItem);
+				
+				StockItem matchedItem = null;
+				//match old items to persist item data
+				for ( StockItem item : oldItems )
+					if ( matchedItem == null && item.equalsStrong(sItem) )
+						matchedItem = item; 
+				
+				if ( matchedItem != null ) 
+				{ 
+					//update just its slot 
+					matchedItem.setSlot(slot); 
+
+					//add to the new stock 
+					stock.addItem(matchedItem, baseStatus.asStock()); 
+				} 
+				else 
+				{ 
+					//set the items new slot 
+					sItem.setSlot(slot); 
+
+					//add to stock 
+					stock.addItem(sItem, baseStatus.asStock()); 
+				}
+			}
+			
+			++slot;
+		}
+	}
+
+	
+	/**
+	 * Function to lock and save the traders inventory on inventory closing
+	 */
+	public void lockAndSave()
+	{
+		//send message
+		locale.sendMessage(player, "trader-managermode-stock-locked");
+		
+		//change status
+		parseStatus(baseStatus);
+		saveItemsUpponLocking();
+	}
+	
 	/**
 	 * @return
 	 * true if the players inventory has enough place to buy the clicked item
@@ -376,8 +436,8 @@ public abstract class Trader implements tNpc {
 	protected final boolean inventoryHasPlace(int slot) 
 	{
 		//debug info
-		Debugger.info("Checking players inventory space");
-		Debugger.info("Player: ", player.getName(), ", item: ", selectedItem.getItem().getType().name().toLowerCase());
+		dB.info("Checking players inventory space");
+		dB.info("Player: ", player.getName(), ", item: ", selectedItem.getItem().getType().name().toLowerCase());
 				
 		return _inventoryHasPlace(selectedItem.getAmount(slot));
 	}
@@ -437,8 +497,8 @@ public abstract class Trader implements tNpc {
 	protected final boolean addToInventory(int slot) 
 	{
 		//debug info
-		Debugger.info("Adding item to players inventory");
-		Debugger.info("Player: ", player.getName(), ", item: ", selectedItem.getItem().getType().name().toLowerCase());
+		dB.info("Adding item to players inventory");
+		dB.info("Player: ", player.getName(), ", item: ", selectedItem.getItem().getType().name().toLowerCase());
 		
 		//adds the item to the "eventInventory" 
 		return _addToInventory(selectedItem.getAmount(slot));
@@ -513,8 +573,8 @@ public abstract class Trader implements tNpc {
 	protected final void removeFromInventory(int slot, int scale) 
 	{
 		//debug info
-		Debugger.info("Removing item from players inventory");
-		Debugger.info("Player: ", player.getName(), ", item: ", selectedItem.getItem().getType().name().toLowerCase());
+		dB.info("Removing item from players inventory");
+		dB.info("Player: ", player.getName(), ", item: ", selectedItem.getItem().getType().name().toLowerCase());
 				
 		//removes from the event inventory
 		_removeFromInventory(slot, selectedItem.getAmount(0) * scale);

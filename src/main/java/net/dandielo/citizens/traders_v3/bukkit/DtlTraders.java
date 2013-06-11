@@ -8,7 +8,7 @@ import net.dandielo.citizens.traders_v3.bankers.backend.AccountLoader;
 import net.dandielo.citizens.traders_v3.bankers.setting.BGlobalSettings;
 import net.dandielo.citizens.traders_v3.bukkit.commands.GeneralCommands;
 import net.dandielo.citizens.traders_v3.bukkit.commands.TraderCommands;
-import net.dandielo.citizens.traders_v3.core.Debugger;
+import net.dandielo.citizens.traders_v3.core.dB;
 import net.dandielo.citizens.traders_v3.core.PluginSettings;
 import net.dandielo.citizens.traders_v3.core.commands.CommandManager;
 import net.dandielo.citizens.traders_v3.traders.setting.TGlobalSettings;
@@ -54,7 +54,7 @@ public class DtlTraders extends JavaPlugin {
 		saveDefaultConfig();
 		PluginSettings.initPluginSettings();
 		
-		Debugger.info("Enabling plugin");
+		dB.info("Enabling plugin");
 		
 		//init Vault
 		if ( !initVault() )

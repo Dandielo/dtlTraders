@@ -2,7 +2,7 @@ package net.dandielo.citizens.traders_v3.traits;
 
 import net.citizensnpcs.api.trait.Trait;
 import net.citizensnpcs.api.util.DataKey;
-import net.dandielo.citizens.traders_v3.core.Debugger;
+import net.dandielo.citizens.traders_v3.core.dB;
 import net.dandielo.citizens.traders_v3.traders.setting.Settings;
 import net.dandielo.citizens.traders_v3.traders.stock.Stock;
 import net.dandielo.citizens.traders_v3.traders.stock.StockTrader;
@@ -44,7 +44,7 @@ public class TraderTrait extends Trait {
 	public void onAttach()
 	{
 		//debug info
-		Debugger.info("Trader trait attached to:", npc.getName());
+		dB.info("Trader trait attached to:", npc.getName());
 		
 		settings = new Settings(this.npc);
 		stock = new StockTrader(settings);

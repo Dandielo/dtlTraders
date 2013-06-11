@@ -28,7 +28,7 @@ public class PluginSettings {
 		debugLevel = config.getString("debug", "normal");
 		
 		//debug info
-		Debugger.info("Loading plugin settings");
+		dB.info("Loading plugin settings");
 		
 		//locale settings
 		locale = config.getString("locale.load", "en");

@@ -7,7 +7,7 @@ import net.citizensnpcs.api.event.NPCLeftClickEvent;
 import net.citizensnpcs.api.event.NPCRightClickEvent;
 import net.dandielo.citizens.traders_v3.bankers.Banker;
 import net.dandielo.citizens.traders_v3.bukkit.Perms;
-import net.dandielo.citizens.traders_v3.core.Debugger;
+import net.dandielo.citizens.traders_v3.core.dB;
 import net.dandielo.citizens.traders_v3.core.exceptions.InvalidTraderTypeException;
 import net.dandielo.citizens.traders_v3.core.exceptions.TraderTypeNotFoundException;
 import net.dandielo.citizens.traders_v3.traders.Trader;
@@ -98,7 +98,14 @@ public class tNpcListener implements Listener {
 
 			//if the trader is not in mm, remove the relation too
 		    if ( !npc.getStatus().inManagementMode() )
-		    {			
+		    {
+		    	//check accounts for unlocked stock
+		    	if ( npc.getStatus().equals(tNpcStatus.ACCOUNT_UNLOCKED) )
+		    	{
+		    		//lock and save the content first
+		    		npc.lockAndSave();
+		    	}
+		    	
 		    	//remove the relation
 		    	manager.removeRelation((Player) e.getPlayer());
 
@@ -111,7 +118,7 @@ public class tNpcListener implements Listener {
 		    	if ( npc.getStatus().equals(tNpcStatus.MANAGE_UNLOCKED) )
 		    	{
 		    		//lock and save the inventory
-		    		((Server)npc).lockAndSave();
+		    		npc.lockAndSave();
 		    	}
 		    }
 		}
@@ -156,14 +163,14 @@ public class tNpcListener implements Listener {
 		catch (TraderTypeNotFoundException e1) 
 		{
 			//debug critical
-			Debugger.critical("Trader type was not found, type: ", traderTrait.getType());
-			Debugger.critical("Did you changed the save file?");
+			dB.critical("Trader type was not found, type: ", traderTrait.getType());
+			dB.critical("Did you changed the save file?");
 		} 
 		catch (InvalidTraderTypeException e1) 
 		{
 			//debug critical
-			Debugger.critical("Trader type is invalid, type: ", traderTrait.getType());
-			Debugger.critical("Contact the dev to fix this!");
+			dB.critical("Trader type is invalid, type: ", traderTrait.getType());
+			dB.critical("Contact the dev to fix this!");
 		}
 	}
 
@@ -209,14 +216,14 @@ public class tNpcListener implements Listener {
 		catch (TraderTypeNotFoundException e1) 
 		{
 			//debug critical
-			Debugger.critical("Trader type was not found, type: ", traderTrait.getType());
-			Debugger.critical("Did you changed the save file?");
+			dB.critical("Trader type was not found, type: ", traderTrait.getType());
+			dB.critical("Did you changed the save file?");
 		} 
 		catch (InvalidTraderTypeException e1) 
 		{
 			//debug critical
-			Debugger.critical("Trader type is invalid, type: ", traderTrait.getType());
-			Debugger.critical("Contact the dev to fix this!");
+			dB.critical("Trader type is invalid, type: ", traderTrait.getType());
+			dB.critical("Contact the dev to fix this!");
 		}
 	}
 	
@@ -243,14 +250,14 @@ public class tNpcListener implements Listener {
 		catch (TraderTypeNotFoundException e1) 
 		{
 			//debug critical
-			Debugger.critical("Banker type was not found, type: ", bankerTrait.getType());
-			Debugger.critical("Did you changed the save file?");
+			dB.critical("Banker type was not found, type: ", bankerTrait.getType());
+			dB.critical("Did you changed the save file?");
 		} 
 		catch (InvalidTraderTypeException e1) 
 		{
 			//debug critical
-			Debugger.critical("TBanker type is invalid, type: ", bankerTrait.getType());
-			Debugger.critical("Contact the dev to fix this!");
+			dB.critical("TBanker type is invalid, type: ", bankerTrait.getType());
+			dB.critical("Contact the dev to fix this!");
 		}
 	}
 
@@ -275,14 +282,14 @@ public class tNpcListener implements Listener {
 		catch (TraderTypeNotFoundException e1) 
 		{
 			//debug critical
-			Debugger.critical("Banker type was not found, type: ", bankerTrait.getType());
-			Debugger.critical("Did you changed the save file?");
+			dB.critical("Banker type was not found, type: ", bankerTrait.getType());
+			dB.critical("Did you changed the save file?");
 		} 
 		catch (InvalidTraderTypeException e1) 
 		{
 			//debug critical
-			Debugger.critical("TBanker type is invalid, type: ", bankerTrait.getType());
-			Debugger.critical("Contact the dev to fix this!");
+			dB.critical("TBanker type is invalid, type: ", bankerTrait.getType());
+			dB.critical("Contact the dev to fix this!");
 		}
 	}
 

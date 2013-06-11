@@ -8,7 +8,7 @@ import java.util.regex.Matcher;
 
 import net.dandielo.citizens.traders_v3.tNpcItem;
 import net.dandielo.citizens.traders_v3.tNpcStatus;
-import net.dandielo.citizens.traders_v3.core.Debugger;
+import net.dandielo.citizens.traders_v3.core.dB;
 import net.dandielo.citizens.traders_v3.core.exceptions.InvalidItemException;
 import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeInvalidClassException;
 import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeInvalidValueException;
@@ -201,7 +201,7 @@ public final class BankItem extends tNpcItem {
 	public void factorize(ItemStack item)
 	{
 		//debug low
-		Debugger.low("Factorizing item: ", item.getType().name().toLowerCase());
+		dB.low("Factorizing item: ", item.getType().name().toLowerCase());
 		
 		for ( ItemAttr iAttr : ItemAttr.getAllAttributes() )
 		{
@@ -347,8 +347,8 @@ public final class BankItem extends tNpcItem {
 			else
 			{
 				//debug message that this key does not exists
-				Debugger.high("The given key is not registered, skipping...");
-				Debugger.high("key: ", key);
+				dB.high("The given key is not registered, skipping...");
+				dB.high("key: ", key);
 			}
 		} 
 		catch (AttributeInvalidClassException e) 
@@ -607,7 +607,7 @@ public final class BankItem extends tNpcItem {
 		//checking attribute missmatching
 		equals = equals ? !attributeMissmatch(item) : equals;
 		
-		Debugger.low("After ID and data check: ", equals);
+		dB.low("After ID and data check: ", equals);
 		
 		//now a if block to not make thousands of not needed checks 
 		if ( equals )
@@ -622,13 +622,13 @@ public final class BankItem extends tNpcItem {
 				equals = tAttr.getInfo().standalone();
 				
 				//debug low
-				Debugger.low("Before ", tAttr.getInfo().name() ," check: ", equals, ", with: ", tAttr.onSave());
+				dB.low("Before ", tAttr.getInfo().name() ," check: ", equals, ", with: ", tAttr.onSave());
 				
 				//check each item in the second item, if the attribute is found and strong equal continue
 				for ( ItemAttr iAttr : item.attr.values() )
 				{
 					//debug low
-					Debugger.info("Checking ", iAttr.getInfo().name() ," with: ", iAttr.onSave());
+					dB.info("Checking ", iAttr.getInfo().name() ," with: ", iAttr.onSave());
 					
 					//same attributes
 					if ( tAttr.getClass().equals(iAttr.getClass()) )
@@ -636,7 +636,7 @@ public final class BankItem extends tNpcItem {
 				}
 				
 				//debug low
-				Debugger.low("After ", tAttr.getInfo().name() ," check: ", equals);
+				dB.low("After ", tAttr.getInfo().name() ," check: ", equals);
 			}
 			
 			//for each attribute in this item
@@ -678,7 +678,7 @@ public final class BankItem extends tNpcItem {
 		//checking attribute missmatching
 		equals = equals ? !attributeMissmatch(item) : equals;
 
-		Debugger.low("After ID and data check: ", equals);
+		dB.low("After ID and data check: ", equals);
 		
 		//now a if block to not make thousands of not needed checks 
 		if ( equals )
@@ -693,13 +693,13 @@ public final class BankItem extends tNpcItem {
 				equals = tAttr.getInfo().standalone();
 
 				//debug low
-				Debugger.low("Before ", tAttr.getInfo().name() ," check: ", equals, ", with: ", tAttr.onSave());
+				dB.low("Before ", tAttr.getInfo().name() ," check: ", equals, ", with: ", tAttr.onSave());
 				
 				//check each item in the second item, if the attribute is found and strong equal continue
 				for ( ItemAttr iAttr : item.attr.values() )
 				{
 					//debug low
-					Debugger.info("Checking ", iAttr.getInfo().name() ," with: ", iAttr.onSave());
+					dB.info("Checking ", iAttr.getInfo().name() ," with: ", iAttr.onSave());
 					
 					//same attributes
 					if ( tAttr.getClass().equals(iAttr.getClass()) )
@@ -707,7 +707,7 @@ public final class BankItem extends tNpcItem {
 				}
 				
 				//debug low
-				Debugger.low("After ", tAttr.getInfo().name() ," check: ", equals);
+				dB.low("After ", tAttr.getInfo().name() ," check: ", equals);
 			}
 			
 			//for each attribute in this item
@@ -755,8 +755,8 @@ public final class BankItem extends tNpcItem {
 	 */
 	private void debugMsgClass(String key)
 	{
-		Debugger.high("Attribute/Flag class exception, the attribute class is invalid");
-		Debugger.high("Attribute/Flag key: ", ChatColor.GOLD, key);
+		dB.high("Attribute/Flag class exception, the attribute class is invalid");
+		dB.high("Attribute/Flag key: ", ChatColor.GOLD, key);
 	}
 
 	/**
@@ -764,8 +764,8 @@ public final class BankItem extends tNpcItem {
 	 */
 	private void debugMsgValue(Attribute attr, String value)
 	{
-		Debugger.normal("Attribute value initialization exception");
-		Debugger.normal("Attribute: ", (attr != null ? attr.name() : "null"), ", value: ", ChatColor.GOLD, value);
+		dB.normal("Attribute value initialization exception");
+		dB.normal("Attribute: ", (attr != null ? attr.name() : "null"), ", value: ", ChatColor.GOLD, value);
 	}
 
 	/**
@@ -773,7 +773,7 @@ public final class BankItem extends tNpcItem {
 	 */
 	private void debugMsgItem(Attribute attr)
 	{
-		Debugger.normal("Attribute/Flag item incompatibility");
-		Debugger.normal("Attribute/Flag: ", (attr != null ? attr.name() : "null"), ", item: ", ChatColor.GOLD, this.getName());
+		dB.normal("Attribute/Flag item incompatibility");
+		dB.normal("Attribute/Flag: ", (attr != null ? attr.name() : "null"), ", item: ", ChatColor.GOLD, this.getName());
 	}
 }

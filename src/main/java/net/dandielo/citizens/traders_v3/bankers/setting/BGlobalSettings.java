@@ -2,7 +2,7 @@ package net.dandielo.citizens.traders_v3.bankers.setting;
 
 import org.bukkit.configuration.ConfigurationSection;
 
-import net.dandielo.citizens.traders_v3.core.Debugger;
+import net.dandielo.citizens.traders_v3.core.dB;
 import net.dandielo.citizens.traders_v3.core.PluginSettings;
 
 public class BGlobalSettings extends PluginSettings {
@@ -18,7 +18,7 @@ public class BGlobalSettings extends PluginSettings {
 	public static void initGlobalSettings()
 	{
 		//debug info
-		Debugger.info("Loading general trader configuration");
+		dB.info("Loading general trader configuration");
 		
 		//get trader section
 		bConfig = config.getConfigurationSection("banker");

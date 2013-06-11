@@ -19,7 +19,6 @@ public class PrivateTab extends Tab {
 	public void onSave(ConfigurationSection data)
 	{
 		//set the data
-		data.set("name", name);
 		data.set("icon", ItemUtils.createBankItem(icon).toString());
 		data.set("desc", desc);
 		
@@ -33,8 +32,10 @@ public class PrivateTab extends Tab {
 	@Override
 	public void onLoad(ConfigurationSection data)
 	{
-		name = data.getString("name");
-		icon = new BankItem(data.getString("icon", "35 a:1 s:0 n:Bank tab")).getItem();
+		BankItem iconItem = new BankItem(data.getString("icon", "35 a:1 s:0 n:Bank tab"));
+		
+		name = iconItem.getName();
+		icon = iconItem.getItem();
 		desc = data.getStringList("desc");
 		
 		//load all items for this tab

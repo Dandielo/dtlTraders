@@ -11,6 +11,7 @@ import net.dandielo.citizens.traders_v3.bankers.Banker;
 import net.dandielo.citizens.traders_v3.bankers.account.Account.AccountType;
 import net.dandielo.citizens.traders_v3.bankers.backend.AccountLoader;
 import net.dandielo.citizens.traders_v3.bankers.tabs.Tab;
+import net.dandielo.citizens.traders_v3.bukkit.Econ;
 import net.dandielo.citizens.traders_v3.traders.clicks.ClickHandler;
 import net.dandielo.citizens.traders_v3.traders.clicks.InventoryType;
 import net.dandielo.citizens.traders_v3.traits.BankerTrait;
@@ -55,50 +56,100 @@ public class Private extends Banker {
 	}
 
 	
-	@ClickHandler(inventory = InventoryType.TRADER, 
+	@ClickHandler(inventory = InventoryType.TRADER, shift = true,
 	status = { tNpcStatus.ACCOUNT_LOCKED, tNpcStatus.ACCOUNT_UNLOCKED, tNpcStatus.ACCOUNT_MANAGE })
 	public void tabClick(InventoryClickEvent e)
 	{
 		if ( !account.isUIRow(e.getSlot()) ) return;
 		e.setCancelled(true);
 		
-		if ( e.isLeftClick() )
+		//if air or null then return
+		if ( e.getCurrentItem() == null || e.getCurrentItem().getTypeId() == 0 )
+			return;
+		
+		if ( e.isShiftClick() )
 		{
-			Tab tab = account.getTab(e.getSlot()%9);
-			
-			//end if its the same tab
-			if ( tab == null || this.tab.equals(tab) ) return;
-			
-			if ( status.equals(tNpcStatus.ACCOUNT_UNLOCKED) )
+			if ( e.isRightClick() )
 			{
-				//send the message
-				locale.sendMessage(player, "banker-tab-locked", "tab", this.tab.getName());
-				this.saveItemsUpponLocking();
-			}
-			
-			this.tab = tab;			
-			account.tabSwitch(tab, inventory);
-			status = tNpcStatus.ACCOUNT_LOCKED;
-			
-			//send the message
-			locale.sendMessage(player, "banker-tab-switch", "tab", tab.getName());
-		}
-		else 
-		{
-			if ( status.equals(tNpcStatus.ACCOUNT_LOCKED) )
-			{
-			    status = tNpcStatus.ACCOUNT_UNLOCKED;
-			    
-				//send the message
-				locale.sendMessage(player, "banker-tab-unlocked", "tab", tab.getName());
-			}
-			else
-			{
+				Tab tab = account.getTab(e.getSlot()%9);
+
+				//end if its the same tab
+				if ( tab != null ) return;
+				
+				//now we maybe can buy the tab :P
+				if ( !tabTransaction(e.getSlot()%9) )
+				{
+					//error message
+					return;
+				}
+
+				//add the new tab
+				tab = Tab.createNewTab(AccountType.PRIVATE);
+				//success
+				account.addTab(tab);
+				
+				//save and lock the previous opened tab
+				if ( status.equals(tNpcStatus.ACCOUNT_UNLOCKED) )
+				{
+					//send the message
+					locale.sendMessage(player, "banker-tab-locked", "tab", this.tab.getName());
+					this.saveItemsUpponLocking();
+				}
+
+				//switch to the new tab
+				this.tab = tab;			
+				account.tabSwitch(tab, inventory);
 				status = tNpcStatus.ACCOUNT_LOCKED;
-				this.saveItemsUpponLocking();
 
 				//send the message
-				locale.sendMessage(player, "banker-tab-locked", "tab", tab.getName());
+				locale.sendMessage(player, "banker-tab-switch", "tab", tab.getName());
+			}
+			//left click
+			else
+			{
+				
+			}
+		}
+		else
+		{
+			if ( e.isLeftClick() )
+			{
+				Tab tab = account.getTab(e.getSlot()%9);
+
+				//end if its the same tab
+				if ( tab == null || this.tab.equals(tab) ) return;
+
+				if ( status.equals(tNpcStatus.ACCOUNT_UNLOCKED) )
+				{
+					//send the message
+					locale.sendMessage(player, "banker-tab-locked", "tab", this.tab.getName());
+					this.saveItemsUpponLocking();
+				}
+
+				this.tab = tab;			
+				account.tabSwitch(tab, inventory);
+				status = tNpcStatus.ACCOUNT_LOCKED;
+
+				//send the message
+				locale.sendMessage(player, "banker-tab-switch", "tab", tab.getName());
+			}
+			else 
+			{
+				if ( status.equals(tNpcStatus.ACCOUNT_LOCKED) )
+				{
+					status = tNpcStatus.ACCOUNT_UNLOCKED;
+
+					//send the message
+					locale.sendMessage(player, "banker-tab-unlocked", "tab", tab.getName());
+				}
+				else
+				{
+					status = tNpcStatus.ACCOUNT_LOCKED;
+					this.saveItemsUpponLocking();
+
+					//send the message
+					locale.sendMessage(player, "banker-tab-locked", "tab", tab.getName());
+				}
 			}
 		}
 	}

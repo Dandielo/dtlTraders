@@ -50,8 +50,8 @@ public class Settings extends BGlobalSettings {
 	{
 		type = data.getString("type");
 		
-		accountName = data.getString("account-format", getDefaultAccountNameFormat());
-		maxVisibleTabs = data.getInt("visible-tabs", getDefaultMaxTabs());
+		accountName = data.getString("account.format", getDefaultAccountNameFormat());
+		maxVisibleTabs = data.getInt("account.visible-tabs", getDefaultMaxTabs());
 	}
 
 	public void save(DataKey data)

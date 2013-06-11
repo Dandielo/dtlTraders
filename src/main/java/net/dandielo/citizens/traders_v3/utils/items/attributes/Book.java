@@ -12,7 +12,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 
-import net.dandielo.citizens.traders_v3.core.Debugger;
+import net.dandielo.citizens.traders_v3.core.dB;
 import net.dandielo.citizens.traders_v3.core.exceptions.InvalidItemException;
 import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeInvalidValueException;
 import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeValueNotFoundException;
@@ -126,7 +126,7 @@ public class Book extends ItemAttr {
 		}
 		catch( Exception e )
 		{
-			Debugger.high("Loading books failed");
+			dB.high("Loading books failed");
 		}
 	}
 	
@@ -173,7 +173,7 @@ public class Book extends ItemAttr {
 		}
 		catch( IOException e )
 		{
-			Debugger.high("Could not save the books file");
+			dB.high("Could not save the books file");
 		}
 	}
 }

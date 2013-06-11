@@ -8,7 +8,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import net.dandielo.citizens.traders_v3.core.Debugger;
+import net.dandielo.citizens.traders_v3.core.dB;
 import net.dandielo.citizens.traders_v3.core.PluginSettings;
 import net.dandielo.citizens.traders_v3.core.locale.LocaleManager;
 import net.dandielo.citizens.traders_v3.utils.ItemUtils;
@@ -52,7 +52,7 @@ public class TGlobalSettings extends PluginSettings {
 	public static void initGlobalSettings()
 	{
 		//debug info
-		Debugger.info("Loading general trader configuration");
+		dB.info("Loading general trader configuration");
 		
 		//get trader section
 		tConfig = config.getConfigurationSection("trader");
@@ -81,12 +81,12 @@ public class TGlobalSettings extends PluginSettings {
 		catch(Exception e)
 		{
 			//debug high
-			Debugger.high("While loading special blocks, a exception occured");
-			Debugger.high("Exception: ", e.getClass().getSimpleName());
+			dB.high("While loading special blocks, a exception occured");
+			dB.high("Exception: ", e.getClass().getSimpleName());
 			
 			//debug normal
-			Debugger.normal("Exception message: ", e.getMessage());
-			Debugger.normal("StackTrace: ", e.getStackTrace());
+			dB.normal("Exception message: ", e.getMessage());
+			dB.normal("StackTrace: ", e.getStackTrace());
 		}
 
 		//load stock settings
@@ -112,12 +112,12 @@ public class TGlobalSettings extends PluginSettings {
 		catch(Exception e)
 		{
 			//debug high
-			Debugger.high("While loading pattern defaults, a exception occured");
-			Debugger.high("Exception: ", e.getClass().getSimpleName());
+			dB.high("While loading pattern defaults, a exception occured");
+			dB.high("Exception: ", e.getClass().getSimpleName());
 			
 			//debug normal
-			Debugger.normal("Exception message: ", e.getMessage());
-			Debugger.normal("StackTrace: ", e.getStackTrace());
+			dB.normal("Exception message: ", e.getMessage());
+			dB.normal("StackTrace: ", e.getStackTrace());
 		}
 		
 		//load books settings

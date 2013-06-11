@@ -1,5 +1,9 @@
 package net.dandielo.citizens.traders_v3.bankers.account;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -35,7 +39,6 @@ public class PrivateAccount extends Account {
 	{
 		maxSize = data.getInt("max-size", maxSize);
 	    tabSize = data.getInt("tab-size", tabSize);
-		name = data.getString("name", name);
 		
 		tabs.clear();
 		
@@ -51,7 +54,6 @@ public class PrivateAccount extends Account {
 	{
 		data.set("max-size", maxSize);
 		data.set("tab-size", tabSize);
-		data.set("name", name);
 
 		int i = 0;
 		for ( Tab tab : tabs )
@@ -73,9 +75,15 @@ public class PrivateAccount extends Account {
 			inventory.setItem(i++, tab.getIcon());
 			++j;
 		}
-		for ( ; j < maxSize ; ++j )
+		
+		//make it bit more nicer ;)
+		List<String> unavailable = new ArrayList<String>();
+		unavailable.add(ChatColor.RESET + "" + ChatColor.GRAY + "This tab is not available for you");
+		unavailable.add(ChatColor.RESET + "" + ChatColor.GRAY + "Shift + right click to buy it");
+		//for ( ; j < maxSize ; ++j )
+		if ( j + 1 < maxSize )
 		{
-			inventory.setItem(i++, new ItemStack(Material.WOOL));
+			inventory.setItem(i++, new BankItem("35 a:1 s:0 .lore n:Bank tab " + (j+1), unavailable).getItem());
 		}
 	}
 

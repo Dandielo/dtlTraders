@@ -9,7 +9,7 @@ import java.util.Map;
 import net.dandielo.citizens.traders_v3.tNpcItem;
 import net.dandielo.citizens.traders_v3.tNpcStatus;
 import net.dandielo.citizens.traders_v3.bukkit.DtlTraders;
-import net.dandielo.citizens.traders_v3.core.Debugger;
+import net.dandielo.citizens.traders_v3.core.dB;
 import net.dandielo.citizens.traders_v3.core.exceptions.InvalidItemException;
 import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeInvalidClassException;
 import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeValueNotFoundException;
@@ -202,12 +202,12 @@ public abstract class ItemAttr {
 			catch (Exception e)
 			{
 				//debug high
-				Debugger.high("Attribute exception on initialization");
-				Debugger.high("Attribute name: ", ChatColor.GREEN, attr.getKey().name());
+				dB.high("Attribute exception on initialization");
+				dB.high("Attribute name: ", ChatColor.GREEN, attr.getKey().name());
 				
 				//debug normal
-				Debugger.normal("Exception: ", e.getClass().getSimpleName());
-				Debugger.normal("Stack trace: ", StringTools.stackTrace(e.getStackTrace()));
+				dB.normal("Exception: ", e.getClass().getSimpleName());
+				dB.normal("Stack trace: ", StringTools.stackTrace(e.getStackTrace()));
 			}
 		}
 		return result;
@@ -232,12 +232,12 @@ public abstract class ItemAttr {
 			catch (Exception e)
 			{
 				//debug high
-				Debugger.high("Attribute exception on initialization");
-				Debugger.high("Attribute name: ", ChatColor.GREEN, attr.getKey().name());
+				dB.high("Attribute exception on initialization");
+				dB.high("Attribute name: ", ChatColor.GREEN, attr.getKey().name());
 				
 				//debug normal
-				Debugger.normal("Exception: ", e.getClass().getSimpleName());
-				Debugger.normal("Stack trace: ", StringTools.stackTrace(e.getStackTrace()));
+				dB.normal("Exception: ", e.getClass().getSimpleName());
+				dB.normal("Stack trace: ", StringTools.stackTrace(e.getStackTrace()));
 			}
 		}
 		return result;
@@ -257,7 +257,7 @@ public abstract class ItemAttr {
 		Attribute attr = clazz.getAnnotation(Attribute.class);
 
 		//debug low
-		Debugger.low("Registering attribute \'", ChatColor.GREEN, attr.name(), ChatColor.RESET, "\' with key: ", attr.key());
+		dB.low("Registering attribute \'", ChatColor.GREEN, attr.name(), ChatColor.RESET, "\' with key: ", attr.key());
 		
 		attributes.put(attr, clazz);
 	}
@@ -279,7 +279,7 @@ public abstract class ItemAttr {
 		try 
 		{
 			//debug low
-			Debugger.low("Initializing new attribute instance");
+			dB.low("Initializing new attribute instance");
 			
 			//get the attribute declaring class
 			T itemAttr = clazz.getConstructor(String.class).newInstance(attr.key());
@@ -350,7 +350,7 @@ public abstract class ItemAttr {
 		try 
 		{
 			//debug low
-			Debugger.low("Initializing new attribute instance");
+			dB.low("Initializing new attribute instance");
 			
 			//get the attribute declaring class
 			ItemAttr itemAttr = attributes.get(attr).getConstructor(String.class).newInstance(key);
@@ -402,12 +402,12 @@ public abstract class ItemAttr {
 	private static void debugInfo(Attribute attr, Exception e)
 	{
 		//debug high
-		Debugger.high("Attribute exception on initialization");
-		Debugger.high("Attribute name: ", ChatColor.GREEN, attr.name());
+		dB.high("Attribute exception on initialization");
+		dB.high("Attribute name: ", ChatColor.GREEN, attr.name());
 		
 		//debug normal
-		Debugger.normal("Exception: ", e.getClass().getSimpleName());
-		Debugger.normal("Stack trace: ", StringTools.stackTrace(e.getStackTrace()));
+		dB.normal("Exception: ", e.getClass().getSimpleName());
+		dB.normal("Stack trace: ", StringTools.stackTrace(e.getStackTrace()));
 	}
 	
 
@@ -417,7 +417,7 @@ public abstract class ItemAttr {
 	public static void registerCoreAttributes()
 	{
 		//debug info
-		Debugger.info("Registering core item attributes");
+		dB.info("Registering core item attributes");
 		
 		try 
 		{
@@ -443,11 +443,11 @@ public abstract class ItemAttr {
 		catch (AttributeInvalidClassException e) 
 		{
 			//debug critical
-			Debugger.critical("Core attributes invalid");
+			dB.critical("Core attributes invalid");
 
 			//debug high
-			Debugger.high("Exception message: ", e.getMessage());
-			Debugger.high("Stack trace: ", StringTools.stackTrace(e.getStackTrace()));
+			dB.high("Exception message: ", e.getMessage());
+			dB.high("Stack trace: ", StringTools.stackTrace(e.getStackTrace()));
 		}
 	}
 

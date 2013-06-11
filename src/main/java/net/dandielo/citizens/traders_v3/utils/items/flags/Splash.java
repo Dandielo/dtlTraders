@@ -48,8 +48,15 @@ public class Splash extends ItemFlag {
 			throw new AttributeValueNotFoundException();
 		
 		//get the potion and check if it's a splash potion
-		Potion potion = Potion.fromItemStack(item);
-		if ( !potion.isSplash() )
-			throw new AttributeValueNotFoundException();
+		try
+		{
+		    Potion potion = Potion.fromItemStack(item);
+		    if ( !potion.isSplash() )
+			    throw new AttributeValueNotFoundException();
+		}
+		catch ( Exception e )
+		{
+		    throw new AttributeValueNotFoundException();
+		}
 	}
 }

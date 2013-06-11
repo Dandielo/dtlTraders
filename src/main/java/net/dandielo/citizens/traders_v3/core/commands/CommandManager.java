@@ -12,7 +12,7 @@ import net.dandielo.citizens.traders_v3.tNpc;
 import net.dandielo.citizens.traders_v3.bukkit.DtlTraders;
 import net.dandielo.citizens.traders_v3.bukkit.Perms;
 import net.dandielo.citizens.traders_v3.bukkit.commands.GeneralCommands;
-import net.dandielo.citizens.traders_v3.core.Debugger;
+import net.dandielo.citizens.traders_v3.core.dB;
 import net.dandielo.citizens.traders_v3.core.locale.LocaleManager;
 import net.dandielo.citizens.traders_v3.core.tools.StringTools;
 
@@ -76,8 +76,8 @@ public class CommandManager {
 		catch (Exception e)
 		{
 			//debug critical
-			Debugger.critical("Command class could not be initialized!");
-			Debugger.critical("Stack trace: ", StringTools.stackTrace(e.getStackTrace()));
+			dB.critical("Command class could not be initialized!");
+			dB.critical("Stack trace: ", StringTools.stackTrace(e.getStackTrace()));
 		}
 	}
 	
@@ -108,7 +108,7 @@ public class CommandManager {
 				GeneralCommands.registerCommandInfo(command.name(), command);
 				
 				//debug info
-			    Debugger.info("Registered command: '", ChatColor.GREEN, command.name(), " ", command.syntax(), ",");
+			    dB.info("Registered command: '", ChatColor.GREEN, command.name(), " ", command.syntax(), ",");
 			    
 				CommandSyntax syntax = new CommandSyntax(command.name(), command.syntax());
 				commands.put(syntax, new CommandBinding(clazz, method, syntax, command));

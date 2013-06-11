@@ -9,7 +9,7 @@ import java.util.Map;
 import net.dandielo.citizens.traders_v3.tNpcItem;
 import net.dandielo.citizens.traders_v3.tNpcStatus;
 import net.dandielo.citizens.traders_v3.bukkit.DtlTraders;
-import net.dandielo.citizens.traders_v3.core.Debugger;
+import net.dandielo.citizens.traders_v3.core.dB;
 import net.dandielo.citizens.traders_v3.core.exceptions.InvalidItemException;
 import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeInvalidClassException;
 import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeInvalidValueException;
@@ -168,12 +168,12 @@ public abstract class ItemFlag {
 			catch (Exception e)
 			{
 				//debug normal
-				Debugger.normal("Flag exception on initialization");
-				Debugger.normal("Flag name: ", ChatColor.GREEN, flag.getKey().name());
+				dB.normal("Flag exception on initialization");
+				dB.normal("Flag name: ", ChatColor.GREEN, flag.getKey().name());
 				
 				//debug low
-				Debugger.low("Exception: ", e.getClass().getSimpleName());
-				Debugger.low("Stack trace: ", StringTools.stackTrace(e.getStackTrace()));
+				dB.low("Exception: ", e.getClass().getSimpleName());
+				dB.low("Stack trace: ", StringTools.stackTrace(e.getStackTrace()));
 			}
 		}
 		return result;
@@ -193,7 +193,7 @@ public abstract class ItemFlag {
 		Attribute attr = clazz.getAnnotation(Attribute.class);
 
 		//debug low
-		Debugger.low("Registering flag \'", ChatColor.GREEN, attr.name(), ChatColor.RESET, "\' with key: ", attr.key());
+		dB.low("Registering flag \'", ChatColor.GREEN, attr.name(), ChatColor.RESET, "\' with key: ", attr.key());
 		
 		flags.put(attr, clazz);
 	}
@@ -220,7 +220,7 @@ public abstract class ItemFlag {
 		try 
 		{
 			//debug low
-			Debugger.low("Initializing new flag instance");
+			dB.low("Initializing new flag instance");
 			
 			//get the attribute declaring class
 			ItemFlag itemflag = flags.get(attr).getConstructor(String.class).newInstance(key);
@@ -270,12 +270,12 @@ public abstract class ItemFlag {
 	private static void debugInfo(Attribute attr, Exception e)
 	{
 		//debug high
-		Debugger.high("Flag exception on initialization");
-		Debugger.high("Flag name: ", ChatColor.GREEN, attr.name());
+		dB.high("Flag exception on initialization");
+		dB.high("Flag name: ", ChatColor.GREEN, attr.name());
 		
 		//debug normal
-		Debugger.normal("Exception: ", e.getClass().getSimpleName());
-		Debugger.normal("Stack trace: ", StringTools.stackTrace(e.getStackTrace()));
+		dB.normal("Exception: ", e.getClass().getSimpleName());
+		dB.normal("Stack trace: ", StringTools.stackTrace(e.getStackTrace()));
 	}
 	
 
@@ -285,7 +285,7 @@ public abstract class ItemFlag {
 	public static void registerCoreFlags()
 	{
 		//debug info
-		Debugger.info("Registering core item flags");
+		dB.info("Registering core item flags");
 		
 		try 
 		{
@@ -301,11 +301,11 @@ public abstract class ItemFlag {
 		catch (AttributeInvalidClassException e) 
 		{
 			//debug critical
-			Debugger.critical("Core flags invalid");
+			dB.critical("Core flags invalid");
 
 			//debug high
-			Debugger.high("Exception message: ", e.getMessage());
-			Debugger.high("Stack trace: ", StringTools.stackTrace(e.getStackTrace()));
+			dB.high("Exception message: ", e.getMessage());
+			dB.high("Stack trace: ", StringTools.stackTrace(e.getStackTrace()));
 		}
 	}
 	

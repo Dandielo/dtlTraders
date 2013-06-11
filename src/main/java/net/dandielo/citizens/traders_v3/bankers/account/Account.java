@@ -9,7 +9,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 
 import net.dandielo.citizens.traders_v3.bankers.setting.Settings;
-import net.dandielo.citizens.traders_v3.bankers.tabs.BankItem;
 import net.dandielo.citizens.traders_v3.bankers.tabs.Tab;
 
 public abstract class Account implements InventoryHolder {
@@ -31,7 +30,7 @@ public abstract class Account implements InventoryHolder {
 	protected String owner;
 	
 	//the account name (stock name)
-	protected String name;
+	//protected String name;
 	
 	//list of all tabs the player has in his account
 	protected List<Tab> tabs;
@@ -52,7 +51,7 @@ public abstract class Account implements InventoryHolder {
 		this.owner = owner;
 		
 		//set the default account name format
-		name = Settings.getDefaultAccountNameFormat();
+	//	name = Settings.getDefaultAccountNameFormat();
 		
 		//tab defaults, create list
 		tabs = new ArrayList<Tab>();
@@ -86,10 +85,10 @@ public abstract class Account implements InventoryHolder {
 	 * @return
 	 * the account name format (stock name)
 	 */
-	public String getName()
+/*	public String getName()
 	{
 		return name;
-	}
+	}*/
 	
 	/**
 	 * @return
@@ -161,7 +160,7 @@ public abstract class Account implements InventoryHolder {
 	public Inventory getInventory()
 	{
 		Inventory inventory = Bukkit.createInventory(this, tabSize*9, 
-				name.replace("{player}", owner).replace("{npc}", settings.getNpcName())
+				settings.getAccountNameFormat().replace("{player}", owner).replace("{npc}", settings.getNpcName())
 				);
 		return inventory;
 	}

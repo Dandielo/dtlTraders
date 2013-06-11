@@ -11,7 +11,7 @@ import org.bukkit.inventory.ItemStack;
 public abstract class Tab {
 
 	protected String name = "Bank tab";
-	protected ItemStack icon = new BankItem("35 a:1 s:0 n:" + name).getItem();
+	protected ItemStack icon = new BankItem("35 a:1 s:0 n:Bank Tab").getItem();
 	protected List<String> desc;
 	
 	protected List<BankItem> items = new ArrayList<BankItem>();	
@@ -19,11 +19,6 @@ public abstract class Tab {
 	public void setIcon(ItemStack icon)
 	{
 		this.icon = icon;
-	}
-	
-	public void setName(String name)
-	{
-		this.name = name;
 	}
 	
 	public void setDescription(List<String> desc)

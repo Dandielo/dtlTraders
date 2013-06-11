@@ -11,6 +11,11 @@ import org.bukkit.inventory.ItemStack;
 public interface tNpc {
 
 	/**
+	 * Allows simply to lock and save all unsaved changes to a tNpc on inventory close events
+	 */
+	public void lockAndSave();
+	
+	/**
 	 * Handles a left click on the tNPC
 	 * @param itemInHand
 	 * the item hold when left clicking

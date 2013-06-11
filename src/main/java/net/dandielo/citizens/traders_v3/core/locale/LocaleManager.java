@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.dandielo.citizens.traders_v3.bukkit.DtlTraders;
-import net.dandielo.citizens.traders_v3.core.Debugger;
+import net.dandielo.citizens.traders_v3.core.dB;
 import net.dandielo.citizens.traders_v3.core.PluginSettings;
 
 import org.bukkit.command.CommandSender;
@@ -52,7 +52,7 @@ public class LocaleManager {
 	private LocaleManager()
 	{
 		//debug info
-		Debugger.info("Initializing locale manager");
+		dB.info("Initializing locale manager");
 		
 		updater = new LocaleUpdater(localeChangeConfiguration().getDefaults());
 		
@@ -71,7 +71,7 @@ public class LocaleManager {
 	public void loadFile()
 	{
 		//debug info
-		Debugger.info("Loading locale file");
+		dB.info("Loading locale file");
 		
 		//get the file name and path
 		String name = "locale." + PluginSettings.getLocale();
@@ -102,13 +102,13 @@ public class LocaleManager {
 			catch (IOException e)
 			{
 				//debug high
-				Debugger.high("While loading locale file, an exception occured");
-				Debugger.normal("Exception message: ", e.getClass().getSimpleName());
-				Debugger.high("Filename: ", name, ", path to file", path);
+				dB.high("While loading locale file, an exception occured");
+				dB.normal("Exception message: ", e.getClass().getSimpleName());
+				dB.high("Filename: ", name, ", path to file", path);
 
 				//debug high
-				Debugger.normal("Exception message: ", e.getMessage());
-				Debugger.normal("StackTrace: ", e.getStackTrace());
+				dB.normal("Exception message: ", e.getMessage());
+				dB.normal("StackTrace: ", e.getStackTrace());
 			}
 		}
 		load();
@@ -123,7 +123,7 @@ public class LocaleManager {
 	public YamlConfiguration localeChangeConfiguration()
 	{
 		//debug info
-		Debugger.info("Loading locale changes");
+		dB.info("Loading locale changes");
 		
 		//Load locale changes
 	    InputStream stream = DtlTraders.getInstance().getResource("locale.changes");
@@ -152,7 +152,7 @@ public class LocaleManager {
 	public void load()
 	{
 		//debug info
-		Debugger.info("Loading yaml configuration");
+		dB.info("Loading yaml configuration");
 		
 		load(PluginSettings.autoUpdateLocale());
 	}
@@ -205,13 +205,13 @@ public class LocaleManager {
 		catch (Exception e)
 		{
 			//debug high
-			Debugger.high("While reading the locale file, an exception occured");
-			Debugger.high("Exception message: ", e.getClass().getSimpleName());
-			Debugger.high("On update: ", update);
+			dB.high("While reading the locale file, an exception occured");
+			dB.high("Exception message: ", e.getClass().getSimpleName());
+			dB.high("On update: ", update);
 
 			//debug high
-			Debugger.normal("Exception message: ", e.getMessage());
-			Debugger.normal("StackTrace: ", e.getStackTrace());
+			dB.normal("Exception message: ", e.getMessage());
+			dB.normal("StackTrace: ", e.getStackTrace());
 		}
 	}
 
@@ -221,7 +221,7 @@ public class LocaleManager {
 	protected void loadMessages(String currentVersion, ConfigurationSection config)
 	{
 		//debug info
-		Debugger.info("Loading locale messages");
+		dB.info("Loading locale messages");
 		
 		//TODO add debug information (this is not normal)
 		if ( config == null ) return;
@@ -239,7 +239,7 @@ public class LocaleManager {
 	protected void loadKeywords(String currentVersion, ConfigurationSection config)
 	{
 		//debug info
-		Debugger.info("Loading locale keywords");
+		dB.info("Loading locale keywords");
 		
 		//TODO add debug information (this is not normal)
 		if ( config == null ) return;
@@ -257,7 +257,7 @@ public class LocaleManager {
 	protected void loadUIConfigs(String currentVersion, ConfigurationSection config)
 	{
 		//debug info
-		Debugger.info("Loading locale UI configs");
+		dB.info("Loading locale UI configs");
 		
 		//TODO add debug information (this is not normal)
 		if ( config == null ) return;
@@ -280,7 +280,7 @@ public class LocaleManager {
 	public void save()
 	{
 		//debug info
-		Debugger.info("Saving locale YAML configuration to file");
+		dB.info("Saving locale YAML configuration to file");
 		
 		try 
 		{
@@ -289,12 +289,12 @@ public class LocaleManager {
 		catch (IOException e)
 		{
 			//debug high
-			Debugger.high("While saving the locale YAML configuration, an exception occured");
-			Debugger.high("Exception: ", e.getClass().getSimpleName());
+			dB.high("While saving the locale YAML configuration, an exception occured");
+			dB.high("Exception: ", e.getClass().getSimpleName());
 			
 			//debug normal
-			Debugger.normal("Exception message: ", e.getMessage());
-			Debugger.normal("Stack trace: ", e.getStackTrace());
+			dB.normal("Exception message: ", e.getMessage());
+			dB.normal("Stack trace: ", e.getStackTrace());
 		}
 	}
 	
@@ -313,8 +313,8 @@ public class LocaleManager {
 	public void sendMessage(CommandSender sender, String key, Object... args)
 	{
 		//debug low
-		Debugger.low("Preparing message to: ", sender.getName(), ", message key: ", key);
-		Debugger.low("With arguments: ", args);
+		dB.low("Preparing message to: ", sender.getName(), ", message key: ", key);
+		dB.low("With arguments: ", args);
 		
 		//check the message key
 		checkMessageKey(key);
@@ -326,14 +326,14 @@ public class LocaleManager {
 		for ( int i = 0 ; i < args.length ; )
 		{
 			//debug info
-			Debugger.info("Checking ", i + 1, " message argument: ", args[i]);
-			Debugger.info("Checking ", i + 2, " message argument: ", args[i+1]);
+			dB.info("Checking ", i + 1, " message argument: ", args[i]);
+			dB.info("Checking ", i + 2, " message argument: ", args[i+1]);
 			
 			//look for string arguments
 			if ( args[i] instanceof String )
 			{
 				//debug info
-				Debugger.info("Valid tag");
+				dB.info("Valid tag");
 
 				//check if the argument might be a keyword
 				checkKeywordKey((String) args[i+1]);
@@ -349,7 +349,7 @@ public class LocaleManager {
 		}
 		
 		//debug low
-		Debugger.low("Sending message to: ", sender.getName(), ", message key: ", key);
+		dB.low("Sending message to: ", sender.getName(), ", message key: ", key);
 		
 		//send the prepared message
 		sender.sendMessage(message.replace('^', '§'));
@@ -368,8 +368,8 @@ public class LocaleManager {
 	public String getMessage(String key, Object... args)
 	{
 		//debug info
-		Debugger.low("Preparing message, key: ", key);
-		Debugger.low("With arguments: ", args);
+		dB.low("Preparing message, key: ", key);
+		dB.low("With arguments: ", args);
 		
 		//check the message key
 		checkMessageKey(key);
@@ -410,13 +410,13 @@ public class LocaleManager {
 	public void checkMessageKey(String key)
 	{
 		//debug info
-		Debugger.info("Checking message key: ",key);
+		dB.info("Checking message key: ",key);
 		
 		//it might be I've forgot to add a message to the locale, add it then with a warning string
 		if ( !messages.containsKey(new LocaleEntry(key, localeVersion)) )
 		{
 			//debug low
-			Debugger.low("Message key not found: ", key);
+			dB.low("Message key not found: ", key);
 			
 			//add to the yaml config
 			localeYaml.set(
@@ -444,14 +444,14 @@ public class LocaleManager {
 	public void checkKeywordKey(String key)
 	{
 		//debug info
-		Debugger.info("Checking keyword key: ", key);
+		dB.info("Checking keyword key: ", key);
 		
 		
 		//it might be I've forgot to add a message to the locale, add it then with a warning string
 		if ( !keywords.containsKey(new LocaleEntry(key, localeVersion)) && key.startsWith("#") )
 		{
 			//debug low
-			Debugger.low("Keyword key not found: ", key);
+			dB.low("Keyword key not found: ", key);
 			
 			//add to the yaml config
 			localeYaml.set(
@@ -478,7 +478,7 @@ public class LocaleManager {
 	public List<String> getLore(String key)
 	{
 		//debug info
-		Debugger.info("Getting lore for UI item: ", key);
+		dB.info("Getting lore for UI item: ", key);
 		
 		List<String> list = new ArrayList<String>();
 		if ( ui.containsKey(new LocaleEntry(key, localeVersion)) )
@@ -496,7 +496,7 @@ public class LocaleManager {
 	 */
 	public String getName(String key) {
 		//debug info
-		Debugger.info("Getting name for UI item: ", key);
+		dB.info("Getting name for UI item: ", key);
 		
 		String name = "";
 		if ( ui.containsKey(new LocaleEntry(key, localeVersion)) )

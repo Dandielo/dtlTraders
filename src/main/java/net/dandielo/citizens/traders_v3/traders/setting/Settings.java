@@ -5,7 +5,7 @@ import org.bukkit.ChatColor;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.trait.trait.Owner;
 import net.citizensnpcs.api.util.DataKey;
-import net.dandielo.citizens.traders_v3.core.Debugger;
+import net.dandielo.citizens.traders_v3.core.dB;
 
 public class Settings extends TGlobalSettings {	
     //the Npc associated with these settings
@@ -105,7 +105,7 @@ public class Settings extends TGlobalSettings {
 	public void load(DataKey data) 
 	{
 		//debug info
-		Debugger.info("Loading trader settings for: ", this.npc.getName());
+		dB.info("Loading trader settings for: ", this.npc.getName());
 		
 		//load trader settings
 		type = data.getString("type");
@@ -125,7 +125,7 @@ public class Settings extends TGlobalSettings {
 	public void save(DataKey data) 
 	{
 		//debug info
-		Debugger.info("Saving trader settings for:", this.npc.getName());
+		dB.info("Saving trader settings for:", this.npc.getName());
 		
 		//save trader settings
 		data.setString("type", type);

@@ -20,7 +20,7 @@ import net.dandielo.citizens.traders_v3.bankers.setting.Settings;
 import net.dandielo.citizens.traders_v3.bankers.tabs.BankItem;
 import net.dandielo.citizens.traders_v3.bankers.tabs.Tab;
 import net.dandielo.citizens.traders_v3.bukkit.Perms;
-import net.dandielo.citizens.traders_v3.core.Debugger;
+import net.dandielo.citizens.traders_v3.core.dB;
 import net.dandielo.citizens.traders_v3.core.locale.LocaleManager;
 import net.dandielo.citizens.traders_v3.core.tools.StringTools;
 import net.dandielo.citizens.traders_v3.traders.clicks.ClickHandler;
@@ -45,7 +45,7 @@ public abstract class Banker implements tNpc {
 	public static void registerHandlers(Class<? extends Banker> clazz)
 	{
 		//debug info
-		Debugger.info("Registering click handlers for trader type: ", clazz.getSimpleName());
+		dB.info("Registering click handlers for trader type: ", clazz.getSimpleName());
 		
 		List<Method> methods = new ArrayList<Method>();
 		for ( Method method : clazz.getMethods() )
@@ -97,7 +97,7 @@ public abstract class Banker implements tNpc {
 	public Banker(BankerTrait banker, WalletTrait wallet, Player player)
 	{
 		//debug info
-		Debugger.low("Creating a banker, for: ", player.getName());
+		dB.low("Creating a banker, for: ", player.getName());
 		
 		//set all constant data
 		settings = banker.getSettings();
@@ -162,7 +162,7 @@ public abstract class Banker implements tNpc {
 	private void inventoryClickHandler(InventoryClickEvent e)
 	{		
 		//debug info
-		Debugger.low("Handling click event");
+		dB.low("Handling click event");
 		
 		//check if the clicked inventoru=y is the tope or the bottom one
         boolean top = e.getView().convertSlot(e.getRawSlot()) == e.getRawSlot();
@@ -181,19 +181,19 @@ public abstract class Banker implements tNpc {
 					try 
 					{
 						//debug info
-						Debugger.low("Executing method: ", ChatColor.AQUA, method.getName());
+						dB.low("Executing method: ", ChatColor.AQUA, method.getName());
 						method.invoke(this, e);
 					} 
 					catch (Exception ex) 
 					{
 						//debug info
-						Debugger.critical("While executing inventory click event");
-						Debugger.critical("Exception: ", ex.getClass().getSimpleName());
-						Debugger.critical("Method: ", method.getName());
-						Debugger.critical("Banker: ", this.getSettings().getNPC().getName(), ", player: ", player.getName());
-						Debugger.critical(" ");
-						Debugger.critical("Exception message: ", ex.getMessage());
-						Debugger.high("Stack trace: ", StringTools.stackTrace(ex.getStackTrace()));
+						dB.critical("While executing inventory click event");
+						dB.critical("Exception: ", ex.getClass().getSimpleName());
+						dB.critical("Method: ", method.getName());
+						dB.critical("Banker: ", this.getSettings().getNPC().getName(), ", player: ", player.getName());
+						dB.critical(" ");
+						dB.critical("Exception message: ", ex.getMessage());
+						dB.high("Stack trace: ", StringTools.stackTrace(ex.getStackTrace()));
 						
 						//cancel the event because of the exception!
 						e.setCancelled(true);
@@ -202,7 +202,7 @@ public abstract class Banker implements tNpc {
 			}
 		}
 		//debug info, shows if the event was canceled or not
-		Debugger.info("Event cancelled: ", e.isCancelled());
+		dB.info("Event cancelled: ", e.isCancelled());
 	}
 	
 	/** 
@@ -222,7 +222,7 @@ public abstract class Banker implements tNpc {
 	public void saveItemsUpponLocking()
 	{
 		//debug normal
-		Debugger.normal("Clearing the stock to set it with new items");
+		dB.normal("Clearing the stock to set it with new items");
 		
 		//clear
 		tab.getItems().clear();
@@ -247,4 +247,20 @@ public abstract class Banker implements tNpc {
 		}
 	}
 	
+	@Override
+	public void lockAndSave()
+	{
+		status = tNpcStatus.ACCOUNT_LOCKED;
+		saveItemsUpponLocking();
+	}
+	
+	public boolean tabTransaction(int tabID)
+	{
+		if ( wallet.withdraw(player, 0.0) )
+		{
+			wallet.deposit(this, 0.0);
+			return true;
+		}
+		return false;
+	}
 }
