@@ -2,14 +2,21 @@ name: dtlTraders
 main: net.dandielo.citizens.traders_v3.bukkit.DtlTraders
 depend: [Citizens,Vault]
 soft-depend: [Denizen,dtlWallets]
-version: 3.0 Beta
+version: 3.0.2 Beta
 description: >
-             Citizens 2 trader and banker trait. 
+             Citizens 2 trader and banker traits. 
 commands:
   trader: 
     aliases: dtrader
-    description: Dtl - CitizensTrader trader commands.
+    description: Dtl - Trader commands.
+  banker:
+    aliases: dbanker
+    description: Dtl - Banker commands
 permissions:
+  dtl.trader.bypass.creative:
+    default: op
+  dtl.banker.bypass.creative:
+    default: op
   dtl.trader.commands.*:
     default: op
   dtl.trader.manage:
@@ -19,4 +26,10 @@ permissions:
   dtl.trader.sell:
     default: true
   dtl.trader.buy:
+    default: true
+  dtl.banker.commands.*:
+    default: op
+  dtl.banker.commands.tabname:
+    default: true
+  dtl.banker.use:
     default: true

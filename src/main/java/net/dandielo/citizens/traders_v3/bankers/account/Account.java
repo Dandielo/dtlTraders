@@ -5,17 +5,24 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 
 import net.dandielo.citizens.traders_v3.bankers.setting.Settings;
 import net.dandielo.citizens.traders_v3.bankers.tabs.Tab;
+import net.dandielo.citizens.traders_v3.bukkit.Perms;
 
 public abstract class Account implements InventoryHolder {
 	/**
+	 * Perm manager instance
+	 */
+	Perms perms = Perms.perms;
+	
+	/**
 	 * Settings from the banker that will handle our account
 	 */
-	private Settings settings;
+	protected Settings settings;
 
 	/**
 	 * The account type used for loading and saving
@@ -223,5 +230,13 @@ public abstract class Account implements InventoryHolder {
 	public static enum AccountType
 	{
 		PRIVATE, GUILD
+	}
+
+	//the current player instance associated with the account
+	protected Player viewer; 
+	
+	public void setPlayer(Player player)
+	{
+		viewer = player;
 	}
 }

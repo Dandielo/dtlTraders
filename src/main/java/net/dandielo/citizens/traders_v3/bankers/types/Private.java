@@ -11,7 +11,6 @@ import net.dandielo.citizens.traders_v3.bankers.Banker;
 import net.dandielo.citizens.traders_v3.bankers.account.Account.AccountType;
 import net.dandielo.citizens.traders_v3.bankers.backend.AccountLoader;
 import net.dandielo.citizens.traders_v3.bankers.tabs.Tab;
-import net.dandielo.citizens.traders_v3.bukkit.Econ;
 import net.dandielo.citizens.traders_v3.traders.clicks.ClickHandler;
 import net.dandielo.citizens.traders_v3.traders.clicks.InventoryType;
 import net.dandielo.citizens.traders_v3.traits.BankerTrait;
@@ -25,7 +24,7 @@ public class Private extends Banker {
 		super(banker, wallet, player);
 
 		//set the account
-		account = AccountLoader.accLoader.getAccount(AccountType.PRIVATE, player.getName());
+		account = AccountLoader.accLoader.getAccount(AccountType.PRIVATE, player);
 		account.applySettings(settings);
 	}
 
@@ -36,7 +35,7 @@ public class Private extends Banker {
 
 	@Override
 	public boolean onRightClick(ItemStack itemInHand)
-	{
+	{		
 		//create the inventory
 		inventory = account.getInventory();
 
@@ -76,12 +75,18 @@ public class Private extends Banker {
 				//end if its the same tab
 				if ( tab != null ) return;
 				
+				//check permission if some can but a tab ;P
+				if ( !perms.has(player, "dtl.banker.buy-tab") ) return;
+				
 				//now we maybe can buy the tab :P
 				if ( !tabTransaction(e.getSlot()%9) )
 				{
-					//error message
+					//send message
+					locale.sendMessage(player, "banker-tab-buy-fail");
 					return;
 				}
+				//send message
+				locale.sendMessage(player, "banker-tab-buy-success");
 
 				//add the new tab
 				tab = Tab.createNewTab(AccountType.PRIVATE);
@@ -105,9 +110,9 @@ public class Private extends Banker {
 				locale.sendMessage(player, "banker-tab-switch", "tab", tab.getName());
 			}
 			//left click
+			//new item icon
 			else
 			{
-				
 			}
 		}
 		else

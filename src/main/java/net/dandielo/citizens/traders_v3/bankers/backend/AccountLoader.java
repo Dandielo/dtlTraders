@@ -12,6 +12,7 @@ import net.dandielo.citizens.traders_v3.bankers.account.PrivateAccount;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 
 /**
  * Loads, saves and holds all private and guild accounts in game
@@ -29,14 +30,16 @@ public class AccountLoader {
 	/**
 	 * returns a private account for the given player
 	 */
-	public Account getAccount(AccountType type, String owner)
+	public Account getAccount(AccountType type, Player player)
 	{
 		//get the account
-		Account account = accounts.get(owner);
+		Account account = accounts.get(player.getName());
 
 		//if the account does not exists create a new one
 		if ( account == null || !account.getType().equals(type) )
-		    account = _createNewAccount(type, owner);
+		    account = _createNewAccount(type, player.getName());
+		
+		account.setPlayer(player);
 		
 		//return the account
 		return account;

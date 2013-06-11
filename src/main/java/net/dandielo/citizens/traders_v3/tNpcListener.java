@@ -10,12 +10,13 @@ import net.dandielo.citizens.traders_v3.bukkit.Perms;
 import net.dandielo.citizens.traders_v3.core.dB;
 import net.dandielo.citizens.traders_v3.core.exceptions.InvalidTraderTypeException;
 import net.dandielo.citizens.traders_v3.core.exceptions.TraderTypeNotFoundException;
+import net.dandielo.citizens.traders_v3.core.locale.LocaleManager;
 import net.dandielo.citizens.traders_v3.traders.Trader;
-import net.dandielo.citizens.traders_v3.traders.types.Server;
 import net.dandielo.citizens.traders_v3.traits.BankerTrait;
 import net.dandielo.citizens.traders_v3.traits.TraderTrait;
 import net.dandielo.citizens.traders_v3.utils.NBTUtils;
 
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -30,6 +31,11 @@ public class tNpcListener implements Listener {
 	 * Permissions manager instance
 	 */
 	Perms perms = Perms.perms;
+	
+	/**
+	 * Locale manager instance
+	 */
+	LocaleManager locale = LocaleManager.locale;
 	
 	InventoryCleaner cleaner = new InventoryCleaner();
 	
@@ -132,8 +138,20 @@ public class tNpcListener implements Listener {
 		if ( !e.getNPC().hasTrait(TraderTrait.class) ) return;
 		
 		//check permission
-		if ( !perms.has(e.getClicker(), "dtl.trader.use") ) return;
-
+		if ( !perms.has(e.getClicker(), "dtl.trader.use") ) 
+		{
+			locale.sendMessage(e.getClicker(), "error-nopermission");
+			return;
+		}
+		
+		//dont allow creative to open traders
+		if ( e.getClicker().getGameMode().equals(GameMode.CREATIVE)
+				&& !perms.has(e.getClicker(), "dtl.trader.bypass.creative") )
+		{
+			locale.sendMessage(e.getClicker(), "error-nopermission-creative");
+			return;
+		}
+		
 		TraderTrait traderTrait = e.getNPC().getTrait(TraderTrait.class);
 		Trader trader;
 		try 
@@ -181,8 +199,19 @@ public class tNpcListener implements Listener {
 		if ( !e.getNPC().hasTrait(TraderTrait.class) ) return;
 
 		//check permission
-		if ( !perms.has(e.getClicker(), "dtl.trader.use") ) return;
+		if ( !perms.has(e.getClicker(), "dtl.trader.use") )
+		{
+			locale.sendMessage(e.getClicker(), "error-nopermission");
+			return;
+		}
 		
+		//dont allow creative to open traders
+		if ( e.getClicker().getGameMode().equals(GameMode.CREATIVE)
+				&& !perms.has(e.getClicker(), "dtl.trader.bypass.creative") ) 
+		{
+			locale.sendMessage(e.getClicker(), "error-nopermission-creative");
+			return;
+		}
 
 		TraderTrait traderTrait = e.getNPC().getTrait(TraderTrait.class);
 		Trader trader;
@@ -236,8 +265,20 @@ public class tNpcListener implements Listener {
 		if ( !e.getNPC().hasTrait(BankerTrait.class) ) return;
 
 		//check permission
-		if ( !perms.has(e.getClicker(), "dtl.banker.use") ) return;
-
+		if ( !perms.has(e.getClicker(), "dtl.banker.use") )
+		{
+			locale.sendMessage(e.getClicker(), "error-nopermission");
+			return;
+		}
+		
+		//dont allow creative to open traders
+		if ( e.getClicker().getGameMode().equals(GameMode.CREATIVE)
+				&& !perms.has(e.getClicker(), "dtl.banker.bypass.creative") ) 
+		{
+			locale.sendMessage(e.getClicker(), "error-nopermission-creative");
+			return;
+		}
+		
 		BankerTrait bankerTrait = e.getNPC().getTrait(BankerTrait.class);
 		Banker banker;
 		try 
@@ -268,7 +309,19 @@ public class tNpcListener implements Listener {
 		if ( !e.getNPC().hasTrait(BankerTrait.class) ) return;
 
 		//check permission
-		if ( !perms.has(e.getClicker(), "dtl.banker.use") ) return;
+		if ( !perms.has(e.getClicker(), "dtl.banker.use") )
+		{
+			locale.sendMessage(e.getClicker(), "error-nopermission");
+			return;
+		}
+
+		//dont allow creative to open traders
+		if ( e.getClicker().getGameMode().equals(GameMode.CREATIVE)
+				&& !perms.has(e.getClicker(), "dtl.banker.bypass.creative") ) 
+		{
+			locale.sendMessage(e.getClicker(), "error-nopermission-creative");
+			return;
+		}
 
 		BankerTrait bankerTrait = e.getNPC().getTrait(BankerTrait.class);
 		Banker banker;

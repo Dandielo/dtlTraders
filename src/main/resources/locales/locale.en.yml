@@ -29,6 +29,7 @@ messages:
   banker-tab-locked: '^6Locked bank tab: ^3{tab}'
   banker-tab-unlocked: '^6Unlocked bank tab: ^3{tab}'
   banker-tab-buy-success: '^6Bought a new tab'
+  banker-tab-buy-fail: '^6Failed to buy a new tab'
   wallet-balance: '^6Wallet balance: ^3{amount}'
   wallet-invalid: '^6You can not use this command on this wallet type'
   wallet-withdraw: '^6Withdrawed ^3{amount}'
@@ -57,6 +58,7 @@ keywords:
   banker-private: Private Banker
   stack-price: Stack price
   tab-price: Tab price
+  tab-name: Tab name
   stock-amounts: Amounts choosing
   stock-start: Start stock
   stock-size: Stock size
@@ -109,4 +111,16 @@ ui:
     lore:
     - ^7Click to unlock the stock
     - ^7Enables item adding/removing from stock
+  tab-unowned:
+    name: ^r^6Unowned bank tab
+    lore:
+    - ^7This tab is unavailable for you
+    - ^7Shift R.Click to buy it
+    - '^7Price: ^3{price}'
+  tab-lock:
+    lore:
+    - ^7Click to lock the tab
+  tab-unlock:
+    lore:
+    - ^7Click to ulock the tab
 

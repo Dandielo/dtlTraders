@@ -195,9 +195,7 @@ public class GeneralCommands {
 		
 		for ( Command cmd : cmds )
 		{
-			{
-				sender.sendMessage(nameAndSyntax(cmd));
-			}
+			sender.sendMessage(nameAndSyntax(cmd));
 		}
 	}
 /*	

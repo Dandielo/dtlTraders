@@ -3,8 +3,6 @@ package net.dandielo.citizens.traders_v3.bankers.tabs;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.dandielo.citizens.traders_v3.utils.ItemUtils;
-
 import org.bukkit.configuration.ConfigurationSection;
 
 public class PrivateTab extends Tab {
@@ -19,7 +17,7 @@ public class PrivateTab extends Tab {
 	public void onSave(ConfigurationSection data)
 	{
 		//set the data
-		data.set("icon", ItemUtils.createBankItem(icon).toString());
+		data.set("icon", icon.toString());
 		data.set("desc", desc);
 		
 		List<String> list = new ArrayList<String>();
@@ -35,7 +33,7 @@ public class PrivateTab extends Tab {
 		BankItem iconItem = new BankItem(data.getString("icon", "35 a:1 s:0 n:Bank tab"));
 		
 		name = iconItem.getName();
-		icon = iconItem.getItem();
+		icon = iconItem;//.getItem();
 		desc = data.getStringList("desc");
 		
 		//load all items for this tab

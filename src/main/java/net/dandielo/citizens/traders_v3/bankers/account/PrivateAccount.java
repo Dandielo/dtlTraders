@@ -1,17 +1,12 @@
 package net.dandielo.citizens.traders_v3.bankers.account;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 
 import net.dandielo.citizens.traders_v3.bankers.tabs.BankItem;
 import net.dandielo.citizens.traders_v3.bankers.tabs.Tab;
+import net.dandielo.citizens.traders_v3.core.locale.LocaleManager;
 
 public class PrivateAccount extends Account {
 
@@ -72,19 +67,27 @@ public class PrivateAccount extends Account {
 		int i = (tabSize-1)*9, j = 0;
 		for ( Tab tab : tabs )
 		{
-			inventory.setItem(i++, tab.getIcon());
+			if ( j < settings.getMaxVisibleTabs() )
+			    inventory.setItem(i++, tab.getIcon());
 			++j;
 		}
-		
-		//make it bit more nicer ;)
-		List<String> unavailable = new ArrayList<String>();
-		unavailable.add(ChatColor.RESET + "" + ChatColor.GRAY + "This tab is not available for you");
-		unavailable.add(ChatColor.RESET + "" + ChatColor.GRAY + "Shift + right click to buy it");
-		//for ( ; j < maxSize ; ++j )
-		if ( j + 1 < maxSize )
+
+		if ( j + 1 < maxSize && j + 1 < settings.getMaxVisibleTabs() )
 		{
-			inventory.setItem(i++, new BankItem("35 a:1 s:0 .lore n:Bank tab " + (j+1), unavailable).getItem());
+			//check the players permission
+			if ( tabCountPermCheck(j+i) )
+			    inventory.setItem(i++, new BankItem("35 a:1 s:0 .lore n:" + LocaleManager.locale.getName("tab-unowned"), 
+			    		/* the lore to set */ LocaleManager.locale.getLore("tab-unowned")).getItem());
 		}
 	}
 
+	private boolean tabCountPermCheck(int tabId)
+	{
+		boolean result = false;
+		for ( int i = tabId ; i < maxSize && !result ; ++i )
+		{
+			result = perms.has(viewer, "dtl.banker.tabs.count." + (i+1));
+		}
+		return result;
+	}
 }

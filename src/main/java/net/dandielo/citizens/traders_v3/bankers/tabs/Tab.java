@@ -4,21 +4,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.dandielo.citizens.traders_v3.bankers.account.Account.AccountType;
+import net.dandielo.citizens.traders_v3.utils.ItemUtils;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 public abstract class Tab {
 
 	protected String name = "Bank tab";
-	protected ItemStack icon = new BankItem("35 a:1 s:0 n:Bank Tab").getItem();
+	protected BankItem icon = new BankItem("35 a:1 s:0 n:Bank Tab");
 	protected List<String> desc;
 	
 	protected List<BankItem> items = new ArrayList<BankItem>();	
 	
 	public void setIcon(ItemStack icon)
 	{
-		this.icon = icon;
+		//apply the name
+		ItemMeta meta = icon.clone().getItemMeta();
+		meta.setDisplayName(name);
+		icon.setItemMeta(meta);
+		
+		//save as bank item
+		this.icon = ItemUtils.createBankItem(icon);
 	}
 	
 	public void setDescription(List<String> desc)
@@ -28,12 +36,27 @@ public abstract class Tab {
 	
 	public ItemStack getIcon()
 	{
-		return icon;
+		return icon.getItem();
 	}
 	
 	public String getName()
 	{
 		return name;
+	}
+	
+	public void setName(String name)
+	{
+		//replace color codes
+		this.name = name.replace('^', '§');
+		
+		//new item
+		ItemStack newItem = this.icon.getItem();
+		ItemMeta meta = newItem.getItemMeta();
+		meta.setDisplayName(this.name);
+		newItem.setItemMeta(meta);
+		
+		//new bank item
+		this.icon = ItemUtils.createBankItem(newItem);
 	}
 	
 	public int getUsedSize()

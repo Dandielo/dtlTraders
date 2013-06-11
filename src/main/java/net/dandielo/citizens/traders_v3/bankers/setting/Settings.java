@@ -64,6 +64,11 @@ public class Settings extends BGlobalSettings {
 		if ( maxVisibleTabs != getDefaultMaxTabs() )
 			data.setInt("account.visible-tabs", maxVisibleTabs);
 	}
+
+	public void setType(String type)
+	{
+		this.type = type;
+	}
 	
 	
 }

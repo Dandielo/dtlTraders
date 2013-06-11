@@ -100,8 +100,8 @@ trader:
   denizen:
 banker:
   account:
-    format: 'Your Bank ;)'
+    format: 'Item bank account'
     max-tabs: 9
-    tab-size: 4
+    tab-size: 6
 auction:
 #planned

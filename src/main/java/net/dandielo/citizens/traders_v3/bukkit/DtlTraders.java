@@ -6,6 +6,7 @@ import net.dandielo.citizens.traders_v3.tNpcListener;
 import net.dandielo.citizens.traders_v3.tNpcManager;
 import net.dandielo.citizens.traders_v3.bankers.backend.AccountLoader;
 import net.dandielo.citizens.traders_v3.bankers.setting.BGlobalSettings;
+import net.dandielo.citizens.traders_v3.bukkit.commands.BankerCommands;
 import net.dandielo.citizens.traders_v3.bukkit.commands.GeneralCommands;
 import net.dandielo.citizens.traders_v3.bukkit.commands.TraderCommands;
 import net.dandielo.citizens.traders_v3.core.dB;
@@ -88,6 +89,7 @@ public class DtlTraders extends JavaPlugin {
 		//register commands
 		CommandManager.manager.registerCommands(GeneralCommands.class);
 		CommandManager.manager.registerCommands(TraderCommands.class);
+		CommandManager.manager.registerCommands(BankerCommands.class);
 		
 	    //init Traders
 		//init Bankers
