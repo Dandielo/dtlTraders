@@ -3,11 +3,11 @@ package net.dandielo.citizens.traders_v3.utils;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.server.v1_5_R3.NBTTagCompound;
-import net.minecraft.server.v1_5_R3.NBTTagList;
-import net.minecraft.server.v1_5_R3.NBTTagString;
+import net.minecraft.server.v1_6_R1.NBTTagCompound;
+import net.minecraft.server.v1_6_R1.NBTTagList;
+import net.minecraft.server.v1_6_R1.NBTTagString;
 
-import org.bukkit.craftbukkit.v1_5_R3.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_6_R1.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
 
 public class NBTUtils {	
@@ -21,7 +21,7 @@ public class NBTUtils {
 
     public static boolean hasCustomNBT(ItemStack item, String key) {
         NBTTagCompound tag;
-        net.minecraft.server.v1_5_R3.ItemStack cis = CraftItemStack.asNMSCopy(item);
+        net.minecraft.server.v1_6_R1.ItemStack cis = CraftItemStack.asNMSCopy(item);
         if (!cis.hasTag()) return false;
         tag = cis.getTag();
         // if this item has the NBTData for 'stockitem', there is an mark.
@@ -29,7 +29,7 @@ public class NBTUtils {
     }
 
     public static String getCustomNBT(ItemStack item, String key) {
-        net.minecraft.server.v1_5_R3.ItemStack cis = CraftItemStack.asNMSCopy(item);
+        net.minecraft.server.v1_6_R1.ItemStack cis = CraftItemStack.asNMSCopy(item);
         NBTTagCompound tag;
         if (!cis.hasTag())
             cis.setTag(new NBTTagCompound());
@@ -41,7 +41,7 @@ public class NBTUtils {
     }
 
     public static ItemStack removeCustomNBT(ItemStack item, String key) {
-        net.minecraft.server.v1_5_R3.ItemStack cis = CraftItemStack.asNMSCopy(item);
+        net.minecraft.server.v1_6_R1.ItemStack cis = CraftItemStack.asNMSCopy(item);
         NBTTagCompound tag;
         if (!cis.hasTag())
             cis.setTag(new NBTTagCompound());
@@ -52,7 +52,7 @@ public class NBTUtils {
     }
 
     public static ItemStack addCustomNBT(ItemStack item, String key, String value) {
-        net.minecraft.server.v1_5_R3.ItemStack cis = CraftItemStack.asNMSCopy(item);
+        net.minecraft.server.v1_6_R1.ItemStack cis = CraftItemStack.asNMSCopy(item);
         NBTTagCompound tag = null;
         // Do stuff with tag
         if (!cis.hasTag())
@@ -87,7 +87,7 @@ public class NBTUtils {
 	public static ItemStack addLore(ItemStack i, List<String> lore)
 	{		
 		//create a NMS copy
-		net.minecraft.server.v1_5_R3.ItemStack nms = CraftItemStack.asNMSCopy(i);
+		net.minecraft.server.v1_6_R1.ItemStack nms = CraftItemStack.asNMSCopy(i);
 		
 		//get the "tag" tag
 		NBTTagCompound tag;
@@ -129,7 +129,7 @@ public class NBTUtils {
 	public static List<String> getLore(ItemStack i)
 	{
 		//create a NMS copy
-		net.minecraft.server.v1_5_R3.ItemStack nms = CraftItemStack.asNMSCopy(i);
+		net.minecraft.server.v1_6_R1.ItemStack nms = CraftItemStack.asNMSCopy(i);
 
 		//get the "tag" tag
 		NBTTagCompound tag;
