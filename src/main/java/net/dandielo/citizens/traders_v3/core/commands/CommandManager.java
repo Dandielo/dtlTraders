@@ -203,11 +203,11 @@ public class CommandManager {
 			
 			String free = "";
 			for ( String arg : args )
-				if ( arg.contains(":") )
-					map.put(arg.split(":")[0], arg.split(":")[1]);
-				else if ( arg.startsWith("--" ))
-					map.put(arg.substring(2), "");
-				else
+				//if ( arg.contains(":") )
+				//	map.put(arg.split(":")[0], arg.split(":")[1]);
+				//else if ( arg.startsWith("--" ))
+				//	map.put(arg.substring(2), "");
+				//else
 					free += " " + arg;
 			
 			if ( !free.isEmpty() )
