@@ -1,4 +1,4 @@
-ver: 1.1.3
+ver: 1.1.4
 messages:
   plugin-reload: '^6Successfuly reloaded ^3dtlTraders'
   plugin-command-message: '^6== dtlTraders ^3{version} ^6=='
@@ -59,6 +59,9 @@ keywords:
   stack-price: Stack price
   tab-price: Tab price
   tab-name: Tab name
+  tab-icon: Tab icon
+  bank-name: Bank text format
+  visible-tabs: Visible tabs
   stock-amounts: Amounts choosing
   stock-start: Start stock
   stock-size: Stock size

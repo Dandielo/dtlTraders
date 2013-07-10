@@ -20,7 +20,6 @@ import net.dandielo.citizens.traders_v3.core.exceptions.TraderTypeNotFoundExcept
 import net.dandielo.citizens.traders_v3.core.exceptions.TraderTypeRegistrationError;
 import net.dandielo.citizens.traders_v3.traders.Trader;
 import net.dandielo.citizens.traders_v3.traders.types.Server;
-import net.dandielo.citizens.traders_v3.traits.TraderTrait;
 import net.dandielo.citizens.traders_v3.traits.WalletTrait;
 
 /**

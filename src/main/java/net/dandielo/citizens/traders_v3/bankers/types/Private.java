@@ -140,6 +140,27 @@ public class Private extends Banker {
 			}
 			else 
 			{
+				Tab tab = account.getTab(e.getSlot()%9);
+
+				//end if its the same tab
+				if (!this.tab.equals(tab) )
+				{
+					if ( status.equals(tNpcStatus.ACCOUNT_UNLOCKED) )
+					{
+						//send the message
+						locale.sendMessage(player, "banker-tab-locked", "tab", this.tab.getName());
+						this.saveItemsUpponLocking();
+					}
+
+					this.tab = tab;			
+					account.tabSwitch(tab, inventory);
+					
+					status = tNpcStatus.ACCOUNT_LOCKED;
+
+					//send the message
+					locale.sendMessage(player, "banker-tab-switch", "tab", tab.getName());
+				}
+				
 				if ( status.equals(tNpcStatus.ACCOUNT_LOCKED) )
 				{
 					status = tNpcStatus.ACCOUNT_UNLOCKED;

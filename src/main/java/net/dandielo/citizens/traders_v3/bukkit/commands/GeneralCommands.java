@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import net.citizensnpcs.api.npc.NPC;
+import net.dandielo.citizens.traders_v3.bankers.Banker;
+import net.dandielo.citizens.traders_v3.bankers.backend.AccountLoader;
 import net.dandielo.citizens.traders_v3.bukkit.DtlTraders;
 import net.dandielo.citizens.traders_v3.core.dB;
 import net.dandielo.citizens.traders_v3.core.PluginSettings;
@@ -72,7 +74,7 @@ public class GeneralCommands {
 		locale.sendMessage(sender, "plugin-reload");
 	}
 	
-	/*
+	
 	@Command(
 	name = "banker",
 	syntax = "",
@@ -81,14 +83,15 @@ public class GeneralCommands {
 	npc = false)
 	public void banker(DtlTraders plugin, CommandSender sender, Banker npc, Map<String, String> args)
 	{
-		if ( npc == null )
-		{
-			locale.sendMessage(sender, "plugin-command-message", "version", plugin.getDescription().getVersion());
-		}
-		else
+		locale.sendMessage(sender, "plugin-command-message", "version", plugin.getDescription().getVersion());
+		
+		//if an NPC is selected
+		if ( npc != null )
 		{
 			locale.sendMessage(sender, "plugin-command-message", "version", plugin.getDescription().getVersion(), "name", plugin.getName());
-			locale.sendMessage(sender, "key-value", "key", "#type", "value", "#" + npc.getType().toString() + "-banker");		
+			locale.sendMessage(sender, "key-value", "key", "#type", "value", "#banker-" + npc.getSettings().getType());	
+			locale.sendMessage(sender, "key-value", "key", "#bank-name", "value", npc.getSettings().getAccountNameFormat());	
+			locale.sendMessage(sender, "key-value", "key", "#visible-tabs", "value", String.valueOf(npc.getSettings().getMaxVisibleTabs()));
 		}
 	}
 	
@@ -102,62 +105,43 @@ public class GeneralCommands {
 	{
 		//reload the general config file
 		plugin.reloadConfig();
+		
+		//reload global settings
+		PluginSettings.initPluginSettings();
+		TGlobalSettings.initGlobalSettings();
+		
 		//reload the locale
 		locale.load();
-		//reload the item config file
-		plugin.getItemConfig().reloadConfig();
+		
+		//Account reload
+	    AccountLoader.accLoader.reload();
+		
+		locale.sendMessage(sender, "plugin-reload");
 	}
 	
 	//Type help command
 	@Command(
 	name = "banker",
-	syntax = "help (page)",
+	syntax = "help",
 	desc = "allows to get information about all banker commands",
 	perm = "dtl.banker.commands.help",
 	npc = false)
 	public void bankerHelp(DtlTraders plugin, CommandSender sender, NPC npc, Map<String, String> args)
 	{
+
 		List<Command> cmds = commands.get("banker");
 		
-		if ( cmds == null )
-			sender.sendMessage(ChatColor.RED + "No commands are registered for this type");
-
-		//Getting the page
-		int page = 1;
-		try
-		{
-			if ( args.containsKey("page") )
-				page = Integer.parseInt(args.get("page"));
-		} 
-		catch (NumberFormatException e)
-		{
-			page = 1;
-		}
-		int overall = ( cmds.size() / 4 ) + (cmds.size() % 4 == 0 ? 0 : 1);
+	    if ( cmds == null )
+			dB.high("Command informations are not loaded");
 		
-		if ( page < 1 || page > overall )
-			page = 1;
-		
-		
-		sender.sendMessage(ChatColor.GOLD + "== " + ChatColor.YELLOW + "Banker commands, page: " + ChatColor.AQUA + page + ChatColor.YELLOW + "/" + ChatColor.DARK_AQUA + overall + ChatColor.GOLD + " ==");
+		sender.sendMessage(ChatColor.GOLD + "== " + ChatColor.YELLOW + "Banker commands" + ChatColor.GOLD + " ==");
 		sender.sendMessage("");
 		
-		int i = 0;
 		for ( Command cmd : cmds )
 		{
-			if ( i >= (page-1)*4 && i < (page)*4 )
-			{
-				sender.sendMessage(nameAndSyntax(cmd));
-				sender.sendMessage(perm(cmd));
-				sender.sendMessage(description(cmd));
-				if ( !cmd.usage().isEmpty() )
-					sender.sendMessage(usage(cmd));
-				sender.sendMessage(npc(cmd));
-				sender.sendMessage("");
-			}
-			++i;
+			sender.sendMessage(nameAndSyntax(cmd));
 		}
-	}*/
+	}
 	
 	
 	//Commands description holder

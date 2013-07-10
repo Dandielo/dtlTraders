@@ -6,24 +6,21 @@ import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.trait.trait.MobType;
 import net.dandielo.citizens.traders_v3.tNpcManager;
-import net.dandielo.citizens.traders_v3.tNpcStatus;
 import net.dandielo.citizens.traders_v3.bankers.Banker;
-import net.dandielo.citizens.traders_v3.bankers.account.PrivateAccount;
 import net.dandielo.citizens.traders_v3.bankers.account.Account.AccountType;
 import net.dandielo.citizens.traders_v3.bankers.backend.AccountLoader;
+import net.dandielo.citizens.traders_v3.bankers.tabs.BankItem;
 import net.dandielo.citizens.traders_v3.bankers.tabs.Tab;
 import net.dandielo.citizens.traders_v3.bukkit.DtlTraders;
+import net.dandielo.citizens.traders_v3.core.dB;
 import net.dandielo.citizens.traders_v3.core.commands.Command;
-import net.dandielo.citizens.traders_v3.core.events.trader.TraderCreateEvent;
 import net.dandielo.citizens.traders_v3.core.exceptions.InvalidTraderTypeException;
 import net.dandielo.citizens.traders_v3.core.exceptions.TraderTypeNotFoundException;
 import net.dandielo.citizens.traders_v3.core.locale.LocaleManager;
-import net.dandielo.citizens.traders_v3.traders.Trader;
-import net.dandielo.citizens.traders_v3.traders.setting.Settings;
 import net.dandielo.citizens.traders_v3.traders.setting.TGlobalSettings;
 import net.dandielo.citizens.traders_v3.traits.BankerTrait;
-import net.dandielo.citizens.traders_v3.traits.TraderTrait;
 import net.dandielo.citizens.traders_v3.traits.WalletTrait;
+import net.dandielo.citizens.traders_v3.utils.items.attributes.Name;
 
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -53,7 +50,7 @@ public class BankerCommands {
 	desc = "creates a new banker with the given arguments | 'e:', 't:'",
 	usage = "- /trader create James the Banker e:sheep t:private",
 	npc = false)
-	public void traderCreate(DtlTraders plugin, Player sender, Banker banker, Map<String, String> args) throws TraderTypeNotFoundException, InvalidTraderTypeException
+	public void bankerCreate(DtlTraders plugin, Player sender, Banker banker, Map<String, String> args) throws TraderTypeNotFoundException, InvalidTraderTypeException
 	{
 		//get the traders name
 		String name = args.get("free");
@@ -115,7 +112,7 @@ public class BankerCommands {
 	 * @param banker
 	 * that took part when the command was executed
 	 * @param args
-	 * additional arguments, like name, type and entity type
+	 * the new tab name 
 	 * @throws TraderTypeNotFoundException
 	 * @throws InvalidBankerTypeException
 	 */
@@ -126,7 +123,7 @@ public class BankerCommands {
 	desc = "Changes a tabs name",
 	usage = "- /banker tabname 0 set Weapons Tab",
 	npc = false)
-	public void settingStockName(DtlTraders plugin, Player sender, Banker banker, Map<String, String> args)
+	public void settingTabName(DtlTraders plugin, Player sender, Banker banker, Map<String, String> args)
 	{
 		//check the argument
 		if ( args.get("free") == null )
@@ -163,4 +160,69 @@ public class BankerCommands {
 				"value", tab.getName());
 	}
 	
+	/**
+	 * Allows to change the tab name for a players bank account
+	 * @param plugin
+	 * This plugin
+	 * @param sender
+	 * The command sender
+	 * @param banker
+	 * that took part when the command was executed
+	 * @param args
+	 * the new tab name 
+	 * @throws TraderTypeNotFoundException
+	 * @throws InvalidBankerTypeException
+	 */
+	@Command(
+	name = "banker",
+	syntax = "tabicon set <tabID> {args}",
+	perm = "dtl.banker.commands.tabicon",
+	desc = "Changes a tabs icon",
+	usage = "- /banker tabname set 0 33 a:2 n:Name",
+	npc = false)
+	public void settingTabIcon(DtlTraders plugin, Player sender, Banker banker, Map<String, String> args)
+	{
+		//check the argument
+		if ( args.get("free") == null )
+		{
+			locale.sendMessage(sender, "error-argument-missing", "argument", "{args}");
+			return;
+		}
+
+		int tabId = -1;
+		try
+		{
+		    tabId = Integer.parseInt(args.get("tabID") );
+		}
+		catch (NumberFormatException e)
+		{
+			locale.sendMessage(sender, "error-argument-invalid", "argument", "<tabID>");
+			return;
+		}
+		
+		//get the tab
+		Tab tab = accounts.getAccount(AccountType.PRIVATE, sender).getTab(tabId);
+		
+		if ( tab == null )
+		{
+			locale.sendMessage(sender, "error-argument-invalid", "argument", "<tabID>");
+			return;
+		}
+		
+		BankItem bItem = new BankItem(args.get("free"));
+		tab.setIcon( bItem.getItem() );
+		
+		if ( bItem.hasAttr(Name.class) )
+		    tab.setName(bItem.getName());
+
+		//send a message
+		locale.sendMessage(sender, "key-change", 
+				"key", "#tab-icon", 
+				"value", args.get("free"));
+		
+		//send a message
+		locale.sendMessage(sender, "key-change", 
+				"key", "#tab-name", 
+				"value", tab.getName());
+	}
 }
