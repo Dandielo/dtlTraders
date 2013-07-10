@@ -72,7 +72,7 @@ public class Settings extends TGlobalSettings {
 	public String getStockName() {
 		//get the npc name and change all abstract color codes into real ones
 		//#request 3 on PiratePad 
-		return stockNameFormat.replace("{npc}", ChatColor.RESET + npc.getName().replace('&', '§') + ChatColor.RESET);
+		return stockNameFormat.replace("{npc}", npc.getName().replace('&', '§'));
 	}
 	
 	public String getStockFormat() {

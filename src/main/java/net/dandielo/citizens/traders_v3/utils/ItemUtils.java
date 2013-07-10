@@ -12,7 +12,7 @@ public class ItemUtils {
 	public static boolean itemHasDurability(ItemStack item)
 	{
 		int id = item.getTypeId();
-		return ( id >= 298 && id <= 317 ) || ( id >= 290 && id <= 294 ) || ( id >= 283 && id <= 286 ) || ( id >= 267 && id <= 279 ) || ( id >= 256 && id <= 259 ) || id == 261;// ? true : false );
+		return ( id >= 256 && id <= 259 ) || id == 261 || ( id >= 267 && id <= 279 ) || ( id >= 283 && id <= 286 ) || ( id >= 290 && id <= 294 ) || ( id >= 298 && id <= 317 ) || id == 398;// ? true : false );
 	}
 	
 	public static StockItem createStockItem(ItemStack vItem)

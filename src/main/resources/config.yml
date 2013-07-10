@@ -52,7 +52,7 @@ trader:
     #default stock size in rows, min 1, max 6 (applied on creation)
     size: 6
     #default stock name format, how should be the traders stock named by default, {npc} tag for npc name
-    format: '{npc}''s shop'
+    format: '{npc}^r''s shop'
   #wallet related settings
   wallet:
     #default wallet type for traders (if set to infinite player traders will use "owner" type instead)
@@ -79,7 +79,7 @@ trader:
     size: 2
     #default stock name format, how should be the traders stock named by default, {npc} tag for npc name, and {player} for the traders owner
     #if set overrides the stock.format setting
-    format: '{npc}''s shop, {player}''s company'
+    format: '{npc}^r''s shop, {player}''s company'
   #ui related settings
   ui:
     #item that will "link" to sell stock
