@@ -11,6 +11,8 @@ import net.dandielo.citizens.traders_v3.utils.items.ItemAttr;
 
 @Attribute(name = "Map", key = "map")
 public class Map extends ItemAttr {
+	
+	int scale = 1;
 
 	public Map(String key)
 	{

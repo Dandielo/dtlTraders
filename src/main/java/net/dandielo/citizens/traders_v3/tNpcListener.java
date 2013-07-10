@@ -375,8 +375,15 @@ public class tNpcListener implements Listener {
 					{
 						if ( item != null )
 						{
-							//clean transaction lores 
-							thisPlayer.getInventory().setItem(i, NBTUtils.cleanItem(item));
+							if ( NBTUtils.isMarked(item) )
+							{
+								thisPlayer.getInventory().setItem(i, null);
+							}
+							else
+							{
+								//clean transaction lores 
+								thisPlayer.getInventory().setItem(i, NBTUtils.cleanItem(item));
+							}
 						}
 						++i;
 					}
