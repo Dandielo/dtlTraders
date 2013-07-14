@@ -15,6 +15,10 @@ public class PluginSettings {
 	private static String locale;
 	private static boolean localeAutoUpdate;
 	
+	//Online logs password and user
+	private static String user = "";
+	private static String pass = "";
+	
 	//statistic settings
 	private static boolean statistics = false;
 	
@@ -33,6 +37,9 @@ public class PluginSettings {
 		//locale settings
 		locale = config.getString("locale.load", "en");
 		localeAutoUpdate = config.getBoolean("locale.auto-update", true);
+
+		user = config.getString("logging.web-account");
+		pass = config.getString("logging.web-pass");
 		
 		//unused
 		statistics = config.getBoolean("general.statistics", false);
@@ -56,5 +63,20 @@ public class PluginSettings {
 
 	public static String debugLevel() {
 		return debugLevel.toUpperCase();
+	}
+
+	public static String getLogUser()
+	{
+		return user;
+	}
+
+	public static String getLogPass()
+	{
+		return pass;
+	}
+
+	public static int logUpdateCounter()
+	{
+		return 5;
 	}
 }

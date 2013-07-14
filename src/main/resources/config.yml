@@ -16,7 +16,7 @@ logging:
   #web account name
   web-account: ''
   #web account id
-  web-id: 0
+  web-pass: 0
 #statistics
 statistics: 
   #enable or disable statistics

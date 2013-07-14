@@ -7,6 +7,7 @@ import net.minecraft.server.v1_6_R2.NBTTagCompound;
 import net.minecraft.server.v1_6_R2.NBTTagList;
 import net.minecraft.server.v1_6_R2.NBTTagString;
 
+import org.bukkit.ChatColor;
 import org.bukkit.craftbukkit.v1_6_R2.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
 
@@ -166,6 +167,52 @@ public class NBTUtils {
 
 		//return the new item;
 		return result;
+	}
+	
+	public static boolean hasTraderLore(ItemStack i)
+	{
+		//create a NMS copy
+		net.minecraft.server.v1_6_R2.ItemStack nms = CraftItemStack.asNMSCopy(i);
+
+		//get the "tag" tag
+		NBTTagCompound tag;
+		if(nms.tag != null) tag = nms.tag;
+		else
+		{
+			return false;
+		}
+
+		//get the display tag
+		NBTTagCompound display;
+		if ( tag.hasKey("display") )
+			display = tag.getCompound("display");
+		else
+		{
+			return false;
+		}
+
+		//get the Lore tag
+		NBTTagList list;
+		if ( display.hasKey("Lore") )
+			list = display.getList("Lore");
+		else
+			return false;
+
+		for ( int j = 0 ; j < list.size() ; ++j )
+		{
+			if ( ((NBTTagString)list.get(j)).getName().equals("dtltrader")
+					|| ((NBTTagString)list.get(j)).data.startsWith(ChatColor.GOLD + "Price: " + ChatColor.GRAY) )
+				
+				return true;
+		}
+
+		//return the new item;
+		return false;
+	}
+	
+	public static void main(String[] a)
+	{
+		System.out.print((ChatColor.GOLD + "Price: " + ChatColor.GRAY + "8.00").startsWith(ChatColor.GOLD + "Price: " + ChatColor.GRAY));
 	}
 	
 	public static ItemStack cleanItem(ItemStack i)

@@ -5,6 +5,7 @@ import java.util.TimerTask;
 
 import net.citizensnpcs.api.event.NPCLeftClickEvent;
 import net.citizensnpcs.api.event.NPCRightClickEvent;
+import net.dandielo.api.traders.tNpcAPI;
 import net.dandielo.citizens.traders_v3.bankers.Banker;
 import net.dandielo.citizens.traders_v3.bukkit.Perms;
 import net.dandielo.citizens.traders_v3.core.dB;
@@ -24,6 +25,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class tNpcListener implements Listener {
@@ -68,6 +71,40 @@ public class tNpcListener implements Listener {
 			    trader.onInventoryClick(e);
 		}
 	}
+	
+	@EventHandler
+	public void onLogoutRemoving(PlayerQuitEvent e)
+	{
+		int i = 0;
+		for ( ItemStack item : e.getPlayer().getInventory().getContents() )
+		{
+			if ( item != null )
+			{
+				if ( NBTUtils.isMarked(item) )
+				{
+					e.getPlayer().getInventory().setItem(i, null);
+				}
+			}
+			++i;
+		}
+	}
+	
+	@EventHandler
+	public void onLoginRemoving(PlayerJoinEvent e)
+	{
+		int i = 0;
+		for ( ItemStack item : e.getPlayer().getInventory().getContents() )
+		{
+			if ( item != null )
+			{
+				if ( NBTUtils.hasTraderLore(item) )
+				{
+					e.getPlayer().getInventory().setItem(i, null);
+				}
+			}
+			++i;
+		}
+	}
 
 	//remove marked items on inventory click events
 	@EventHandler
@@ -78,7 +115,8 @@ public class tNpcListener implements Listener {
 		{
 			if ( item != null )
 			{
-				if ( NBTUtils.isMarked(item) )
+				if ( NBTUtils.isMarked(item) ||
+						( !tNpcAPI.isTNpcInventory((Player) e.getWhoClicked()) && NBTUtils.hasTraderLore(item) ) )
 				{
 					e.getWhoClicked().getInventory().setItem(i, null);
 				}

@@ -3,7 +3,7 @@ package net.dandielo.citizens.traders_v3.traders.patterns;
 public abstract class Pattern {
 	private Type type;
 	
-	Pattern(Type type)
+	protected Pattern(Type type)
 	{
 		this.type = type;
 	}
@@ -12,7 +12,6 @@ public abstract class Pattern {
 	{
 		return type;
 	}
-	
 	
 	static enum Type
 	{

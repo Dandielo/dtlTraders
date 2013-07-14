@@ -1,5 +1,7 @@
 package net.dandielo.citizens.traders_v3.bukkit;
 
+import java.io.IOException;
+
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.trait.TraitInfo;
 import net.dandielo.citizens.traders_v3.tNpcListener;
@@ -12,6 +14,9 @@ import net.dandielo.citizens.traders_v3.bukkit.commands.TraderCommands;
 import net.dandielo.citizens.traders_v3.core.dB;
 import net.dandielo.citizens.traders_v3.core.PluginSettings;
 import net.dandielo.citizens.traders_v3.core.commands.CommandManager;
+import net.dandielo.citizens.traders_v3.statistics.StatisticManager;
+import net.dandielo.citizens.traders_v3.statistics.StatisticServer;
+import net.dandielo.citizens.traders_v3.statistics.TraderStats;
 import net.dandielo.citizens.traders_v3.traders.setting.TGlobalSettings;
 import net.dandielo.citizens.traders_v3.traits.BankerTrait;
 import net.dandielo.citizens.traders_v3.traits.TraderTrait;
@@ -103,13 +108,50 @@ public class DtlTraders extends JavaPlugin {
 		accLoader = AccountLoader.accLoader;
 		info("Accounts loaded: " + ChatColor.YELLOW + accLoader.accountsLoaded());
 		
+		//enable statistic server
+		try
+		{
+			s = new StatisticServer();
+			server = new Thread(s);
+			server.start();
+			
+			stats = new TraderStats();
+			logs = new Thread(stats);
+			logs.start();
+			info("Statistic server enabled");
+		}
+		catch( IOException e )
+		{
+			e.printStackTrace();
+		}
+		
+		StatisticManager.instance.registerListener("dtlTraders", new TraderStats());
+		
+		
 		//enabled info
 		info("Enabled");
 	}
 	
+	Thread server, logs;
+	TraderStats stats;
+	StatisticServer s;
+	
 	@Override
 	public void onDisable()
 	{
+		try
+		{
+			s.stop();
+			server.join(1000);
+			stats.stop();
+			logs.join(1000);
+		}
+		catch( InterruptedException e )
+		{
+			e.printStackTrace();
+		}
+		
+		
 		accLoader.save();
 	}
 	
