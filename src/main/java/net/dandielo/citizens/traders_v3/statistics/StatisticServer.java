@@ -25,8 +25,9 @@ public class StatisticServer implements Runnable {
 	
 	/**
 	 * Starts listening for statistics request from websites
+	 * @throws IOException 
 	 */
-	public void listen()
+	public void listen() throws IOException
 	{		
 		Socket incoming;
 		while( !stop )
@@ -48,6 +49,7 @@ public class StatisticServer implements Runnable {
 				e.printStackTrace();
 			}
 		}
+		server.close();
 	}
 	
 	public static void logRequest()
@@ -67,7 +69,15 @@ public class StatisticServer implements Runnable {
 	@Override
 	public void run()
 	{
-		listen();
+		try
+		{
+			listen();
+		}
+		catch( IOException e )
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public void stop()
