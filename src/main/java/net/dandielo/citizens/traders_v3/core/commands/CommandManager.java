@@ -60,7 +60,6 @@ public class CommandManager {
 
 		DtlTraders.getInstance().getCommand("trader").setExecutor(executor);
 		DtlTraders.getInstance().getCommand("banker").setExecutor(executor);
-	//	plugin.getCommand("banker").setExecutor(executor);
 	}
 	
 	/**
