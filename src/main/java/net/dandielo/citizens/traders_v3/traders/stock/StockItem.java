@@ -891,7 +891,7 @@ public final class StockItem extends tNpcItem {
 			}
 		}
 		
-		System.out.print(priority);
+		dB.info("Priority result: ", priority);
 		return priority;
 	}
 	
