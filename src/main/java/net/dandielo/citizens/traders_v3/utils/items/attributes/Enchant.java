@@ -12,7 +12,7 @@ import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeValu
 import net.dandielo.citizens.traders_v3.utils.items.Attribute;
 import net.dandielo.citizens.traders_v3.utils.items.ItemAttr;
 
-@Attribute(name="Enchants", key="e")
+@Attribute(name="Enchants", key="e", priority = 5)
 public class Enchant extends ItemAttr {
 	Map<Enchantment, Integer> enchants = new HashMap<Enchantment, Integer>();
 	

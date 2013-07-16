@@ -1,11 +1,22 @@
 package net.dandielo.citizens.traders_v3.traders.patterns;
 
+import org.bukkit.configuration.ConfigurationSection;
+
 public abstract class Pattern {
 	private Type type;
+	private String name;
 	
-	protected Pattern(Type type)
+	protected int priority = 0;
+	protected boolean tier = false;
+	
+	protected Pattern(String name, Type type)
 	{
 		this.type = type;
+	}
+	
+	public String getName()
+	{
+		return name;
 	}
 	
 	public Type getType()
@@ -13,7 +24,9 @@ public abstract class Pattern {
 		return type;
 	}
 	
-	static enum Type
+	public abstract void loadItems(ConfigurationSection data);
+	
+	public static enum Type
 	{
 		PRICE, ITEM, LAYOUT, CHANCE;
 		

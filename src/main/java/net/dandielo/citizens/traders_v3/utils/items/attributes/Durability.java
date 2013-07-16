@@ -9,7 +9,7 @@ import net.dandielo.citizens.traders_v3.utils.ItemUtils;
 import net.dandielo.citizens.traders_v3.utils.items.Attribute;
 import net.dandielo.citizens.traders_v3.utils.items.ItemAttr;
 
-@Attribute(name="Durability", key="d")
+@Attribute(name="Durability", key="d", priority = 45)
 public class Durability extends ItemAttr
 {
 	private double durabilityPercent;

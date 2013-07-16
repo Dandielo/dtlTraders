@@ -28,12 +28,6 @@ public class StockTrader extends Stock {
 		this.settings = settings;
 	}
 
-	public StockPlayer toPlayerStock(Player player)
-	{
-		StockPlayer stock = new StockPlayer(settings.getStockName(), settings.getStockSize(), player);
-		return stock;
-	}
-
 	//stock operations
 	public void addItem(StockItem item, String stock)
 	{
@@ -287,6 +281,12 @@ public class StockTrader extends Stock {
 			return item.getPrice() * item.getAmount(slot) / item.getAmount();
 		else
 		    return item.getPrice() * item.getAmount(slot);
+	}
+
+	@Override
+	public double parsePrice(StockItem item, String stock, int slot)
+	{
+		return -1.0;
 	}
 
 }

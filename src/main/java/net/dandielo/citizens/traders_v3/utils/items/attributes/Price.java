@@ -14,7 +14,7 @@ import net.dandielo.citizens.traders_v3.utils.items.ItemAttr;
 import net.dandielo.citizens.traders_v3.utils.items.flags.StackPrice;
 
 @Attribute(
-name="Price", key = "p", standalone = true,
+name="Price", key = "p", standalone = true, priority = 0,
 status = {tNpcStatus.BUY, tNpcStatus.SELL, tNpcStatus.SELL_AMOUNTS, tNpcStatus.MANAGE_PRICE})
 public class Price extends ItemAttr {
 	private double price;
@@ -98,4 +98,10 @@ public class Price extends ItemAttr {
 		
 	}
 	
+	public static List<String> loreRequest(double price, List<String> lore)
+	{
+		lore.add(ChatColor.GOLD + "Price: " + ChatColor.GRAY + 
+				String.format("%.2f", price).replace(',', '.'));
+		return lore;
+	}
 }

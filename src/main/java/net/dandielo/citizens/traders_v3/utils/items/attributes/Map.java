@@ -9,7 +9,7 @@ import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeValu
 import net.dandielo.citizens.traders_v3.utils.items.Attribute;
 import net.dandielo.citizens.traders_v3.utils.items.ItemAttr;
 
-@Attribute(name = "Map", key = "map")
+@Attribute(name = "Map", key = "map", priority = 5)
 public class Map extends ItemAttr {
 	
 	int scale = 1;

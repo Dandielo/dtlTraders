@@ -21,12 +21,14 @@ import net.dandielo.citizens.traders_v3.utils.items.attributes.Durability;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Enchant;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Firework;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.LeatherColor;
+import net.dandielo.citizens.traders_v3.utils.items.attributes.Multiplier;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Name;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Potion;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Price;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Skull;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Slot;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.StoredEnchant;
+import net.dandielo.citizens.traders_v3.utils.items.attributes.Tier;
 
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
@@ -38,22 +40,22 @@ import org.bukkit.inventory.ItemStack;
  * @author dandielo
  */
 public abstract class ItemAttr {
-	
+
 	/**
 	 * Attribute key, used for saving and identification (is Unique)
 	 */
 	private final String key;
-	
+
 	/**
 	 * All informations about this attribute 
 	 */
 	protected Attribute info;
-	
+
 	/**
 	 * The item associated with the attribute
 	 */
 	protected tNpcItem item;
-	
+
 	/**
 	 * default constructor (needs a key)
 	 * @param key
@@ -63,7 +65,7 @@ public abstract class ItemAttr {
 	{
 		this.key = key;
 	}
-	
+
 	/**
 	 * Called when a attribute was found in a save string.
 	 * @param data
@@ -71,13 +73,13 @@ public abstract class ItemAttr {
 	 * @throws AttributeInvalidValueException
 	 */
 	public abstract void onLoad(String data) throws AttributeInvalidValueException;
-	
+
 	/**
 	 * Called upon a save request, should return a string representation of its values 
 	 * @return
 	 */
 	public abstract String onSave();
-	
+
 	/**
 	 * Called when the given item needs attributes re-set
 	 * @param item
@@ -85,14 +87,14 @@ public abstract class ItemAttr {
 	 * @throws InvalidItemException
 	 */
 	public abstract void onAssign(ItemStack item) throws InvalidItemException; 
-	
+
 	/**
 	 * Called when trying to get attribute data information from the given item. If no valid data for this attribute is found then it throws an exception.
 	 * @param item
 	 * @throws AttributeValueNotFoundException
 	 */
 	public abstract void onFactorize(ItemStack item) throws AttributeValueNotFoundException;
-	
+
 	/**
 	 * Called when a status lore request is send for the given status set in the attributes information.
 	 * @param status
@@ -105,7 +107,7 @@ public abstract class ItemAttr {
 	public void onStatusLoreRequest(tNpcStatus status, ItemStack target, List<String> lore)
 	{
 	}
-	
+
 	/**
 	 * Tells the item factorizing function to not check the lore anymore because it was already checked, retrieved and saved somewhere else. 
 	 */
@@ -113,7 +115,7 @@ public abstract class ItemAttr {
 	{
 		item.loreManaged(true);
 	}
-	
+
 	/**
 	 * Called when a week equality is needed. Allows sometimes a value to be in range of another value, used for priority requests
 	 * @return
@@ -123,7 +125,7 @@ public abstract class ItemAttr {
 	{
 		return true;
 	}
-	
+
 	/**
 	 * Called when a strong equality is needed. Values are compared strict.
 	 * @return
@@ -142,7 +144,7 @@ public abstract class ItemAttr {
 	{
 		return info;
 	}
-	
+
 	/**
 	 * @return returns the attributes save string.
 	 */
@@ -151,7 +153,7 @@ public abstract class ItemAttr {
 	{
 		return key + ":" + onSave();
 	}
-	
+
 	/**
 	 * @return
 	 *     The attributes unique key
@@ -159,29 +161,29 @@ public abstract class ItemAttr {
 	public String getKey() {
 		return key;
 	}
-	
+
 	@Override
 	@SuppressWarnings("all")
 	public final boolean equals(Object o)
 	{
 		return (o instanceof ItemAttr && key.equals(((ItemAttr)o).key));
 	}
-	
+
 	@Override
 	public final int hashCode()
 	{
 		return key.hashCode();
 	}
-	
+
 	/**
 	 * Static data section, holds all registered attributes and provides some utilities
 	 */
-	
+
 	/**
 	 * Map containing all registered attributes
 	 */
 	private static final Map<Attribute, Class<? extends ItemAttr>> attributes = new HashMap<Attribute, Class<? extends ItemAttr>>();
-	
+
 	/**
 	 * Returns all attribute instances in a list. This list is used later to factorize data from a item.
 	 * @return
@@ -204,7 +206,7 @@ public abstract class ItemAttr {
 				//debug high
 				dB.high("Attribute exception on initialization");
 				dB.high("Attribute name: ", ChatColor.GREEN, attr.getKey().name());
-				
+
 				//debug normal
 				dB.normal("Exception: ", e.getClass().getSimpleName());
 				dB.normal("Stack trace: ", StringTools.stackTrace(e.getStackTrace()));
@@ -212,7 +214,7 @@ public abstract class ItemAttr {
 		}
 		return result;
 	}
-	
+
 	/**
 	 * Returns required attribute instances in a list. This list is used later to init any item with required attributes.
 	 * @return
@@ -227,14 +229,18 @@ public abstract class ItemAttr {
 			try 
 			{
 				if ( attr.getKey().required() )
-				    result.add(attr.getValue().getConstructor(String.class).newInstance(attr.getKey().key()));
+				{
+					ItemAttr attrInstance = attr.getValue().getConstructor(String.class).newInstance(attr.getKey().key());
+					attrInstance.info = attr.getKey();
+					result.add(attrInstance);
+				}
 			} 
 			catch (Exception e)
 			{
 				//debug high
 				dB.high("Attribute exception on initialization");
 				dB.high("Attribute name: ", ChatColor.GREEN, attr.getKey().name());
-				
+
 				//debug normal
 				dB.normal("Exception: ", e.getClass().getSimpleName());
 				dB.normal("Stack trace: ", StringTools.stackTrace(e.getStackTrace()));
@@ -253,15 +259,15 @@ public abstract class ItemAttr {
 	{
 		if ( !clazz.isAnnotationPresent(Attribute.class) )
 			throw new AttributeInvalidClassException();
-		
+
 		Attribute attr = clazz.getAnnotation(Attribute.class);
 
 		//debug low
 		dB.low("Registering attribute \'", ChatColor.GREEN, attr.name(), ChatColor.RESET, "\' with key: ", attr.key());
-		
+
 		attributes.put(attr, clazz);
 	}
-	
+
 	/**
 	 * Creates a attribute with default values based class given.
 	 * @param item
@@ -280,7 +286,7 @@ public abstract class ItemAttr {
 		{
 			//debug low
 			dB.low("Initializing new attribute instance");
-			
+
 			//get the attribute declaring class
 			T itemAttr = clazz.getConstructor(String.class).newInstance(attr.key());
 			//assoc the item
@@ -320,9 +326,9 @@ public abstract class ItemAttr {
 			debugInfo(attr, e);
 			throw new AttributeInvalidClassException();
 		} 
-		
+
 	}
-	
+
 	/**
 	 * Creates a attribute based on the key. If a attribute is found it will call the <i><b>onLoad</b></i> method with the given <b>value</b>.
 	 * @param item
@@ -343,15 +349,15 @@ public abstract class ItemAttr {
 		for ( Attribute attrEntry : attributes.keySet() )
 			if ( attrEntry.key().equals(key) )
 				attr = attrEntry;
-		
+
 		//if attribute key is not valid return null
 		if ( attr == null ) return null;
-		
+
 		try 
 		{
 			//debug low
 			dB.low("Initializing new attribute instance");
-			
+
 			//get the attribute declaring class
 			ItemAttr itemAttr = attributes.get(attr).getConstructor(String.class).newInstance(key);
 			//assoc the item
@@ -393,7 +399,7 @@ public abstract class ItemAttr {
 			debugInfo(attr, e);
 			throw new AttributeInvalidClassException();
 		} 
-		
+
 	}
 
 	/**
@@ -404,12 +410,12 @@ public abstract class ItemAttr {
 		//debug high
 		dB.high("Attribute exception on initialization");
 		dB.high("Attribute name: ", ChatColor.GREEN, attr.name());
-		
+
 		//debug normal
 		dB.normal("Exception: ", e.getClass().getSimpleName());
 		dB.normal("Stack trace: ", StringTools.stackTrace(e.getStackTrace()));
 	}
-	
+
 
 	/**
 	 * Registers all core attributes
@@ -418,26 +424,28 @@ public abstract class ItemAttr {
 	{
 		//debug info
 		dB.info("Registering core item attributes");
-		
+
 		try 
 		{
 			//item related
 			registerAttr(StoredEnchant.class);
 			registerAttr(LeatherColor.class);
+			registerAttr(Multiplier.class);
 			registerAttr(Durability.class);
 			registerAttr(Firework.class);
 			registerAttr(Enchant.class);
 			registerAttr(Amount.class);
 			registerAttr(Potion.class);
 			registerAttr(Skull.class);
+			registerAttr(Tier.class);
 			registerAttr(Book.class);
 			registerAttr(Name.class);
-			
+
 			//Stock item related
-		//	registerAttr(Multiplier.class);
+			//	registerAttr(Multiplier.class);
 			registerAttr(Price.class);
 			registerAttr(Slot.class);
-			
+
 			DtlTraders.info("Registered core attributes: " + attributesAsString());
 		} 
 		catch (AttributeInvalidClassException e) 
@@ -462,7 +470,7 @@ public abstract class ItemAttr {
 		//format the string
 		for ( Attribute attr : attributes.keySet() )
 			result += " ," + ChatColor.YELLOW + attr.name() + ChatColor.RESET;
-		
+
 		return ChatColor.WHITE + "[" + result.substring(2) + ChatColor.WHITE + "]";
 	}
 }

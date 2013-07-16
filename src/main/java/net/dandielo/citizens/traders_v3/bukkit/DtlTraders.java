@@ -197,7 +197,6 @@ public class DtlTraders extends JavaPlugin {
 	public static void severe(String message)
 	{
 		console.sendMessage(PREFIX + ChatColor.RED + "[SEVERE] " + ChatColor.RESET + message);
-	//	logger.severe("["+instance.getDescription().getName()+"] " + message);
 	}
 }
  

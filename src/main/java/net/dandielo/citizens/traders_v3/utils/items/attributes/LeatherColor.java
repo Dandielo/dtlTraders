@@ -11,7 +11,7 @@ import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeValu
 import net.dandielo.citizens.traders_v3.utils.items.Attribute;
 import net.dandielo.citizens.traders_v3.utils.items.ItemAttr;
 
-@Attribute(name="Leather color", key="lc")
+@Attribute(name="Leather color", key="lc", priority = 5)
 public class LeatherColor extends ItemAttr {
 	private Color color;
 

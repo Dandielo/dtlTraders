@@ -1,5 +1,6 @@
 package net.dandielo.citizens.traders_v3.traders.setting;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,7 +38,7 @@ public class TGlobalSettings extends PluginSettings {
 	protected static double walletMoney;
 
 	//pattern settings
-	protected static Map<String, Integer> defaultPatterns = new HashMap<String, Integer>();
+	protected static List<String> defaultPatterns;// = new ArrayList<String>();
 	protected static String patternFile;
 
 	//player trader settings
@@ -49,6 +50,7 @@ public class TGlobalSettings extends PluginSettings {
 	protected static Map<String, ItemStack> uiItems = new HashMap<String, ItemStack>();
 
 	//load global settings
+	@SuppressWarnings("unchecked")
 	public static void initGlobalSettings()
 	{
 		//debug info
@@ -70,7 +72,6 @@ public class TGlobalSettings extends PluginSettings {
 
 		try
 		{
-			@SuppressWarnings("unchecked")
 			List<String> specials = (List<String>) tConfig.getList("managing.special-blocks");
 			for ( String entry : specials )
 			{
@@ -101,13 +102,13 @@ public class TGlobalSettings extends PluginSettings {
 		//load pattern settings
 		try
 		{
-			@SuppressWarnings("unchecked")
-			List<String> defaults = (List<String>) tConfig.getList("pattern.defaults");
-			for ( String entry : defaults )
-			{
-				String[] data = entry.split(" ");
-				defaultPatterns.put(data[0], Integer.parseInt(data[1]));
-			}
+			defaultPatterns = (List<String>) tConfig.getList("pattern.defaults", new ArrayList<String>());
+			//for ( String entry : defaults )
+			//{
+			//	String[] data = entry.split(" ");
+			//	defaultPatterns.put(data[0], Integer.parseInt(data[1]));
+			//}
+			patternFile = tConfig.getString("pattern.file", "patterns.yml");
 		}
 		catch(Exception e)
 		{
@@ -251,5 +252,15 @@ public class TGlobalSettings extends PluginSettings {
 	public static double getWalletStartBalance()
 	{
 		return walletMoney;
+	}
+	
+	public static String getPatternFile()
+	{
+		return patternFile;
+	}
+	
+	public static List<String> defaultPatterns()
+	{
+		return defaultPatterns;
 	}
 }

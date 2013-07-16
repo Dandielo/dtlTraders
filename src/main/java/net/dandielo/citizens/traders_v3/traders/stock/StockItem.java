@@ -19,9 +19,11 @@ import net.dandielo.citizens.traders_v3.utils.items.Attribute;
 import net.dandielo.citizens.traders_v3.utils.items.ItemAttr;
 import net.dandielo.citizens.traders_v3.utils.items.ItemFlag;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Amount;
+import net.dandielo.citizens.traders_v3.utils.items.attributes.Multiplier;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Name;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Price;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Slot;
+import net.dandielo.citizens.traders_v3.utils.items.flags.DataCheck;
 import net.dandielo.citizens.traders_v3.utils.items.flags.Lore;
 
 import org.bukkit.ChatColor;
@@ -517,6 +519,26 @@ public final class StockItem extends tNpcItem {
 	{
 		return tryGetAttr(Price.class);
 	}
+
+	/**
+	 * Gets the items multiplier value
+	 * @return
+	 * the multiplier set, or -1.0 instead
+	 */
+	public double getMultiplier()
+	{
+		return hasAttr(Multiplier.class) ? this.getAttr(Multiplier.class).getMultiplier() : -1.0;
+	}
+	
+	/**
+	 * Checks if the item has a multiplier assigned
+	 * @return
+	 * true if a the multiplier attribute is set
+	 */
+	public boolean hasMultiplier()
+	{
+		return hasAttr(Multiplier.class);
+	}
 	
 	/**
 	 * Gets the items slot attribute, always a valid value.
@@ -801,6 +823,76 @@ public final class StockItem extends tNpcItem {
 	public final boolean equals(Object object)
 	{
 		return (object instanceof StockItem && equalsStrong((StockItem)object));
+	}
+	
+	public final int priorityMatch(StockItem item)
+	{
+		int priority = 0;
+
+		//id and data check
+		if ( this.hasFlag(DataCheck.class) )
+		{
+			if ( this.item.getTypeId() != 0 )
+			{
+				if ( this.item.getTypeId() == item.item.getTypeId() &&
+					 this.item.getDurability() == item.item.getDurability() )
+					priority += 130;
+				else
+					priority = -1;
+			}
+			else
+			{
+				if ( this.item.getDurability() == item.item.getDurability() )
+					priority += 130;
+				else
+					priority = -1;
+			}
+		}
+		else
+		{
+			if ( this.item.getTypeId() != 0 )
+			{
+				if ( this.item.getTypeId() == item.item.getTypeId() )
+					priority = 130;
+				else
+					priority = -1;
+			}
+		}
+
+		//now a if block to not make thousands of not needed checks 
+		if ( priority == -1 ) return priority;
+
+		//for each attribute in this item
+		for ( ItemAttr tAttr : attr.values() )
+		{
+			//check each item in the second item, if the attribute is found and strong equal continue
+			for ( ItemAttr iAttr : item.attr.values() )
+			{
+				//debug low
+				dB.info("Checking ", iAttr.getInfo().name() ," with: ", iAttr.onSave());
+
+				//same attributes
+				if ( tAttr.getClass().equals(iAttr.getClass()) && tAttr.equalsStrong(iAttr) )
+					priority += tAttr.getInfo().priority();
+			}
+			//debug low
+			dB.low("After ", tAttr.getInfo().name() ," check: ", String.valueOf(priority));
+		}
+			
+		//for each attribute in this item
+		for ( ItemFlag tFlag : flags.values() )
+		{
+			//check each item in the second item, if the attribute is found and strong equal continue
+			for ( ItemFlag iFlag : item.flags.values() )
+			{
+				//same attributes
+				if ( tFlag.getClass().equals(iFlag.getClass()) && tFlag.equalsStrong(iFlag) )
+					priority += tFlag.getInfo().priority();
+			}
+		}
+		
+		System.out.print(priority);
+		return priority;
 	}
 	
 	@Override

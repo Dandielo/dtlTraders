@@ -10,7 +10,7 @@ import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeInva
 import net.dandielo.citizens.traders_v3.utils.items.Attribute;
 import net.dandielo.citizens.traders_v3.utils.items.ItemAttr;
 
-@Attribute(name="Amount", key = "a", required = true,
+@Attribute(name="Amount", key = "a", required = true, priority = 5,
 status = {tNpcStatus.MANAGE_SELL, tNpcStatus.MANAGE_BUY})
 public class Amount extends ItemAttr {
 	private List<Integer> amounts = new ArrayList<Integer>();

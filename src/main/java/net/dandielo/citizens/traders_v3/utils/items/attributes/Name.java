@@ -7,7 +7,7 @@ import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeValu
 import net.dandielo.citizens.traders_v3.utils.items.Attribute;
 import net.dandielo.citizens.traders_v3.utils.items.ItemAttr;
 
-@Attribute(name="Name", key="n")
+@Attribute(name="Name", key="n", priority = 300)
 public class Name extends ItemAttr {
 	private String name;
 

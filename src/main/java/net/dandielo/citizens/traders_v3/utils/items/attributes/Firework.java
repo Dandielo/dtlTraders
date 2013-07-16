@@ -16,7 +16,7 @@ import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeValu
 import net.dandielo.citizens.traders_v3.utils.items.Attribute;
 import net.dandielo.citizens.traders_v3.utils.items.ItemAttr;
 
-@Attribute(name="Firework", key="fw")
+@Attribute(name="Firework", key="fw", priority = 5)
 public class Firework extends ItemAttr {
 	//the firework effect builder
 	private static FireworkEffect.Builder effectBuilder = FireworkEffect.builder();

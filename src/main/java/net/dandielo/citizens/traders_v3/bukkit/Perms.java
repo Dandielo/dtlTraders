@@ -36,4 +36,9 @@ public class Perms {
 	{
 		return permission != null ? permission.has(sender, perm) : sender.hasPermission(perm);
 	}
+	
+	public static boolean hasPerm(CommandSender sender, String perm)
+	{
+		return perms.has(sender, perm);
+	}
 }

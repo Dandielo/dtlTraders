@@ -1,5 +1,8 @@
 package net.dandielo.citizens.traders_v3.traders.setting;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.trait.trait.Owner;
 import net.citizensnpcs.api.util.DataKey;
@@ -15,6 +18,9 @@ public class Settings extends TGlobalSettings {
 	private int stockSize = TGlobalSettings.stockSize;
 	private String stockNameFormat = TGlobalSettings.stockNameFormat;
 	private String stockStart = TGlobalSettings.stockStart;
+	
+	//pattern settings
+	private List<String> patterns = new ArrayList<String>();
 	
 	public Settings(NPC npc) {
 		this.npc = npc;
@@ -100,6 +106,7 @@ public class Settings extends TGlobalSettings {
 	}
 
 	//loading and saving
+	@SuppressWarnings("unchecked")
 	public void load(DataKey data) 
 	{
 		//debug info
@@ -118,6 +125,9 @@ public class Settings extends TGlobalSettings {
 		stockSize = data.getInt("stock.size", TGlobalSettings.stockSize);
 		stockNameFormat = data.getString("stock.format", TGlobalSettings.stockNameFormat);
 		stockStart = data.getString("stock.default", TGlobalSettings.stockStart);
+		
+		//load pattern settings
+		patterns.addAll((List<String>)data.getRaw("patterns"));
 	}
 	
 	public void save(DataKey data) 
@@ -130,6 +140,9 @@ public class Settings extends TGlobalSettings {
 		data.setString("owner", owner);
 		data.setRaw("stock", null);
 		
+		//save patterns
+		data.setRaw("patterns", patterns);
+		
 		//save stock settings
 		if ( stockSize != TGlobalSettings.stockSize )
 			data.setInt("stock.size", stockSize);
@@ -138,6 +151,11 @@ public class Settings extends TGlobalSettings {
 		if ( !stockStart.equals(TGlobalSettings.stockStart) )
 			data.setString("stock.default", stockStart);
 			
+	} 
+
+	public List<String> getPatterns()
+	{
+		return patterns;
 	}
 
 }

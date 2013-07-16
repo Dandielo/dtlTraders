@@ -1,71 +1,117 @@
 package net.dandielo.citizens.traders_v3.traders.stock;
 
-import net.dandielo.citizens.traders_v3.tNpcStatus;
+import java.util.List;
 
-import org.bukkit.Bukkit;
+import net.dandielo.citizens.traders_v3.tNpcStatus;
+import net.dandielo.citizens.traders_v3.bukkit.Perms;
+import net.dandielo.citizens.traders_v3.core.dB;
+import net.dandielo.citizens.traders_v3.traders.patterns.Pattern;
+import net.dandielo.citizens.traders_v3.traders.patterns.Pattern.Type;
+import net.dandielo.citizens.traders_v3.traders.patterns.PatternManager;
+import net.dandielo.citizens.traders_v3.traders.patterns.types.Price.PriceMatch;
+import net.dandielo.citizens.traders_v3.traders.setting.Settings;
+import net.dandielo.citizens.traders_v3.utils.NBTUtils;
+import net.dandielo.citizens.traders_v3.utils.items.attributes.Price;
+import net.dandielo.citizens.traders_v3.utils.items.flags.StackPrice;
+
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
-public class StockPlayer extends Stock {
-    @SuppressWarnings("unused")
+public class StockPlayer extends StockTrader {
 	private Player player;
 	
-	public StockPlayer(String name, int size, Player player) {
-		super(null);
+	public StockPlayer(Settings settings, Player player) {
+		super(settings);
 		this.player = player;
 	}
 
 	@Override
-	public Inventory getInventory() {
-		return Bukkit.createInventory(this, getFinalInventorySize(), "");
-	}
-
-	@Override
 	public Inventory getInventory(tNpcStatus status) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Inventory getManagementInventory(tNpcStatus baseStatus, tNpcStatus status) {
-		// TODO Auto-generated method stub
-		return null;
+		Inventory inventory = getInventory();
+		setInventory(inventory, status);
+		return inventory;
 	}
 
 	@Override
 	public void setInventory(Inventory inventory, tNpcStatus status) {
-		// TODO Auto-generated method stub
+		//debug info
+		dB.info("Setting inventory, status: ", status.name().toLowerCase());
 		
+		//clear the inventory
+		inventory.clear();
+		for ( StockItem item : this.stock.get(status.asStock()) )
+		{
+			if (  item.getSlot() < 0 )
+				item.setSlot(inventory.firstEmpty());
+
+			//set the lore
+			ItemStack itemStack = item.getItem();
+			ItemMeta meta = itemStack.getItemMeta();
+			
+			List<String> lore = item.getTempLore(status, itemStack.clone());
+			if ( !item.hasPrice() )
+				lore = Price.loreRequest(parsePrice(item, status.asStock(), item.getAmount()), lore);
+			meta.setLore(lore);
+			
+			itemStack.setItemMeta(meta);
+			
+			//set the item 
+			inventory.setItem(item.getSlot(), NBTUtils.markItem(itemStack));
+		}
+		setUi(inventory, null, status);
 	}
 
 	@Override
-	public void setManagementInventory(Inventory inventory, tNpcStatus baseStatus, tNpcStatus status) {
-		// TODO Auto-generated method stub
+	public void setAmountsInventory(Inventory inventory, tNpcStatus status, StockItem item) 
+	{
+		//debug info
+		dB.info("Setting inventory, status: ", tNpcStatus.SELL_AMOUNTS.name().toLowerCase());
 		
+		//clear the inventory
+		inventory.clear();
+		for ( Integer amount : item.getAmounts() )
+		{
+			//set new amount
+			ItemStack itemStack = item.getItem();
+			itemStack.setAmount(amount);
+
+			//set the lore
+			ItemMeta meta = itemStack.getItemMeta();
+			
+			List<String> lore = item.getTempLore(status, itemStack.clone());
+			if ( !item.hasPrice() )
+				lore = Price.loreRequest(parsePrice(item, "sell", amount), lore);
+			meta.setLore(lore);
+			
+			itemStack.setItemMeta(meta);
+			
+			//set the item
+			inventory.setItem(inventory.firstEmpty(), NBTUtils.markItem(itemStack));
+		}
+		setUi(inventory, null, tNpcStatus.SELL_AMOUNTS);
 	}
 
-	@Override
-	public void setAmountsInventory(Inventory inventory, tNpcStatus status, StockItem item) {
-		// TODO Auto-generated method stub
-		
+	public Player getPlayer()
+	{
+		return player;
 	}
-
+	
 	/* price methods */
 	@Override
-	public double parsePrice(StockItem item, int slot) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public void addItem(StockItem item, String stock) {
-		// TODO Auto-generated method stub
+	public double parsePrice(StockItem item, String stock, int amount) 
+	{
+		PriceMatch match = new PriceMatch();
+		for ( Pattern pattern : PatternManager.getPatterns(settings.getPatterns()) )
+		{
+			if ( pattern.getType().equals(Type.PRICE) &&
+				 Perms.hasPerm(player, "dtl.trader.patterns." + pattern.getName()) )
+				match.merge(((net.dandielo.citizens.traders_v3.traders.patterns.types.Price)pattern).findPriceFor(player, stock, item));
+		}
 		
-	}
-
-	@Override
-	public void removeItem(StockItem item, String stock) {
-		// TODO Auto-generated method stub
-		
+		if ( item.hasFlag(StackPrice.class) )
+			return match.finalPrice();
+		return match.finalPrice() * amount;
 	}
 }

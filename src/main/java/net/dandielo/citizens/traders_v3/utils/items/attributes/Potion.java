@@ -15,7 +15,7 @@ import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeValu
 import net.dandielo.citizens.traders_v3.utils.items.Attribute;
 import net.dandielo.citizens.traders_v3.utils.items.ItemAttr;
 
-@Attribute(name="Potion", key="pt")
+@Attribute(name="Potion", key="pt", priority = 5)
 public class Potion extends ItemAttr {
 
 	/**

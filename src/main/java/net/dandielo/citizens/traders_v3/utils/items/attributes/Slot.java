@@ -6,7 +6,7 @@ import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeInva
 import net.dandielo.citizens.traders_v3.utils.items.Attribute;
 import net.dandielo.citizens.traders_v3.utils.items.ItemAttr;
 
-@Attribute(name="Slot", key="s", required = true)
+@Attribute(name="Slot", key="s", required = true, priority = 0)
 public class Slot extends ItemAttr {
 	private int slot;
 	

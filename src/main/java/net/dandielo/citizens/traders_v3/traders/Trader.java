@@ -108,7 +108,7 @@ public abstract class Trader implements tNpc {
 		//set all constant data
 		settings = trader.getSettings();
 		status = getDefaultStatus();
-		stock = trader.getStock();
+		stock = trader.getStock().toPlayerStock(player);
 		this.wallet = wallet.getWallet();
 		this.player = player;
 	}

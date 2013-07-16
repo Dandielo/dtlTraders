@@ -10,16 +10,13 @@ import net.dandielo.citizens.traders_v3.tNpcStatus;
 import net.dandielo.citizens.traders_v3.core.dB;
 import net.dandielo.citizens.traders_v3.traders.setting.Settings;
 
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
 public abstract class Stock implements InventoryHolder {
-//	protected final int size;
-//	protected final String name;
-	
-	protected final Map<String, List<StockItem>> stock = new HashMap<String, List<StockItem>>();
-	
+	protected Map<String, List<StockItem>> stock = new HashMap<String, List<StockItem>>();
 	protected Settings settings;
 	
 	protected Stock(Settings settings)
@@ -36,8 +33,18 @@ public abstract class Stock implements InventoryHolder {
         stock.put("sell", new ArrayList<StockItem>());
         stock.put("buy", new ArrayList<StockItem>());
 	}
-	
-	//Stockitem operations
+
+	//stock changing
+	public StockPlayer toPlayerStock(Player player)
+	{
+		StockPlayer stock = new StockPlayer(settings, player);
+		
+		//for ( Map.Entry<String, List<StockItem>> entry : this.stock.entrySet() )
+		//add all items to the new player stock
+		stock.stock = this.stock;
+		
+		return stock;
+	}
 
 	//inventory size
 	public final int getFinalInventorySize()
@@ -128,4 +135,6 @@ public abstract class Stock implements InventoryHolder {
 	{
 		return this.stock.get(stock);
 	}
+
+	public abstract double parsePrice(StockItem item, String stock, int amount);
 }
