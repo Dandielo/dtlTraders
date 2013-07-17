@@ -17,6 +17,7 @@ import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeValu
 import net.dandielo.citizens.traders_v3.core.tools.StringTools;
 import net.dandielo.citizens.traders_v3.utils.items.flags.DataCheck;
 import net.dandielo.citizens.traders_v3.utils.items.flags.Lore;
+import net.dandielo.citizens.traders_v3.utils.items.flags.NoStack;
 import net.dandielo.citizens.traders_v3.utils.items.flags.Splash;
 import net.dandielo.citizens.traders_v3.utils.items.flags.StackPrice;
 
@@ -292,6 +293,7 @@ public abstract class ItemFlag {
 		{
 			registerFlag(StackPrice.class);
 			registerFlag(DataCheck.class);
+			registerFlag(NoStack.class);
 			registerFlag(Splash.class);
 			registerFlag(Lore.class);
 		//	registerFlag(Price.class);
