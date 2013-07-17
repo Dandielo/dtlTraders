@@ -36,7 +36,7 @@ public class Skull extends ItemAttr {
 	public void onAssign(ItemStack item) throws InvalidItemException
 	{
 		//check if the item is valid
-		if ( (item.getItemMeta() instanceof SkullMeta) ) throw new InvalidItemException();
+		if ( !(item.getItemMeta() instanceof SkullMeta) ) throw new InvalidItemException();
 		
 		//get the meta
 		SkullMeta meta = (SkullMeta) item.getItemMeta();

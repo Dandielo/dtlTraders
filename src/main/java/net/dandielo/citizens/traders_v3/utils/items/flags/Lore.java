@@ -34,8 +34,9 @@ public class Lore extends ItemFlag {
 			itemLore = new ArrayList<String>();
 		
 		//add this lore
-		itemLore.addAll(this.lore);
-
+		for ( String lore : this.lore )
+			itemLore.add(lore.replace('^', '§'));
+		
 		//save the new lore
 		ItemMeta meta = item.getItemMeta();
 		meta.setLore(itemLore);
