@@ -73,4 +73,9 @@ public class Lore extends ItemFlag {
 		return equals;
 	}
 
+	@Override
+	public boolean equalsWeak(ItemFlag flag)
+	{
+		return equalsStrong(flag);
+	}
 }
