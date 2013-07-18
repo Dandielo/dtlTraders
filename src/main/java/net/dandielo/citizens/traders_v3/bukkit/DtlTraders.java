@@ -113,12 +113,19 @@ public class DtlTraders extends JavaPlugin {
 		{
 			s = new StatisticServer();
 			server = new Thread(s);
-			server.start();
 			
 			stats = new TraderStats();
 			logs = new Thread(stats);
-			logs.start();
-			info("Statistic server enabled");
+			
+			if ( !PluginSettings.getLogUser().isEmpty() && !PluginSettings.getLogPass().isEmpty() )
+			{
+			    server.start();
+			    logs.start();
+			
+			    info("Statistic server enabled");
+			}
+			else
+			    info("Statistic server not loaded");
 		}
 		catch( IOException e )
 		{
@@ -141,10 +148,13 @@ public class DtlTraders extends JavaPlugin {
 	{
 		try
 		{
-			s.stop();
-			server.join(1000);
-			stats.stop();
-			logs.join(1000);
+			if ( !PluginSettings.getLogUser().isEmpty() && !PluginSettings.getLogPass().isEmpty() )
+			{
+				s.stop();
+				server.join(1000);
+				stats.stop();
+				logs.join(1000);
+			}
 		}
 		catch( InterruptedException e )
 		{
