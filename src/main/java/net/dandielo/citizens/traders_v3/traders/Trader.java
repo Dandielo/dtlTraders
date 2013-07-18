@@ -20,7 +20,6 @@ import net.dandielo.citizens.traders_v3.bukkit.Perms;
 import net.dandielo.citizens.traders_v3.core.dB;
 import net.dandielo.citizens.traders_v3.core.locale.LocaleManager;
 import net.dandielo.citizens.traders_v3.core.tools.StringTools;
-import net.dandielo.citizens.traders_v3.statistics.TraderStats;
 import net.dandielo.citizens.traders_v3.traders.clicks.ClickHandler;
 import net.dandielo.citizens.traders_v3.traders.setting.Settings;
 import net.dandielo.citizens.traders_v3.traders.setting.TGlobalSettings;
@@ -261,7 +260,7 @@ public abstract class Trader implements tNpc {
 			wallet.deposit(this, stock.parsePrice(selectedItem, slot));
 			
 			//Trader log
-			TraderStats.traderLog(this, "buy", selectedItem, selectedItem.getAmount());
+			//TraderStats.traderLog(this, "buy", selectedItem, selectedItem.getAmount());
 			return true;
 		}
 		return false;
@@ -289,7 +288,7 @@ public abstract class Trader implements tNpc {
 			wallet.deposit(player, stock.parsePrice(selectedItem, 0)*scale);
 			
 			//Trader log
-			TraderStats.traderLog(this, "sell", selectedItem, scale);
+			//TraderStats.traderLog(this, "sell", selectedItem, scale);
 			return true;
 		}
 		return false;
