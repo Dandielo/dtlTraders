@@ -45,11 +45,12 @@ public class TraderStats implements StatListener, Runnable {
 	
 	public static void traderLog(Trader trader, String action, StockItem item, int amount)
 	{
-		logs.add(new LogEntry(trader, action, item, amount));
+	/*	logs.add(new LogEntry(trader, action, item, amount));
 		if ( logs.size() >= PluginSettings.logUpdateCounter() )
 		{
 			StatisticServer.logRequest();
-		}
+			logs.notify();
+		}*/
 	}
 	
 	private boolean stop = false;
@@ -62,7 +63,7 @@ public class TraderStats implements StatListener, Runnable {
 			try
 			{
 				//bow we will wait 5 seconds, this should help a bit (I hope so)!
-				Thread.sleep(5000);
+				logs.wait();
 			}
 			catch( InterruptedException e )
 			{

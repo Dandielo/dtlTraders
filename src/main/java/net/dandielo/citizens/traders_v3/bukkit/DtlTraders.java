@@ -108,7 +108,7 @@ public class DtlTraders extends JavaPlugin {
 		accLoader = AccountLoader.accLoader;
 		info("Accounts loaded: " + ChatColor.YELLOW + accLoader.accountsLoaded());
 		
-		//enable statistic server
+	/*	//enable statistic server
 		try
 		{
 			s = new StatisticServer();
@@ -133,20 +133,20 @@ public class DtlTraders extends JavaPlugin {
 		}
 		
 		StatisticManager.instance.registerListener("dtlTraders", new TraderStats());
-		
+		*/
 		
 		//enabled info
 		info("Enabled");
 	}
-	
+/*	
 	Thread server, logs;
 	TraderStats stats;
-	StatisticServer s;
+	StatisticServer s;*/
 	
 	@Override
 	public void onDisable()
 	{
-		try
+	/*	try
 		{
 			if ( !PluginSettings.getLogUser().isEmpty() && !PluginSettings.getLogPass().isEmpty() )
 			{
@@ -160,7 +160,7 @@ public class DtlTraders extends JavaPlugin {
 		{
 			e.printStackTrace();
 		}
-		
+		*/
 		
 		accLoader.save();
 	}
