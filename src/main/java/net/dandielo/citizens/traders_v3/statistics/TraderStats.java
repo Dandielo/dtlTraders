@@ -62,7 +62,7 @@ public class TraderStats implements StatListener, Runnable {
 			try
 			{
 				//bow we will wait 5 seconds, this should help a bit (I hope so)!
-				this.wait(5000);
+				Thread.sleep(5000);
 			}
 			catch( InterruptedException e )
 			{
