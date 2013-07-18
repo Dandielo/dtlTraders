@@ -49,6 +49,8 @@ public class TraderClickEvent extends TraderEvent {
 	public TraderClickEvent(Trader npc, Player player, boolean mmToggling, boolean leftClick)
 	{
 		super(npc, player);
+		this.mmToggling = mmToggling;
+		this.leftClick = leftClick;
 	}
 
 	/**

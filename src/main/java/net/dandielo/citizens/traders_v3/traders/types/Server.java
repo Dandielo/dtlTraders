@@ -36,7 +36,7 @@ public class Server extends Trader {
 		TraderClickEvent e = (TraderClickEvent) new TraderClickEvent(this, player, !TGlobalSettings.mmRightToggle(), true).callEvent();
 		
 		//check settings
-		if ( e.isManagerToggling() ) return;
+		if ( !e.isManagerToggling() ) return;
 
 		//check permission
 		if ( !perms.has(player, "dtl.trader.manage") ) return;
@@ -55,7 +55,6 @@ public class Server extends Trader {
 	@Override
 	public boolean onRightClick(ItemStack itemInHand)
 	{
-		
 		//right click toggling is enabled, handle it and check permission
 		if ( TGlobalSettings.mmRightToggle() && perms.has(player, "dtl.trader.manage") )
 		{
