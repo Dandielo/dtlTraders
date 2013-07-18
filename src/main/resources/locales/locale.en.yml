@@ -57,6 +57,7 @@ keywords:
   banker-money: Money Banker
   banker-private: Private Banker
   stack-price: Stack price
+  stack-disable: Stack disabled
   tab-price: Tab price
   tab-name: Tab name
   tab-icon: Tab icon

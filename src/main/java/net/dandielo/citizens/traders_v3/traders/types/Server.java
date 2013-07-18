@@ -18,6 +18,7 @@ import net.dandielo.citizens.traders_v3.traders.setting.TGlobalSettings;
 import net.dandielo.citizens.traders_v3.traits.TraderTrait;
 import net.dandielo.citizens.traders_v3.traits.WalletTrait;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Price;
+import net.dandielo.citizens.traders_v3.utils.items.flags.NoStack;
 import net.dandielo.citizens.traders_v3.utils.items.flags.StackPrice;
 
 @tNpcType(name="server", author="dandielo")
@@ -558,9 +559,16 @@ public class Server extends Trader {
 							"key", "#stack-price", 
 							"value", String.valueOf(getSelectedItem().hasFlag(StackPrice.class)));
 				}
-				else //if it's a shift rightclick
+				else //if it's a no shift rightclick
 				{
+					if ( getSelectedItem().hasFlag(NoStack.class) )
+						getSelectedItem().removeFlag(NoStack.class);
+					else
+						getSelectedItem().addFlag(".nostack");
 					
+					locale.sendMessage(player, "key-change", 
+							"key", "#stack-disable", 
+							"value", String.valueOf(getSelectedItem().hasFlag(NoStack.class)));
 				}
 			}
 		}
