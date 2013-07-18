@@ -20,6 +20,7 @@ import net.dandielo.citizens.traders_v3.traits.TraderTrait;
 import net.dandielo.citizens.traders_v3.traits.WalletTrait;
 import net.dandielo.citizens.traders_v3.utils.items.ItemAttr;
 import net.dandielo.citizens.traders_v3.utils.items.ItemFlag;
+import net.dandielo.stats.bukkit.Stats;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.ConsoleCommandSender;
@@ -35,6 +36,7 @@ public class DtlTraders extends JavaPlugin {
 	
 	//plugin instance
 	private static DtlTraders instance;
+	private static Stats stats;
 	
 	//plugin resources
 	AccountLoader accLoader;
@@ -99,7 +101,7 @@ public class DtlTraders extends JavaPlugin {
 		//init Denizen
 		initDenizens();
 		//init Wallets
-		initWallets();
+		initStats();
 		
 		//load all accounts
 		accLoader = AccountLoader.accLoader;
@@ -166,8 +168,14 @@ public class DtlTraders extends JavaPlugin {
 	{	
 	}
 	
-	private void initWallets()
+	private void initStats()
 	{
+		stats = (Stats) getServer().getPluginManager().getPlugin("dtlStats");
+		if ( stats == null ) 
+		{
+			return;
+		}
+		info("dtlStats found, web api usable!");
 	}
 	
 	private boolean initVault()
