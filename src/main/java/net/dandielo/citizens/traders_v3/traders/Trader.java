@@ -31,7 +31,6 @@ import net.dandielo.citizens.traders_v3.traits.TraderTrait;
 import net.dandielo.citizens.traders_v3.traits.WalletTrait;
 import net.dandielo.citizens.traders_v3.utils.ItemUtils;
 import net.dandielo.citizens.traders_v3.utils.NBTUtils;
-import net.dandielo.citizens.traders_v3.utils.items.flags.NoStack;
 
 public abstract class Trader implements tNpc {
 	
@@ -371,7 +370,6 @@ public abstract class Trader implements tNpc {
 	 * Methods that helps us to choose and execute all actions we want
 	 */
 	
-	//TODO documentation
 	public void saveItemsUpponLocking()
 	{
 		//debug normal

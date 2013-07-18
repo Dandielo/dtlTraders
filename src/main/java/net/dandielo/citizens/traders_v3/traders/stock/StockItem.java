@@ -801,7 +801,7 @@ public final class StockItem extends tNpcItem {
 			for ( ItemFlag tFlag : flags.values() )
 			{
 				//if only once is false then return false
-				if ( !equals ) tFlag.getInfo().standalone();
+				if ( !equals ) break; //tFlag.getInfo().standalone();
 				
 				//temporary false
 				equals = tFlag.getInfo().standalone();

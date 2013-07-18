@@ -100,6 +100,8 @@ public class Price extends ItemAttr {
 	
 	public static List<String> loreRequest(double price, List<String> lore)
 	{
+		if ( price < 0 ) return lore;
+		
 		lore.add(ChatColor.GOLD + "Price: " + ChatColor.GRAY + 
 				String.format("%.2f", price).replace(',', '.'));
 		return lore;
