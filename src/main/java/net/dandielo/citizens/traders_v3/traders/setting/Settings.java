@@ -126,7 +126,7 @@ public class Settings extends TGlobalSettings {
 		stockNameFormat = data.getString("stock.format", TGlobalSettings.stockNameFormat);
 		stockStart = data.getString("stock.default", TGlobalSettings.stockStart);
 		
-		//load pattern settings
+		//load pattern settings 
 		patterns.addAll((List<String>)data.getRaw("patterns"));
 	}
 	

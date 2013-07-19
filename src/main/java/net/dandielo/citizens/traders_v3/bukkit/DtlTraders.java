@@ -1,7 +1,5 @@
 package net.dandielo.citizens.traders_v3.bukkit;
 
-import java.io.IOException;
-
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.trait.TraitInfo;
 import net.dandielo.citizens.traders_v3.tNpcListener;
@@ -14,6 +12,7 @@ import net.dandielo.citizens.traders_v3.bukkit.commands.TraderCommands;
 import net.dandielo.citizens.traders_v3.core.dB;
 import net.dandielo.citizens.traders_v3.core.PluginSettings;
 import net.dandielo.citizens.traders_v3.core.commands.CommandManager;
+import net.dandielo.citizens.traders_v3.stats.TraderStats;
 import net.dandielo.citizens.traders_v3.traders.setting.TGlobalSettings;
 import net.dandielo.citizens.traders_v3.traits.BankerTrait;
 import net.dandielo.citizens.traders_v3.traits.TraderTrait;
@@ -21,6 +20,7 @@ import net.dandielo.citizens.traders_v3.traits.WalletTrait;
 import net.dandielo.citizens.traders_v3.utils.items.ItemAttr;
 import net.dandielo.citizens.traders_v3.utils.items.ItemFlag;
 import net.dandielo.stats.bukkit.Stats;
+import net.dandielo.stats.core.Manager;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.ConsoleCommandSender;
@@ -175,6 +175,8 @@ public class DtlTraders extends JavaPlugin {
 		{
 			return;
 		}
+		Manager.registerListener("dtlTraders", TraderStats.class);
+		Manager.registerUpdater("dtlTraders", TraderStats.class);
 		info("dtlStats found, web api usable!");
 	}
 	

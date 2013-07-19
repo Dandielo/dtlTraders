@@ -38,6 +38,11 @@ public class Price extends ItemAttr {
 	{
 		price = (price -= value) < 0 ? 0 : price;
 	}
+	
+	public void setPrice(double value)
+	{
+		price = value < 0 ? 0 : price;
+	}
 
 	@Override
 	public void onLoad(String data) throws AttributeInvalidValueException 

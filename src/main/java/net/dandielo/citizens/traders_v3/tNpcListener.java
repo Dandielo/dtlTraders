@@ -164,6 +164,11 @@ public class tNpcListener implements Listener {
 		    		//lock and save the inventory
 		    		npc.lockAndSave();
 		    	}
+		    	if ( npc.getStatus().equals(tNpcStatus.MANAGE_PRICE) )
+		    	{
+		    		//remove all special block lores 
+		    		((Trader)npc).setSpecialBlockPrices();
+		    	}
 		    }
 		}
 	}

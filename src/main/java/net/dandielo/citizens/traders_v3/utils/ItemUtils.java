@@ -44,8 +44,10 @@ public class ItemUtils {
 	{
 		//creating a clean item
 		BankItem bItem = new BankItem(vItem);
+		
 		//getting data out of it (by force ;>)
-		bItem.factorize(vItem); 
+		bItem.factorize(vItem);
+		
 		//returning the item
 		return bItem;
 	}

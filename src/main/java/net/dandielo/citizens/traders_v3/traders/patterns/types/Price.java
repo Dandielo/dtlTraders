@@ -202,4 +202,11 @@ public class Price extends Pattern {
 			return data[0]*data[1];
 		}
 	}
+	
+	/*public static void main(String[] a) throws IOException, ScriptException
+	{ScriptEngineManager mgr = new ScriptEngineManager();
+    ScriptEngine engine = mgr.getEngineByName("JavaScript");
+    String foo = "40+2*2.1";
+    System.out.println(engine.eval(foo));
+	}*/
 }

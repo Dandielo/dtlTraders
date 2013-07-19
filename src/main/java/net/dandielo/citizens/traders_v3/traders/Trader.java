@@ -331,7 +331,7 @@ public abstract class Trader implements tNpc {
 	/**
 	 * Updates the players inventory resetting all transaction lores.
 	 */
-	protected void setSpecialBlockPrices()
+	public void setSpecialBlockPrices()
 	{
 		//the inventory that will be reseted
 		Inventory inv = player.getInventory();
