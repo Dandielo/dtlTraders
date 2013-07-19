@@ -87,11 +87,11 @@ keywords:
   disabled: Disabled
 ui: 
   buy:
-    name: ^r^6Buy stock
+    name: ^r^6Sell stock
     lore:
     - ^7Click to switch to buy stock
   sell:
-    name: ^r^6Sell stock
+    name: ^r^6Buy Stock
     lore:
     - ^7Click to switch to sell stock
   back:
