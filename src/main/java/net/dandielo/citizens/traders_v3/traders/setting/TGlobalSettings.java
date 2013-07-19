@@ -230,7 +230,7 @@ public class TGlobalSettings extends PluginSettings {
 	 */
 	public static double getBlockValue(ItemStack item)
 	{
-		ItemStack tempItem = NBTUtils.cleanItem(item.clone());
+		ItemStack tempItem = new ItemStack(item.getTypeId());
 		tempItem.setAmount(1);
 		return specialBlocks.containsKey(tempItem) ? specialBlocks.get(tempItem) : 1.0;
 	}
