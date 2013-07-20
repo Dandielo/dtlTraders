@@ -52,9 +52,9 @@
 			<artifactId>craftbukkit</artifactId>
 			<version>${craftbukkit.version}</version>
 			<type>jar</type>
-			<scope>provided</scope>
+			<scope>provided</scope> 
 		</dependency>
-		<dependency> 
+		<dependency>
 			<groupId>net.aufdemrand</groupId>
 			<artifactId>denizen</artifactId>
 			<version>${denizen.version}</version>
@@ -107,13 +107,50 @@
         </excludes>
       </resource>
     </resources>
+    
     <plugins>
       <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-				<version>2.5.1</version>
-        <configuration>
-        </configuration>
-      </plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>1.5</version>
+        <executions>
+          <execution>
+          <phase>package</phase>
+          <goals>
+            <goal>shade</goal>
+          </goals>
+          <configuration>
+            <artifactSet>
+              <includes>
+                <include>org.json</include>
+              </includes>
+            </artifactSet>
+            <relocations>
+              <relocation>
+	            <pattern>org.json</pattern>
+	            <shadedPattern>org.shade.json</shadedPattern>
+              </relocation>
+            </relocations>
+          </configuration>
+         </execution>
+       </executions>
+     </plugin>
+
+     <plugin>
+       <groupId>org.apache.maven.plugins</groupId>
+       <artifactId>maven-jar-plugin</artifactId>
+       <version>2.2</version>
+     </plugin>
+
+	 <plugin>
+		<groupId>org.apache.maven.plugins</groupId>
+		<artifactId>maven-compiler-plugin</artifactId>
+		<version>2.5.1</version>
+		<configuration>
+			<!-- put your configurations here -->
+		</configuration>
+	 </plugin>
+
     </plugins>
   </build>
   
