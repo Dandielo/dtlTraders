@@ -37,7 +37,7 @@ public abstract class tEvent extends Event {
 	 * Returns the player that participates in the event with the given tNpc character
 	 * @return
 	 */
-	public Player getParticipate()
+	public Player getPlayer()
 	{
 		return player;
 	}

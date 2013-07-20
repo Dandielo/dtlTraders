@@ -10,6 +10,8 @@ import net.dandielo.citizens.traders_v3.tNpcStatus;
 import net.dandielo.citizens.traders_v3.tNpcType;
 import net.dandielo.citizens.traders_v3.core.dB;
 import net.dandielo.citizens.traders_v3.core.events.trader.TraderClickEvent;
+import net.dandielo.citizens.traders_v3.core.events.trader.TraderTransactionEvent;
+import net.dandielo.citizens.traders_v3.core.events.trader.TraderTransactionEvent.TransactionResult;
 import net.dandielo.citizens.traders_v3.traders.Trader;
 import net.dandielo.citizens.traders_v3.traders.clicks.ClickHandler;
 import net.dandielo.citizens.traders_v3.traders.clicks.InventoryType;
@@ -285,16 +287,24 @@ public class Server extends Trader {
 				{
 					//send message
 					locale.sendMessage(player, "trader-transaction-failed-inventory");
+					
+					//send event
+					transactionEvent(TransactionResult.INVENTORY_FULL);
 				}
 				else
 				if ( !sellTransaction(slot) )
 				{
 					//send message
 					locale.sendMessage(player, "trader-transaction-failed-player-money");
+					
+					//send event
+					transactionEvent(TransactionResult.PLAYER_LACKS_MONEY);
 				}
 				else
 				{
-					addToInventory(slot);
+					//send event
+					if ( transactionEvent(TransactionResult.SUCCESS_PLAYER_BUY).isSaveToInv() );
+					    addToInventory(slot);
 
 					//send message
 					locale.sendMessage(player, "trader-transaction-success", "trader", getNPC().getName(),
@@ -345,16 +355,24 @@ public class Server extends Trader {
 					{
 						//send message
 						locale.sendMessage(player, "trader-transaction-failed-inventory");
+						
+						//send event
+						transactionEvent(TransactionResult.INVENTORY_FULL);
 					}
 					else
 					if ( !sellTransaction() )
 					{
 						//send message
 						locale.sendMessage(player, "trader-transaction-failed-player-money");
+						
+						//send event
+						transactionEvent(TransactionResult.PLAYER_LACKS_MONEY);
 					}
 					else
 					{
-						addToInventory();
+						//send event
+						if ( transactionEvent(TransactionResult.SUCCESS_PLAYER_BUY).isSaveToInv() );
+						    addToInventory(slot);
 						
 						//send message
 						locale.sendMessage(player, "trader-transaction-success", "trader", getNPC().getName(),
@@ -384,16 +402,24 @@ public class Server extends Trader {
 					{
 						//send message
 						locale.sendMessage(player, "trader-transaction-failed-inventory");
+						
+						//send event
+						transactionEvent(TransactionResult.INVENTORY_FULL);
 					}
 					else
 					if ( !sellTransaction() )
 					{
 						//send message
 						locale.sendMessage(player, "trader-transaction-failed-player-money");
+						
+						//send event
+						transactionEvent(TransactionResult.PLAYER_LACKS_MONEY);
 					}
 					else
 					{
-						addToInventory();
+						//send event
+						if ( transactionEvent(TransactionResult.SUCCESS_PLAYER_BUY).isSaveToInv() );
+						    addToInventory(slot);
 						
 						//send message
 						locale.sendMessage(player, "trader-transaction-success", "trader", getNPC().getName(),
@@ -441,12 +467,18 @@ public class Server extends Trader {
 				if ( handleClick(e.getRawSlot()) )
 				{
 					if ( !buyTransaction(scale) )
-					{
+					{						
 						//send message
 						locale.sendMessage(player, "trader-transaction-failed-trader-money", "npc", settings.getNPC().getName());
+						
+						//send event
+						transactionEvent(TransactionResult.TRADER_LACKS_MONEY);
 					}
 					else
 					{
+						//send event
+						transactionEvent(TransactionResult.SUCCESS_PLAYER_SELL);
+						
 						//remove the amount from inventory
 						removeFromInventory(slot, scale);
 
@@ -482,9 +514,15 @@ public class Server extends Trader {
 					{
 						//send message
 						locale.sendMessage(player, "trader-transaction-failed-trader-money", "npc", settings.getNPC().getName());
+						
+						//send event
+						transactionEvent(TransactionResult.TRADER_LACKS_MONEY);
 					}
 					else
 					{
+						//send event
+						transactionEvent(TransactionResult.SUCCESS_PLAYER_SELL);
+						
 						//remove the amount from inventory
 						removeFromInventory(slot);
 						

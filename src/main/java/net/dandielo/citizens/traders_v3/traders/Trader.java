@@ -18,6 +18,8 @@ import net.dandielo.citizens.traders_v3.tNpc;
 import net.dandielo.citizens.traders_v3.tNpcStatus;
 import net.dandielo.citizens.traders_v3.bukkit.Perms;
 import net.dandielo.citizens.traders_v3.core.dB;
+import net.dandielo.citizens.traders_v3.core.events.trader.TraderTransactionEvent;
+import net.dandielo.citizens.traders_v3.core.events.trader.TraderTransactionEvent.TransactionResult;
 import net.dandielo.citizens.traders_v3.core.locale.LocaleManager;
 import net.dandielo.citizens.traders_v3.core.tools.StringTools;
 import net.dandielo.citizens.traders_v3.traders.clicks.ClickHandler;
@@ -156,6 +158,11 @@ public abstract class Trader implements tNpc {
 	public NPC getNPC()
 	{
 		return settings.getNPC();
+	}
+	
+	public TraderTransactionEvent transactionEvent(TransactionResult result)
+	{
+		return (TraderTransactionEvent) new TraderTransactionEvent(this, player, selectedItem, TransactionResult.INVENTORY_FULL).callEvent();
 	}
 	
 	/**
