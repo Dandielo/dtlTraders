@@ -98,18 +98,33 @@ public class StockPlayer extends StockTrader {
 		return player;
 	}
 	
+	@Override
+	public double parsePrice(StockItem item, int amount) 
+	{
+		return -1.0;
+	}
+	
 	/* price methods */
 	@Override
 	public double parsePrice(StockItem item, String stock, int amount) 
 	{
 		PriceMatch match = new PriceMatch();
-		for ( Pattern pattern : PatternManager.getPatterns(settings.getPatterns()) )
+
+		if ( settings.getPatterns() != null && !settings.getPatterns().isEmpty() )
 		{
-			if ( pattern.getType().equals(Type.PRICE) &&
-				 Perms.hasPerm(player, "dtl.trader.patterns." + pattern.getName()) )
-				match.merge(((net.dandielo.citizens.traders_v3.traders.patterns.types.Price)pattern).findPriceFor(player, stock, item));
+			for ( Pattern pattern : PatternManager.getPatterns(settings.getPatterns()) )
+			{
+				if ( pattern.getType().equals(Type.PRICE) &&
+						Perms.hasPerm(player, "dtl.trader.patterns." + pattern.getName()) )
+					match.merge(((net.dandielo.citizens.traders_v3.traders.patterns.types.Price)pattern).findPriceFor(player, stock, item));
+			}
 		}
-		
+		else
+		{
+			match.price(item.getPrice());
+			match.multiplier(item.getMultiplier());
+		}
+
 		if ( item.hasFlag(StackPrice.class) )
 			return match.finalPrice();
 		return match.finalPrice() * amount;

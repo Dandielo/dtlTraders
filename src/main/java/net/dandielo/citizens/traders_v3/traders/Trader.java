@@ -262,9 +262,9 @@ public abstract class Trader implements tNpc {
 	 */
 	protected boolean sellTransaction(int slot)
 	{
-		if ( wallet.withdraw(player, stock.parsePrice(selectedItem, slot)) )
+		if ( wallet.withdraw(player, stock.parsePrice(selectedItem, "sell", selectedItem.getAmount(slot))) )
 		{
-			wallet.deposit(this, stock.parsePrice(selectedItem, slot));
+			wallet.deposit(this, stock.parsePrice(selectedItem, "sell", selectedItem.getAmount(slot)));
 			
 			//Trader log
 			//TraderStats.traderLog(this, "buy", selectedItem, selectedItem.getAmount());
@@ -290,9 +290,9 @@ public abstract class Trader implements tNpc {
 	 */
 	protected boolean buyTransaction(int scale)
 	{
-		if ( wallet.withdraw(this, stock.parsePrice(selectedItem, 0)*scale) )
+		if ( wallet.withdraw(this, stock.parsePrice(selectedItem, "buy", selectedItem.getAmount())*scale) )
 		{
-			wallet.deposit(player, stock.parsePrice(selectedItem, 0)*scale);
+			wallet.deposit(player, stock.parsePrice(selectedItem, "buy", selectedItem.getAmount())*scale);
 			
 			//Trader log
 			//TraderStats.traderLog(this, "sell", selectedItem, scale);
