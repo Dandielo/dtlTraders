@@ -48,18 +48,12 @@
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.bukkit</groupId>
+			<groupId>org.bukkit</groupId> 
 			<artifactId>craftbukkit</artifactId>
 			<version>${craftbukkit.version}</version>
 			<type>jar</type>
 			<scope>provided</scope> 
 		</dependency>
-		<dependency>
-			<groupId>net.aufdemrand</groupId>
-			<artifactId>denizen</artifactId>
-			<version>${denizen.version}</version>
-			<scope>provided</scope> 
-		</dependency> 
 		<dependency>
 			<groupId>net.citizensnpcs</groupId>
 			<artifactId>citizens</artifactId>
@@ -73,6 +67,12 @@
 			<version>${vault.version}</version>
 			<type>jar</type>
 			<scope>provided</scope>
+		</dependency> 
+		<dependency> 
+			<groupId>net.aufdemrand</groupId>
+			<artifactId>denizen</artifactId>
+			<version>${denizen.version}</version>
+			<scope>provided</scope> 
 		</dependency> 
 		<dependency> 
 		    <groupId>net.dandielo</groupId>

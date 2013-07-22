@@ -47,7 +47,7 @@ public class Map extends ItemAttr {
 		if ( !(item.getItemMeta() instanceof MapMeta) )
 			throw new AttributeValueNotFoundException();
 		
-		MapMeta meta = (MapMeta) item.getItemMeta();
+		//MapMeta meta = (MapMeta) item.getItemMeta();
 	}
 
 }

@@ -1,0 +1,128 @@
+ver: 1.1.3
+messages:
+  trader-managermode-stock-locked: ^6Objets sauvé et vérrouillé
+  plugin-reload: ^6Reload réussi ^3dtlTraders
+  error-argument-invalid: '^6Argument invalide: ^3{argument}'
+  trader-transaction-failed-trader-money: ^6{npc} n'a pas assez d'argent
+  trader-stock-item-invalid: ^6Objets invalide
+  banker-tab-switch: '^6Switché dans: ^3{tab}'
+  banker-created: '^6Tu a crée un nouveau : {banker}'
+  error-nopermission-creative: ^6Tu n'a pas la permission de faire ca en ^3creative mode
+  wallet-balance: '^6Porte monaie: ^3{amount}'
+  trader-stock-item-update: ^6Objets mise à jour
+  banker-tab-buy-fail: ^6Failed to buy a new tab
+  error-nopermission: ^6Tu n'a pas la permission de faire ca
+  wallet-invalid: ^6Tu ne peux pas utiliser cette commande dans ce type de porte monaie
+  denizen-item-hint: '{item}: {price}'
+  trader-managermode-toggled: ^3{mode} ^6management changé
+  wallet-withdraw: ^6Withdrawed ^3{amount}
+  trader-transaction-failed-limit: ^6Limite pour cet objet ateinte
+  trader-stock-item-add: ^6Objets ajouté
+  pattern-save-success: ^6Création réussi ^3{pattern} ^6pattern
+  wallet-deposit: ^6Déposée ^3{amount
+  banker-tab-locked: '^6Onglet bancaire bloqué : ^3{tab}'
+  error-managermode-enabled: ^6Mode Manager n'a pas pu être activé
+  error-npc-not-selected: ^6Vous n'avez sélectioné aucun marchand
+  banker-tab-buy-success: ^6Achat d'un onglet réussi
+  trader-managermode-enabled: ^6Mode de gestion activée pour ^3{npc}
+  error-argument-missing: '^6Argument manquant : ^3{argument}'
+  wallet-deposit-fail: Vous n'avez pas assez d'argent
+  trader-stock-item-select: ^6Objet sélectioné
+  pattern-save-fail-exists: ^6ce pattern exite déjà {pattern}
+  trader-created: '^6Vous avez crée un nouveau marchand: ^3{trader}'
+  banker-tab-unlocked: '^6Onglet banque déverrouillé: ^3{tab}'
+  trader-managermode-disabled: ^6Mode de gestion désactivée pour ^3{npc}
+  trader-hire-limit: ^6Vous ne pouvez pas faire plus de marchand
+  trader-transaction-failed-inventory: ^6Vous n'avez pas assez de place dans votre inventaire
+  trader-managermode-stock-unlocked: ^6Déverrouillé le stock
+  trader-transaction-success: ^6Vous avez {action} ^3{amount} ^6pour ^3{price}
+  wallet-withdraw-fail: ^6Il n'y a pas assez d'argent dans ce porte monaie pour retiré de l'argent
+  plugin-command-message: ^6== dtlTraders ^3{version} ^6==
+  trader-transaction-item: '^6{item}, Prix: ^e{price}'
+  key-value: '^6{key}: ^3{value}'
+  trader-transaction-failed-player-money: ^6Vous n'avez pas assez de monaie
+  trader-stock-toggled: ^3{stock}
+  error-command-invalid: ^6Commande invalide
+  trader-stock-back: ^6Vous êtes revenu dans le stock normal
+  key-change: '^6changé {key}: ^3{value}'
+  trader-stock-item-remove: ^6Objet supprimé
+  error-nopermission-command: ^6Vous n'avez pas la permission d'utilisé cette commande
+keywords:
+  limit: Limite
+  banker-money: Monaie Banque
+  stock-size: Taille du stock
+  wallet-type: Type de porte monaie
+  wallet: Porte monaie
+  disabled: désactivé
+  stack-price: Prix du stack
+  price: Prix
+  wallet-deposit: Déposé
+  bank-name: Format de text de banque
+  banker-type: Type de Banque
+  name: Nom
+  trader-market: Market Trader
+  stock-sell: Stock de vente
+  trader-player: Joueur marchand
+  stock: Stock
+  enabled: Activé
+  sold: Sold
+  stock-amounts: Choix du montant
+  stock-start: Stock de départ
+  owner: Créateur
+  tab-price: Prix de l'onglet
+  pattern: modèle
+  trader-type: Type de marchand
+  tab-name: Nom de l'onglet
+  tab-icon: Icone de l'onglet
+  type: Type
+  banker-private: Banque privé
+  bought: Acheté
+  stock-buy: Stock d'achat
+  wallet-balance: monaie
+  stock-name: Nom du stock
+  wallet-player: Joueur ciblé
+  wallet-withdraw: Withdrawed
+  trader-server: Marchand du serveur
+  visible-tabs: Onglet visible
+ui:
+  tab-unlock:
+    lore:
+    - ^7Clique pour déverrouiller l'onglet
+  tab-lock:
+    lore:
+    - ^7Clique pour verrouiller l'onglet
+  limit:
+    name: ^r^6Gestion limité
+    lore:
+    - ^7Clique pour changer la limite de gestion
+  unlock:
+    name: ^r^6Déverrouiller le stock
+    lore:
+    - ^7Clique pour déverrouillé le stock
+    - ^7Ajout/suppression d'objets
+  price:
+    name: ^r^6Gestion du prix
+    lore:
+    - ^7Clique pour changer la gestion du prix
+  sell:
+    name: ^r^6Stock de vente
+    lore:
+    - ^7Clique pour passer au stock de vente
+  buy:
+    name: ^r^6Stock d'achat
+    lore:
+    - ^7Clique pour passer au stock d'achat
+  tab-unowned:
+    name: ^r^6Vous n'êtes pas le propriétaire de l'onglet
+    lore:
+    - ^7Cet onglet ne vous appartient pas
+    - ^7Shift+Clique pour acheter
+    - '^7Prix: ^3{price}'
+  lock:
+    name: ^r^6Vérouiller le stock
+    lore:
+    - ^7Clique pour sauvez tout les objets et les vérouillé
+  back:
+    name: ^r^6Retour
+    lore:
+    - ^7Retourner au stock

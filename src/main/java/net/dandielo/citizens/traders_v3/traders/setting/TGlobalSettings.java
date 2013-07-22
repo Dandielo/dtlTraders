@@ -13,7 +13,6 @@ import net.dandielo.citizens.traders_v3.core.dB;
 import net.dandielo.citizens.traders_v3.core.PluginSettings;
 import net.dandielo.citizens.traders_v3.core.locale.LocaleManager;
 import net.dandielo.citizens.traders_v3.utils.ItemUtils;
-import net.dandielo.citizens.traders_v3.utils.NBTUtils;
 
 public class TGlobalSettings extends PluginSettings {
 	//the trader soncig section

@@ -56,6 +56,7 @@ public class AccountLoader {
 	 * Two configuration sections for both files
 	 */
 	private FileConfiguration pAccFC;
+	@SuppressWarnings("unused")
 	private FileConfiguration gAccFC;
 	
 	/**
