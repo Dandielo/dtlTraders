@@ -2,9 +2,9 @@ package net.dandielo.citizens.traders_v3.bukkit.commands;
 
 import java.util.Map;
 
+import org.bukkit.ChatColor;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.trait.trait.MobType;
@@ -510,4 +510,145 @@ public class TraderCommands {
 			}
 		}
 	}
+	
+	@Command(
+	name = "trader",
+	syntax = "pattern <action> (pattern)",
+	perm = "dtl.trader.commands.pattern",
+	desc = "Allows to manage patterns for a trader",
+	usage = "- /trader pattern set pattern_na,e",
+	npc = true)
+	//Action set/remove/add/clear/reload/show/
+	public void setPattern(DtlTraders plugin, Player sender, Trader trader, Map<String, String> args)
+	{
+		//show all patterns
+		if ( args.get("action").equals("show") )
+		{
+			String result = "";
+			for ( String pat : trader.getSettings().getPatterns() )
+				result += ChatColor.GOLD + pat + ", " + ChatColor.RESET;
+			
+			//send the message
+			locale.sendMessage(sender, "key-value", "key", "#pattern-list", "value", result);
+		}
+		else
+		//add a pattern
+		if ( args.get("action").equals("add") )
+		{
+			if ( !args.containsKey("pattern") )
+			{
+				locale.sendMessage(sender, "error-argument-missing", "argument", "(pattern)");
+				return;
+			}
+			
+			//add the new pattern
+			trader.getSettings().getPatterns().add(args.get("pattern"));
+			
+			//added message
+			locale.sendMessage(sender, "change-value", "key", "#pattern-add", "value", args.get("pattern"));
+		}
+		else
+		//remove a pattern
+		if ( args.get("action").equals("remove") )
+		{
+			if ( !args.containsKey("pattern") )
+			{
+				locale.sendMessage(sender, "error-argument-missing", "argument", "(pattern)");
+				return;
+			}
+			
+			//remove the pattern
+			trader.getSettings().getPatterns().remove(args.get("pattern"));
+			
+			//added message
+			locale.sendMessage(sender, "change-value", "key", "#pattern-remove", "value", args.get("pattern"));
+		}
+		else
+		//remove all patterns
+		if ( args.get("action").equals("removeall") )
+		{			
+			//pattern list
+			String result = "";
+			for ( String pat : trader.getSettings().getPatterns() )
+				result += ChatColor.GOLD + pat + ", " + ChatColor.RESET;
+
+			//clear the pattern list
+			trader.getSettings().getPatterns().clear();
+			
+			//added message
+			locale.sendMessage(sender, "change-value",  "key","#pattern-removeall", "value", result);
+		}
+		else
+		//set back to default
+		if ( args.get("action").equals("default") )
+		{
+			//set defaults
+			trader.getSettings().getPatterns().clear();
+			trader.getSettings().getPatterns().addAll(Settings.defaultPatterns());
+			
+			//pattern list
+			String result = "";
+			for ( String pat : trader.getSettings().getPatterns() )
+				result += ChatColor.GOLD + pat + ", " + ChatColor.RESET;
+			
+			//added message
+			locale.sendMessage(sender, "change-value", "key","#pattern-default", "value", result);
+		}
+		else
+		{
+			//error action arg invalid
+			locale.sendMessage(sender, "error-argument-invalid", "argument", "<action>");
+		}
+	}
+	
+	
+/*
+	@SerializableAs("dice")
+	static class Dice implements ConfigurationSerializable
+	{
+		int x = 2;
+		int y = 3;
+		
+		public Dice(int x, int y)
+		{
+			
+		}
+		
+		public Dice(Map<String, Object> m)
+		{
+			x = (Integer) m.get("x");
+			y = (Integer) m.get("y");
+		}
+		
+		@Override
+		public Map<String, Object> serialize()
+		{
+			HashMap<String, Object> map = new HashMap<String, Object>();
+			map.put("x", x);
+			map.put("y", y);
+			return map;
+		}
+		
+		public Dice deserialize(Map<String, Object> m)
+		{
+			return new Dice(m);
+		}
+		
+		public Dice valueOf(Map<String, Object> m)
+		{
+			return new Dice(m);
+		}
+
+	}
+	
+	public static void main(String[] a)
+	{
+		
+		YamlConfiguration yaml = new YamlConfiguration();
+		ConfigurationSerialization.registerClass(Dice.class, "dice");
+		
+		yaml.set("test", new Dice(2, 3));
+		
+		System.out.print(yaml.saveToString());
+	}*/
 }
