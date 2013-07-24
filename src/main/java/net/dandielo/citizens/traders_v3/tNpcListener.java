@@ -434,7 +434,7 @@ public class tNpcListener implements Listener {
 			};
 
 			//so this one for a fast cleanup
-			timer.schedule(task, 100);
+			timer.schedule(task, 350);
 			
 		}
 		
