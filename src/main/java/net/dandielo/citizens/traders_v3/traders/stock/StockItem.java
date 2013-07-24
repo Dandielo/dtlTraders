@@ -344,6 +344,11 @@ public final class StockItem extends tNpcItem {
 		try
 		{
 			itemAttr = ItemAttr.initAttribute(this, key, value);
+			
+			//2.x compatibility fix
+			if ( itemAttr.getKey().equals("d") && !ItemUtils.itemHasDurability(item) )
+				itemAttr = null;
+			
 			if ( itemAttr != null )
 			    this.attr.put(itemAttr.getClass(), itemAttr);
 			else
