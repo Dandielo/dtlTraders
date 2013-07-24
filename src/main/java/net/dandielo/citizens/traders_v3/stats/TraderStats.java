@@ -1,11 +1,11 @@
 package net.dandielo.citizens.traders_v3.stats;
-
+/*
 import java.io.StringWriter;
 import java.util.Iterator;
 
 import org.json.JSONException;
 import org.json.JSONWriter;
-
+*/
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
 import net.dandielo.citizens.traders_v3.traders.setting.Settings;
@@ -19,9 +19,10 @@ import net.dandielo.stats.api.Updater;
 public class TraderStats implements Listener, Updater {
 	
 	@Stat(name="list", requestType = RequestType.GET)
-	public Object getList() throws JSONException
+	public Object getList() //throws JSONException
 	{
-		//json writer
+		return null;
+	/*	//json writer
 		StringWriter writer = new StringWriter();
 		JSONWriter json = new JSONWriter(writer);
 		
@@ -37,7 +38,7 @@ public class TraderStats implements Listener, Updater {
 		json.endObject();
 		
 		//return json string
-		return writer.toString();
+		return writer.toString();*/
 	}
 	
 	@Stat(name="{id}/setting/{setting}", requestType = RequestType.GET)

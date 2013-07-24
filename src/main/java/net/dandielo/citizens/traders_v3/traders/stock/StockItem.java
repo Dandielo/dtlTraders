@@ -386,6 +386,18 @@ public final class StockItem extends tNpcItem {
 		}
 		return itemAttr;
 	}
+
+	/**
+	 * @param clazz
+	 *     attr class that should be removed
+	 * @return
+	 *     true if the attr that was removed
+	 */
+	@SuppressWarnings("unchecked")
+	public <T extends ItemAttr> T removeAttr(Class<T> clazz)
+	{
+		return (T) attr.remove(clazz);
+	}
 	
 	/**
 	 * Removes all attributes and adds only the required ones.
@@ -825,7 +837,7 @@ public final class StockItem extends tNpcItem {
 		return (object instanceof StockItem && equalsStrong((StockItem)object));
 	}
 	
-	public final int priorityMatch(StockItem item)
+	public final int priorityMatch(StockItem that)
 	{
 		int priority = 0;
 
@@ -834,15 +846,15 @@ public final class StockItem extends tNpcItem {
 		{
 			if ( this.item.getTypeId() != 0 )
 			{
-				if ( this.item.getTypeId() == item.item.getTypeId() &&
-					 this.item.getDurability() == item.item.getDurability() )
+				if ( this.item.getTypeId() == that.item.getTypeId() &&
+					 this.item.getDurability() == that.item.getDurability() )
 					priority += 130;
 				else
 					priority = -1;
 			}
 			else
 			{
-				if ( this.item.getDurability() == item.item.getDurability() )
+				if ( this.item.getDurability() == that.item.getDurability() )
 					priority += 130;
 				else
 					priority = -1;
@@ -852,7 +864,7 @@ public final class StockItem extends tNpcItem {
 		{
 			if ( this.item.getTypeId() != 0 )
 			{
-				if ( this.item.getTypeId() == item.item.getTypeId() )
+				if ( this.item.getTypeId() == that.item.getTypeId() )
 					priority = 130;
 				else
 					priority = -1;
@@ -866,7 +878,7 @@ public final class StockItem extends tNpcItem {
 		for ( ItemAttr tAttr : attr.values() )
 		{
 			//check each item in the second item, if the attribute is found and strong equal continue
-			for ( ItemAttr iAttr : item.attr.values() )
+			for ( ItemAttr iAttr : that.attr.values() )
 			{
 				//debug low
 				dB.info("Checking ", iAttr.getInfo().name() ," with: ", iAttr.onSave());
@@ -883,7 +895,7 @@ public final class StockItem extends tNpcItem {
 		for ( ItemFlag tFlag : flags.values() )
 		{
 			//check each item in the second item, if the attribute is found and strong equal continue
-			for ( ItemFlag iFlag : item.flags.values() )
+			for ( ItemFlag iFlag : that.flags.values() )
 			{
 				//same attributes
 				if ( tFlag.getClass().equals(iFlag.getClass()) && tFlag.equalsStrong(iFlag) )

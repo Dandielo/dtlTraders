@@ -41,7 +41,7 @@ public class Price extends ItemAttr {
 	
 	public void setPrice(double value)
 	{
-		price = value < 0 ? 0 : price;
+		price = value < 0 ? 0 : value;
 	}
 
 	@Override
@@ -78,7 +78,7 @@ public class Price extends ItemAttr {
 	public void onStatusLoreRequest(tNpcStatus status, ItemStack target, List<String> lore)
 	{
 		//as because this is the price attribute it can only apply for stock items
-		StockItem item = (StockItem) this.item;
+	/*	StockItem item = (StockItem) this.item;
 		
 		double m;
 		//has the item the stack price flag?
@@ -99,7 +99,7 @@ public class Price extends ItemAttr {
 		}
 		
 		lore.add(ChatColor.GOLD + "Price: " + ChatColor.GRAY + 
-				String.format("%.2f", price*m).replace(',', '.'));
+				String.format("%.2f", price*m).replace(',', '.'));*/
 		
 	}
 	

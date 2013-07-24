@@ -477,13 +477,18 @@ public class TraderCommands {
 		for ( StockItem item : trader.getStock().getStock("sell") )
 		{
 			StockItem price = new StockItem(itemString);
+			int items = 0;
 			if ( item.priorityMatch(price) >= 0 )
 			{
+				++items;
 				if ( item.hasAttr(Price.class) )
 					item.getPriceAttr().setPrice(price.getPrice());
 				else
 					item.addAttr("p", price.getPriceFormated());
 			}
+			
+			//send message
+			locale.sendMessage(sender, "trader-stock-price-set", "items", String.valueOf(items));
 		}
 	}
 	
@@ -498,16 +503,44 @@ public class TraderCommands {
 	{
 		String itemString = args.get("free");
 
+		int items = 0;
 		for ( StockItem item : trader.getStock().getStock("buy") )
 		{
 			StockItem price = new StockItem(itemString);
-			if ( item.priorityMatch(price) >= 0 )
+			if ( price.priorityMatch(item) >= 0 )
 			{
+				++items;
 				if ( item.hasAttr(Price.class) )
 					item.getPriceAttr().setPrice(price.getPrice());
 				else
 					item.addAttr("p", price.getPriceFormated());
 			}
+		}
+		
+		//send message
+		locale.sendMessage(sender, "trader-stock-price-set", "items", String.valueOf(items));
+	}
+	
+	@Command(
+	name = "trader",
+	syntax = "reset <option>",
+	perm = "dtl.trader.commands.reset",
+	npc = true)
+	public void resetSettings(DtlTraders plugin, Player sender, Trader trader, Map<String, String> args)
+	{
+		if ( args.get("option").equals("prices") )
+		{
+			//remove all prices attributes
+			for ( StockItem item : trader.getStock().getStock("sell") )
+				item.removeAttr(Price.class);
+			
+			//send a message
+			locale.sendMessage(sender, "trader-stock-price-reset");
+		}
+		else
+		{
+			//error action arg invalid
+			locale.sendMessage(sender, "error-argument-invalid", "argument", "<action>");
 		}
 	}
 	
@@ -526,7 +559,7 @@ public class TraderCommands {
 		{
 			String result = "";
 			for ( String pat : trader.getSettings().getPatterns() )
-				result += ChatColor.GOLD + pat + ", " + ChatColor.RESET;
+				result += ChatColor.DARK_AQUA + pat + ", " + ChatColor.RESET;
 			
 			//send the message
 			locale.sendMessage(sender, "key-value", "key", "#pattern-list", "value", result);
@@ -545,7 +578,7 @@ public class TraderCommands {
 			trader.getSettings().getPatterns().add(args.get("pattern"));
 			
 			//added message
-			locale.sendMessage(sender, "change-value", "key", "#pattern-add", "value", args.get("pattern"));
+			locale.sendMessage(sender, "key-change", "key", "#pattern-add", "value", args.get("pattern"));
 		}
 		else
 		//remove a pattern
@@ -561,7 +594,7 @@ public class TraderCommands {
 			trader.getSettings().getPatterns().remove(args.get("pattern"));
 			
 			//added message
-			locale.sendMessage(sender, "change-value", "key", "#pattern-remove", "value", args.get("pattern"));
+			locale.sendMessage(sender, "key-change", "key", "#pattern-remove", "value", args.get("pattern"));
 		}
 		else
 		//remove all patterns
@@ -570,13 +603,13 @@ public class TraderCommands {
 			//pattern list
 			String result = "";
 			for ( String pat : trader.getSettings().getPatterns() )
-				result += ChatColor.GOLD + pat + ", " + ChatColor.RESET;
+				result += ChatColor.DARK_AQUA + pat + ", " + ChatColor.RESET;
 
 			//clear the pattern list
 			trader.getSettings().getPatterns().clear();
 			
 			//added message
-			locale.sendMessage(sender, "change-value",  "key","#pattern-removeall", "value", result);
+			locale.sendMessage(sender, "key-change",  "key","#pattern-remove-all", "value", result);
 		}
 		else
 		//set back to default
@@ -589,10 +622,10 @@ public class TraderCommands {
 			//pattern list
 			String result = "";
 			for ( String pat : trader.getSettings().getPatterns() )
-				result += ChatColor.GOLD + pat + ", " + ChatColor.RESET;
+				result += ChatColor.DARK_AQUA + pat + ", " + ChatColor.RESET;
 			
 			//added message
-			locale.sendMessage(sender, "change-value", "key","#pattern-default", "value", result);
+			locale.sendMessage(sender, "key-change", "key","#pattern-default", "value", result);
 		}
 		else
 		{
