@@ -3,6 +3,7 @@ package net.dandielo.citizens.traders_v3.utils;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.dandielo.citizens.traders_v3.utils.items.attributes.Price;
 import net.minecraft.server.v1_6_R2.NBTTagCompound;
 import net.minecraft.server.v1_6_R2.NBTTagList;
 import net.minecraft.server.v1_6_R2.NBTTagString;
@@ -162,7 +163,8 @@ public class NBTUtils {
 			list = new NBTTagList();
 
 		for ( int j = 0 ; j < list.size() ; ++j )
-			if ( !((NBTTagString)list.get(j)).getName().equals("dtltrader") )
+			if ( !((NBTTagString)list.get(j)).getName().equals("dtltrader") &&
+					!((NBTTagString)list.get(j)).data.startsWith(Price.lorePattern) )
 				result.add(((NBTTagString)list.get(j)).data);
 
 		//return the new item;

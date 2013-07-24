@@ -8,15 +8,14 @@ import org.bukkit.inventory.ItemStack;
 import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeInvalidValueException;
 import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeValueNotFoundException;
 import net.dandielo.citizens.traders_v3.tNpcStatus;
-import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
 import net.dandielo.citizens.traders_v3.utils.items.Attribute;
 import net.dandielo.citizens.traders_v3.utils.items.ItemAttr;
-import net.dandielo.citizens.traders_v3.utils.items.flags.StackPrice;
 
 @Attribute(
 name="Price", key = "p", standalone = true, priority = 0,
 status = {tNpcStatus.BUY, tNpcStatus.SELL, tNpcStatus.SELL_AMOUNTS, tNpcStatus.MANAGE_PRICE})
 public class Price extends ItemAttr {
+	public static String lorePattern = ChatColor.GOLD + "Price: " + ChatColor.GRAY;
 	private double price;
 
 	public Price(String key) {

@@ -32,6 +32,7 @@ import net.dandielo.citizens.traders_v3.traits.TraderTrait;
 import net.dandielo.citizens.traders_v3.traits.WalletTrait;
 import net.dandielo.citizens.traders_v3.utils.ItemUtils;
 import net.dandielo.citizens.traders_v3.utils.NBTUtils;
+import net.dandielo.citizens.traders_v3.utils.items.attributes.Price;
 
 public abstract class Trader implements tNpc {
 	
@@ -321,7 +322,7 @@ public abstract class Trader implements tNpc {
 				if ( item.getAmount() >= selectedItem.getAmount() )
 				{
 				    //set the new lore
-				    inv.setItem(i, NBTUtils.addLore(NBTUtils.cleanItem(item), selectedItem.getTempLore(status, item.clone())));
+				    inv.setItem(i, NBTUtils.addLore(NBTUtils.cleanItem(item), Price.loreRequest(stock.parsePrice(selectedItem, "buy", item.getAmount()), new ArrayList<String>())));
 				}
 				else
 					//clean the item from any lore
