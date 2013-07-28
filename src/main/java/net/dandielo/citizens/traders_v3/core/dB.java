@@ -90,6 +90,16 @@ public class dB {
 		
 		sendMessage(ChatColor.GREEN, "INFO", args);
 	}
+
+	/**
+	 * Sends a <strong>information</strong> message to the console
+	 */
+	public static void spec(DebugLevel lvl, Object... args)
+	{
+		if ( !levelEnabled(lvl) ) return;
+		
+		sendMessage(ChatColor.GREEN, lvl.name().toUpperCase(), args);
+	}
 	
 	/**
 	 * Merges the given arguments into one string, this allows to add any Object to the string without any problems. 
@@ -141,7 +151,7 @@ public class dB {
 	 */
 	public static enum DebugLevel
 	{
-		 NONE, FALSE, DISABLE, CRITICAL, HIGH, NORMAL, LOW, INFO;
+		 NONE, FALSE, DISABLE, CRITICAL, HIGH, NORMAL, LOW, INFO, S1_ADONDRIEL;
 		 
 		 boolean showCritical()
 		 {
@@ -167,6 +177,17 @@ public class dB {
 		 {
 			 return equals(INFO);
 		 }
+
+		 boolean showSpecific()
+		 {
+			 switch(this)
+			 {
+			 case S1_ADONDRIEL: return true;
+			 default:
+				 break;
+			 }
+			 return false;
+		 }
 		 
 		 boolean levelEnabled(DebugLevel level)
 		 {
@@ -188,8 +209,10 @@ public class dB {
 				 return showLow();
 			 case INFO:
 				 return showInfo();
+			default:
+				break;
 			 }
-			 return false;
+			 return showSpecific();
 		 }
 	}
 }
