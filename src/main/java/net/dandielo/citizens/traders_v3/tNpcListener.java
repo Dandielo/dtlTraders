@@ -9,6 +9,7 @@ import net.dandielo.api.traders.tNpcAPI;
 import net.dandielo.citizens.traders_v3.bankers.Banker;
 import net.dandielo.citizens.traders_v3.bukkit.Perms;
 import net.dandielo.citizens.traders_v3.core.dB;
+import net.dandielo.citizens.traders_v3.core.dB.DebugLevel;
 import net.dandielo.citizens.traders_v3.core.exceptions.InvalidTraderTypeException;
 import net.dandielo.citizens.traders_v3.core.exceptions.TraderTypeNotFoundException;
 import net.dandielo.citizens.traders_v3.core.locale.LocaleManager;
@@ -82,6 +83,11 @@ public class tNpcListener implements Listener {
 			{
 				if ( NBTUtils.isMarked(item) )
 				{
+					//send specific debug messages
+					dB.spec(DebugLevel.S1_ADONDRIEL, "Marked item found on player quit event");
+					dB.spec(DebugLevel.S1_ADONDRIEL, "Item: ", item);
+					
+					//remove the item
 					e.getPlayer().getInventory().setItem(i, null);
 				}
 			}
@@ -99,6 +105,11 @@ public class tNpcListener implements Listener {
 			{
 				if ( NBTUtils.hasTraderLore(item) )
 				{
+					//send specific debug messages
+					dB.spec(DebugLevel.S1_ADONDRIEL, "Item with trader price lore found on player join event");
+					dB.spec(DebugLevel.S1_ADONDRIEL, "Item: ", item);
+					
+					//remove the item
 					e.getPlayer().getInventory().setItem(i, null);
 				}
 			}
@@ -118,6 +129,13 @@ public class tNpcListener implements Listener {
 				if ( NBTUtils.isMarked(item) ||
 						( !tNpcAPI.isTNpcInventory((Player) e.getWhoClicked()) && NBTUtils.hasTraderLore(item) ) )
 				{
+					//send specific debug messages
+					dB.spec(DebugLevel.S1_ADONDRIEL, "Marked item found on player inventory click");
+					dB.spec(DebugLevel.S1_ADONDRIEL, "Marked: ", NBTUtils.isMarked(item));
+					dB.spec(DebugLevel.S1_ADONDRIEL, "Lore: ", NBTUtils.hasTraderLore(item));
+					dB.spec(DebugLevel.S1_ADONDRIEL, "Item: ", item);
+					
+					//remove the item
 					e.getWhoClicked().getInventory().setItem(i, null);
 				}
 			}
@@ -153,6 +171,9 @@ public class tNpcListener implements Listener {
 		    	//remove the relation
 		    	manager.removeRelation((Player) e.getPlayer());
 
+		    	//send specific debug info
+		    	dB.spec(DebugLevel.S1_ADONDRIEL, "Adding player inventory to the cleaning querry");
+		    	
 		    	//clean his inventory
 		    	cleaner.addPlayer((Player) e.getPlayer());
 		    }
@@ -414,16 +435,30 @@ public class tNpcListener implements Listener {
 				public void run()
 				{
 					int i = 0;
+					
+					//specific debug info
+					dB.spec(DebugLevel.S1_ADONDRIEL, "Adding player inventory to the cleaning querry");
+			    	
+					//search for items
 					for ( ItemStack item : thisPlayer.getInventory().getContents() )
 					{
 						if ( item != null )
 						{
 							if ( NBTUtils.isMarked(item) )
 							{
+								//specific debug info
+								dB.spec(DebugLevel.S1_ADONDRIEL, "Marked item found, remove it");
+								dB.spec(DebugLevel.S1_ADONDRIEL, "Item: ", item);
+						    	
+								//remove item
 								thisPlayer.getInventory().setItem(i, null);
 							}
 							else
 							{
+								//specific debug info
+							//	dB.spec(DebugLevel.S1_ADONDRIEL, "Cleaning lore for item");
+							//	dB.spec(DebugLevel.S1_ADONDRIEL, "Item: ", item);
+								
 								//clean transaction lores 
 								thisPlayer.getInventory().setItem(i, NBTUtils.cleanItem(item));
 							}
