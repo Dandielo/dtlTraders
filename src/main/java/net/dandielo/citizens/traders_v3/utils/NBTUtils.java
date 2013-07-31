@@ -8,7 +8,6 @@ import java.util.List;
 
 import net.dandielo.citizens.traders_v3.bukkit.CraftBukkitInterface;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Price;
-import net.minecraft.server.v1_6_R2.NBTTagList;
 
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
