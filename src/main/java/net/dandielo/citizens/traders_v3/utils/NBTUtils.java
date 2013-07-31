@@ -1,15 +1,16 @@
 package net.dandielo.citizens.traders_v3.utils;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.dandielo.citizens.traders_v3.bukkit.CraftBukkitInterface;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Price;
-import net.minecraft.server.v1_6_R2.NBTTagCompound;
 import net.minecraft.server.v1_6_R2.NBTTagList;
-import net.minecraft.server.v1_6_R2.NBTTagString;
 
 import org.bukkit.ChatColor;
-import org.bukkit.craftbukkit.v1_6_R2.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
 
 public class NBTUtils {	
@@ -20,48 +21,168 @@ public class NBTUtils {
      * 
      * All credits to Denizen - Aufdemrand
      */
+	
+	/** added static loaded classes and methods for later to use */ /***/
+	
+	//net.minecraft.server.{$VERSION}.NBTTagCompound
+	private static Class NBTTagCompoundClazz = CraftBukkitInterface.getNMClass("NBTTagCompound");
+	//net.minecraft.server.{$VERSION}.NBTTagString
+	private static Class NBTTagStringClazz = CraftBukkitInterface.getNMClass("NBTTagString");
+	//net.minecraft.server.{$VERSION}.NBTTagList
+	private static Class NBTTagListClazz = CraftBukkitInterface.getNMClass("NBTTagList");
+	//net.minecraft.server.{$VERSION}.NBTTagList
+	private static Class NBTBaseClazz = CraftBukkitInterface.getNMClass("NBTBase");
+	//net.minecraft.server.{$VERSION}.ItemStack
+	private static Class ItemStackClazz = CraftBukkitInterface.getNMClass("ItemStack");
+	
+	//org.bukkit.craftbukkit.{$VERSION}.inventory.CraftItemStack
+	private static Class CraftItemStackClazz = CraftBukkitInterface.getCBClass("inventory.CraftItemStack");
+	
+	//org.bukkit.craftbukkit.{$VERSION}.inventory.CraftItemStack
+	private static Method asNMSCopy, asCraftMirror;
+	//net.minecraft.server.{$VERSION}.ItemStack
+	private static Method hasTag, getTag, setTag;
+	//net.minecraft.server.{$VERSION}.NBTTagCompound
+	private static Method hasKey, getString, setString, getCompound, getList, set, 
+	remove, add, get, size, getName;
+	
+	//NTBTagString data field
+	private static Field data;
+	
+	static
+	{
+	    try
+		{
+	    	//CB methods
+			asNMSCopy = CraftItemStackClazz.getMethod("asNMSCopy", ItemStack.class);
+			asCraftMirror = CraftItemStackClazz.getMethod("asCraftMirror", ItemStackClazz);
+			
+			//Native minecraft methods
+			hasTag = ItemStackClazz.getMethod("hasTag");
+			getTag = ItemStackClazz.getMethod("getTag");
+			setTag = ItemStackClazz.getMethod("setTag", NBTTagCompoundClazz);
+			hasKey = NBTTagCompoundClazz.getMethod("hasKey", String.class);
+			getString = NBTTagCompoundClazz.getMethod("getString", String.class);
+			setString = NBTTagCompoundClazz.getMethod("setString", String.class, String.class);
+			getCompound = NBTTagCompoundClazz.getMethod("getCompound", String.class);
+			getList = NBTTagCompoundClazz.getMethod("getList", String.class);
+			set = NBTTagCompoundClazz.getMethod("set", String.class, NBTBaseClazz);
+			remove = NBTTagCompoundClazz.getMethod("remove", String.class);
+			add = NBTTagListClazz.getMethod("add", NBTBaseClazz);
+			get = NBTTagListClazz.getMethod("get", int.class);
+			size = NBTTagListClazz.getMethod("size");
+			getName = NBTTagStringClazz.getMethod("getName");
+			
+			data = NBTTagStringClazz.getField("data");
+		}
+		catch( Exception e )
+		{ e.printStackTrace(); }
+	}
+	
+	public static boolean hasCustomNBT(ItemStack item, String key)
+	{
+		try
+		{
+			return _hasCustomNBT(item, key);
+		} catch(Exception e) { }
+		return false;
+	}
 
-    public static boolean hasCustomNBT(ItemStack item, String key) {
-        NBTTagCompound tag;
-        net.minecraft.server.v1_6_R2.ItemStack cis = CraftItemStack.asNMSCopy(item);
-        if (!cis.hasTag()) return false;
-        tag = cis.getTag();
+    public static boolean _hasCustomNBT(ItemStack item, String key) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+    	// tag (net.minecraft.server.{$VERSION}.NBTTagCompound) 
+    	Object tag;
+    	
+        //cis (net.minecraft.server.{$VERSION}.ItemStack)
+    	Object cis = asNMSCopy.invoke(null, item);
+    	
+    	//check and get the tag
+        if ( !((Boolean)hasTag.invoke(cis)) ) return false;
+        tag = getTag.invoke(cis);
+        
         // if this item has the NBTData for 'stockitem', there is an mark.
-        return tag.hasKey(key);
+        return (Boolean) hasKey.invoke(tag, key);
     }
 
-    public static String getCustomNBT(ItemStack item, String key) {
-        net.minecraft.server.v1_6_R2.ItemStack cis = CraftItemStack.asNMSCopy(item);
-        NBTTagCompound tag;
-        if (!cis.hasTag())
-            cis.setTag(new NBTTagCompound());
-        tag = cis.getTag();
+    public static String getCustomNBT(ItemStack item, String key)
+    {
+    	try
+    	{
+    	    return _getCustomNBT(item, key);
+    	} catch(Exception e) { }
+    	return null;
+    }
+    
+    public static String _getCustomNBT(ItemStack item, String key) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException {
+    	// tag (net.minecraft.server.{$VERSION}.NBTTagCompound) 
+    	Object tag;
+    	
+        //cis (net.minecraft.server.{$VERSION}.ItemStack)
+    	Object cis = asNMSCopy.invoke(null, item);
+    	
+    	//check the tag and if not exists make a new instance of it
+        if ( !((Boolean)hasTag.invoke(cis)) ) 
+        	setTag.invoke(cis, NBTTagCompoundClazz.newInstance());
+        tag = getTag.invoke(cis);
+        
         // if this item has the NBTData for 'stockitem', return the value, which is the playername of the 'stockitem'.
-        if (tag.hasKey(key)) return tag.getString(key);
+        if ((Boolean) hasKey.invoke(tag, key)) return (String) getString.invoke(tag, key);
         return null;
-
+    }
+    
+    public static ItemStack removeCustomNBT(ItemStack item, String key)
+    {
+    	try
+    	{
+    		return _removeCustomNBT(item, key);
+    	} catch(Exception e) { }
+    	return null;
     }
 
-    public static ItemStack removeCustomNBT(ItemStack item, String key) {
-        net.minecraft.server.v1_6_R2.ItemStack cis = CraftItemStack.asNMSCopy(item);
-        NBTTagCompound tag;
-        if (!cis.hasTag())
-            cis.setTag(new NBTTagCompound());
-        tag = cis.getTag();
+    public static ItemStack _removeCustomNBT(ItemStack item, String key) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+    	// tag (net.minecraft.server.{$VERSION}.NBTTagCompound) 
+    	Object tag;
+    	
+        //cis (net.minecraft.server.{$VERSION}.ItemStack)
+    	Object cis = asNMSCopy.invoke(null, item);
+    	
+    	//check for the tag if not exists do not need to do anything more
+        if ( !((Boolean)hasTag.invoke(cis)) ) 
+        	return (ItemStack) asCraftMirror.invoke(null, cis);
+        tag = getTag.invoke(cis);
+        
         // remove 'stockitem' NBTData
-        tag.remove(key);
-        return CraftItemStack.asCraftMirror(cis);
+        remove.invoke(tag, key);
+        
+        //return the cleared item
+        return (ItemStack) asCraftMirror.invoke(null, cis);
+    }
+    
+    public static ItemStack addCustomNBT(ItemStack item, String key, String value)
+    {
+    	try
+    	{
+    		return _addCustomNBT(item, key, value);
+    	} catch(Exception e) { }
+    	return null;
     }
 
-    public static ItemStack addCustomNBT(ItemStack item, String key, String value) {
-        net.minecraft.server.v1_6_R2.ItemStack cis = CraftItemStack.asNMSCopy(item);
-        NBTTagCompound tag = null;
-        // Do stuff with tag
-        if (!cis.hasTag())
-            cis.setTag(new NBTTagCompound());
-        tag = cis.getTag();
-        tag.setString(key, value);
-        return CraftItemStack.asCraftMirror(cis);
+    public static ItemStack _addCustomNBT(ItemStack item, String key, String value) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException {
+    	// tag (net.minecraft.server.{$VERSION}.NBTTagCompound) 
+    	Object tag;
+    	
+        //cis (net.minecraft.server.{$VERSION}.ItemStack)
+    	Object cis = asNMSCopy.invoke(null, item);
+
+    	//check the tag and if not exists make a new instance of it
+        if ( !((Boolean)hasTag.invoke(cis)) ) 
+        	setTag.invoke(cis, NBTTagCompoundClazz.newInstance());
+        tag = getTag.invoke(cis);
+        
+        //set the new NBT value
+        setString.invoke(tag, key, value);
+        
+        //return as new item
+        return (ItemStack) asCraftMirror.invoke(null, cis);
     }
 	
 	/*
@@ -83,89 +204,99 @@ public class NBTUtils {
 		return addCustomNBT(i, "stockitem", "player");
 	}
 	
-	/*
-	 * adding and removing lores
+	/**
+	 * adding and removing NBT lores
 	 */
 	public static ItemStack addLore(ItemStack i, List<String> lore)
+	{
+		try
+    	{
+    		return _addLore(i, lore);
+    	} catch(Exception e) { }
+    	return null;
+	}
+	
+	public static ItemStack _addLore(ItemStack i, List<String> lore) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException, NoSuchMethodException, SecurityException
 	{		
-		//create a NMS copy
-		net.minecraft.server.v1_6_R2.ItemStack nms = CraftItemStack.asNMSCopy(i);
+		//create a NMS copy (net.minecraft.server.{$VERSION}.ItemStack)
+		Object nms = asNMSCopy.invoke(null, i);
 		
-		//get the "tag" tag
-		NBTTagCompound tag;
-		if(nms.tag != null) tag = nms.tag;
-		else
-		{
-		    tag = new NBTTagCompound();
-		    nms.tag = tag;
-		}
+		//net.minecraft.server.{$VERSION}.NBTTagCompound
+		Object tag;
 		
-		//get the display tag
-		NBTTagCompound display;
-		if ( tag.hasKey("display") )
-			display = tag.getCompound("display");
+		//search for the tag
+		if( !((Boolean) hasTag.invoke(nms)) )
+			setTag.invoke(nms, NBTTagCompoundClazz.newInstance());
+		tag = getTag.invoke(nms);
+
+		//net.minecraft.server.{$VERSION}.NBTTagCompound (display tag)
+		Object display;
+		if ( !((Boolean) hasKey.invoke(tag, "display")) )
+			set.invoke(tag, "display", NBTTagCompoundClazz.newInstance());
+		display = getCompound.invoke(tag, "display");
+
+		//net.minecraft.server.{$VERSION}.NBTTagList
+		Object list;
+		if ( (boolean) hasKey.invoke(display, "Lore") )
+			list = getList.invoke(display, "Lore");
 		else
-		{
-			display = new NBTTagCompound();
-			tag.set("display", display);
-		}
-		
-		//get the Lore tag
-		NBTTagList list;
-		if ( display.hasKey("Lore") )
-			list = display.getList("Lore");
-		else
-			list = new NBTTagList();
+			list = NBTTagListClazz.newInstance();
 
 		//add the lore
 		for ( String line : lore )
-			list.add(new NBTTagString("dtltrader", line));
+	    //net.minecraft.server.{$VERSION}.NBTTagList (add method)
+			add.invoke(list, NBTTagStringClazz.getConstructor(String.class, String.class).newInstance("dtltrader", line));//new NBTTagString("dtltrader", line));
 
 		//set the new list
-		display.set("Lore", list);
+		set.invoke(display, "Lore", list);
 
 		//return the new item;
-		return CraftItemStack.asCraftMirror(nms);
+		return (ItemStack) asCraftMirror.invoke(null, nms);
 	}
 	
 	public static List<String> getLore(ItemStack i)
 	{
-		//create a NMS copy
-		net.minecraft.server.v1_6_R2.ItemStack nms = CraftItemStack.asNMSCopy(i);
+		try
+    	{
+    		return _getLore(i);
+    	} catch(Exception e) { }
+    	return null;
+	}
+	
+	public static List<String> _getLore(ItemStack i) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException, InstantiationException
+	{
+		//create a NMS copy (net.minecraft.server.{$VERSION}.ItemStack)
+		Object nms = asNMSCopy.invoke(null, i);
 
-		//get the "tag" tag
-		NBTTagCompound tag;
-		if(nms.tag != null) tag = nms.tag;
-		else
-		{
-			tag = new NBTTagCompound();
-			nms.tag = tag;
-		}
+		//net.minecraft.server.{$VERSION}.NBTTagCompound
+		Object tag;
 
-		//get the display tag
-		NBTTagCompound display;
-		if ( tag.hasKey("display") )
-			display = tag.getCompound("display");
-		else
-		{
-			display = new NBTTagCompound();
-			tag.set("display", display);
-		}
+		//search for the tag
+		if( !((Boolean) hasTag.invoke(nms)) )
+			setTag.invoke(nms, NBTTagCompoundClazz.newInstance());
+		tag = getTag.invoke(nms);
+
+		//net.minecraft.server.{$VERSION}.NBTTagCompound (display tag)
+		Object display;
+		if ( !((Boolean) hasKey.invoke(tag, "display")) )
+			set.invoke(tag, "display", NBTTagCompoundClazz.newInstance());
+		display = getCompound.invoke(tag, "display");
 		
 		//the result list
 		List<String> result = new ArrayList<String>();
 
-		//get the Lore tag
-		NBTTagList list;
-		if ( display.hasKey("Lore") )
-			list = display.getList("Lore");
+		//net.minecraft.server.{$VERSION}.NBTTagList
+		Object list;
+		if ( (boolean) hasKey.invoke(display, "Lore") )
+			list = getList.invoke(display, "Lore");
 		else
-			list = new NBTTagList();
+			list = NBTTagListClazz.newInstance();
 
-		for ( int j = 0 ; j < list.size() ; ++j )
-			if ( !((NBTTagString)list.get(j)).getName().equals("dtltrader") &&
-					!((NBTTagString)list.get(j)).data.startsWith(Price.lorePattern) )
-				result.add(((NBTTagString)list.get(j)).data);
+		//get the specific and normal lore!
+		for ( int j = 0 ; j < (Integer) size.invoke(list) ; ++j )
+			if ( !getName.invoke(get.invoke(list, j)).equals("dtltrader") &&
+				 !(((String) data.get(get.invoke(list, j))).startsWith(Price.lorePattern)) )
+				result.add((String) data.get(get.invoke(list, j)));
 
 		//return the new item;
 		return result;
@@ -173,42 +304,49 @@ public class NBTUtils {
 	
 	public static boolean hasTraderLore(ItemStack i)
 	{
-		//create a NMS copy
-		net.minecraft.server.v1_6_R2.ItemStack nms = CraftItemStack.asNMSCopy(i);
+		try
+    	{
+    		return _hasTraderLore(i);
+    	} catch(Exception e) { }
+    	return false;
+	}
+	
+	public static boolean _hasTraderLore(ItemStack i) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException
+	{
+		//create a NMS copy (net.minecraft.server.{$VERSION}.ItemStack)
+		Object nms = asNMSCopy.invoke(null, i);
 
-		//get the "tag" tag
-		NBTTagCompound tag;
-		if(nms.tag != null) tag = nms.tag;
-		else
-		{
+		//net.minecraft.server.{$VERSION}.NBTTagCompound
+		Object tag;
+
+		//search for the tag
+		if( !((Boolean) hasTag.invoke(nms)) )
 			return false;
-		}
+		tag = getTag.invoke(nms);
 
-		//get the display tag
-		NBTTagCompound display;
-		if ( tag.hasKey("display") )
-			display = tag.getCompound("display");
-		else
-		{
+		//net.minecraft.server.{$VERSION}.NBTTagCompound (display tag)
+		Object display;
+		if ( !((Boolean) hasKey.invoke(tag, "display")) )
 			return false;
-		}
+		display = getCompound.invoke(tag, "display");
 
-		//get the Lore tag
-		NBTTagList list;
-		if ( display.hasKey("Lore") )
-			list = display.getList("Lore");
+		//the result list
+		List<String> result = new ArrayList<String>();
+
+		//net.minecraft.server.{$VERSION}.NBTTagList
+		Object list;
+		if ( (boolean) hasKey.invoke(display, "Lore") )
+			list = getList.invoke(display, "Lore");
 		else
 			return false;
 
-		for ( int j = 0 ; j < list.size() ; ++j )
-		{
-			if ( ((NBTTagString)list.get(j)).getName().equals("dtltrader")
-					|| ((NBTTagString)list.get(j)).data.startsWith(ChatColor.GOLD + "Price: " + ChatColor.GRAY) )
-				
+		//search for trader lores
+		for ( int j = 0 ; j < (Integer) size.invoke(list) ; ++j )
+			if ( getName.invoke(get.invoke(list, j)).equals("dtltrader") || 
+				 ((String) data.get(get.invoke(list, j))).startsWith(Price.lorePattern) )
 				return true;
-		}
 
-		//return the new item;
+		//return false as no lores was found;
 		return false;
 	}
 	
