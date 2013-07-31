@@ -236,7 +236,7 @@ public class NBTUtils {
 
 		//net.minecraft.server.{$VERSION}.NBTTagList
 		Object list;
-		if ( (boolean) hasKey.invoke(display, "Lore") )
+		if ( (Boolean) hasKey.invoke(display, "Lore") )
 			list = getList.invoke(display, "Lore");
 		else
 			list = NBTTagListClazz.newInstance();
@@ -286,7 +286,7 @@ public class NBTUtils {
 
 		//net.minecraft.server.{$VERSION}.NBTTagList
 		Object list;
-		if ( (boolean) hasKey.invoke(display, "Lore") )
+		if ( (Boolean) hasKey.invoke(display, "Lore") )
 			list = getList.invoke(display, "Lore");
 		else
 			list = NBTTagListClazz.newInstance();
@@ -334,7 +334,7 @@ public class NBTUtils {
 
 		//net.minecraft.server.{$VERSION}.NBTTagList
 		Object list;
-		if ( (boolean) hasKey.invoke(display, "Lore") )
+		if ( (Boolean) hasKey.invoke(display, "Lore") )
 			list = getList.invoke(display, "Lore");
 		else
 			return false;
