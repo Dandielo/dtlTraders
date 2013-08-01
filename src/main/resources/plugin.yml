@@ -2,7 +2,7 @@ name: dtlTraders
 main: net.dandielo.citizens.traders_v3.bukkit.DtlTraders
 depend: [Citizens,Vault]
 soft-depend: [Denizen,dtlWallets,dtlStats]
-version: 3.0.4 Beta
+version: 3.0.5 Release
 description: >
              Citizens 2 trader and banker traits. 
 commands:
