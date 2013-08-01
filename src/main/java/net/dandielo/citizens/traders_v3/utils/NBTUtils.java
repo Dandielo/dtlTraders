@@ -12,6 +12,7 @@ import net.dandielo.citizens.traders_v3.utils.items.attributes.Price;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class NBTUtils {	
 	
 	/*
@@ -328,9 +329,6 @@ public class NBTUtils {
 		if ( !((Boolean) hasKey.invoke(tag, "display")) )
 			return false;
 		display = getCompound.invoke(tag, "display");
-
-		//the result list
-		List<String> result = new ArrayList<String>();
 
 		//net.minecraft.server.{$VERSION}.NBTTagList
 		Object list;
