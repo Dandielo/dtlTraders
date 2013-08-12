@@ -88,7 +88,7 @@ public class NBTUtils {
 		return false;
 	}
 
-    public static boolean _hasCustomNBT(ItemStack item, String key) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+    private static boolean _hasCustomNBT(ItemStack item, String key) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
     	// tag (net.minecraft.server.{$VERSION}.NBTTagCompound) 
     	Object tag;
     	
@@ -112,7 +112,7 @@ public class NBTUtils {
     	return null;
     }
     
-    public static String _getCustomNBT(ItemStack item, String key) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException {
+    private static String _getCustomNBT(ItemStack item, String key) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException {
     	// tag (net.minecraft.server.{$VERSION}.NBTTagCompound) 
     	Object tag;
     	
@@ -138,7 +138,7 @@ public class NBTUtils {
     	return null;
     }
 
-    public static ItemStack _removeCustomNBT(ItemStack item, String key) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+    private static ItemStack _removeCustomNBT(ItemStack item, String key) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
     	// tag (net.minecraft.server.{$VERSION}.NBTTagCompound) 
     	Object tag;
     	
@@ -166,7 +166,7 @@ public class NBTUtils {
     	return null;
     }
 
-    public static ItemStack _addCustomNBT(ItemStack item, String key, String value) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException {
+    private static ItemStack _addCustomNBT(ItemStack item, String key, String value) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException {
     	// tag (net.minecraft.server.{$VERSION}.NBTTagCompound) 
     	Object tag;
     	
@@ -216,7 +216,7 @@ public class NBTUtils {
     	return null;
 	}
 	
-	public static ItemStack _addLore(ItemStack i, List<String> lore) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException, NoSuchMethodException, SecurityException
+	private static ItemStack _addLore(ItemStack i, List<String> lore) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException, NoSuchMethodException, SecurityException
 	{		
 		//create a NMS copy (net.minecraft.server.{$VERSION}.ItemStack)
 		Object nms = asNMSCopy.invoke(null, i);
@@ -263,7 +263,7 @@ public class NBTUtils {
     	return null;
 	}
 	
-	public static List<String> _getLore(ItemStack i) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException, InstantiationException
+	private static List<String> _getLore(ItemStack i) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException, InstantiationException
 	{
 		//create a NMS copy (net.minecraft.server.{$VERSION}.ItemStack)
 		Object nms = asNMSCopy.invoke(null, i);
@@ -311,7 +311,7 @@ public class NBTUtils {
     	return false;
 	}
 	
-	public static boolean _hasTraderLore(ItemStack i) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException
+	private static boolean _hasTraderLore(ItemStack i) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException
 	{
 		//create a NMS copy (net.minecraft.server.{$VERSION}.ItemStack)
 		Object nms = asNMSCopy.invoke(null, i);

@@ -15,9 +15,8 @@ public class PluginSettings {
 	private static String locale;
 	private static boolean localeAutoUpdate;
 	
-	//Online logs password and user
-	private static String user = "";
-	private static String pass = "";
+	//core settings (should be changed only by advanced users)
+	private static int cleaningTimeout = 4;
 	
 	//statistic settings
 	private static boolean statistics = false;
@@ -38,8 +37,8 @@ public class PluginSettings {
 		locale = config.getString("locale.load", "en");
 		localeAutoUpdate = config.getBoolean("locale.auto-update", true);
 
-		user = config.getString("logging.web-account");
-		pass = config.getString("logging.web-pass");
+		//core settings
+		cleaningTimeout = config.getInt("trader.transaction.cleaning", 4);
 		
 		//unused
 		statistics = config.getBoolean("general.statistics", false);
@@ -60,23 +59,13 @@ public class PluginSettings {
 	{
 		return statistics;
 	}
+	
+	public static int cleaningTimeout()
+	{
+		return cleaningTimeout;
+	}
 
 	public static String debugLevel() {
 		return debugLevel.toUpperCase();
-	}
-
-	public static String getLogUser()
-	{
-		return user;
-	}
-
-	public static String getLogPass()
-	{
-		return pass;
-	}
-
-	public static int logUpdateCounter()
-	{
-		return 5;
 	}
 }

@@ -240,7 +240,8 @@ public final class StockItem extends tNpcItem {
 		{
 			lore = (Lore) ItemFlag.initFlag(this, ".lore");
 			lore.onFactorize(item);
-			flags.put(lore.getClass(), lore);
+			
+			flags.put(lore.getClass(), lore); 
 		}
 		catch (AttributeValueNotFoundException e)
 		{

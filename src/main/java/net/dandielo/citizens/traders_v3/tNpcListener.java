@@ -7,7 +7,9 @@ import net.citizensnpcs.api.event.NPCLeftClickEvent;
 import net.citizensnpcs.api.event.NPCRightClickEvent;
 import net.dandielo.api.traders.tNpcAPI;
 import net.dandielo.citizens.traders_v3.bankers.Banker;
+import net.dandielo.citizens.traders_v3.bukkit.DtlTraders;
 import net.dandielo.citizens.traders_v3.bukkit.Perms;
+import net.dandielo.citizens.traders_v3.core.PluginSettings;
 import net.dandielo.citizens.traders_v3.core.dB;
 import net.dandielo.citizens.traders_v3.core.dB.DebugLevel;
 import net.dandielo.citizens.traders_v3.core.exceptions.InvalidTraderTypeException;
@@ -18,6 +20,7 @@ import net.dandielo.citizens.traders_v3.traits.BankerTrait;
 import net.dandielo.citizens.traders_v3.traits.TraderTrait;
 import net.dandielo.citizens.traders_v3.utils.NBTUtils;
 
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -40,24 +43,24 @@ public class tNpcListener implements Listener {
 	 * Locale manager instance
 	 */
 	LocaleManager locale = LocaleManager.locale;
-	
-	InventoryCleaner cleaner = new InventoryCleaner();
-	
+//	InventoryCleaner cleaner = new InventoryCleaner();
 	private static tNpcListener instance = new tNpcListener();
+	
 	
 	public static tNpcListener instance()
 	{
 		return instance;
 	}
 	
+	
 	//class definition
 	tNpcManager manager = tNpcManager.instance();
 
 	public tNpcListener()
 	{
-		cleaner.start();
+	//	cleaner.start();
 	}
-	
+
 	//general events
 	@EventHandler
 	public void inventoryClickEvent(InventoryClickEvent e)
@@ -175,7 +178,8 @@ public class tNpcListener implements Listener {
 		    	dB.spec(DebugLevel.S1_ADONDRIEL, "Adding player inventory to the cleaning querry");
 		    	
 		    	//clean his inventory
-		    	cleaner.addPlayer((Player) e.getPlayer());
+		    	//cleaner.addPlayer((Player) e.getPlayer());
+		    	new InventoryCleaner((Player) e.getPlayer());
 		    }
 		    //in the mode is MANAGE_UNLOCKED, lock it and save items
 		    else
@@ -414,73 +418,60 @@ public class tNpcListener implements Listener {
 	 * Cleans the players inventory from any "dtltrader" lore that is applied to ease the way of using traders. 
 	 * @author dandielo
 	 */
-	static class InventoryCleaner 
+	static class InventoryCleaner implements Runnable
 	{		
-		/**
-		 * The timer that will shoot ech TimedTask 
-		 */
-		private Timer timer;
+		private final Player player;
 		
-		/**
-		 * Adds a player to the list, that will clean his inventory for dtltrader lores
-		 * @param player
-		 */
-		public void addPlayer(final Player player)
-		{			
-			TimerTask task = new TimerTask()
-			{
-				private Player thisPlayer = player;
-				
-				@Override
-				public void run()
-				{
-					int i = 0;
-					
-					//specific debug info
-					dB.spec(DebugLevel.S1_ADONDRIEL, "Adding player inventory to the cleaning querry");
-			    	
-					//search for items
-					for ( ItemStack item : thisPlayer.getInventory().getContents() )
-					{
-						if ( item != null )
-						{
-							if ( NBTUtils.isMarked(item) )
-							{
-								//specific debug info
-								dB.spec(DebugLevel.S1_ADONDRIEL, "Marked item found, remove it");
-								dB.spec(DebugLevel.S1_ADONDRIEL, "Item: ", item);
-						    	
-								//remove item
-								thisPlayer.getInventory().setItem(i, null);
-							}
-							else
-							{
-								//specific debug info
-							//	dB.spec(DebugLevel.S1_ADONDRIEL, "Cleaning lore for item");
-							//	dB.spec(DebugLevel.S1_ADONDRIEL, "Item: ", item);
-								
-								//clean transaction lores 
-								thisPlayer.getInventory().setItem(i, NBTUtils.cleanItem(item));
-							}
-						}
-						++i;
-					}
-				}
-			};
-
-			//so this one for a fast cleanup
-			timer.schedule(task, 350);
+		public InventoryCleaner(final Player player)
+		{
+			//set the player
+			this.player = player;
 			
+			//set the task for schedule
+			Bukkit.getScheduler().scheduleSyncDelayedTask(DtlTraders.getInstance(), this, PluginSettings.cleaningTimeout());
 		}
 		
-		public void start()
+		@Override
+		public void run()
 		{
-			if ( timer != null ) 
-			{
-				timer.cancel();
-			}
+			//clean the player
+			clean(player);
 			
-			timer = new Timer("DtlDescription-Cleaner");
+			//specific debug info
+			dB.spec(DebugLevel.S1_ADONDRIEL, "Removed from the cleaning querry");
+		}
+
+		public static void clean(Player thisPlayer)
+		{
+			int i = 0;
+			//search for items
+			for ( ItemStack item : thisPlayer.getInventory().getContents() )
+			{
+				if ( item != null )
+				{
+					if ( NBTUtils.isMarked(item) )
+					{
+						//specific debug info
+						dB.spec(DebugLevel.S1_ADONDRIEL, "Marked item found, remove it");
+						dB.spec(DebugLevel.S1_ADONDRIEL, "Item: ", item);
+				    	
+						//remove item
+						thisPlayer.getInventory().setItem(i, null);
+					}
+					else
+					{		
+						dB.spec(DebugLevel.S1_ADONDRIEL, "Item: ", item);	
+						dB.spec(DebugLevel.S1_ADONDRIEL, "Has trader lore: ", NBTUtils.hasTraderLore(item));
+						dB.spec(DebugLevel.S1_ADONDRIEL, "Cleaned Item: ", NBTUtils.cleanItem(item));	
+						
+						//clean transaction lores 
+						ItemStack it = NBTUtils.cleanItem(item);
+						it.setAmount(1);
+						thisPlayer.getInventory().setItem(i, it);
+					}
+				}
+				++i;
+			}
 		}
 	}
 }
