@@ -473,11 +473,12 @@ public class TraderCommands {
 	public void sellprice(DtlTraders plugin, Player sender, Trader trader, Map<String, String> args)
 	{
 		String itemString = args.get("free");
+
+		int items = 0;
 		
+		StockItem price = new StockItem(itemString);
 		for ( StockItem item : trader.getStock().getStock("sell") )
 		{
-			StockItem price = new StockItem(itemString);
-			int items = 0;
 			if ( item.priorityMatch(price) >= 0 )
 			{
 				++items;
@@ -486,10 +487,9 @@ public class TraderCommands {
 				else
 					item.addAttr("p", price.getPriceFormated());
 			}
-			
-			//send message
-			locale.sendMessage(sender, "trader-stock-price-set", "items", String.valueOf(items));
 		}
+		//send message
+		locale.sendMessage(sender, "trader-stock-price-set", "items", String.valueOf(items));
 	}
 	
 	@Command(
@@ -504,9 +504,10 @@ public class TraderCommands {
 		String itemString = args.get("free");
 
 		int items = 0;
+		
+		StockItem price = new StockItem(itemString);
 		for ( StockItem item : trader.getStock().getStock("buy") )
 		{
-			StockItem price = new StockItem(itemString);
 			if ( price.priorityMatch(item) >= 0 )
 			{
 				++items;

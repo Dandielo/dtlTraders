@@ -1,8 +1,5 @@
 package net.dandielo.citizens.traders_v3;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 import net.citizensnpcs.api.event.NPCLeftClickEvent;
 import net.citizensnpcs.api.event.NPCRightClickEvent;
 import net.dandielo.api.traders.tNpcAPI;

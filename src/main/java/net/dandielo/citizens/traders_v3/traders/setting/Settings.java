@@ -127,7 +127,8 @@ public class Settings extends TGlobalSettings {
 		stockStart = data.getString("stock.default", TGlobalSettings.stockStart);
 		
 		//load pattern settings 
-		patterns.addAll((List<String>)data.getRaw("patterns"));
+		if ( data.getRaw("patterns") != null )
+		    patterns.addAll((List<String>)data.getRaw("patterns"));
 	}
 	
 	public void save(DataKey data) 
