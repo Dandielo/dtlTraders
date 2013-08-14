@@ -462,9 +462,7 @@ public class tNpcListener implements Listener {
 						dB.spec(DebugLevel.S1_ADONDRIEL, "Cleaned Item: ", NBTUtils.cleanItem(item));	
 						
 						//clean transaction lores 
-						ItemStack it = NBTUtils.cleanItem(item);
-						it.setAmount(1);
-						thisPlayer.getInventory().setItem(i, it);
+						thisPlayer.getInventory().setItem(i, NBTUtils.cleanItem(item));
 					}
 				}
 				++i;
