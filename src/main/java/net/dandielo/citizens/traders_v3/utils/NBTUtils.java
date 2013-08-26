@@ -354,6 +354,8 @@ public class NBTUtils {
 	
 	public static ItemStack cleanItem(ItemStack i)
 	{
+	//	System.out.print(i.getAmount());
+	//	System.out.print(ItemUtils.createStockItem(i).getItem().getAmount());
 		return ItemUtils.createStockItem(i).getItem();
 	}
 }

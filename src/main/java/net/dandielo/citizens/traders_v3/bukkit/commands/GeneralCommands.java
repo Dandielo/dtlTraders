@@ -170,6 +170,7 @@ public class GeneralCommands {
 	public void traderHelpBasic(DtlTraders plugin, CommandSender sender, NPC npc, Map<String, String> args)
 	{
 		List<Command> cmds = commands.get("trader");
+		dB.spec(dB.DebugLevel.S1_ADONDRIEL, cmds);
 		
 	    if ( cmds == null )
 			dB.high("Command informations are not loaded");
@@ -179,6 +180,7 @@ public class GeneralCommands {
 		
 		for ( Command cmd : cmds )
 		{
+			dB.spec(dB.DebugLevel.S1_ADONDRIEL, nameAndSyntax(cmd));
 			sender.sendMessage(nameAndSyntax(cmd));
 		}
 	}

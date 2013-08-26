@@ -219,6 +219,7 @@ public class CommandManager {
 		{
 			Map<String, String> map = new HashMap<String, String>();
 			Matcher matcher = syntax.matcher(name + " " + toString(args));
+
 			int max = matcher.groupCount();
 			
 			matcher.find();
