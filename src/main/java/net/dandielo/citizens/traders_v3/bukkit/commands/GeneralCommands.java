@@ -14,6 +14,7 @@ import net.dandielo.citizens.traders_v3.core.PluginSettings;
 import net.dandielo.citizens.traders_v3.core.commands.Command;
 import net.dandielo.citizens.traders_v3.core.locale.LocaleManager;
 import net.dandielo.citizens.traders_v3.traders.Trader;
+import net.dandielo.citizens.traders_v3.traders.patterns.PatternManager;
 import net.dandielo.citizens.traders_v3.traders.setting.TGlobalSettings;
 
 import org.bukkit.ChatColor;
@@ -68,9 +69,11 @@ public class GeneralCommands {
 		PluginSettings.initPluginSettings();
 		TGlobalSettings.initGlobalSettings();
 		
+		//reload all patterns
+		PatternManager.instance.reload();
+		
 		//reload the locale
 		locale.load();
-		
 		locale.sendMessage(sender, "plugin-reload");
 	}
 	
