@@ -112,11 +112,21 @@ public class StockPlayer extends StockTrader {
 
 		if ( settings.getPatterns() != null && !settings.getPatterns().isEmpty() )
 		{
-			for ( Pattern pattern : PatternManager.getPatterns(settings.getPatterns()) )
+			List<Pattern> patterns = PatternManager.getPatterns(settings.getPatterns());
+			
+			if ( patterns.isEmpty() )
 			{
-				if ( pattern.getType().equals(Type.PRICE) &&
-						Perms.hasPerm(player, "dtl.trader.patterns." + pattern.getName()) )
-					match.merge(((net.dandielo.citizens.traders_v3.traders.patterns.types.Price)pattern).findPriceFor(player, stock, item));
+				match.price(item.getPrice());
+				match.multiplier(item.getMultiplier());
+			}
+			else
+			{
+				for ( Pattern pattern : PatternManager.getPatterns(settings.getPatterns()) )
+				{
+					if ( pattern.getType().equals(Type.PRICE) &&
+							Perms.hasPerm(player, "dtl.trader.patterns." + pattern.getName()) )
+						match.merge(((net.dandielo.citizens.traders_v3.traders.patterns.types.Price)pattern).findPriceFor(player, stock, item));
+				}
 			}
 		}
 		else
