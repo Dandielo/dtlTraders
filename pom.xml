@@ -18,10 +18,10 @@
 
 	<!-- Repositories --> 
 	<repositories>  
-		<repository>
-			<id>bukkit-repo</id>
-			<url>http://repo.bukkit.org/content/groups/public/</url>
-		</repository>
+        <repository>
+          <id>repobo-snap</id>
+          <url>http://repo.bukkit.org/content/groups/public</url>
+        </repository>
 		<repository>
 			<id>everything</id>
 			<url>http://repo.citizensnpcs.com</url>
@@ -109,7 +109,6 @@
     </resources>
     
     <plugins>
-
      <plugin>
        <groupId>org.apache.maven.plugins</groupId>
        <artifactId>maven-jar-plugin</artifactId>
