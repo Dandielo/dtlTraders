@@ -14,7 +14,6 @@
 		<denizen.version>0.9.2-SNAPSHOT</denizen.version>
 		<wallets.version>1.0.0-SNAPSHOT</wallets.version>
 		<stats.version>1.2.0-SNAPSHOT</stats.version>
-		<json.version>20090211</json.version>
 	</properties> 
 
 	<!-- Repositories --> 
@@ -41,19 +40,20 @@
 	
 	<!-- Dependencies -->
  	<dependencies>
-		<dependency>
-			<groupId>org.json</groupId>
-			<artifactId>json</artifactId>
-			<version>${json.version}</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.bukkit</groupId> 
-			<artifactId>craftbukkit</artifactId>
-			<version>${craftbukkit.version}</version>
-			<type>jar</type>
-			<scope>provided</scope> 
-		</dependency>
+        <dependency>
+            <groupId>org.bukkit</groupId>
+            <artifactId>bukkit</artifactId>
+            <version>${craftbukkit.version}</version>
+            <type>jar</type>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.bukkit</groupId>
+            <artifactId>craftbukkit</artifactId>
+            <version>${craftbukkit.version}</version>
+            <type>jar</type>
+            <scope>provided</scope>
+        </dependency>
 		<dependency>
 			<groupId>net.citizensnpcs</groupId>
 			<artifactId>citizens</artifactId>
@@ -109,32 +109,6 @@
     </resources>
     
     <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-shade-plugin</artifactId>
-        <version>1.5</version>
-        <executions>
-          <execution>
-          <phase>package</phase>
-          <goals>
-            <goal>shade</goal>
-          </goals>
-          <configuration>
-            <artifactSet>
-              <includes>
-                <include>org.json</include>
-              </includes>
-            </artifactSet>
-            <relocations>
-              <relocation>
-	            <pattern>org.json</pattern>
-	            <shadedPattern>org.shade.json</shadedPattern>
-              </relocation>
-            </relocations>
-          </configuration>
-         </execution>
-       </executions>
-     </plugin>
 
      <plugin>
        <groupId>org.apache.maven.plugins</groupId>
