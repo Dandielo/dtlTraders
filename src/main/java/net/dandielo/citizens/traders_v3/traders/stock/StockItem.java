@@ -751,7 +751,7 @@ public final class StockItem extends tNpcItem {
 				if ( !equals ) break;
 				
 				//temporary false
-				equals = false;
+				equals = tFlag.getInfo().standalone();
 				
 				
 				//check each item in the second item, if the attribute is found and strong equal continue
