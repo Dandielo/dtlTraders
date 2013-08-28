@@ -170,7 +170,7 @@ public class GeneralCommands {
 	desc = "allows to get information about all trader commands",
 	perm = "dtl.trader.commands.help",
 	npc = false)
-	public void traderHelpBasic(DtlTraders plugin, CommandSender sender, NPC npc, Map<String, String> args)
+	public void traderHelpBasic(DtlTraders plugin, CommandSender sender, Trader npc, Map<String, String> args)
 	{
 		List<Command> cmds = commands.get("trader");
 		dB.spec(dB.DebugLevel.S1_ADONDRIEL, cmds);
