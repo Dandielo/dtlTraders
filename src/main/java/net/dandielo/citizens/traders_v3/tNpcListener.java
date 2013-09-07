@@ -74,9 +74,7 @@ public class tNpcListener implements Listener {
 	//general events
 	@EventHandler
 	public void inventoryClickEvent(InventoryClickEvent e)
-	{
-		dB.high(e.getClick().name().toLowerCase());
-		
+	{		
 		tNpc trader = manager.getRelation(e.getWhoClicked().getName(), tNpc.class);
 		
 		if ( trader != null )
