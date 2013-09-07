@@ -8,12 +8,12 @@ import org.json.JSONWriter;
 */
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
+import net.dandielo.api.stats.Listener;
+import net.dandielo.api.stats.Stat;
+import net.dandielo.api.stats.Updater;
+import net.dandielo.api.stats.Stat.RequestType;
 import net.dandielo.citizens.traders_v3.traders.setting.Settings;
 import net.dandielo.citizens.traders_v3.traits.TraderTrait;
-import net.dandielo.stats.api.Listener;
-import net.dandielo.stats.api.Stat;
-import net.dandielo.stats.api.Stat.RequestType;
-import net.dandielo.stats.api.Updater;
 
 @Stat(name = "trader")
 public class TraderStats implements Listener, Updater {

@@ -6,13 +6,13 @@ import net.dandielo.api.traders.tNpcAPI;
 import net.dandielo.citizens.traders_v3.bankers.Banker;
 import net.dandielo.citizens.traders_v3.bukkit.DtlTraders;
 import net.dandielo.citizens.traders_v3.bukkit.Perms;
-import net.dandielo.citizens.traders_v3.core.PluginSettings;
 import net.dandielo.citizens.traders_v3.core.dB;
 import net.dandielo.citizens.traders_v3.core.dB.DebugLevel;
 import net.dandielo.citizens.traders_v3.core.exceptions.InvalidTraderTypeException;
 import net.dandielo.citizens.traders_v3.core.exceptions.TraderTypeNotFoundException;
 import net.dandielo.citizens.traders_v3.core.locale.LocaleManager;
 import net.dandielo.citizens.traders_v3.traders.Trader;
+import net.dandielo.citizens.traders_v3.traders.setting.Settings;
 import net.dandielo.citizens.traders_v3.traits.BankerTrait;
 import net.dandielo.citizens.traders_v3.traits.TraderTrait;
 import net.dandielo.citizens.traders_v3.utils.NBTUtils;
@@ -26,6 +26,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
@@ -58,12 +59,26 @@ public class tNpcListener implements Listener {
 	//	cleaner.start();
 	}
 
+	//don't allow consuming marked items
+	@EventHandler
+	public void playerItemConsumeEvent(PlayerItemConsumeEvent e)
+	{
+		//cancel the event if the item is marked or has a trader lore
+		if ( NBTUtils.isMarked(e.getItem()) || NBTUtils.hasTraderLore(e.getItem()) )
+		{
+			e.setItem(null);
+			e.setCancelled(true);
+		}
+	}
+	
 	//general events
 	@EventHandler
 	public void inventoryClickEvent(InventoryClickEvent e)
 	{
+		dB.high(e.getClick().name().toLowerCase());
+		
 		tNpc trader = manager.getRelation(e.getWhoClicked().getName(), tNpc.class);
-
+		
 		if ( trader != null )
 		{
 			if ( trader.getStatus().inManagementMode() )
@@ -425,7 +440,7 @@ public class tNpcListener implements Listener {
 			this.player = player;
 			
 			//set the task for schedule
-			Bukkit.getScheduler().scheduleSyncDelayedTask(DtlTraders.getInstance(), this, PluginSettings.cleaningTimeout());
+			Bukkit.getScheduler().scheduleSyncDelayedTask(DtlTraders.getInstance(), this, Settings.cleaningTimeout());
 		}
 		
 		@Override
@@ -448,6 +463,7 @@ public class tNpcListener implements Listener {
 				{
 					if ( NBTUtils.isMarked(item) )
 					{
+						dB.high("Marked item found, remove it");
 						//specific debug info
 						dB.spec(DebugLevel.S1_ADONDRIEL, "Marked item found, remove it");
 						dB.spec(DebugLevel.S1_ADONDRIEL, "Item: ", item);

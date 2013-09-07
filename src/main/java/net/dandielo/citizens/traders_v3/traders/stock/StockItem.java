@@ -203,7 +203,7 @@ public final class StockItem extends tNpcItem {
 	public void factorize(ItemStack item)
 	{
 		//debug low
-		dB.low("Factorizing item: ", item.getType().name().toLowerCase());
+	//	dB.low("Factorizing item: ", item.getType().name().toLowerCase());
 		
 		for ( ItemAttr iAttr : ItemAttr.getAllAttributes() )
 		{
@@ -355,8 +355,8 @@ public final class StockItem extends tNpcItem {
 			else
 			{
 				//debug message that this key does not exists
-				dB.high("The given key is not registered, skipping...");
-				dB.high("key: ", key);
+	//			dB.high("The given key is not registered, skipping...");
+	//			dB.high("key: ", key);
 			}
 		} 
 		catch (AttributeInvalidClassException e) 
@@ -712,7 +712,7 @@ public final class StockItem extends tNpcItem {
 		//checking attribute missmatching
 		equals = equals ? !attributeMissmatch(item) : equals;
 		
-		dB.low("After ID and data check: ", equals);
+	//	dB.low("After ID and data check: ", equals);
 		
 		//now a if block to not make thousands of not needed checks 
 		if ( equals )
@@ -727,13 +727,13 @@ public final class StockItem extends tNpcItem {
 				equals = tAttr.getInfo().standalone();
 				
 				//debug low
-				dB.low("Before ", tAttr.getInfo().name() ," check: ", equals, ", with: ", tAttr.onSave());
+		//		dB.low("Before ", tAttr.getInfo().name() ," check: ", equals, ", with: ", tAttr.onSave());
 				
 				//check each item in the second item, if the attribute is found and strong equal continue
 				for ( ItemAttr iAttr : item.attr.values() )
 				{
 					//debug low
-					dB.info("Checking ", iAttr.getInfo().name() ," with: ", iAttr.onSave());
+		//			dB.info("Checking ", iAttr.getInfo().name() ," with: ", iAttr.onSave());
 					
 					//same attributes
 					if ( tAttr.getClass().equals(iAttr.getClass()) )
@@ -783,7 +783,7 @@ public final class StockItem extends tNpcItem {
 		//checking attribute missmatching
 		equals = equals ? !attributeMissmatch(item) : equals;
 
-		dB.low("After ID and data check: ", equals);
+	//	dB.low("After ID and data check: ", equals);
 		
 		//now a if block to not make thousands of not needed checks 
 		if ( equals )
@@ -798,13 +798,13 @@ public final class StockItem extends tNpcItem {
 				equals = tAttr.getInfo().standalone();
 
 				//debug low
-				dB.low("Before ", tAttr.getInfo().name() ," check: ", equals, ", with: ", tAttr.onSave());
+		//		dB.low("Before ", tAttr.getInfo().name() ," check: ", equals, ", with: ", tAttr.onSave());
 				
 				//check each item in the second item, if the attribute is found and strong equal continue
 				for ( ItemAttr iAttr : item.attr.values() )
 				{
 					//debug low
-					dB.info("Checking ", iAttr.getInfo().name() ," with: ", iAttr.onSave());
+			//		dB.info("Checking ", iAttr.getInfo().name() ," with: ", iAttr.onSave());
 					
 					//same attributes
 					if ( tAttr.getClass().equals(iAttr.getClass()) )
@@ -812,7 +812,7 @@ public final class StockItem extends tNpcItem {
 				}
 				
 				//debug low
-				dB.low("After ", tAttr.getInfo().name() ," check: ", equals);
+		//		dB.low("After ", tAttr.getInfo().name() ," check: ", equals);
 			}
 			
 			//for each attribute in this item
@@ -887,14 +887,14 @@ public final class StockItem extends tNpcItem {
 			for ( ItemAttr iAttr : that.attr.values() )
 			{
 				//debug low
-				dB.info("Checking ", iAttr.getInfo().name() ," with: ", iAttr.onSave());
+		//		dB.info("Checking ", iAttr.getInfo().name() ," with: ", iAttr.onSave());
 
 				//same attributes
 				if ( tAttr.getClass().equals(iAttr.getClass()) && tAttr.equalsStrong(iAttr) )
 					priority += tAttr.getInfo().priority();
 			}
 			//debug low
-			dB.low("After ", tAttr.getInfo().name() ," check: ", String.valueOf(priority));
+		//	dB.low("After ", tAttr.getInfo().name() ," check: ", String.valueOf(priority));
 		}
 			
 		//for each attribute in this item
@@ -909,7 +909,7 @@ public final class StockItem extends tNpcItem {
 			}
 		}
 		
-		dB.info("Priority result: ", priority);
+	//	dB.info("Priority result: ", priority);
 		return priority;
 	}
 	
@@ -930,8 +930,8 @@ public final class StockItem extends tNpcItem {
 	 */
 	private void debugMsgClass(String key)
 	{
-		dB.high("Attribute/Flag class exception, the attribute class is invalid");
-		dB.high("Attribute/Flag key: ", ChatColor.GOLD, key);
+	//	dB.high("Attribute/Flag class exception, the attribute class is invalid");
+	//	dB.high("Attribute/Flag key: ", ChatColor.GOLD, key);
 	}
 
 	/**
@@ -939,8 +939,8 @@ public final class StockItem extends tNpcItem {
 	 */
 	private void debugMsgValue(Attribute attr, String value)
 	{
-		dB.normal("Attribute value initialization exception");
-		dB.normal("Attribute: ", (attr != null ? attr.name() : "null"), ", value: ", ChatColor.GOLD, value);
+	//	dB.normal("Attribute value initialization exception");
+	//	dB.normal("Attribute: ", (attr != null ? attr.name() : "null"), ", value: ", ChatColor.GOLD, value);
 	}
 
 	/**
@@ -948,7 +948,7 @@ public final class StockItem extends tNpcItem {
 	 */
 	private void debugMsgItem(Attribute attr)
 	{
-		dB.normal("Attribute/Flag item incompatibility");
-		dB.normal("Attribute/Flag: ", (attr != null ? attr.name() : "null"), ", item: ", ChatColor.GOLD, this.getName());
+	//	dB.normal("Attribute/Flag item incompatibility");
+	//	dB.normal("Attribute/Flag: ", (attr != null ? attr.name() : "null"), ", item: ", ChatColor.GOLD, this.getName());
 	}
 }

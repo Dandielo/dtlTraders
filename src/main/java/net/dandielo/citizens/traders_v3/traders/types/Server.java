@@ -452,6 +452,8 @@ public class Server extends Trader {
 	public void buyItems(InventoryClickEvent e)
 	{
 		e.setCancelled(true);
+		//Check the item in cursor if its marked
+		
 		//check permission
 		if ( !perms.has(player, "dtl.trader.buy") ) return;
 		
@@ -670,12 +672,6 @@ public class Server extends Trader {
 	
 	
 	
-	
-	
-	
-	
-	
-	
 	//shift handler
 	@ClickHandler(status = {tNpcStatus.SELL, tNpcStatus.BUY, tNpcStatus.SELL_AMOUNTS, tNpcStatus.MANAGE_BUY, tNpcStatus.MANAGE_SELL}, shift = true, inventory = InventoryType.TRADER)
 	public void topShift(InventoryClickEvent e)
@@ -706,5 +702,20 @@ public class Server extends Trader {
 		dB.info("Inventory click, by: ", player.getName(), ", status: ", status.name().toLowerCase());
 		dB.info("slot: ", e.getSlot(), ", left: ", e.isLeftClick(), ", shift: ", e.isShiftClick());
 	}
+
 	
+	@ClickHandler(status = {tNpcStatus.SELL, tNpcStatus.BUY, tNpcStatus.SELL_AMOUNTS}, inventory = InventoryType.PLAYER)
+	public void __last(InventoryClickEvent e)
+	{
+		//Temporary fix for Touchscreen issue!
+		if ( e.isCancelled() )
+		{
+			e.setCurrentItem(e.getCurrentItem());
+			//This should be fixed soon! 
+			((Player)e.getWhoClicked()).updateInventory();
+		}
+		//debug info
+	//	dB.info("Inventory click, by: ", player.getName(), ", status: ", status.name().toLowerCase());
+	//	dB.info("slot: ", e.getSlot(), ", left: ", e.isLeftClick(), ", shift: ", e.isShiftClick());
+	}
 }
