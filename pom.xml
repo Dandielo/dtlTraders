@@ -68,18 +68,12 @@
 			<type>jar</type>
 			<scope>provided</scope>
 		</dependency> 
-		<dependency> 
+	<!-- <dependency> 
 			<groupId>net.aufdemrand</groupId>
 			<artifactId>denizen</artifactId>
 			<version>${denizen.version}</version>
 			<scope>provided</scope> 
-		</dependency> 
-		<dependency> 
-		    <groupId>net.dandielo</groupId>
-		    <artifactId>dtlWallets</artifactId>
-			<version>${wallets.version}</version> 
-		    <scope>provided</scope>
-		</dependency>
+		</dependency>  -->	
 		<dependency> 
 		    <groupId>net.dandielo</groupId>
 		    <artifactId>dtlStats</artifactId> 
