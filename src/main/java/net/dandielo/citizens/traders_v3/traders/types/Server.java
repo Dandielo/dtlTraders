@@ -107,7 +107,8 @@ public class Server extends Trader {
 		
 		//register the inventory as a traderInventory
 		tNpcManager.instance().registerOpenedInventory(player, inventory);
-		
+
+		System.out.print("Open");
 		//open the traders inventory
 		player.openInventory(inventory);
 		
@@ -704,6 +705,7 @@ public class Server extends Trader {
 	}
 
 	
+	@SuppressWarnings("deprecation")
 	@ClickHandler(status = {tNpcStatus.SELL, tNpcStatus.BUY, tNpcStatus.SELL_AMOUNTS}, inventory = InventoryType.PLAYER)
 	public void __last(InventoryClickEvent e)
 	{
@@ -714,8 +716,5 @@ public class Server extends Trader {
 			//This should be fixed soon! 
 			((Player)e.getWhoClicked()).updateInventory();
 		}
-		//debug info
-	//	dB.info("Inventory click, by: ", player.getName(), ", status: ", status.name().toLowerCase());
-	//	dB.info("slot: ", e.getSlot(), ", left: ", e.isLeftClick(), ", shift: ", e.isShiftClick());
 	}
 }

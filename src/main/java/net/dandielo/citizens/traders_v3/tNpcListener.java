@@ -73,8 +73,9 @@ public class tNpcListener implements Listener {
 	
 	//general events
 	@EventHandler
-	public void inventoryClickEvent(InventoryClickEvent e)
+	public void inventoryClickEvent(final InventoryClickEvent e)
 	{		
+		System.out.print("Click");
 		tNpc trader = manager.getRelation(e.getWhoClicked().getName(), tNpc.class);
 		
 		if ( trader != null )
@@ -165,6 +166,7 @@ public class tNpcListener implements Listener {
 	@EventHandler(priority = EventPriority.LOW)
 	public void inventoryCloseEvent(InventoryCloseEvent e)
 	{
+		System.out.print("Close");
 		tNpc npc = manager.getRelation(e.getPlayer().getName(), tNpc.class);
 		if ( npc != null )
 		{
@@ -303,6 +305,17 @@ public class tNpcListener implements Listener {
 			else
 			{
 				trader = manager.getTraderRelation(e.getClicker());
+				
+				if ( !trader.getStatus().inManagementMode() )
+				{
+					//close inventory before opening
+					e.getClicker().closeInventory();
+
+					//make a new relation
+					manager.removeRelation(e.getClicker());
+					trader = (Trader) tNpcManager.create_tNpc(e.getNPC(), traderTrait.getType(), e.getClicker(), TraderTrait.class);
+					manager.registerRelation(e.getClicker(), trader);
+				}
 				
 				//check if its the same NPC if not then close the old manager mode and open the next NPC i normal mode
 				if ( !trader.equals(e.getNPC()) )

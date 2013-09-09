@@ -26,7 +26,6 @@ import net.dandielo.citizens.traders_v3.utils.items.attributes.Slot;
 import net.dandielo.citizens.traders_v3.utils.items.flags.DataCheck;
 import net.dandielo.citizens.traders_v3.utils.items.flags.Lore;
 
-import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 
 /**
