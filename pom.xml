@@ -19,11 +19,11 @@
 	<!-- Repositories --> 
 	<repositories>  
         <repository>
-          <id>repobo-snap</id>
+          <id>bukkit-repo</id>
           <url>http://repo.bukkit.org/content/groups/public</url>
         </repository>
 		<repository>
-			<id>everything</id>
+			<id>citi-repo</id>
 			<url>http://repo.citizensnpcs.com</url>
 	        <snapshots>
 	            <updatePolicy>always</updatePolicy>
@@ -33,7 +33,7 @@
 	        </releases>
 		</repository>
 		<repository>
-			<id>everything</id>
+			<id>vault-repo</id>
 			<url>http://ci.herocraftonline.com/plugin/repository/</url>
 		</repository>
 	</repositories> 
