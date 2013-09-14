@@ -28,7 +28,7 @@
 			<id>citi-repo</id>
 			<url>http://repo.citizensnpcs.com</url>
 			<snapshots>
-			    <checksumPolicy>fail</checksumPolicy>
+			    <checksumPolicy>ignore</checksumPolicy>
 			</snapshots>
 		</repository>
 		<repository>
