@@ -853,14 +853,14 @@ public final class StockItem extends tNpcItem {
 			{
 				if ( this.item.getTypeId() == that.item.getTypeId() &&
 					 this.item.getDurability() == that.item.getDurability() )
-					priority += 130;
+					priority += 140;
 				else
 					priority = -1;
 			}
 			else
 			{
 				if ( this.item.getDurability() == that.item.getDurability() )
-					priority += 130;
+					priority += 120;
 				else
 					priority = -1;
 			}
