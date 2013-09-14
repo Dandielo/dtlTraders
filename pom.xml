@@ -26,7 +26,7 @@
 		<repository>
 		    <name>Citizens2 repository</name>
 			<id>citi-repo</id>
-			<url>http://repo.citizensnpcs.com</url>
+			<url>http://repo.citizensnpcs.com/everything</url>
 			<snapshots>
 			    <checksumPolicy>ignore</checksumPolicy>
 			</snapshots>
