@@ -9,7 +9,7 @@ public enum tNpcStatus
 	 */
 	SELL(TRADER, "sell"), 
 	BUY(TRADER, "buy"), 
-	SELL_AMOUNTS(TRADER, "sAmounts"),
+	SELL_AMOUNTS(TRADER, "amounts"),
 	
 	MANAGE_SELL(TRADER, "mSell"), 
 	MANAGE_BUY(TRADER, "mBuy"), 

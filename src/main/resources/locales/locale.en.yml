@@ -121,16 +121,14 @@ ui:
     lore:
     - ^7Click to unlock the stock
     - ^7Enables item adding/removing from stock
-  tab-unowned:
-    name: ^r^6Unowned bank tab
+  item-price:
     lore:
-    - ^7This tab is unavailable for you
-    - ^7Shift R.Click to buy it
-    - '^7Price: ^3{price}'
-  tab-lock:
+    - '^6Price: ^7{price}'
+  item-sell:
     lore:
-    - ^7Click to lock the tab
-  tab-unlock:
+    - '^6Click to buy this item'
+  item-sell:
     lore:
-    - ^7Click to ulock the tab
+    - '^6Click on this item in'
+    - '^6your inventory to sell it'
 

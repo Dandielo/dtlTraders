@@ -52,7 +52,7 @@ public class StockPlayer extends StockTrader {
 			
 			List<String> lore = item.getTempLore(status, itemStack.clone());
 			//if ( !item.hasPrice() )
-			lore = Price.loreRequest(parsePrice(item, status.asStock(), item.getAmount()), lore);
+			lore = Price.loreRequest(parsePrice(item, status.asStock(), item.getAmount()), lore, status);
 			meta.setLore(lore);
 			
 			itemStack.setItemMeta(meta);
@@ -82,7 +82,7 @@ public class StockPlayer extends StockTrader {
 			
 			List<String> lore = item.getTempLore(status, itemStack.clone());
 			//if ( !item.hasPrice() )
-			lore = Price.loreRequest(parsePrice(item, "sell", amount), lore);
+			lore = Price.loreRequest(parsePrice(item, "sell", amount), lore, status);
 			meta.setLore(lore);
 			
 			itemStack.setItemMeta(meta);

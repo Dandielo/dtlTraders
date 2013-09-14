@@ -2,11 +2,17 @@ package net.dandielo.citizens.traders_v3.utils.items.attributes;
 
 import java.util.List;
 
+import javax.swing.event.ListSelectionEvent;
+
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 
+import com.google.common.collect.Lists;
+
+import net.dandielo.citizens.traders_v3.bukkit.DtlTraders;
 import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeInvalidValueException;
 import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeValueNotFoundException;
+import net.dandielo.citizens.traders_v3.core.locale.LocaleManager;
 import net.dandielo.citizens.traders_v3.tNpcStatus;
 import net.dandielo.citizens.traders_v3.utils.items.Attribute;
 import net.dandielo.citizens.traders_v3.utils.items.ItemAttr;
@@ -75,39 +81,19 @@ public class Price extends ItemAttr {
 	
 	@Override
 	public void onStatusLoreRequest(tNpcStatus status, ItemStack target, List<String> lore)
-	{
-		//as because this is the price attribute it can only apply for stock items
-	/*	StockItem item = (StockItem) this.item;
-		
-		double m;
-		//has the item the stack price flag?
-		if ( item.hasFlag(StackPrice.class) )
-			m = 1;
-		else
-			m = item.getAmount();
-
-		//assign a multiplier to each item sold in the amounts inventory
-		if ( status.equals(tNpcStatus.SELL_AMOUNTS) )
-		{
-			m *= (double) target.getAmount() / (double) item.getAmount();
-		}
-		//multiplier for items in player stock
-		else
-		{
-		    m *= (int) ( target.getAmount() / item.getAmount() );
-		}
-		
-		lore.add(ChatColor.GOLD + "Price: " + ChatColor.GRAY + 
-				String.format("%.2f", price*m).replace(',', '.'));*/
-		
+	{		
 	}
 	
-	public static List<String> loreRequest(double price, List<String> lore)
+	public static List<String> loreRequest(double price, List<String> lore, tNpcStatus status)
 	{
 		if ( price < 0 ) return lore;
 		
-		lore.add(ChatColor.GOLD + "Price: " + ChatColor.GRAY + 
-				String.format("%.2f", price).replace(',', '.'));
+		//add the Price lore
+		for ( String pLore : LocaleManager.locale.getLore("item-price") )
+			lore.add(pLore.replace("{price}", String.format("%.2f", price)).replace(',', '.'));
+
+		//add additional click info lore
+		lore.addAll(LocaleManager.locale.getLore("item-" + status));
 		return lore;
 	}
 }
