@@ -19,14 +19,20 @@
 	<!-- Repositories --> 
 	<repositories>   
         <repository>
+          <name>Bukkit repository</name>
           <id>bukkit-repo</id>
           <url>http://repo.bukkit.org/content/groups/public</url>
         </repository>
 		<repository>
+		    <name>Citizens2 repository</name>
 			<id>citi-repo</id>
 			<url>http://repo.citizensnpcs.com</url>
+			<snapshots>
+			    <checksumPolicy>fail</checksumPolicy>
+			</snapshots>
 		</repository>
 		<repository>
+		    <name>Vault repository</name>
 			<id>vault-repo</id>
 			<url>http://ci.herocraftonline.com/plugin/repository/everything</url>
 		</repository>
