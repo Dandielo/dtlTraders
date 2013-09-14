@@ -23,6 +23,7 @@ import net.dandielo.citizens.traders_v3.utils.items.flags.NoStack;
 import net.dandielo.citizens.traders_v3.utils.items.flags.StackPrice;
 
 @tNpcType(name="server", author="dandielo")
+@SuppressWarnings({"deprecation"})
 public class Server extends Trader {
 	
 
@@ -703,8 +704,6 @@ public class Server extends Trader {
 		dB.info("slot: ", e.getSlot(), ", left: ", e.isLeftClick(), ", shift: ", e.isShiftClick());
 	}
 
-	
-	@SuppressWarnings("deprecation")
 	@ClickHandler(status = {tNpcStatus.SELL, tNpcStatus.BUY, tNpcStatus.SELL_AMOUNTS}, inventory = InventoryType.PLAYER)
 	public void __last(InventoryClickEvent e)
 	{

@@ -25,12 +25,6 @@
 		<repository>
 			<id>citi-repo</id>
 			<url>http://repo.citizensnpcs.com</url>
-	        <snapshots>
-	            <updatePolicy>always</updatePolicy>
-	        </snapshots>
-	        <releases>
-	            <updatePolicy>always</updatePolicy>
-	        </releases>
 		</repository>
 		<repository>
 			<id>vault-repo</id>

@@ -32,6 +32,7 @@ import org.bukkit.inventory.ItemStack;
  * Item structure using in each trader stock, this structure allows to save and store more data than the commom ItemStack bukkit structure.
  * @author dandielo
  */
+@SuppressWarnings({"deprecation"})
 public final class StockItem extends tNpcItem {
 	/**
 	 * Pattern used for loading data form strings
