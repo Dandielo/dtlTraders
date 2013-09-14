@@ -25,8 +25,8 @@
         </repository>
 		<repository>
 		    <name>Citizens2 repository</name>
-			<id>citizens-repo</id>
-			<url>http://repo.citizensnpcs.com/everything</url>
+			<id>everything</id>
+			<url>http://repo.citizensnpcs.co</url>
 		</repository>
 		<repository>
 		    <name>Vault repository</name>
