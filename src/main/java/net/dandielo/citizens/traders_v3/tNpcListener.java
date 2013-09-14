@@ -253,6 +253,9 @@ public class tNpcListener implements Listener {
 			
 			if ( !trader.getStatus().inManagementMode() )
 				manager.removeRelation(e.getClicker());
+			
+			//cancel to not dmg traders //TODO add a PVP check and shift "enable" toggling
+			e.setCancelled(true);
 		}
 		catch (TraderTypeNotFoundException e1) 
 		{
