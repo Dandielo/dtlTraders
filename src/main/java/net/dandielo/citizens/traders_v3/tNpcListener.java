@@ -40,8 +40,7 @@ public class tNpcListener implements Listener {
 	/**
 	 * Locale manager instance
 	 */
-	LocaleManager locale = LocaleManager.locale;
-//	InventoryCleaner cleaner = new InventoryCleaner();
+	private LocaleManager locale = LocaleManager.locale;
 	private static tNpcListener instance = new tNpcListener();
 	
 	
@@ -56,7 +55,6 @@ public class tNpcListener implements Listener {
 
 	public tNpcListener()
 	{
-	//	cleaner.start();
 	}
 
 	//don't allow consuming marked items
@@ -74,8 +72,7 @@ public class tNpcListener implements Listener {
 	//general events
 	@EventHandler
 	public void inventoryClickEvent(final InventoryClickEvent e)
-	{		
-		System.out.print("Click");
+	{
 		tNpc trader = manager.getRelation(e.getWhoClicked().getName(), tNpc.class);
 		
 		if ( trader != null )
@@ -166,7 +163,6 @@ public class tNpcListener implements Listener {
 	@EventHandler(priority = EventPriority.LOW)
 	public void inventoryCloseEvent(InventoryCloseEvent e)
 	{
-		System.out.print("Close");
 		tNpc npc = manager.getRelation(e.getPlayer().getName(), tNpc.class);
 		if ( npc != null )
 		{
