@@ -2,14 +2,9 @@ package net.dandielo.citizens.traders_v3.utils.items.attributes;
 
 import java.util.List;
 
-import javax.swing.event.ListSelectionEvent;
-
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 
-import com.google.common.collect.Lists;
-
-import net.dandielo.citizens.traders_v3.bukkit.DtlTraders;
 import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeInvalidValueException;
 import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeValueNotFoundException;
 import net.dandielo.citizens.traders_v3.core.locale.LocaleManager;

@@ -2,7 +2,6 @@ package net.dandielo.citizens.traders_v3;
 
 import net.citizensnpcs.api.event.NPCLeftClickEvent;
 import net.citizensnpcs.api.event.NPCRightClickEvent;
-import net.dandielo.api.traders.tNpcAPI;
 import net.dandielo.citizens.traders_v3.bankers.Banker;
 import net.dandielo.citizens.traders_v3.bukkit.DtlTraders;
 import net.dandielo.citizens.traders_v3.bukkit.Perms;
@@ -62,7 +61,7 @@ public class tNpcListener implements Listener {
 	public void playerItemConsumeEvent(PlayerItemConsumeEvent e)
 	{
 		//cancel the event if the item is marked or has a trader lore
-		if ( NBTUtils.isMarked(e.getItem()) || NBTUtils.hasTraderLore(e.getItem()) )
+		if ( NBTUtils.isMarked(e.getItem()) )// || NBTUtils.hasTraderLore(e.getItem()) )
 		{
 			e.setItem(null);
 			e.setCancelled(true);
@@ -137,8 +136,7 @@ public class tNpcListener implements Listener {
 		{
 			if ( item != null )
 			{
-				if ( NBTUtils.isMarked(item) ||
-						( !tNpcAPI.isTNpcInventory((Player) e.getWhoClicked()) && NBTUtils.hasTraderLore(item) ) )
+				if ( NBTUtils.isMarked(item) ) //||						( !tNpcAPI.isTNpcInventory((Player) e.getWhoClicked()) && NBTUtils.hasTraderLore(item) ) )
 				{
 					//send specific debug messages
 					dB.spec(DebugLevel.S1_ADONDRIEL, "Marked item found on player inventory click");
