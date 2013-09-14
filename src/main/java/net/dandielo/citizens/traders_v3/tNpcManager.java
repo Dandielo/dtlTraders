@@ -11,13 +11,11 @@ import org.bukkit.inventory.Inventory;
 
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.trait.Trait;
-import net.dandielo.citizens.traders_v3.bankers.Banker;
-import net.dandielo.citizens.traders_v3.bankers.types.Private;
 import net.dandielo.citizens.traders_v3.bukkit.DtlTraders;
 import net.dandielo.citizens.traders_v3.core.dB;
 import net.dandielo.citizens.traders_v3.core.exceptions.InvalidTraderTypeException;
 import net.dandielo.citizens.traders_v3.core.exceptions.TraderTypeNotFoundException;
-import net.dandielo.citizens.traders_v3.core.exceptions.TraderTypeRegistrationError;
+import net.dandielo.citizens.traders_v3.core.exceptions.TraderTypeRegistrationException;
 import net.dandielo.citizens.traders_v3.traders.Trader;
 import net.dandielo.citizens.traders_v3.traders.types.Server;
 import net.dandielo.citizens.traders_v3.traits.WalletTrait;
@@ -236,16 +234,16 @@ public class tNpcManager {
 			registerType(Server.class);
 			
 			dB.info("Register private banker type");
-			registerType(Private.class);
+			//registerType(Private.class);
 			
 			//register type handlers
 			Trader.registerHandlers(Server.class);
-			Banker.registerHandlers(Private.class);
+			//Banker.registerHandlers(Private.class);
 			
 			//send message with registered types 
 			DtlTraders.info("Registered types: " + typesAsString());
 		} 
-		catch (TraderTypeRegistrationError e) 
+		catch (TraderTypeRegistrationException e) 
 		{
 			e.printStackTrace();
 		}
@@ -260,13 +258,13 @@ public class tNpcManager {
 	 * Registers the given class as a new type for use by this plugin. The class needs to have the tNpcType addnotation filled.
 	 * @param class1
 	 * Class to register
-	 * @throws TraderTypeRegistrationError
+	 * @throws TraderTypeRegistrationException
 	 * Thrown when the class does not have the tNpcType addnotation
 	 */
-	public static void registerType(Class<? extends tNpc> class1) throws TraderTypeRegistrationError
+	public static void registerType(Class<? extends tNpc> class1) throws TraderTypeRegistrationException
 	{
 		//check for addnotation
-		if ( !class1.isAnnotationPresent(tNpcType.class) ) throw new TraderTypeRegistrationError();
+		if ( !class1.isAnnotationPresent(tNpcType.class) ) throw new TraderTypeRegistrationException();
 		
 		//save the class
 		types.put(class1.getAnnotation(tNpcType.class), class1);

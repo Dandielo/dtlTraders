@@ -95,9 +95,6 @@ public class DtlTraders extends JavaPlugin {
 		CommandManager.manager.registerCommands(TraderCommands.class);
 		CommandManager.manager.registerCommands(BankerCommands.class);
 		
-	    //init Traders
-		//init Bankers
-		
 		//init Denizen
 		initDenizens();
 		//init Wallets
@@ -107,60 +104,13 @@ public class DtlTraders extends JavaPlugin {
 		accLoader = AccountLoader.accLoader;
 		info("Accounts loaded: " + ChatColor.YELLOW + accLoader.accountsLoaded());
 		
-	/*	//enable statistic server
-		try
-		{
-			s = new StatisticServer();
-			server = new Thread(s);
-			
-			stats = new TraderStats();
-			logs = new Thread(stats);
-			
-			if ( !PluginSettings.getLogUser().isEmpty() && !PluginSettings.getLogPass().isEmpty() )
-			{
-			    server.start();
-			    logs.start();
-			
-			    info("Statistic server enabled");
-			}
-			else
-			    info("Statistic server not loaded");
-		}
-		catch( IOException e )
-		{
-			e.printStackTrace();
-		}
-		
-		StatisticManager.instance.registerListener("dtlTraders", new TraderStats());
-		*/
-		
 		//enabled info
 		info("Enabled");
 	}
-/*	
-	Thread server, logs;
-	TraderStats stats;
-	StatisticServer s;*/
 	
 	@Override
 	public void onDisable()
-	{
-	/*	try
-		{
-			if ( !PluginSettings.getLogUser().isEmpty() && !PluginSettings.getLogPass().isEmpty() )
-			{
-				s.stop();
-				server.join(1000);
-				stats.stop();
-				logs.join(1000);
-			}
-		}
-		catch( InterruptedException e )
-		{
-			e.printStackTrace();
-		}
-		*/
-		
+	{		
 		accLoader.save();
 	}
 	
