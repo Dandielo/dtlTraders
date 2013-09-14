@@ -25,11 +25,8 @@
         </repository>
 		<repository>
 		    <name>Citizens2 repository</name>
-			<id>citi-repo</id>
+			<id>citizens-repo</id>
 			<url>http://repo.citizensnpcs.com/everything</url>
-			<snapshots>
-			    <checksumPolicy>ignore</checksumPolicy>
-			</snapshots>
 		</repository>
 		<repository>
 		    <name>Vault repository</name>
