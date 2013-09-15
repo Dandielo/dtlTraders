@@ -12,6 +12,7 @@ public abstract class Pattern {
 	protected Pattern(String name, Type type)
 	{
 		this.type = type;
+		this.name = name;
 	}
 	
 	public String getName()

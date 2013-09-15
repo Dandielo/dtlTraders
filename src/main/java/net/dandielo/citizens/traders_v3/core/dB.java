@@ -180,12 +180,12 @@ public class dB {
 			 return equals(INFO);
 		 }
 
-		 boolean showSpecific()
+		 boolean showSpecific(DebugLevel level)
 		 {
-			 switch(this)
+			 switch(level)
 			 {
-			 case S1_ADONDRIEL: return true;
-			 case S2_MAGIC_POWA: return true;
+			 case S1_ADONDRIEL: equals(S1_ADONDRIEL);//return true;
+			 case S2_MAGIC_POWA: equals(S2_MAGIC_POWA);//return true;
 			 default:
 				 break;
 			 }
@@ -215,7 +215,7 @@ public class dB {
 			default:
 				break;
 			 }
-			 return showSpecific();
+			 return showSpecific(level);
 		 }
 	}
 }
