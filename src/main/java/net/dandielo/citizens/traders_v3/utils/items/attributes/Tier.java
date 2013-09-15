@@ -8,7 +8,7 @@ import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeValu
 import net.dandielo.citizens.traders_v3.utils.items.Attribute;
 import net.dandielo.citizens.traders_v3.utils.items.ItemAttr;
 
-@Attribute(name="Tier", key = "t", priority = 25)
+@Attribute(name="Tier", key = "t", priority = 25, standalone = true)
 public class Tier extends ItemAttr {
 	private String tier;
 	

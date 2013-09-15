@@ -121,7 +121,7 @@ public class Price extends Pattern {
 		{
 			int temp = price.priorityMatch(item);
 			temp = temp < 0 ? temp : this.priority*1000 + temp;
-			
+
 			result.price(price.getPrice(), temp);
 			result.multiplier(price.getMultiplier(), temp);
 		}
@@ -130,7 +130,9 @@ public class Price extends Pattern {
 		for ( Map.Entry<String, Price> e : tiers.entrySet() )
 		{
 			if ( Perms.hasPerm(player, "dtl.trader.tiers." + e.getKey()) )
+			{
 			    result.merge(e.getValue().findPriceFor(player, stock, item));
+			}
 		}
 		
 		if ( item.hasPrice() )
