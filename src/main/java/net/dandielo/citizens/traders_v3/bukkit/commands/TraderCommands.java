@@ -1,5 +1,6 @@
 package net.dandielo.citizens.traders_v3.bukkit.commands;
 
+import java.util.Iterator;
 import java.util.Map;
 
 import org.bukkit.ChatColor;
@@ -635,7 +636,57 @@ public class TraderCommands {
 		}
 	}
 	
+	@Command(
+	name = "trader", syntax = "manage <trader>",
+	perm = "dtl.trader.commands.manage",
+	usage = "", desc = "", npc = false)
+	public void traderManage(DtlTraders plugin, Player sender, Trader trader, Map<String, String> args) throws TraderTypeNotFoundException, InvalidTraderTypeException
+	{
+		Iterator<NPC> it = CitizensAPI.getNPCRegistry().iterator();
+		NPC result = null;
+		while(it.hasNext() && result == null)
+		{
+			if ( !(result = it.next()).getName().equals(args.get("trader")) )
+			{
+				try
+				{
+				    if ( result.getId() != Integer.parseInt(args.get("trader")) )
+				    	result = null;
+				    
+				} catch( Exception e ) { }
+			}
+			
+			if ( result != null && !result.hasTrait(TraderTrait.class) )
+				result = null;
+		}
+		
+		if ( result == null ) 
+		{
+			locale.sendMessage(sender, "error-npc-invalid");
+			return;
+		}
+
+		//create a test Trader Npc
+		Trader nTrader = (Trader) tNpcManager.create_tNpc(result, result.getTrait(TraderTrait.class).getType(), sender, TraderTrait.class);
+		
+		//start with the unlocked status, to allow fast stock setting 
+		nTrader.parseStatus(tNpcStatus.MANAGE_SELL);
+		
+		//register the relation
+		tNpcManager.instance().registerRelation(sender, nTrader);
+		
+		//send messages
+		locale.sendMessage(sender, "trader-managermode-enabled", "npc", result.getName());
+	}
 	
+	@Command(
+	name = "trader", syntax = "open",
+	perm = "dtl.trader.commands.open",
+	usage = "", desc = "", npc = true)
+	public void traderOpen(DtlTraders plugin, Player sender, Trader trader, Map<String, String> args)
+	{
+		
+	}
 /*
 	@SerializableAs("dice")
 	static class Dice implements ConfigurationSerializable

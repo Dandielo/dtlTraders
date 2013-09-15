@@ -39,6 +39,7 @@ messages:
   wallet-withdraw-fail: '^6Is there enough money to withdraw from this wallet?'
   wallet-deposit-fail: 'You dont have enought money'
   denizen-item-hint: '{item}: {price}' #this one is valid
+  error-npc-invalid: '^6This NPC is not a trader'
   error-npc-not-selected: '^6You did not selected any trader'
   error-nopermission-creative: '^6You dont have permissions to do this while in ^3creative mode'
   error-nopermission-command: '^6You dont have permissions to use this command'
