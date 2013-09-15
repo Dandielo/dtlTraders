@@ -666,17 +666,29 @@ public class TraderCommands {
 			return;
 		}
 
-		//create a test Trader Npc
-		Trader nTrader = (Trader) tNpcManager.create_tNpc(result, result.getTrait(TraderTrait.class).getType(), sender, TraderTrait.class);
-		
-		//start with the unlocked status, to allow fast stock setting 
-		nTrader.parseStatus(tNpcStatus.MANAGE_SELL);
-		
-		//register the relation
-		tNpcManager.instance().registerRelation(sender, nTrader);
-		
-		//send messages
-		locale.sendMessage(sender, "trader-managermode-enabled", "npc", result.getName());
+		if ( !tNpcManager.instance().inRelation(sender) )
+		{
+			//create a test Trader Npc
+			Trader nTrader = (Trader) tNpcManager.create_tNpc(result, result.getTrait(TraderTrait.class).getType(), sender, TraderTrait.class);
+
+			//start with the unlocked status, to allow fast stock setting 
+			nTrader.parseStatus(tNpcStatus.MANAGE_SELL);
+
+			//register the relation
+			tNpcManager.instance().registerRelation(sender, nTrader);
+
+			//send messages
+			locale.sendMessage(sender, "trader-managermode-enabled", "npc", result.getName());
+		}
+		else
+		{
+			//remove the relation
+			tNpcManager.instance().removeRelation(sender);
+			sender.closeInventory();
+			
+			//send messages
+			locale.sendMessage(sender, "trader-managermode-disabled", "npc", result.getName());
+		}
 	}
 	
 	@Command(
