@@ -151,7 +151,9 @@ public class dB {
 	 */
 	public static enum DebugLevel
 	{
-		 NONE, FALSE, DISABLE, CRITICAL, HIGH, NORMAL, LOW, INFO, S1_ADONDRIEL;
+		 NONE, FALSE, DISABLE, CRITICAL, HIGH, NORMAL, LOW, INFO, 
+		 //specific levels
+		 S1_ADONDRIEL, S2_MAGIC_POWA;
 		 
 		 boolean showCritical()
 		 {
@@ -183,6 +185,7 @@ public class dB {
 			 switch(this)
 			 {
 			 case S1_ADONDRIEL: return true;
+			 case S2_MAGIC_POWA: return true;
 			 default:
 				 break;
 			 }

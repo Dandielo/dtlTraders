@@ -9,6 +9,8 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 import net.dandielo.citizens.traders_v3.bukkit.Perms;
+import net.dandielo.citizens.traders_v3.core.dB;
+import net.dandielo.citizens.traders_v3.core.dB.DebugLevel;
 import net.dandielo.citizens.traders_v3.traders.patterns.Pattern;
 import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
 
@@ -69,6 +71,9 @@ public class Price extends Pattern {
 
 						if ( tier ) stockItem.addAttr("t", getName());
 
+						//specific debug info
+						dB.spec(DebugLevel.S2_MAGIC_POWA, "Added \"", stockItem, "\" item to the sell category");
+						
 						sell.add(stockItem);
 					}
 				}
@@ -98,6 +103,8 @@ public class Price extends Pattern {
 							tiers.put(key, pattern);
 						}
 		}
+		dB.spec(DebugLevel.S2_MAGIC_POWA, "Added ", sell.size(), " items to the sell category");
+		dB.spec(DebugLevel.S2_MAGIC_POWA, "Added ", buy.size(), " items to the buy category");
 		this.items.put("sell", sell);
 		this.items.put("buy", buy);
 	}
@@ -133,6 +140,13 @@ public class Price extends Pattern {
 			{
 			    result.merge(e.getValue().findPriceFor(player, stock, item));
 			}
+		}
+		
+		if ( !tier )
+		{
+			dB.spec(DebugLevel.S2_MAGIC_POWA, "Matching result for item: ", item.toString());
+			dB.spec(DebugLevel.S2_MAGIC_POWA, "Price: ", result.finalPrice());
+			dB.spec(DebugLevel.S2_MAGIC_POWA, "Multiplier: ", result.data[1]);
 		}
 		
 		if ( item.hasPrice() )

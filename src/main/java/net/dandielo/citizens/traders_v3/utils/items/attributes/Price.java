@@ -5,6 +5,8 @@ import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 
+import net.dandielo.citizens.traders_v3.core.dB;
+import net.dandielo.citizens.traders_v3.core.dB.DebugLevel;
 import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeInvalidValueException;
 import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeValueNotFoundException;
 import net.dandielo.citizens.traders_v3.core.locale.LocaleManager;
@@ -53,6 +55,7 @@ public class Price extends ItemAttr {
 		}
 		catch(NumberFormatException e)
 		{
+			dB.spec(DebugLevel.S2_MAGIC_POWA, "A exception occured when parsing the price");
 			throw new AttributeInvalidValueException(getInfo(), data);
 		}
 	}
