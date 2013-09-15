@@ -49,18 +49,11 @@ public class Price extends ItemAttr {
 	{
 		try
 		{
-			price = Double.parseDouble(data.replace("", "."));
+			price = Double.parseDouble(data);
 		}
 		catch(NumberFormatException e)
 		{
-			try
-			{
-				price = Double.parseDouble(data.replace(".", ","));
-			}
-			catch(NumberFormatException ee)
-			{
-				throw new AttributeInvalidValueException(getInfo(), data);
-			}
+			throw new AttributeInvalidValueException(getInfo(), data);
 		}
 	}
 
