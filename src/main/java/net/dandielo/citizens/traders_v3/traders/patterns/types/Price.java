@@ -119,7 +119,9 @@ public class Price extends Pattern {
 		//override with current
 		for ( StockItem price : items.get(stock) )
 		{
-			int temp = this.priority*1000 + price.priorityMatch(item);
+			int temp = price.priorityMatch(item);
+			temp = temp < 0 ? temp : this.priority*1000 + temp;
+			
 			result.price(price.getPrice(), temp);
 			result.multiplier(price.getMultiplier(), temp);
 		}

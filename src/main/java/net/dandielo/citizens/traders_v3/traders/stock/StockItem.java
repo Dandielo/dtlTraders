@@ -108,6 +108,10 @@ public final class StockItem extends tNpcItem {
 		//Reset all attributes
 		resetAttr();
 		
+		//add data check flag if data was set for an item by hand
+		if ( itemData[0].contains(":") )
+			addFlag(".dc");
+		
 		//load the regex matcher
 		Matcher matcher = RegexMatcher.instance().getMatcher("item", itemData[1]);
 
@@ -856,14 +860,14 @@ public final class StockItem extends tNpcItem {
 					 this.item.getDurability() == that.item.getDurability() )
 					priority += 140;
 				else
-					priority = -1;
+					priority = -2;
 			}
 			else
 			{
-				if ( this.item.getDurability() == that.item.getDurability() )
+				if ( this.item.getTypeId() == 0 && this.item.getDurability() == that.item.getDurability() )
 					priority += 120;
 				else
-					priority = -1;
+					priority = -2;
 			}
 		}
 		else
@@ -871,14 +875,19 @@ public final class StockItem extends tNpcItem {
 			if ( this.item.getTypeId() != 0 )
 			{
 				if ( this.item.getTypeId() == that.item.getTypeId() )
+				{
 					priority = 130;
-				else
-					priority = -1;
+				}
+				else priority = -2;
 			}
+			else
+			    priority = 0;
 		}
 
+		if ( attributeMissmatch(that) ) return -2;
+		
 		//now a if block to not make thousands of not needed checks 
-		if ( priority == -1 ) return priority;
+		if ( priority < 0 ) return priority;
 
 		//for each attribute in this item
 		for ( ItemAttr tAttr : attr.values() )

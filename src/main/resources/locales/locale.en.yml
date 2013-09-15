@@ -127,7 +127,7 @@ ui:
   item-sell:
     lore:
     - '^6Click to buy this item'
-  item-sell:
+  item-buy:
     lore:
     - '^6Click on this item in'
     - '^6your inventory to sell it'
