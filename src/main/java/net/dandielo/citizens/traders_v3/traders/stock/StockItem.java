@@ -9,6 +9,7 @@ import java.util.regex.Matcher;
 import net.dandielo.citizens.traders_v3.tNpcItem;
 import net.dandielo.citizens.traders_v3.tNpcStatus;
 import net.dandielo.citizens.traders_v3.core.dB;
+import net.dandielo.citizens.traders_v3.core.dB.DebugLevel;
 import net.dandielo.citizens.traders_v3.core.exceptions.InvalidItemException;
 import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeInvalidClassException;
 import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeInvalidValueException;
@@ -290,7 +291,7 @@ public final class StockItem extends tNpcItem {
 	{
 		try
 		{
-			ItemFlag flag = ItemFlag.initFlag(this, key);
+			ItemFlag flag = ItemFlag.initFlag(this, key.toLowerCase());
 			flags.put(flag.getClass(), flag);
 		} 
 		catch (Exception e)
@@ -345,10 +346,12 @@ public final class StockItem extends tNpcItem {
 	@SuppressWarnings("null")
 	public void addAttr(String key, String value)
 	{
+		dB.spec(DebugLevel.S2_MAGIC_POWA, "Attribute: ", key, " | ", value);
+	
 		ItemAttr itemAttr = null;
 		try
 		{
-			itemAttr = ItemAttr.initAttribute(this, key, value);
+			itemAttr = ItemAttr.initAttribute(this, key.toLowerCase(), value);
 			
 			//2.x compatibility fix
 			if ( itemAttr.getKey().equals("d") && !ItemUtils.itemHasDurability(item) )
