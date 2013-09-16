@@ -184,8 +184,8 @@ public class dB {
 		 {
 			 switch(level)
 			 {
-			 case S1_ADONDRIEL: equals(S1_ADONDRIEL);//return true;
-			 case S2_MAGIC_POWA: equals(S2_MAGIC_POWA);//return true;
+			 case S1_ADONDRIEL: return equals(S1_ADONDRIEL);//return true;
+			 case S2_MAGIC_POWA: return equals(S2_MAGIC_POWA);//return true;
 			 default:
 				 break;
 			 }
