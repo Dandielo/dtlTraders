@@ -693,7 +693,7 @@ public final class StockItem extends tNpcItem {
 		return containsAll;
 	}
 	
-	private boolean priorityStandaloneAttrCheck(StockItem item)
+	private boolean patternStandaloneAttrCheck(StockItem item)
 	{
 		boolean containsAll = true;
 		for ( ItemAttr key : this.attr.values() )
@@ -701,7 +701,7 @@ public final class StockItem extends tNpcItem {
 		return containsAll;
 	}
 	
-	private boolean priorityStandaloneFlagCheck(StockItem item)
+	private boolean patternStandaloneFlagCheck(StockItem item)
 	{
 		boolean containsAll = true;
 		for ( ItemFlag key : this.flags.values() )
@@ -709,9 +709,9 @@ public final class StockItem extends tNpcItem {
 		return containsAll;
 	}
 
-	private boolean priorityAttributeMissmatch(StockItem item)
+	private boolean patternAttributeMissmatch(StockItem item)
 	{
-		return !(priorityStandaloneAttrCheck(item) && priorityStandaloneFlagCheck(item));
+		return !(patternStandaloneAttrCheck(item) && patternStandaloneFlagCheck(item));
 	}
 	private boolean attributeMissmatch(StockItem item)
 	{
@@ -904,7 +904,7 @@ public final class StockItem extends tNpcItem {
 			    priority = 0;
 		}
 
-		if ( priorityAttributeMissmatch(that) ) return -2;
+		if ( patternAttributeMissmatch(that) ) return -2;
 		
 		//now a if block to not make thousands of not needed checks 
 		if ( priority < 0 ) return priority;

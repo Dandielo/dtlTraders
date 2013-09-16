@@ -14,6 +14,7 @@ import net.dandielo.citizens.traders_v3.core.PluginSettings;
 import net.dandielo.citizens.traders_v3.core.locale.LocaleManager;
 import net.dandielo.citizens.traders_v3.utils.ItemUtils;
 
+@SuppressWarnings("deprecation")
 public class TGlobalSettings extends PluginSettings {
 	//the trader soncig section
 	protected static ConfigurationSection tConfig;
@@ -24,8 +25,8 @@ public class TGlobalSettings extends PluginSettings {
 	//manage settings
 	protected static Map<ItemStack, Double> specialBlocks = new HashMap<ItemStack, Double>();
 	protected static String mmStockStart;
-	protected static ItemStack mmItemToggle; //TODO
-	protected static boolean mmRightToggle; //TODO
+	protected static ItemStack mmItemToggle; 
+	protected static boolean mmRightToggle; 
 
 	//stock settings
 	protected static int stockSize;

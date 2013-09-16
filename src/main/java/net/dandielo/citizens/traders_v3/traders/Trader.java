@@ -34,6 +34,7 @@ import net.dandielo.citizens.traders_v3.utils.ItemUtils;
 import net.dandielo.citizens.traders_v3.utils.NBTUtils;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Price;
 
+@SuppressWarnings("deprecation")
 public abstract class Trader implements tNpc {
 	
 	/**

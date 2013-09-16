@@ -6,6 +6,7 @@ import org.bukkit.inventory.ItemStack;
 import net.dandielo.citizens.traders_v3.bankers.tabs.BankItem;
 import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
 
+@SuppressWarnings("deprecation")
 public class ItemUtils {
 
 	//durability check
