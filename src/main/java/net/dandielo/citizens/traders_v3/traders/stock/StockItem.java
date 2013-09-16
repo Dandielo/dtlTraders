@@ -693,6 +693,26 @@ public final class StockItem extends tNpcItem {
 		return containsAll;
 	}
 	
+	private boolean priorityStandaloneAttrCheck(StockItem item)
+	{
+		boolean containsAll = true;
+		for ( ItemAttr key : this.attr.values() )
+			containsAll = containsAll && !key.getInfo().standalone() ? item.attr.containsKey(key.getClass()) : containsAll;
+		return containsAll;
+	}
+	
+	private boolean priorityStandaloneFlagCheck(StockItem item)
+	{
+		boolean containsAll = true;
+		for ( ItemFlag key : this.flags.values() )
+			containsAll = containsAll && !key.getInfo().standalone() ? item.flags.containsKey(key.getClass()) : containsAll;
+		return containsAll;
+	}
+
+	private boolean priorityAttributeMissmatch(StockItem item)
+	{
+		return !(priorityStandaloneAttrCheck(item) && priorityStandaloneFlagCheck(item));
+	}
 	private boolean attributeMissmatch(StockItem item)
 	{
 		return !(standaloneAttrCheck(item) && standaloneFlagCheck(item));
@@ -884,7 +904,7 @@ public final class StockItem extends tNpcItem {
 			    priority = 0;
 		}
 
-		if ( attributeMissmatch(that) ) return -2;
+		if ( priorityAttributeMissmatch(that) ) return -2;
 		
 		//now a if block to not make thousands of not needed checks 
 		if ( priority < 0 ) return priority;
