@@ -45,9 +45,9 @@ public class StockPlayer extends StockTrader {
 		{
 			if (  item.getSlot() < 0 )
 				item.setSlot(inventory.firstEmpty());
-
+			
 			//set the lore
-			ItemStack itemStack = item.getItem();
+			ItemStack itemStack = item.getItem(false);
 			ItemMeta meta = itemStack.getItemMeta();
 			
 			List<String> lore = item.getTempLore(status, itemStack.clone());
@@ -74,7 +74,7 @@ public class StockPlayer extends StockTrader {
 		for ( Integer amount : item.getAmounts() )
 		{
 			//set new amount
-			ItemStack itemStack = item.getItem();
+			ItemStack itemStack = item.getItem(false);
 			itemStack.setAmount(amount);
 
 			//set the lore

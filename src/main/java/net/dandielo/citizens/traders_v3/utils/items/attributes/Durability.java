@@ -38,7 +38,7 @@ public class Durability extends ItemAttr
 			if ( data.endsWith("%") )
 			{
 				durabilityPercent = Integer.parseInt(data.substring(0, data.length() - 1)) / 100.0;
-				durability = (short) (item.getItem().getType().getMaxDurability() * durabilityPercent);
+				durability = (short) (item.getItem(false).getType().getMaxDurability() * durabilityPercent);
 			}
 			else
 			{

@@ -165,7 +165,7 @@ public class StockTrader extends Stock {
 				item.setSlot(inventory.firstEmpty());
 
 			//set the lore
-			ItemStack itemStack = item.getItem();
+			ItemStack itemStack = item.getItem(false);
 			ItemMeta meta = itemStack.getItemMeta();
 			meta.setLore(item.getTempLore(status, itemStack.clone()));
 			itemStack.setItemMeta(meta);
@@ -186,7 +186,7 @@ public class StockTrader extends Stock {
 		for ( Integer amount : item.getAmounts() )
 		{
 			//set new amount
-			ItemStack itemStack = item.getItem();
+			ItemStack itemStack = item.getItem(false);
 			itemStack.setAmount(amount);
 			
 			//set the lore
@@ -213,7 +213,7 @@ public class StockTrader extends Stock {
 				item.setSlot(inventory.firstEmpty());
 
 			//set the lore
-			ItemStack itemStack = item.getItem();
+			ItemStack itemStack = item.getItem(false);
 			ItemMeta meta = itemStack.getItemMeta();
 			meta.setLore(item.getTempLore(status, itemStack.clone()));
 			itemStack.setItemMeta(meta);

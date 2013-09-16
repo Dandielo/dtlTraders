@@ -34,7 +34,7 @@ import org.bukkit.inventory.ItemStack;
  * @author dandielo
  */
 @SuppressWarnings({"deprecation"})
-public final class StockItem extends tNpcItem {
+public final class StockItem {
 	/**
 	 * Pattern used for loading data form strings
 	 */
@@ -432,10 +432,11 @@ public final class StockItem extends tNpcItem {
 	}
 	
 	/**
+	 * @param inStock tells the onAssign method if the item is going to be displayed in the traders stock or if it's the users new End-Item
 	 * @return
 	 *     a Item Stack item with all attributes and flag data assigned to it.
 	 */
-	public ItemStack getItem()
+	public ItemStack getItem(boolean endItem)
 	{
 		//clone the "clean" item
 		ItemStack clone = this.item.clone();
@@ -446,7 +447,7 @@ public final class StockItem extends tNpcItem {
 			try 
 			{
 				//try assign the attribute
-			    itemAttr.onAssign(clone);
+			    itemAttr.onAssign(clone, endItem);
 			} 
 			catch (InvalidItemException e)
 			{

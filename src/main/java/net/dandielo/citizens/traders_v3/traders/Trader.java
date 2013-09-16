@@ -397,7 +397,7 @@ public abstract class Trader implements tNpc {
 			if ( bItem != null && !stock.isUiSlot(slot) )
 			{
 				//to stock item
-				StockItem sItem = ItemUtils.createStockItem(bItem);
+				StockItem sItem = ItemUtils.createAbstractStockItem(bItem);
 				
 				StockItem matchedItem = null;
 				//match old items to persist item data
@@ -460,7 +460,7 @@ public abstract class Trader implements tNpc {
 	{
 		//debug info
 		dB.info("Checking players inventory space");
-		dB.info("Player: ", player.getName(), ", item: ", selectedItem.getItem().getType().name().toLowerCase());
+		dB.info("Player: ", player.getName(), ", item: ", selectedItem.getItem(false).getType().name().toLowerCase());
 				
 		return _inventoryHasPlace(selectedItem.getAmount(slot));
 	}
@@ -483,7 +483,7 @@ public abstract class Trader implements tNpc {
 		int amountLeft = amount;
 		
 		//get all item stack with the same type
-		for ( ItemStack item : inventory.all(selectedItem.getItem().getType()).values() )
+		for ( ItemStack item : inventory.all(selectedItem.getItem(false).getType()).values() )
 		{
 			if ( selectedItem.equalsWeak(ItemUtils.createStockItem(item)) )
 			{
@@ -521,7 +521,7 @@ public abstract class Trader implements tNpc {
 	{
 		//debug info
 		dB.info("Adding item to players inventory");
-		dB.info("Player: ", player.getName(), ", item: ", selectedItem.getItem().getType().name().toLowerCase());
+		dB.info("Player: ", player.getName(), ", item: ", selectedItem.getItem(false).getType().name().toLowerCase());
 		
 		//adds the item to the "eventInventory" 
 		return _addToInventory(selectedItem.getAmount(slot));
@@ -538,7 +538,7 @@ public abstract class Trader implements tNpc {
 		PlayerInventory inventory = player.getInventory();
 		int amountLeft = amount;
 
-		for ( ItemStack item : inventory.all(selectedItem.getItem().getType()).values() ) 
+		for ( ItemStack item : inventory.all(selectedItem.getItem(false).getType()).values() ) 
 		{
 			if ( selectedItem.equalsWeak(ItemUtils.createStockItem(item)) )
 			{
@@ -565,7 +565,7 @@ public abstract class Trader implements tNpc {
 		{
 			
 			//new stack
-			ItemStack is = selectedItem.getItem();
+			ItemStack is = selectedItem.getItem(true);
 			is.setAmount(amountLeft);
 			
 			//set the item info the inv
@@ -597,7 +597,7 @@ public abstract class Trader implements tNpc {
 	{
 		//debug info
 		dB.info("Removing item from players inventory");
-		dB.info("Player: ", player.getName(), ", item: ", selectedItem.getItem().getType().name().toLowerCase());
+		dB.info("Player: ", player.getName(), ", item: ", selectedItem.getItem(false).getType().name().toLowerCase());
 				
 		//removes from the event inventory
 		_removeFromInventory(slot, selectedItem.getAmount(0) * scale);
@@ -750,7 +750,7 @@ public abstract class Trader implements tNpc {
 	 */
 	protected boolean selectAndCheckItem(ItemStack item, String bStock)
 	{
-		return (selectedItem = item != null && item.getTypeId() != 0 ? stock.getItem(ItemUtils.createStockItem(item), bStock) : null ) != null;
+		return (selectedItem = item != null && item.getTypeId() != 0 ? stock.getItem(ItemUtils.createAbstractStockItem(item), bStock) : null ) != null;
 	}
 	
 	/** 

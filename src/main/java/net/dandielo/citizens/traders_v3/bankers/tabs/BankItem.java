@@ -236,17 +236,13 @@ public final class BankItem extends tNpcItem {
 		Lore lore = null;
 		try 
 		{
-			lore = (Lore) ItemFlag.initFlag(this, ".lore");
+			//lore = (Lore) ItemFlag.initFlag(this, ".lore");
 			lore.onFactorize(item);
 			flags.put(lore.getClass(), lore);
 		}
 		catch (AttributeValueNotFoundException e)
 		{
 			this.debugMsgValue(lore != null ? lore.getInfo() : null, "factorized");
-		}
-		catch (AttributeInvalidClassException e) 
-		{
-			this.debugMsgClass(".lore");
 		} 
 		
 	}
@@ -283,8 +279,8 @@ public final class BankItem extends tNpcItem {
 	{
 		try
 		{
-			ItemFlag flag = ItemFlag.initFlag(this, key);
-			flags.put(flag.getClass(), flag);
+		//	ItemFlag flag = ItemFlag.initFlag(this, key);
+		//	flags.put(flag.getClass(), flag);
 		} 
 		catch (Exception e)
 		{
@@ -339,25 +335,14 @@ public final class BankItem extends tNpcItem {
 	public void addAttr(String key, String value)
 	{
 		ItemAttr itemAttr = null;
-		try
+		//itemAttr = ItemAttr.initAttribute(this, key, value);
+		//if ( itemAttr != null )
+		//    this.attr.put(itemAttr.getClass(), itemAttr);
+		//else
 		{
-			itemAttr = ItemAttr.initAttribute(this, key, value);
-			if ( itemAttr != null )
-			    this.attr.put(itemAttr.getClass(), itemAttr);
-			else
-			{
-				//debug message that this key does not exists
-				dB.high("The given key is not registered, skipping...");
-				dB.high("key: ", key);
-			}
-		} 
-		catch (AttributeInvalidClassException e) 
-		{
-			debugMsgClass(key);
-		} 
-		catch (AttributeInvalidValueException e)
-		{
-			debugMsgValue(itemAttr.getInfo(), value);
+			//debug message that this key does not exists
+			dB.high("The given key is not registered, skipping...");
+			dB.high("key: ", key);
 		}
 	}
 
@@ -375,7 +360,7 @@ public final class BankItem extends tNpcItem {
 		T itemAttr = null;
 		try
 		{
-			itemAttr = ItemAttr.initAttribute(this, clazz);
+		//	itemAttr = ItemAttr.initAttribute(this, clazz);
 			this.attr.put(clazz, itemAttr);
 		} 
 		catch (Exception e)

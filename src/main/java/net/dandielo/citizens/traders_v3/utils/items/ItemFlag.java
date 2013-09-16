@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.dandielo.citizens.traders_v3.tNpcItem;
 import net.dandielo.citizens.traders_v3.tNpcStatus;
 import net.dandielo.citizens.traders_v3.bukkit.DtlTraders;
 import net.dandielo.citizens.traders_v3.core.dB;
@@ -15,6 +14,8 @@ import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeInva
 import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeInvalidValueException;
 import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeValueNotFoundException;
 import net.dandielo.citizens.traders_v3.core.tools.StringTools;
+import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
+import net.dandielo.citizens.traders_v3.utils.items.flags.Abstract;
 import net.dandielo.citizens.traders_v3.utils.items.flags.DataCheck;
 import net.dandielo.citizens.traders_v3.utils.items.flags.Lore;
 import net.dandielo.citizens.traders_v3.utils.items.flags.NoStack;
@@ -45,7 +46,7 @@ public abstract class ItemFlag {
 	/**
 	 * The item associated with the attribute
 	 */
-	protected tNpcItem item;
+	protected StockItem item;
 	
 	/**
 	 * default constructor (needs a key)
@@ -202,7 +203,7 @@ public abstract class ItemFlag {
 	
 	/**
 	 * Creates a flag based on the key. 
-	 * @param item
+	 * @param stockItem
 	 *     The item associated with the flag
 	 * @param key
 	 *     The flag key, this is the unique key for each flag.
@@ -211,7 +212,7 @@ public abstract class ItemFlag {
 	 * @throws AttributeInvalidClassException 
 	 * @throws AttributeInvalidValueException 
 	 */
-	public static ItemFlag initFlag(tNpcItem item, String key) throws AttributeInvalidClassException
+	public static ItemFlag initFlag(StockItem stockItem, String key) throws AttributeInvalidClassException
 	{
 		//Search for the attribute
 		Attribute attr = null;
@@ -227,7 +228,7 @@ public abstract class ItemFlag {
 			//get the attribute declaring class
 			ItemFlag itemflag = flags.get(attr).getConstructor(String.class).newInstance(key);
 			//assoc the item
-			itemflag.item = item;
+			itemflag.item = stockItem;
 			//assigning attribute information
 			itemflag.info = attr;
 			//returning the initialized attribute
@@ -293,6 +294,7 @@ public abstract class ItemFlag {
 		{
 			registerFlag(StackPrice.class);
 			registerFlag(DataCheck.class);
+			registerFlag(Abstract.class);
 			registerFlag(NoStack.class);
 			registerFlag(Splash.class);
 			registerFlag(Lore.class);

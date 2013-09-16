@@ -15,6 +15,7 @@ import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeInva
 import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeValueNotFoundException;
 import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeInvalidValueException;
 import net.dandielo.citizens.traders_v3.core.tools.StringTools;
+import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Amount;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Book;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Durability;
@@ -54,7 +55,7 @@ public abstract class ItemAttr {
 	/**
 	 * The item associated with the attribute
 	 */
-	protected tNpcItem item;
+	protected StockItem item;
 
 	/**
 	 * default constructor (needs a key)
@@ -84,9 +85,25 @@ public abstract class ItemAttr {
 	 * Called when the given item needs attributes re-set
 	 * @param item
 	 *     The item for which we set the attribute values
+	 * @param endItem 
+	 *     tells the method if the item is just displayed in the traders inventory or if it's the users end-item he bought  
 	 * @throws InvalidItemException
 	 */
-	public abstract void onAssign(ItemStack item) throws InvalidItemException; 
+	public void onAssign(ItemStack item, boolean endItem) throws InvalidItemException
+	{
+		//JUST DO NOTHING IF NOT NEEDED
+	}
+
+	/**
+	 * Called when the given item needs attributes re-set. This method is called as a end-user item assigning method.
+	 * @param item
+	 *     The item for which we set the attribute values
+	 * @throws InvalidItemException
+	 */
+	public void onAssign(ItemStack item) throws InvalidItemException
+	{
+		onAssign(item, true);
+	}
 
 	/**
 	 * Called when trying to get attribute data information from the given item. If no valid data for this attribute is found then it throws an exception.
@@ -279,7 +296,7 @@ public abstract class ItemAttr {
 	 * @throws AttributeInvalidClassException 
 	 * @throws AttributeInvalidValueException 
 	 */
-	public static <T extends ItemAttr> T initAttribute(tNpcItem item, Class<T> clazz) throws AttributeInvalidClassException, AttributeInvalidValueException
+	public static <T extends ItemAttr> T initAttribute(StockItem item, Class<T> clazz) throws AttributeInvalidClassException, AttributeInvalidValueException
 	{
 		Attribute attr = clazz.getAnnotation(Attribute.class);
 		try 
@@ -331,7 +348,7 @@ public abstract class ItemAttr {
 
 	/**
 	 * Creates a attribute based on the key. If a attribute is found it will call the <i><b>onLoad</b></i> method with the given <b>value</b>.
-	 * @param item
+	 * @param stockItem
 	 *     The item associated with the flag
 	 * @param key
 	 *     The attribute key, this is the unique key for each attribute.
@@ -342,7 +359,7 @@ public abstract class ItemAttr {
 	 * @throws AttributeInvalidClassException 
 	 * @throws AttributeInvalidValueException 
 	 */
-	public static ItemAttr initAttribute(tNpcItem item, String key, String value) throws AttributeInvalidClassException, AttributeInvalidValueException
+	public static ItemAttr initAttribute(StockItem stockItem, String key, String value) throws AttributeInvalidClassException, AttributeInvalidValueException
 	{
 		//Search for the attribute
 		Attribute attr = null;
@@ -361,7 +378,7 @@ public abstract class ItemAttr {
 			//get the attribute declaring class
 			ItemAttr itemAttr = attributes.get(attr).getConstructor(String.class).newInstance(key);
 			//assoc the item
-			itemAttr.item = item;
+			itemAttr.item = stockItem;
 			//calling the onLoad method
 			itemAttr.onLoad(value);
 			//assigning attribute information

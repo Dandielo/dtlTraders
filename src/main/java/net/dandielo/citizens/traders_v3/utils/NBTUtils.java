@@ -356,6 +356,6 @@ public class NBTUtils {
 	{
 	//	System.out.print(i.getAmount());
 	//	System.out.print(ItemUtils.createStockItem(i).getItem().getAmount());
-		return ItemUtils.createStockItem(i).getItem();
+		return ItemUtils.createStockItem(i).getItem(true);
 	}
 }

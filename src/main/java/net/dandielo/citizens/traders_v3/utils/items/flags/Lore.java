@@ -44,7 +44,7 @@ public class Lore extends ItemFlag {
 	}
 	
 	public void onFactorize(ItemStack item) throws AttributeValueNotFoundException
-	{
+	{	
 		if ( !item.getItemMeta().hasLore() )
 			throw new AttributeValueNotFoundException();
 		
@@ -60,6 +60,12 @@ public class Lore extends ItemFlag {
 		return lore;
 	}
 	
+	//this should be always 0 to be assigned first
+	@Override
+	public int hashCode()
+	{
+		return 0;
+	}
 	
 	@Override
 	public boolean equalsStrong(ItemFlag o)

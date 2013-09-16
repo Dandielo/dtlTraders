@@ -5,6 +5,7 @@ import org.bukkit.inventory.ItemStack;
 
 import net.dandielo.citizens.traders_v3.bankers.tabs.BankItem;
 import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
+import net.dandielo.citizens.traders_v3.utils.items.flags.Abstract;
 
 @SuppressWarnings("deprecation")
 public class ItemUtils {
@@ -20,6 +21,18 @@ public class ItemUtils {
 	{
 		//creating a clean item
 		StockItem sItem = new StockItem(vItem);
+		//getting data out of it (by force ;>)
+		sItem.factorize(vItem);
+		//returning the item
+		return sItem;
+	}
+
+	public static StockItem createAbstractStockItem(ItemStack vItem)
+	{
+		//creating a clean item
+		StockItem sItem = new StockItem(vItem);
+		//set the item as abstract
+		sItem.addFlag(".abstract");
 		//getting data out of it (by force ;>)
 		sItem.factorize(vItem);
 		//returning the item
