@@ -13,23 +13,37 @@ commands:
     aliases: dbanker
     description: Dtl - Banker commands
 permissions:
-  dtl.trader.bypass.creative:
+  dtl.trader.*:
     default: op
-  dtl.banker.bypass.creative:
-    default: op
+    children:
+      dtl.trader.use: true
+      dtl.trader.buy: true
+      dtl.trader.sell: true
+      dtl.trader.manage: true
+      dtl.trader.bypass.*: true
+      dtl.trader.commands.*: true
   dtl.trader.commands.*:
     default: op
-  dtl.trader.manage:
+    children:
+      dtl.trader.commands.open: true
+      dtl.trader.commands.reset: true
+      dtl.trader.commands.manage: true
+      dtl.trader.commands.wallet: true
+      dtl.trader.commands.create: true
+      dtl.trader.commands.pattern: true
+      dtl.trader.commands.buyprice: true
+      dtl.trader.commands.stockname: true
+      dtl.trader.commands.stocksize: true
+      dtl.trader.commands.sellprice: true
+      dtl.trader.commands.startstock: true
+  dtl.trader.bypass.*:
     default: op
-  dtl.trader.use:
+    children:
+      dtl.trader.bypass.creative: true
+  dtl.trader.default:
     default: true
-  dtl.trader.sell:
-    default: true
-  dtl.trader.buy:
-    default: true
-  dtl.banker.commands.*:
-    default: op
-  dtl.banker.commands.tabname:
-    default: true
-  dtl.banker.use:
-    default: true
+    children:
+      dtl.trader.use: true
+      dtl.trader.buy: true
+      dtl.trader.sell: true
+      dtl.trader.manage: false
