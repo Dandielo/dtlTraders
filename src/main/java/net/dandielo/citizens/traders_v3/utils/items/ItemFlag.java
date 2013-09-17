@@ -68,7 +68,7 @@ public abstract class ItemFlag {
 	 */
 	public void onAssign(ItemStack item, boolean endItem) throws InvalidItemException
 	{
-		//DO NOTHING IF NOT NEEDED!
+		onAssign(item);
 	}
 
 
@@ -80,7 +80,7 @@ public abstract class ItemFlag {
 	 */
 	public void onAssign(ItemStack item) throws InvalidItemException
 	{
-		onAssign(item, true);
+		//DO NOTHING IF NOT NEEDED!
 	}
 	
 	/**
@@ -213,7 +213,7 @@ public abstract class ItemFlag {
 		Attribute attr = clazz.getAnnotation(Attribute.class);
 
 		//debug low
-		dB.low("Registering flag \'", ChatColor.GREEN, attr.name(), ChatColor.RESET, "\' with key: ", attr.key());
+		dB.critical("Registering flag \'", ChatColor.GREEN, attr.name(), ChatColor.RESET, "\' with key: ", attr.key());
 		
 		flags.put(attr, clazz);
 	}

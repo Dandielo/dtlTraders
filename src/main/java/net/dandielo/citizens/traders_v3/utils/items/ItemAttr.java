@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.dandielo.citizens.traders_v3.tNpcItem;
 import net.dandielo.citizens.traders_v3.tNpcStatus;
 import net.dandielo.citizens.traders_v3.bukkit.DtlTraders;
 import net.dandielo.citizens.traders_v3.core.dB;
@@ -91,7 +90,7 @@ public abstract class ItemAttr {
 	 */
 	public void onAssign(ItemStack item, boolean endItem) throws InvalidItemException
 	{
-		//JUST DO NOTHING IF NOT NEEDED
+		onAssign(item);
 	}
 
 	/**
@@ -102,7 +101,7 @@ public abstract class ItemAttr {
 	 */
 	public void onAssign(ItemStack item) throws InvalidItemException
 	{
-		onAssign(item, true);
+		//DO NOTHING IF NOT NEEDED!
 	}
 
 	/**
