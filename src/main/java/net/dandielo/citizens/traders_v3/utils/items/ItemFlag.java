@@ -213,7 +213,7 @@ public abstract class ItemFlag {
 		Attribute attr = clazz.getAnnotation(Attribute.class);
 
 		//debug low
-		dB.critical("Registering flag \'", ChatColor.GREEN, attr.name(), ChatColor.RESET, "\' with key: ", attr.key());
+		dB.low("Registering flag \'", ChatColor.GREEN, attr.name(), ChatColor.RESET, "\' with key: ", attr.key());
 		
 		flags.put(attr, clazz);
 	}
