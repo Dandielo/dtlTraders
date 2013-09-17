@@ -62,9 +62,26 @@ public abstract class ItemFlag {
 	 * Called when the given item needs flags re-set
 	 * @param item
 	 *     The item for which we set the flag values
+	 * @param endItem 
+	 *     tells the method if the item is just displayed in the traders inventory or if it's the users end-item he bought
 	 * @throws InvalidItemException
 	 */
-	public abstract void onAssign(ItemStack item) throws InvalidItemException; 
+	public void onAssign(ItemStack item, boolean endItem) throws InvalidItemException
+	{
+		//DO NOTHING IF NOT NEEDED!
+	}
+
+
+	/**
+	 * Called when the given item needs flags re-set. This method is called as a end-user item assigning method.
+	 * @param item
+	 *     The item for which we set the attribute values 
+	 * @throws InvalidItemException
+	 */
+	public void onAssign(ItemStack item) throws InvalidItemException
+	{
+		onAssign(item, true);
+	}
 	
 	/**
 	 * Called when a status lore request is send for the given status set in the flags information.
@@ -298,8 +315,6 @@ public abstract class ItemFlag {
 			registerFlag(NoStack.class);
 			registerFlag(Splash.class);
 			registerFlag(Lore.class);
-		//	registerFlag(Price.class);
-		//	registerFlag(Slot.class);
 			
 			DtlTraders.info("Registered core flags: " + flagsAsString());
 		} 

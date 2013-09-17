@@ -460,7 +460,7 @@ public final class StockItem {
 			try 
 			{
 				//try assign the flag
-				flag.onAssign(clone);
+				flag.onAssign(clone, endItem);
 			} 
 			catch (InvalidItemException e)
 			{
