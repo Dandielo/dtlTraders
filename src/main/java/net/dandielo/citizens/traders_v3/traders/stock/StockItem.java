@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 
-import net.dandielo.citizens.traders_v3.tNpcItem;
 import net.dandielo.citizens.traders_v3.tNpcStatus;
 import net.dandielo.citizens.traders_v3.core.dB;
 import net.dandielo.citizens.traders_v3.core.dB.DebugLevel;
@@ -214,6 +213,7 @@ public final class StockItem {
 		{
 			try 
 			{
+				iAttr.setItem(this);
 				iAttr.onFactorize(item);
 				attr.put(iAttr.getClass(), iAttr);
 			}
@@ -228,6 +228,7 @@ public final class StockItem {
 		{
 			try 
 			{
+				iFlag.setItem(this);
 				iFlag.onFactorize(item);
 				flags.put(iFlag.getClass(), iFlag);
 			}

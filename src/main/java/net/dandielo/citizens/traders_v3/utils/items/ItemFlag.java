@@ -134,6 +134,14 @@ public abstract class ItemFlag {
 	}
 	
 	/**
+	 * Sets the stock item for this item flag
+	 */
+	public void setItem(StockItem item)
+	{
+		this.item = item;
+	}
+	
+	/**
 	 * @return returns the flags save string.
 	 */
 	@Override

@@ -160,6 +160,14 @@ public abstract class ItemAttr {
 	{
 		return info;
 	}
+	
+	/**
+	 * Sets the stock item for this item attribute
+	 */
+	public void setItem(StockItem item)
+	{
+		this.item = item;
+	}
 
 	/**
 	 * @return returns the attributes save string.
