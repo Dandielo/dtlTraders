@@ -9,7 +9,7 @@ import net.dandielo.citizens.traders_v3.utils.items.ItemFlag;
  * This flag is added to an item if it's generated only for a small amount of time 
  * or if it's owned only by a trader
  */
-@Attribute(name="Abstract", key = ".abstract")
+@Attribute(name="Abstract", key = ".abstract", standalone = true)
 public class Abstract extends ItemFlag {
 
 	public Abstract(String key)
