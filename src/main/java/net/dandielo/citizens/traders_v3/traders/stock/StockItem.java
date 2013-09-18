@@ -279,8 +279,6 @@ public final class StockItem {
 	 */
 	public boolean hasFlag(Class<? extends ItemFlag> clazz)
 	{
-		dB.critical(clazz.getName());
-		dB.critical(flags.containsKey(clazz));
 		return flags.containsKey(clazz);
 	}
 	
@@ -454,6 +452,10 @@ public final class StockItem {
 	{
 		//clone the "clean" item
 		ItemStack clone = this.item.clone();
+
+		//add the lore as the first one
+		if ( flags.containsKey(Lore.class) )
+			try { flags.get(Lore.class).onAssign(clone, endItem); } catch(Exception e) { }
 		
 		//assign attribute data to it
 		for ( ItemAttr itemAttr : this.attr.values() )
@@ -474,7 +476,8 @@ public final class StockItem {
 			try 
 			{
 				//try assign the flag
-				flag.onAssign(clone, endItem);
+				if ( !flag.getKey().equals(".lore") )
+				    flag.onAssign(clone, endItem);
 			} 
 			catch (InvalidItemException e)
 			{
@@ -510,10 +513,10 @@ public final class StockItem {
 			        itemAttr.onStatusLoreRequest(status, target, lore);
 		
 		//for each flag
-		for ( ItemFlag flag : flags.values() )
-			for ( tNpcStatus attrStatus : flag.getInfo().status() )
+		for ( ItemFlag itemFlag : flags.values() )
+			for ( tNpcStatus attrStatus : itemFlag.getInfo().status() )
 				if ( attrStatus.equals(status) )
-			        flag.onStatusLoreRequest(status, lore);
+			        itemFlag.onStatusLoreRequest(status, lore);
 		
 		//return the lore
 		return lore;

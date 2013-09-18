@@ -18,22 +18,24 @@ public class ItemUtils {
 	
 	public static StockItem createStockItem(ItemStack vItem)
 	{
+		ItemStack clone = vItem.clone();
 		//creating a clean item
-		StockItem sItem = new StockItem(vItem);
+		StockItem sItem = new StockItem(clone);
 		//getting data out of it (by force ;>)
-		sItem.factorize(vItem);
+		sItem.factorize(clone);
 		//returning the item
 		return sItem;
 	}
 
 	public static StockItem createAbstractStockItem(ItemStack vItem)
 	{
+		ItemStack clone = vItem.clone();
 		//creating a clean item
-		StockItem sItem = new StockItem(vItem);
+		StockItem sItem = new StockItem(clone);
 		//set the item as abstract
 		sItem.addFlag(".abstract");
 		//getting data out of it (by force ;>)
-		sItem.factorize(vItem);
+		sItem.factorize(clone);
 		//returning the item
 		return sItem;
 	}

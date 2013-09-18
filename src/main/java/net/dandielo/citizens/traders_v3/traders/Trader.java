@@ -538,10 +538,15 @@ public abstract class Trader implements tNpc {
 		PlayerInventory inventory = player.getInventory();
 		int amountLeft = amount;
 
-		for ( ItemStack item : inventory.all(selectedItem.getItem(false).getType()).values() ) 
+		//Generate it just once!
+		ItemStack generatedItem = selectedItem.getItem(true);
+		
+		//Check for compatibility
+		for ( ItemStack item : inventory.all(generatedItem.getType()).values() ) 
 		{
 			if ( selectedItem.equalsWeak(ItemUtils.createStockItem(item)) )
 			{
+				dB.critical("EQUAL?!");
 				//add amount to an item in the inventory, its done
 				if ( item.getAmount() + amountLeft <= item.getMaxStackSize() ) {
 					item.setAmount( item.getAmount() + amountLeft );
@@ -563,11 +568,10 @@ public abstract class Trader implements tNpc {
 		if ( inventory.firstEmpty() < inventory.getSize() 
 				&& inventory.firstEmpty() >= 0 ) 
 		{
-			
 			//new stack
-			ItemStack is = selectedItem.getItem(true);
+			ItemStack is = generatedItem;//selectedItem.getItem(true);
 			is.setAmount(amountLeft);
-			
+
 			//set the item info the inv
 			inventory.setItem(inventory.firstEmpty(), is);
 			return true;

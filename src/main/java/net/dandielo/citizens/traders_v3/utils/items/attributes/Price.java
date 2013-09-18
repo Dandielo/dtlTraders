@@ -79,7 +79,7 @@ public class Price extends ItemAttr {
 	
 	@Override
 	public void onStatusLoreRequest(tNpcStatus status, ItemStack target, List<String> lore)
-	{		
+	{
 	}
 	
 	public static List<String> loreRequest(double price, List<String> lore, tNpcStatus status)
