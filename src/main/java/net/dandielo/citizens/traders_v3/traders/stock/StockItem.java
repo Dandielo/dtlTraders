@@ -23,6 +23,7 @@ import net.dandielo.citizens.traders_v3.utils.items.attributes.Multiplier;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Name;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Price;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Slot;
+import net.dandielo.citizens.traders_v3.utils.items.flags.Abstract;
 import net.dandielo.citizens.traders_v3.utils.items.flags.DataCheck;
 import net.dandielo.citizens.traders_v3.utils.items.flags.Lore;
 
@@ -99,6 +100,9 @@ public final class StockItem {
 	 */
 	public void load(String format)
 	{
+		//always create the item as abstract
+		addFlag(".abstract");
+		
 		//split the item format string
 		String[] itemData = format.split(" ", 2);
 		
@@ -191,9 +195,16 @@ public final class StockItem {
 		for ( ItemAttr entry : attr.values() )
 			result += " " + entry.toString();
 
+
+		//remove abstract modifier
+		ItemFlag abs = flags.remove(Abstract.class);
+		
 		//save each flag
 		for ( ItemFlag flag : flags.values() )
 			result += " " + flag.getKey();		
+		
+		//put it back
+		if ( abs != null ) flags.put(Abstract.class, abs);
 		
 		//return the result
 		return result;
@@ -268,6 +279,8 @@ public final class StockItem {
 	 */
 	public boolean hasFlag(Class<? extends ItemFlag> clazz)
 	{
+		dB.critical(clazz.getName());
+		dB.critical(flags.containsKey(clazz));
 		return flags.containsKey(clazz);
 	}
 	

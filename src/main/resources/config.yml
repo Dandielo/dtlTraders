@@ -3,26 +3,20 @@ debug: critical
 locale:
   #the choosen localization to load
   load: en
-  #should the locale updated autmaticaly, (using the plugin updater)
-  auto-update: true
+  #should the locale updated autmaticaly, (not implemented)
+  auto-update: false
 #logging settings
 logging:
   #should transactions be logged? (false/FILE/SQL/WEB) , (not used at this moment)
   log: false
-  #the foramt how transactions should be logged, (not used at this moment)
+  #the foramt how transactions should be logged to FILE, (not used at this moment)
   log-format: ''
-  #should transactions be loggen on the web?
-  web-log: false
-  #web account name
-  web-account: ''
-  #web account id
-  web-pass: 0
 #statistics
 statistics: 
-  #enable or disable statistics
-  enabled: true
-  #metrics should be enabled?
-  metrics: true
+  #enable or disable statistics (not implemented)
+  enabled: false
+  #metrics should be enabled? (not implemented)
+  metrics: false
 #trader types related settings
 trader:
   #transaction related settings
@@ -96,12 +90,5 @@ trader:
     lock: wool:4
     #item that will "lock" the stock (saving all changes)
     unlock: wool:5
-  #denizen support related settings
-  denizen:
-banker:
-  account:
-    format: 'Item bank account'
-    max-tabs: 9
-    tab-size: 6
-auction:
-#planned
+#denizen support related settings
+denizen: []

@@ -5,7 +5,6 @@ import org.bukkit.inventory.ItemStack;
 
 import net.dandielo.citizens.traders_v3.bankers.tabs.BankItem;
 import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
-import net.dandielo.citizens.traders_v3.utils.items.flags.Abstract;
 
 @SuppressWarnings("deprecation")
 public class ItemUtils {
