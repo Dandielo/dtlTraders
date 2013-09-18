@@ -59,7 +59,6 @@ public class CommandManager {
 		executor = new DtlCommandExecutor(this);
 
 		DtlTraders.getInstance().getCommand("trader").setExecutor(executor);
-		DtlTraders.getInstance().getCommand("banker").setExecutor(executor);
 	}
 	
 	/**
