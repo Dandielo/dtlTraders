@@ -238,6 +238,7 @@ public class tNpcManager {
 			
 			//register type handlers
 			Trader.registerHandlers(Server.class);
+			Trader.registerHandlers(net.dandielo.citizens.traders_v3.traders.types.Private.class);
 			//Banker.registerHandlers(Private.class);
 			
 			//send message with registered types 
