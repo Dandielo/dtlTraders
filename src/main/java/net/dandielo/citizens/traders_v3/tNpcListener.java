@@ -269,7 +269,7 @@ public class tNpcListener implements Listener {
 		}
 	}
 
-	@EventHandler(priority=EventPriority.HIGHEST)
+	@EventHandler(priority=EventPriority.NORMAL, ignoreCancelled = true)
 	public void npcRightClickEvent(NPCRightClickEvent e) 
 	{
 		//check trait
