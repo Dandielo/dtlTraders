@@ -75,7 +75,6 @@ public class DtlTraders extends JavaPlugin {
 		info("Loading config files");
 		//init global settings
 		TGlobalSettings.initGlobalSettings();
-		BGlobalSettings.initGlobalSettings();
 		
 		//register traits
 		CitizensAPI.getTraitFactory().registerTrait(TraitInfo.create(TraderTrait.class).withName("trader"));
