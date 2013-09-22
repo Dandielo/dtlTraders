@@ -1,5 +1,6 @@
 package net.dandielo.citizens.traders_v3;
 
+import net.citizensnpcs.api.event.NPCDamageByEntityEvent;
 import net.citizensnpcs.api.event.NPCLeftClickEvent;
 import net.citizensnpcs.api.event.NPCRightClickEvent;
 import net.dandielo.citizens.traders_v3.bankers.Banker;
@@ -202,6 +203,24 @@ public class tNpcListener implements Listener {
 		    	}
 		    }
 		}
+	}
+	
+	/*
+	 * Handle the NPCDamageByEntityEvent to force the NPCLeftClickEvent lol...
+	 */
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+	public void npcDamageEvent(NPCDamageByEntityEvent e)
+	{
+		//check trait if this NPC is a trader and if the entity is a player
+		if ( !e.getNPC().hasTrait(TraderTrait.class) ) return;
+		if ( !(e.getDamager() instanceof Player) ) return;
+		
+		Player damager = (Player) e.getDamager();
+		//if damage is enabled and the player is not sneaking
+		if ( Settings.mmEnableDamage() && !damager.isSneaking() ) return;
+		
+		//set cancelled
+		e.setCancelled(true);
 	}
 
 	//npc events for traders

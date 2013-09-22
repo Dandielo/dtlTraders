@@ -27,6 +27,7 @@ public class TGlobalSettings extends PluginSettings {
 	protected static String mmStockStart;
 	protected static ItemStack mmItemToggle; 
 	protected static boolean mmRightToggle; 
+	protected static boolean mmEnableDamage;
 
 	//stock settings
 	protected static int stockSize;
@@ -202,6 +203,15 @@ public class TGlobalSettings extends PluginSettings {
 	public static boolean mmRightToggle()
 	{
 		return mmRightToggle;
+	}
+	
+	/**
+	 * @return
+	 * true if the trader can be damaged by players
+	 */
+	public static boolean mmEnableDamage()
+	{
+		return mmEnableDamage;
 	}
 	
 	/**

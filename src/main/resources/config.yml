@@ -19,6 +19,11 @@ statistics:
   metrics: false
 #trader types related settings
 trader:
+  #sets if left clicking the Trader should damage him, if set to false the trader wont be damaged and the click will be handled as ManagerMode toogling
+  #when the player meets the requirements (permissions, and right-click = false)
+  #it this setting is set to true, manager modes is toggled only when sneaking 
+  allow-damage: false
+  #item used to toggle between modes (air counts for anything)
   #transaction related settings
   transaction:
     #sets if buying and selling should be done after clicking on a item twice in a row
@@ -30,7 +35,6 @@ trader:
     #right click toggling (instead of left click, which is default from 3.0+) 
     #if r.click toggling is enabled the item needs to be other than AIR. If not set to an item "stick" item will be used.
     right-click: false
-    #item used to toggle between modes (air counts for anything)
     item: 'air'
     #special blocks used when setting prices and limits, format => 'item_id value'
     special-blocks:
