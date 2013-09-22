@@ -546,7 +546,6 @@ public abstract class Trader implements tNpc {
 		{
 			if ( selectedItem.equalsWeak(ItemUtils.createStockItem(item)) )
 			{
-				dB.critical("EQUAL?!");
 				//add amount to an item in the inventory, its done
 				if ( item.getAmount() + amountLeft <= item.getMaxStackSize() ) {
 					item.setAmount( item.getAmount() + amountLeft );
