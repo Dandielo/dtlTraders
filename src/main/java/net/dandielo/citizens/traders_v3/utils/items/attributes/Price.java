@@ -90,8 +90,10 @@ public class Price extends ItemAttr {
 		for ( String pLore : LocaleManager.locale.getLore("item-price") )
 			lore.add(pLore.replace("{price}", String.format("%.2f", price)).replace(',', '.'));
 
-		//add additional click info lore
-		lore.addAll(LocaleManager.locale.getLore("item-" + status));
+		if (status == tNpcStatus.BUY || status == tNpcStatus.SELL) {
+    		//add additional click info lore
+    		lore.addAll(LocaleManager.locale.getLore("item-" + status));
+		}
 		return lore;
 	}
 }

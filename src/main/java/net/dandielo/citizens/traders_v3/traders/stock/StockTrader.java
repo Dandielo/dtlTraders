@@ -11,6 +11,7 @@ import net.dandielo.citizens.traders_v3.core.dB;
 import net.dandielo.citizens.traders_v3.traders.setting.Settings;
 import net.dandielo.citizens.traders_v3.traders.setting.TGlobalSettings;
 import net.dandielo.citizens.traders_v3.utils.NBTUtils;
+import net.dandielo.citizens.traders_v3.utils.items.attributes.Price;
 import net.dandielo.citizens.traders_v3.utils.items.flags.Lore;
 import net.dandielo.citizens.traders_v3.utils.items.flags.StackPrice;
 
@@ -167,7 +168,7 @@ public class StockTrader extends Stock {
 			//set the lore
 			ItemStack itemStack = item.getItem(false);
 			ItemMeta meta = itemStack.getItemMeta();
-			meta.setLore(item.getTempLore(status, itemStack.clone()));
+			meta.setLore(Price.loreRequest(parsePrice(item, status.asStock(), item.getAmount()), item.getTempLore(status, itemStack.clone()), status));
 			itemStack.setItemMeta(meta);
 			
 			//set the item 
@@ -215,7 +216,7 @@ public class StockTrader extends Stock {
 			//set the lore
 			ItemStack itemStack = item.getItem(false);
 			ItemMeta meta = itemStack.getItemMeta();
-			meta.setLore(item.getTempLore(status, itemStack.clone()));
+			meta.setLore(Price.loreRequest(parsePrice(item, status.asStock(), item.getAmount()), item.getTempLore(status, itemStack.clone()), status));
 			itemStack.setItemMeta(meta);
 			
 			//set the item 

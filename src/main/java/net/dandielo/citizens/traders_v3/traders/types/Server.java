@@ -4,6 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import net.dandielo.citizens.traders_v3.tNpcManager;
 import net.dandielo.citizens.traders_v3.tNpcStatus;
@@ -16,8 +17,10 @@ import net.dandielo.citizens.traders_v3.traders.clicks.ClickHandler;
 import net.dandielo.citizens.traders_v3.traders.clicks.InventoryType;
 import net.dandielo.citizens.traders_v3.traders.setting.Settings;
 import net.dandielo.citizens.traders_v3.traders.setting.TGlobalSettings;
+import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
 import net.dandielo.citizens.traders_v3.traits.TraderTrait;
 import net.dandielo.citizens.traders_v3.traits.WalletTrait;
+import net.dandielo.citizens.traders_v3.utils.NBTUtils;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Price;
 import net.dandielo.citizens.traders_v3.utils.items.flags.NoStack;
 import net.dandielo.citizens.traders_v3.utils.items.flags.StackPrice;
@@ -666,6 +669,14 @@ public class Server extends Trader {
 					locale.sendMessage(player, "key-change", 
 							"key", "#price", "value", getSelectedItem().getPriceFormated());
 				}
+				
+				// Update the item with new Price
+				StockItem item = getSelectedItem();
+	            ItemStack itemStack = item.getItem(false);
+	            ItemMeta meta = itemStack.getItemMeta();
+	            meta.setLore(Price.loreRequest(stock.parsePrice(item, status.asStock(), item.getAmount()), item.getTempLore(status, itemStack.clone()), status));
+	            itemStack.setItemMeta(meta); 
+	            e.getInventory().setItem(item.getSlot(), NBTUtils.markItem(itemStack));
 			}
 		}
 		e.setCancelled(true);
