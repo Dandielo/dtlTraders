@@ -10,6 +10,13 @@ commands:
     aliases: dtrader
     description: Dtl - Trader commands.
 permissions:
+  dtl.trader.default:
+    default: true
+    children:
+      dtl.trader.use: true
+      dtl.trader.buy: true
+      dtl.trader.sell: true
+      dtl.trader.manage: false
   dtl.trader.*:
     default: op
     children:
@@ -37,10 +44,3 @@ permissions:
     default: op
     children:
       dtl.trader.bypass.creative: true
-  dtl.trader.default:
-    default: true
-    children:
-      dtl.trader.use: true
-      dtl.trader.buy: true
-      dtl.trader.sell: true
-      dtl.trader.manage: false
