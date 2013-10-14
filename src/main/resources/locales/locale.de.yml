@@ -1,103 +1,103 @@
-ver: 1.1.3
+ver: 1.1.5
 messages:
-  plugin-reload: '^3dtlTraders ^6erfolgreich neugeladen'
-  plugin-command-message: '^6== dtlTraders ^3{version} ^6=='
-  trader-created: '^6Du hast den Trader ^3{trader} ^6erfolgreich erstellt'
-  trader-hire-limit: '^6Du kannst keine Trader mehr einstellen'
-  trader-stock-item-add: '^6Item hinzugefuegt'
-  trader-stock-item-update: '^6Item aktualisiert'
-  trader-stock-item-select: '^6Item ausgewaehlt'
-  trader-stock-item-invalid: '^6Item ist ungueltig'
-  trader-stock-item-remove: '^6Item geloescht'
-  trader-stock-toggled: '^6Du hast dich zum ^3{stock} ^6bewegt'
-  trader-stock-back: '^6Du bist wieder beim Standard-Bestand'
+  plugin-reload: ^3dtlTraders ^6erfolgreich neugeladen
+  plugin-command-message: ^6== dtlTraders ^3{version} ^6==
+  trader-created: ^6Du hast den Trader ^3{trader} ^6erfolgreich erstellt
+  trader-hire-limit: ^6Du kannst keine Trader mehr einstellen
+  trader-stock-item-add: ^6Gegenstand hinzugefuegt
+  trader-stock-item-update: ^6Gegenstand aktualisiert
+  trader-stock-item-select: ^6Gegenstand ausgewählt
+  trader-stock-item-invalid: ^6Gegenstand ist ungültig
+  trader-stock-item-remove: ^6Gegenstand gelöscht
+  trader-stock-toggled: ^6Du hast zum ^3{stock} ^6gewechselt
+  trader-stock-back: ^6Du bist wieder beim Standard-Bestand
   trader-transaction-item: '^6{item}, Preis: ^e{price}'
-  trader-transaction-success: '^6You {action} ^3{amount} ^6for ^3{price}' #Can not be translated, because of wrong syntax and 'action' is not translated
-  trader-transaction-failed-player-money: '^6Du hast nicht genug Geld'
-  trader-transaction-failed-trader-money: '^6{npc} hat nicht genug Geld'
-  trader-transaction-failed-inventory: '^6In deinem Inventar ist nicht genug Platz'
-  trader-transaction-failed-limit: '^6Die Grenze fuer dieses Item wurde erreicht'
-  trader-managermode-stock-locked: '^6Alle Items wurden gesichtert und der Bestand verriegelt'
-  trader-managermode-stock-unlocked: '^6Bestand entriegelt'
-  trader-managermode-toggled: '^3{mode} ^6Managermodus gewechselt'
-  trader-managermode-enabled: '^6Managermodus fuer ^3{npc} ^6 aktiviert'
-  trader-managermode-disabled: '^6Managermodus fuer ^3{npc} ^6 deaktiviert'
-  pattern-save-fail-exists: '^6Diese Vorlage existiert bereits {pattern}'
-  pattern-save-success: '^6Vorlage ^3{pattern} ^6erfolgreich erstellt'
+  trader-transaction-success: ^6You {action} ^3{amount} ^6for ^3{price}
+  trader-transaction-failed-player-money: ^6Du hast nicht genug Geld
+  trader-transaction-failed-trader-money: ^6{npc} hat nicht genug Geld
+  trader-transaction-failed-inventory: ^6In deinem Inventar ist nicht genug Platz
+  trader-transaction-failed-limit: ^6Die Grenze für diesen Gegenstand wurde erreicht
+  trader-managermode-stock-locked: ^6Alle Gegenstände wurden gesichtert und der Bestand verriegelt
+  trader-managermode-stock-unlocked: ^6Bestand entriegelt
+  trader-managermode-toggled: ^6Zum ^3{mode}^6-Verwaltungsmodus gewechselt
+  trader-managermode-enabled: ^6Verwaltungsmodus für ^3{npc}^6 aktiviert
+  trader-managermode-disabled: '^6Verwaltungsmodus für ^3{npc}^6 deaktiviert'
+  pattern-save-fail-exists: '^6Diese Vorlage existiert bereits: {pattern}'
+  pattern-save-success: ^6Vorlage ^3{pattern} ^6erfolgreich erstellt
   banker-created: '^6Du hast einen neuen Banker erstellt: {banker}'
-  banker-tab-switch: '^6Wechsel zu tab: ^3{tab}' # To Trnslate a tab, I need to know exactly, what this is, same for patterns, but I think I found a good one for patterns
-  banker-tab-locked: '^6Verriegeln von bank tab: ^3{tab}'
-  banker-tab-unlocked: '^6Entriegeln von bank tab: ^3{tab}'
-  banker-tab-buy-success: '^6Kauf eines neuen tabs'
-  banker-tab-buy-fail: '^6Der Kauf eines neuen tabs ist fehlgeschlagen'
-  wallet-balance: '^6Geldboerse: ^3{amount}'
-  wallet-invalid: '^6Du kannst diesen Befehl nicht bei diesem Geldboersentyp anwenden'
-  wallet-withdraw: '^3{amount} ^6abgehoben'
-  wallet-deposit: '^6^3{amount} ^6eingezahlt'
-  wallet-withdraw-fail: '^6Diese Geldboerse hat nicht genug Geld'
-  wallet-deposit-fail: 'Du hast nicht genug Geld'
-  denizen-item-hint: '{item}: {price}' #this one is valid
-  error-npc-not-selected: '^6Du hast keinen Trader augewaehlt'
-  error-nopermission-creative: '^6Du hast keine ausreichende Berechtigung, dies im ^3creative mode ^6zu machen'
-  error-nopermission-command: '^6Du hast keine ausreichende Berechtigung, diesen Befehl zu verwenden'
-  error-nopermission: '^6Du hast keine ausreichende Berechtigung dies zu tun'
+  banker-tab-switch: '^6Zu Tab ^3{tab}^6 gewechselt'
+  banker-tab-locked: '^6Bank-Tab ^3{tab}^6 verriegelt'
+  banker-tab-unlocked: '^6Bank-Tab ^3{tab}^6 entriegelt'
+  banker-tab-buy-success: ^6Kauf eines neuen Tabs erfolgreich
+  banker-tab-buy-fail: ^6Der Kauf eines neuen Tabs ist fehlgeschlagen
+  wallet-balance: '^6Geldbörse: ^3{amount}'
+  wallet-invalid: ^6Du kannst diesen Befehl bei diesem Geldbörsentyp nicht anwenden
+  wallet-withdraw: ^3{amount} ^6abgehoben
+  wallet-deposit: ^6^3{amount} ^6eingezahlt
+  wallet-withdraw-fail: ^6Diese Geldbörse hat nicht genug Geld
+  wallet-deposit-fail: Du hast nicht genug Geld
+  denizen-item-hint: '{item}: {price}'
+  error-npc-not-selected: ^6Du hast keinen Händler augewählt
+  error-nopermission-creative: ^6Du hast keine Berechtigung, dies im ^3Kreativ-Modus^6 zu tun
+  error-nopermission-command: ^6Du hast keine Berechtigung, diesen Befehl zu verwenden
+  error-nopermission: ^6Du hast keine Berechtigung dies zu tun
   error-argument-missing: '^6Argument fehlt: ^3{argument}'
-  error-argument-invalid: '^6Ungueltiges argument was geliefert: ^3{argument}'
-  error-managermode-enabled: '^6Managermodus konnte nicht aktiviert werden'
-  error-command-invalid: '^6Dieser Befehl ist ungueltig'
+  error-argument-invalid: '^6Ungültiges Argument: ^3{argument}'
+  error-managermode-enabled: ^6Managermodus konnte nicht aktiviert werden
+  error-command-invalid: ^6Dieser Befehl ist ungültig
   key-value: '^6{key}: ^3{value}'
   key-change: '{key} ^6geaendert: ^3{value}'
 keywords:
-  type: Type
-  trader-type: Trader type
-  banker-type: Banker type
-  trader-market: Market Trader
-  trader-server: Server Trader
-  trader-player: Player Trader
-  banker-money: Money Banker
-  banker-private: Private Banker
-  stack-price: Stack price
-  tab-price: Tab price
-  tab-name: Tab name
-  stock-amounts: Amounts choosing
-  stock-start: Start stock
-  stock-size: Stock size
-  stock-name: Stock name
-  stock-sell: Sell stock
-  stock-buy: Buy stock
-  stock: Stock
-  pattern: Patterns
-  wallet: Wallet
-  wallet-type: Wallet type
-  wallet-player: Target player
-  wallet-balance: Balance
-  wallet-deposit: Deposited
-  wallet-withdraw: Withdrawed
-  bought: Bought
-  owner: Owner
+  type: Typ
+  trader-type: Händler
+  banker-type: Bankier
+  trader-market: Marktstand
+  trader-server: Server-Händler
+  trader-player: Spieler-Händler
+  banker-money: Finanz-Bank
+  banker-private: Private Banke
+  stack-price: Stapel-Preis
+  tab-price: Tab-Preis
+  tab-name: Tab-Name
+  stock-amounts: Mengen-Auswahl
+  stock-start: Anfangs Bestand
+  stock-size: Bestandsgröße
+  stock-name: Bestandsname
+  stock-sell: Verkaufsbestand
+  stock-buy: Ankaufsbestand
+  stock: Bestand
+  pattern: Muster
+  wallet: Geldbörse
+  wallet-type: Geldbörsen-Typ
+  wallet-player: Geldbörsen-Besitzer
+  wallet-balance: Kontostand
+  wallet-deposit: Eingezahlt
+  wallet-withdraw: Ausgezahlt
+  bought: Gekauft
+  owner: Besitzer
   limit: Limit
-  price: Price
+  price: Preis
   name: Name
-  sold: Sold
-  enabled: Enabled
-  disabled: Disabled
+  sold: Verkauft
+  enabled: Aktiviert
+  disabled: Deaktiviert
 ui:
   buy:
-    name: ^r^6Kaufbestand
+    name: ^r^6Ankauf
     lore:
-    - ^7Klicke um zum Kaufbestand zu gehen
+    - ^7Klicke um zum Ankauf zu wechseln
   sell:
-    name: ^r^6Verkausbestand
+    name: ^r^6Händlerbestand
     lore:
-    - ^7Klicke um zum Verkausbestand zu gehen
+    - ^7Klicke um zum Händlerbestand zu wechseln
   back:
-    name: ^r^6Zurueck
+    name: ^r^6Zurück
     lore:
-    - ^7Kehrt zum Bestand zurueck
+    - ^7Kehrt zum Bestand zurück
   price:
     name: ^r^6Preismanager
     lore:
-    - ^7Klicke um Preismanagment zu wechseln
+    - ^7Klicke um zum Preismanagment zu wechseln
   limit:
     name: ^r^6Limitmanager
     lore:
@@ -105,21 +105,30 @@ ui:
   lock:
     name: ^r^6Bestand verriegeln
     lore:
-    - ^7Klicke um alle Items im Bestand zu sichern und diesen zu verriegeln
+    - ^7Klicke um alle Gegenstände im Bestand zu sichern und diesen zu verriegeln
   unlock:
     name: ^r^6Bestand entriegeln
     lore:
     - ^7Klicke um den Bestand zu entriegeln
-    - ^7Aktiviert das hinzufuegen und entfernen von Items vom Bestand
+    - ^7Aktiviert das Hinzufügen/Entfernen zum/vom Bestand
   tab-unowned:
-    name: ^r^6Unbesitzter Bank tab
+    name: ^r^6Freier Bank-Tab
     lore:
-    - ^7Dieser tab ist fuer dich nicht verfuegbar
-    - ^7Shift R.Klick um das zu kaufen
+    - ^7Dieser Tab ist noch verfügbar
+    - ^7Umshalt-Rechtsklick zum Kaufen
     - '^7Preis: ^3{price}'
   tab-lock:
     lore:
-    - ^7Klicke um den tab zu verriegeln
+    - ^7Klicke um den Tab zu verriegeln
   tab-unlock:
     lore:
-    - ^7Klicke um den tab zu entriegeln  #In the english version in the word 'unlock' is the n missing
+    - ^7Klicke um den Tab zu entriegeln
+  item-price:
+    lore:
+    - '^6Preis: ^7{price}'
+  item-sell:
+    lore:
+    - ^6Zum kaufen anklicken
+  item-buy:
+    lore:
+    - ^6Zum verkaufen anklicken
