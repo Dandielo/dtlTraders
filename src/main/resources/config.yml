@@ -33,6 +33,7 @@ trader:
     #the starting stock when opening a trader (buy/sell)
     start-stock: sell
     #right click toggling (instead of left click, which is default from 3.0+) 
+    #Attention: When PvP is disabled in the world, and the NPC is Player-Type, left click may not work!
     #if r.click toggling is enabled the item needs to be other than AIR. If not set to an item "stick" item will be used.
     right-click: false
     item: 'air'
