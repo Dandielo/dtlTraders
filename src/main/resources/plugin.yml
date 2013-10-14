@@ -16,7 +16,6 @@ permissions:
       dtl.trader.use: true
       dtl.trader.buy: true
       dtl.trader.sell: true
-      dtl.trader.manage: false
   dtl.trader.*:
     default: op
     children:
