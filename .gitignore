@@ -1,3 +1,10 @@
 /bin
 /target
 /dtlTraders v3
+
+# Eclipse stuff
+/.project
+/.classpath
+/.settings
+/.buildpath
+/.checkstyle
