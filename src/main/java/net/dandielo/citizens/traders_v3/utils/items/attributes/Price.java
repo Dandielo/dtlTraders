@@ -16,7 +16,7 @@ import net.dandielo.citizens.traders_v3.utils.items.ItemAttr;
 
 @Attribute(
 name="Price", key = "p", standalone = true, priority = 0,
-status = {tNpcStatus.BUY, tNpcStatus.SELL, tNpcStatus.SELL_AMOUNTS, tNpcStatus.MANAGE_PRICE})
+status = {tNpcStatus.BUY, tNpcStatus.SELL, tNpcStatus.SELL_AMOUNTS, tNpcStatus.MANAGE_PRICE, tNpcStatus.MANAGE_BUY, tNpcStatus.MANAGE_SELL})
 public class Price extends ItemAttr {
 	public static String lorePattern = ChatColor.GOLD + "Price: " + ChatColor.GRAY;
 	private double price;
@@ -80,6 +80,10 @@ public class Price extends ItemAttr {
 	@Override
 	public void onStatusLoreRequest(tNpcStatus status, ItemStack target, List<String> lore)
 	{
+	    if (status == tNpcStatus.MANAGE_BUY || status == tNpcStatus.MANAGE_SELL || status == tNpcStatus.MANAGE_PRICE) {
+	        for ( String pLore : LocaleManager.locale.getLore("item-unitPrice") )
+	            lore.add(pLore.replace("{price}", String.format("%.2f", price)).replace(',', '.'));
+	    }
 	}
 	
 	public static List<String> loreRequest(double price, List<String> lore, tNpcStatus status)

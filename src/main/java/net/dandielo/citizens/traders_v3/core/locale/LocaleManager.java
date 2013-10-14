@@ -404,6 +404,10 @@ public class LocaleManager {
 		return message.replace('^', '§');
 	}
 	
+	public String getKeyword(String keyword) {
+	    return keywords.get(new LocaleEntry("#" + keyword, localeVersion));
+	}
+	
 	/**
 	 * Checks the given key if it's present in the cached message data.
 	 * If it's not present it saves it into the locale with the following string <strong>"^3Check the locale, this message is not set!"</strong>, and adds to the cached data.

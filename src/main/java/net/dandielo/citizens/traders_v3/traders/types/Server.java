@@ -22,7 +22,6 @@ import net.dandielo.citizens.traders_v3.traits.TraderTrait;
 import net.dandielo.citizens.traders_v3.traits.WalletTrait;
 import net.dandielo.citizens.traders_v3.utils.NBTUtils;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Price;
-import net.dandielo.citizens.traders_v3.utils.items.flags.NoStack;
 import net.dandielo.citizens.traders_v3.utils.items.flags.StackPrice;
 
 @tNpcType(name="server", author="dandielo")
@@ -582,6 +581,9 @@ public class Server extends Trader {
 				if ( e.isLeftClick() )
 				{
 					stock.setAmountsInventory(inventory, status, getSelectedItem());
+					
+	                locale.sendMessage(player, "trader-managermode-toggled", "mode", "#amount");
+	                
 					parseStatus(tNpcStatus.MANAGE_AMOUNTS);
 				}
 				else //if it's a shift rightclick
@@ -600,10 +602,11 @@ public class Server extends Trader {
 					
 					locale.sendMessage(player, "key-change", 
 							"key", "#stack-price", 
-							"value", String.valueOf(getSelectedItem().hasFlag(StackPrice.class)));
+							"value", locale.getKeyword(String.valueOf(getSelectedItem().hasFlag(StackPrice.class))));
 				}
 				else //if it's a no shift rightclick
 				{
+					/* Unused feedback confuses players
 					if ( getSelectedItem().hasFlag(NoStack.class) )
 						getSelectedItem().removeFlag(NoStack.class);
 					else
@@ -611,8 +614,16 @@ public class Server extends Trader {
 					
 					locale.sendMessage(player, "key-change", 
 							"key", "#stack-disable", 
-							"value", String.valueOf(getSelectedItem().hasFlag(NoStack.class)));
+							"value", locale.getKeyword(String.valueOf(getSelectedItem().hasFlag(NoStack.class)));*/
 				}
+                
+                // Update the item with new Price
+                StockItem item = getSelectedItem();
+                ItemStack itemStack = item.getItem(false);
+                ItemMeta meta = itemStack.getItemMeta();
+                meta.setLore(Price.loreRequest(stock.parsePrice(item, status.asStock(), item.getAmount()), item.getTempLore(status, itemStack.clone()), status));
+                itemStack.setItemMeta(meta); 
+                e.getInventory().setItem(item.getSlot(), NBTUtils.markItem(itemStack));
 			}
 		}
 		e.setCancelled(true);
