@@ -1,6 +1,7 @@
 package net.dandielo.citizens.traders_v3.core.locale;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -12,10 +13,12 @@ import net.dandielo.citizens.traders_v3.bukkit.DtlTraders;
 import net.dandielo.citizens.traders_v3.core.dB;
 import net.dandielo.citizens.traders_v3.core.PluginSettings;
 
+import org.apache.commons.io.input.ReaderInputStream;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.craftbukkit.libs.jline.internal.InputStreamReader;
 
 /**
  * Manages all message, and UI requests by using the chosen localization file
@@ -74,7 +77,7 @@ public class LocaleManager {
 		dB.info("Loading locale file");
 		
 		//get the file name and path
-		String name = "locale." + PluginSettings.getLocale();
+		String name = "locale." + PluginSettings.getLocale() + ".yml";
 		String path = "plugins/dtlTraders/locale";
 		
 		File baseDirectory = new File(path);
@@ -102,7 +105,7 @@ public class LocaleManager {
 			catch (IOException e)
 			{
 				//debug high
-				dB.high("While loading locale file, an exception occured");
+				dB.critical("While loading locale file, an exception occured");
 				dB.normal("Exception message: ", e.getClass().getSimpleName());
 				dB.high("Filename: ", name, ", path to file", path);
 
@@ -175,7 +178,9 @@ public class LocaleManager {
 		try 
 		{
 			//load yaml from file
-			localeYaml.load(localeFile);
+		    // Bypass UTF-8 loading issue on windows
+		    InputStream inputStream = new ReaderInputStream(new InputStreamReader(new FileInputStream(localeFile), "UTF-8"));
+			localeYaml.load(inputStream);
 			//get the locale version
 			String currentVersion = localeYaml.getString("ver");
 			
@@ -205,7 +210,7 @@ public class LocaleManager {
 		catch (Exception e)
 		{
 			//debug high
-			dB.high("While reading the locale file, an exception occured");
+			dB.critical("While reading the locale file, an exception occured");
 			dB.high("Exception message: ", e.getClass().getSimpleName());
 			dB.high("On update: ", update);
 
@@ -481,9 +486,13 @@ public class LocaleManager {
 		dB.info("Getting lore for UI item: ", key);
 		
 		List<String> list = new ArrayList<String>();
-		if ( ui.containsKey(new LocaleEntry(key, localeVersion)) )
+		if ( ui.containsKey(new LocaleEntry(key, localeVersion)) ) {
 			for ( String l : ui.get(new LocaleEntry(key, localeVersion)).lore() )
 				list.add(l.replace('^', '§'));
+		} else {
+		    // The Lore-List may be empty, but if the ui-entry is missing, the locale is incomplete
+		    dB.high("Missing Locale: " + key);
+		}
 		return list;
 	}
 
@@ -499,8 +508,12 @@ public class LocaleManager {
 		dB.info("Getting name for UI item: ", key);
 		
 		String name = "";
-		if ( ui.containsKey(new LocaleEntry(key, localeVersion)) )
+		if ( ui.containsKey(new LocaleEntry(key, localeVersion)) ) {
 			name = ui.get(new LocaleEntry(key, localeVersion)).name();
+		} else {
+            // The Name may be empty, but if the ui-entry is missing, the locale is incomplete
+            dB.high("Missing Locale: " + key);
+        }
 		return name.replace('^', '§');
 	}
 
