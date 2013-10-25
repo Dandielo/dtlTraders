@@ -71,6 +71,17 @@ public class DtlTraders extends JavaPlugin {
 			return;
 		}
 		
+		//check Citizens2 dependency
+		if ( !checkCitizens() )
+		{
+			this.setEnabled(false);
+			this.getPluginLoader().disablePlugin(this);
+			
+			//Severe message
+			severe("Vault plugin not found, disabling plugin");
+			return;
+		}
+		
 		info("Loading config files");
 		//init global settings
 		TGlobalSettings.initGlobalSettings();
@@ -136,6 +147,15 @@ public class DtlTraders extends JavaPlugin {
 			return false;
 		}
 		return Econ.econ.isEnabled();
+	}
+	private boolean checkCitizens()
+	{
+		if ( getServer().getPluginManager().getPlugin("Citizens") == null ) 
+		{
+			warning("Citizens2 plugin not found! Disabling plugin");
+			return false;
+		}
+		return true;
 	}
 	
 	//static methods
