@@ -181,6 +181,7 @@ public class Server extends Trader {
 				//change status
 				parseStatus(tNpcStatus.SELL);
 			}
+			//Update the inventory on EACH UI CLICK
 			stock.setInventory(inventory, getStatus());
 		}
 		e.setCancelled(true);
@@ -568,7 +569,7 @@ public class Server extends Trader {
 	}
 
 	@ClickHandler(status={tNpcStatus.MANAGE_SELL, tNpcStatus.MANAGE_BUY}, inventory=InventoryType.TRADER, shift = true)
-	public void itemsAttribs(InventoryClickEvent e)
+	public void itemAttribs(InventoryClickEvent e)
 	{
 		//debug info
 		dB.info("Item managing click event");
@@ -583,7 +584,6 @@ public class Server extends Trader {
 					stock.setAmountsInventory(inventory, status, getSelectedItem());
 					
 	                locale.sendMessage(player, "trader-managermode-toggled", "mode", "#amount");
-	                
 					parseStatus(tNpcStatus.MANAGE_AMOUNTS);
 				}
 				else //if it's a shift rightclick
@@ -618,12 +618,17 @@ public class Server extends Trader {
 				}
                 
                 // Update the item with new Price
+				
+				/* Do not show the price in the general Management Tab! It's not to show prices
+				 * Ok it might be quite anoying to always check prices entering the price management
+				 * But every tab has its own purpose dont mix it!
+				 * 
                 StockItem item = getSelectedItem();
                 ItemStack itemStack = item.getItem(false);
                 ItemMeta meta = itemStack.getItemMeta();
                 meta.setLore(Price.loreRequest(stock.parsePrice(item, status.asStock(), item.getAmount()), item.getTempLore(status, itemStack.clone()), status));
                 itemStack.setItemMeta(meta); 
-                e.getInventory().setItem(item.getSlot(), NBTUtils.markItem(itemStack));
+                e.getInventory().setItem(item.getSlot(), NBTUtils.markItem(itemStack));*/
 			}
 		}
 		e.setCancelled(true);
@@ -647,17 +652,20 @@ public class Server extends Trader {
 		//select the item that should have the price changed
 		if ( selectAndCheckItem(e.getSlot()) )
 		{
+			//get the selected item
+			StockItem item = getSelectedItem();
+			
 			//show the current price in chat, if cursor is AIR
 			if ( e.getCursor().getTypeId() == 0 )
 			{
 				//sends the message
 				locale.sendMessage(player, "key-value", 
-						"key", "#price", "value", getSelectedItem().getPriceFormated());
+						"key", "#price", "value", item.getPriceFormated());
 			}
 			else
 			{
 				//adds the price attribute to the item
-				Price price = getSelectedItem().getPriceAttr();
+				Price price = item.getPriceAttr();
 				
 				//adds value to the current price
 				if ( e.isLeftClick() )
@@ -667,7 +675,7 @@ public class Server extends Trader {
 					
 					//sends a message
 					locale.sendMessage(player, "key-change", 
-							"key", "#price", "value", getSelectedItem().getPriceFormated());
+							"key", "#price", "value", item.getPriceFormated());
 				}
 				else
 				//remove value from the current price
@@ -678,15 +686,18 @@ public class Server extends Trader {
 					
 					//sends a message
 					locale.sendMessage(player, "key-change", 
-							"key", "#price", "value", getSelectedItem().getPriceFormated());
+							"key", "#price", "value", item.getPriceFormated());
 				}
 				
-				// Update the item with new Price
-				StockItem item = getSelectedItem();
+				//Get a clean item and it's meta
 	            ItemStack itemStack = item.getItem(false);
 	            ItemMeta meta = itemStack.getItemMeta();
-	            meta.setLore(Price.loreRequest(stock.parsePrice(item, status.asStock(), item.getAmount()), item.getTempLore(status, itemStack.clone()), status));
+	            
+	            //Set the temp lore by the current status
+	            meta.setLore(item.getTempLore(status, itemStack.clone()));
 	            itemStack.setItemMeta(meta); 
+	            
+	            //replace the item with that one in the inventory
 	            e.getInventory().setItem(item.getSlot(), NBTUtils.markItem(itemStack));
 			}
 		}
