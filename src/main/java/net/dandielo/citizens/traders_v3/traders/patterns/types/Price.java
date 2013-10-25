@@ -215,10 +215,15 @@ public class Price extends Pattern {
 		
 		public double finalPrice()
 		{
-			if ( data[1] < 0 ) data[1] = 1.0;
+			if ( data[1] < 0.0 ) data[1] = 1.0;
 			
 			return data[0]*data[1];
 		}
+	}
+	
+	public static void main(String[] args)
+	{
+		System.out.println(0.7 < 0);
 	}
 	
 	/*public static void main(String[] a) throws IOException, ScriptException
