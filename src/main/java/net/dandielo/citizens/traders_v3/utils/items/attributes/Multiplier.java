@@ -8,7 +8,7 @@ import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeValu
 import net.dandielo.citizens.traders_v3.utils.items.Attribute;
 import net.dandielo.citizens.traders_v3.utils.items.ItemAttr;
 
-@Attribute(name = "Multiplier", key = "m", priority = 0)
+@Attribute(name = "Multiplier", key = "m", standalone = true, priority = 0)
 public class Multiplier extends ItemAttr {
 
 	private double multiplier;

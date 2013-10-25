@@ -223,7 +223,6 @@ public class Price extends Pattern {
 	
 	public static void main(String[] args)
 	{
-		System.out.println(0.7 < 0);
 	}
 	
 	/*public static void main(String[] a) throws IOException, ScriptException

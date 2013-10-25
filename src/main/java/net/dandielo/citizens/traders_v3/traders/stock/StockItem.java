@@ -703,7 +703,6 @@ public final class StockItem {
 			containsAll = containsAll && !key.getInfo().standalone() ? item.attr.containsKey(key.getClass()) : containsAll;
 		return containsAll;
 	}
-	
 	private boolean standaloneFlagCheck(StockItem item)
 	{
 		boolean containsAll = true;
@@ -713,6 +712,12 @@ public final class StockItem {
 			containsAll = containsAll && !key.getInfo().standalone() ? item.flags.containsKey(key.getClass()) : containsAll;
 		return containsAll;
 	}
+	private boolean attributeMissmatch(StockItem item)
+	{
+		return !(standaloneAttrCheck(item) && standaloneFlagCheck(item));
+	}
+	
+	
 	
 	private boolean patternStandaloneAttrCheck(StockItem item)
 	{
@@ -721,7 +726,6 @@ public final class StockItem {
 			containsAll = containsAll && !key.getInfo().standalone() ? item.attr.containsKey(key.getClass()) : containsAll;
 		return containsAll;
 	}
-	
 	private boolean patternStandaloneFlagCheck(StockItem item)
 	{
 		boolean containsAll = true;
@@ -729,14 +733,9 @@ public final class StockItem {
 			containsAll = containsAll && !key.getInfo().standalone() ? item.flags.containsKey(key.getClass()) : containsAll;
 		return containsAll;
 	}
-
 	private boolean patternAttributeMissmatch(StockItem item)
 	{
 		return !(patternStandaloneAttrCheck(item) && patternStandaloneFlagCheck(item));
-	}
-	private boolean attributeMissmatch(StockItem item)
-	{
-		return !(standaloneAttrCheck(item) && standaloneFlagCheck(item));
 	}
 	
 	/**
