@@ -51,6 +51,8 @@ messages:
   key-value: '^6{key}: ^3{value}'
   key-change: '^6Changed {key}: ^3{value}'
 keywords:
+  'true': On
+  'false': Off
   type: Type
   trader-type: Trader type
   banker-type: Banker type
@@ -86,6 +88,7 @@ keywords:
   wallet-withdraw: Withdrawed
   bought: Bought
   owner: Owner
+  amount: Amount
   limit: Limit
   price: Price
   name: Name
@@ -122,6 +125,9 @@ ui:
     lore:
     - ^7Click to unlock the stock
     - ^7Enables item adding/removing from stock
+  item-unitPrice:
+    lore:
+    - '^6Unit-Price: ^7{price}'
   item-price:
     lore:
     - '^6Price: ^7{price}'

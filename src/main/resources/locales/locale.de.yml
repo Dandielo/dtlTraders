@@ -4,7 +4,7 @@ messages:
   plugin-command-message: ^6== dtlTraders ^3{version} ^6==
   trader-created: ^6Du hast den Trader ^3{trader} ^6erfolgreich erstellt
   trader-hire-limit: ^6Du kannst keine Trader mehr einstellen
-  trader-stock-item-add: ^6Gegenstand hinzugefuegt
+  trader-stock-item-add: ^6Gegenstand hinzugefügt
   trader-stock-item-update: ^6Gegenstand aktualisiert
   trader-stock-item-select: ^6Gegenstand ausgewählt
   trader-stock-item-invalid: ^6Gegenstand ist ungültig
@@ -12,7 +12,7 @@ messages:
   trader-stock-toggled: ^6Du hast zum ^3{stock} ^6gewechselt
   trader-stock-back: ^6Du bist wieder beim Standard-Bestand
   trader-transaction-item: '^6{item}, Preis: ^e{price}'
-  trader-transaction-success: ^6You {action} ^3{amount} ^6for ^3{price}
+  trader-transaction-success: ^6Du hast ^3{amount}x {item} ^6für ^3{price} {action}
   trader-transaction-failed-player-money: ^6Du hast nicht genug Geld
   trader-transaction-failed-trader-money: ^6{npc} hat nicht genug Geld
   trader-transaction-failed-inventory: ^6In deinem Inventar ist nicht genug Platz
@@ -46,8 +46,10 @@ messages:
   error-managermode-enabled: ^6Managermodus konnte nicht aktiviert werden
   error-command-invalid: ^6Dieser Befehl ist ungültig
   key-value: '^6{key}: ^3{value}'
-  key-change: '{key} ^6geaendert: ^3{value}'
+  key-change: '{key} ^6geändert: ^3{value}'
 keywords:
+  'true': An
+  'false': Aus
   type: Typ
   trader-type: Händler
   banker-type: Bankier
@@ -57,9 +59,10 @@ keywords:
   banker-money: Finanz-Bank
   banker-private: Private Banke
   stack-price: Stapel-Preis
+  stack-disable: Stapel-Kauf
   tab-price: Tab-Preis
   tab-name: Tab-Name
-  stock-amounts: Mengen-Auswahl
+  stock-amounts: Mengen-Auswahl-Modus
   stock-start: Anfangs Bestand
   stock-size: Bestandsgröße
   stock-name: Bestandsname
@@ -73,12 +76,13 @@ keywords:
   wallet-balance: Kontostand
   wallet-deposit: Eingezahlt
   wallet-withdraw: Ausgezahlt
-  bought: Gekauft
+  bought: gekauft
   owner: Besitzer
+  amount: Mengen
   limit: Limit
   price: Preis
   name: Name
-  sold: Verkauft
+  sold: verkauft
   enabled: Aktiviert
   disabled: Deaktiviert
 ui:
@@ -123,6 +127,9 @@ ui:
   tab-unlock:
     lore:
     - ^7Klicke um den Tab zu entriegeln
+  item-unitPrice:
+    lore:
+    - '^6Einzelpreis: ^7{price}'
   item-price:
     lore:
     - '^6Preis: ^7{price}'
