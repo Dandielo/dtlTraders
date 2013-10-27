@@ -25,7 +25,6 @@ import net.dandielo.citizens.traders_v3.utils.items.attributes.Price;
 import net.dandielo.citizens.traders_v3.utils.items.flags.StackPrice;
 
 @tNpcType(name="server", author="dandielo")
-@SuppressWarnings({"deprecation"})
 public class Server extends Trader {
 	
 
@@ -50,7 +49,7 @@ public class Server extends Trader {
 		if ( itemInHand != null && !itemToToggle.getType().equals(Material.AIR) )
 		{
 			//if id are different then cancel the event
-			if ( itemToToggle.getTypeId() != itemInHand.getTypeId() ) return;
+			if ( !itemToToggle.getType().equals(itemInHand.getType()) ) return;
 		}
 		
 		toggleManageMode("left");
@@ -68,7 +67,7 @@ public class Server extends Trader {
 				itemToToggle.setType(Material.STICK);
 
 			//if id's in hand and for toggling are the same manage the mode change
-			if ( itemInHand != null && itemToToggle.getTypeId() == itemInHand.getTypeId() ) 
+			if ( itemInHand != null && itemToToggle.getType().equals(itemInHand.getType()) ) 
 			{
 				//send a event when manager mode toggling
 				TraderClickEvent e = (TraderClickEvent) new TraderClickEvent(this, player, true, false).callEvent();
@@ -656,7 +655,7 @@ public class Server extends Trader {
 			StockItem item = getSelectedItem();
 			
 			//show the current price in chat, if cursor is AIR
-			if ( e.getCursor().getTypeId() == 0 )
+			if ( e.getCursor().getType().equals(Material.AIR) )
 			{
 				//sends the message
 				locale.sendMessage(player, "key-value", 

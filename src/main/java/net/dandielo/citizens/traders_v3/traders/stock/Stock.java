@@ -111,10 +111,6 @@ public abstract class Stock implements InventoryHolder {
 	
 	public abstract void addItem(StockItem item, String stock);
 	public abstract void removeItem(StockItem item, String stock);
-	/*public boolean hasItem(StockItem item, String stock)
-	{
-		return this.stock.get(stock).contains(item);
-	}*/
 	
 	/*abstract methods*/
 	public abstract Inventory getInventory(tNpcStatus status);

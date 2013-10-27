@@ -26,6 +26,7 @@ import net.dandielo.citizens.traders_v3.utils.items.attributes.Slot;
 import net.dandielo.citizens.traders_v3.utils.items.flags.Abstract;
 import net.dandielo.citizens.traders_v3.utils.items.flags.DataCheck;
 import net.dandielo.citizens.traders_v3.utils.items.flags.Lore;
+import net.minecraft.server.v1_6_R3.Material;
 
 import org.bukkit.inventory.ItemStack;
 
@@ -33,7 +34,6 @@ import org.bukkit.inventory.ItemStack;
  * Item structure using in each trader stock, this structure allows to save and store more data than the commom ItemStack bukkit structure.
  * @author dandielo
  */
-@SuppressWarnings({"deprecation"})
 public final class StockItem {
 	/**
 	 * Pattern used for loading data form strings
@@ -187,9 +187,9 @@ public final class StockItem {
 		String result = "";
 		
 		//add id and data information
-		result += item.getTypeId();
-		if ( !ItemUtils.itemHasDurability(item) && item.getData().getData() != 0 )
-			result += ":" + item.getData().getData();
+		result += item.getType().name().toLowerCase();
+		if ( !ItemUtils.itemHasDurability(item) && item.getDurability() != 0 )
+			result += ":" + item.getDurability();
 
 		//save each attribute
 		for ( ItemAttr entry : attr.values() )
@@ -198,6 +198,7 @@ public final class StockItem {
 
 		//remove abstract modifier
 		ItemFlag abs = flags.remove(Abstract.class);
+		ItemFlag dc = flags.remove(DataCheck.class);
 		
 		//save each flag
 		for ( ItemFlag flag : flags.values() )
@@ -205,6 +206,7 @@ public final class StockItem {
 		
 		//put it back
 		if ( abs != null ) flags.put(Abstract.class, abs);
+		if ( dc != null ) flags.put(DataCheck.class, dc);
 		
 		//return the result
 		return result;
@@ -748,8 +750,8 @@ public final class StockItem {
 	public final boolean equalsStrong(StockItem item)
 	{
 		boolean equals;
-		//check id
-		equals = item.item.getTypeId() == this.item.getTypeId();
+		//check Item materials
+		equals = item.item.getType().equals(this.item.getType());
 		//if equals check data, if not durability
 		equals = equals && !ItemUtils.itemHasDurability(item.item) ? item.item.getDurability() == this.item.getDurability() : equals; 
 		
@@ -819,8 +821,8 @@ public final class StockItem {
 	public final boolean equalsWeak(StockItem item)
 	{
 		boolean equals;
-		//check id
-		equals = item.item.getTypeId() == this.item.getTypeId();
+		//check item materials
+		equals = item.item.getType().equals(this.item.getType());
 		//if equals check data, if not durability
 		equals = equals && !ItemUtils.itemHasDurability(item.item) ? item.item.getDurability() == this.item.getDurability() : equals; 
 
@@ -894,9 +896,9 @@ public final class StockItem {
 		//id and data check
 		if ( this.hasFlag(DataCheck.class) )
 		{
-			if ( this.item.getTypeId() != 0 )
+			if ( !this.item.getType().equals(Material.AIR) )
 			{
-				if ( this.item.getTypeId() == that.item.getTypeId() &&
+				if ( this.item.getType().equals(that.item.getType()) &&
 					 this.item.getDurability() == that.item.getDurability() )
 					priority += 140;
 				else
@@ -904,7 +906,7 @@ public final class StockItem {
 			}
 			else
 			{
-				if ( this.item.getTypeId() == 0 && this.item.getDurability() == that.item.getDurability() )
+				if ( this.item.getType().equals(Material.AIR) && this.item.getDurability() == that.item.getDurability() )
 					priority += 120;
 				else
 					priority = -2;
@@ -912,9 +914,9 @@ public final class StockItem {
 		}
 		else
 		{
-			if ( this.item.getTypeId() != 0 )
+			if ( !this.item.getType().equals(Material.AIR) )
 			{
-				if ( this.item.getTypeId() == that.item.getTypeId() )
+				if ( this.item.getType().equals(that.item.getType()) )
 				{
 					priority = 130;
 				}

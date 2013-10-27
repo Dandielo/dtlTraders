@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
@@ -34,7 +35,6 @@ import net.dandielo.citizens.traders_v3.utils.ItemUtils;
 import net.dandielo.citizens.traders_v3.utils.NBTUtils;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Price;
 
-@SuppressWarnings("deprecation")
 public abstract class Trader implements tNpc {
 	
 	/**
@@ -648,7 +648,7 @@ public abstract class Trader implements tNpc {
 	 */
 	protected boolean selectAndCheckNewItem(ItemStack item)
 	{
-		return (selectedItem = item != null && item.getTypeId() != 0 ? ItemUtils.createStockItem(item) : null) != null;
+		return (selectedItem = item != null && !item.getType().equals(Material.AIR) ? ItemUtils.createStockItem(item) : null) != null;
 	}
 	
 	/**
@@ -738,7 +738,7 @@ public abstract class Trader implements tNpc {
 	 */
 	protected boolean selectAndCheckItem(ItemStack item)
 	{
-		return (selectedItem = item != null && item.getTypeId() != 0 ? stock.getItem(ItemUtils.createStockItem(item), baseStatus.asStock()) : null ) != null;
+		return (selectedItem = item != null && !item.getType().equals(Material.AIR) ? stock.getItem(ItemUtils.createStockItem(item), baseStatus.asStock()) : null ) != null;
 	}
 	
 	/** 
@@ -753,7 +753,7 @@ public abstract class Trader implements tNpc {
 	 */
 	protected boolean selectAndCheckItem(ItemStack item, String bStock)
 	{
-		return (selectedItem = item != null && item.getTypeId() != 0 ? stock.getItem(ItemUtils.createAbstractStockItem(item), bStock) : null ) != null;
+		return (selectedItem = item != null && !item.getType().equals(Material.AIR) ? stock.getItem(ItemUtils.createAbstractStockItem(item), bStock) : null ) != null;
 	}
 	
 	/** 
