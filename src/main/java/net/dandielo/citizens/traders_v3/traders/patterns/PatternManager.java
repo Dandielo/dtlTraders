@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.dandielo.citizens.traders_v3.traders.patterns.types.Item;
 import net.dandielo.citizens.traders_v3.traders.patterns.types.Price;
 import net.dandielo.citizens.traders_v3.traders.setting.TGlobalSettings;
 
@@ -79,6 +80,8 @@ public class PatternManager {
 	{
 		if ( type.equals("price") )
 			return new Price(name);
+		if ( type.equals("item") )
+			return new Item(name);
 		return null;
 	}
 	

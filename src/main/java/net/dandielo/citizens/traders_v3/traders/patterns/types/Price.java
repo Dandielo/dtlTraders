@@ -15,7 +15,6 @@ import net.dandielo.citizens.traders_v3.traders.patterns.Pattern;
 import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
 
 public class Price extends Pattern {
-
 	private Map<String, List<StockItem>> items;
 	private Map<String, Price> inherits;
 	private Map<String, Price> tiers;
