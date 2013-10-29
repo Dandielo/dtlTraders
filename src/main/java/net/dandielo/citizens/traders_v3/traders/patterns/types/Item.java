@@ -1,6 +1,7 @@
 package net.dandielo.citizens.traders_v3.traders.patterns.types;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,7 +52,7 @@ public class Item extends Pattern {
 				for ( String item : data.getStringList(key) )
 				{
 					StockItem stockItem = new StockItem(item);
-
+					stockItem.addFlag(".pat");
 					if ( tier ) stockItem.addAttr("t", getName());
 
 					sell.add(stockItem);
@@ -64,6 +65,7 @@ public class Item extends Pattern {
 					for ( String item : data.getStringList(key) )
 					{
 						StockItem stockItem = new StockItem(item);
+						stockItem.addFlag(".pat");
 						if ( tier ) stockItem.addAttr("t", getName());
 
 						sell.add(stockItem);
@@ -75,6 +77,7 @@ public class Item extends Pattern {
 						for ( String item : data.getStringList(key) )
 						{
 							StockItem stockItem = new StockItem(item);
+							stockItem.addFlag(".pat");
 							if ( tier ) stockItem.addAttr("t", getName());
 
 							buy.add(stockItem);
@@ -97,10 +100,9 @@ public class Item extends Pattern {
 		this.items.put("sell", sell);
 		this.items.put("buy", buy);
 	}
-	
-	List<StockItem> updateList(List<StockItem> oldList)
+
+	public List<StockItem> getStock(String key)
 	{
-		List<StockItem> newList = new ArrayList<StockItem>();
-		return newList;
+		return items.get(key);
 	}
 }

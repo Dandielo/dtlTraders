@@ -8,6 +8,7 @@ import net.dandielo.citizens.traders_v3.core.dB;
 import net.dandielo.citizens.traders_v3.traders.patterns.Pattern;
 import net.dandielo.citizens.traders_v3.traders.patterns.Pattern.Type;
 import net.dandielo.citizens.traders_v3.traders.patterns.PatternManager;
+import net.dandielo.citizens.traders_v3.traders.patterns.types.Item;
 import net.dandielo.citizens.traders_v3.traders.patterns.types.Price.PriceMatch;
 import net.dandielo.citizens.traders_v3.traders.setting.Settings;
 import net.dandielo.citizens.traders_v3.utils.NBTUtils;
@@ -25,6 +26,33 @@ public class StockPlayer extends StockTrader {
 	public StockPlayer(Settings settings, Player player) {
 		super(settings);
 		this.player = player;
+		
+		//add all pattern items to the stock
+		if ( settings.getPatterns() != null && !settings.getPatterns().isEmpty() )
+		{
+			List<Pattern> patterns = PatternManager.getPatterns(settings.getPatterns());
+			
+			if ( !patterns.isEmpty() )
+			{
+				for ( Pattern pattern : PatternManager.getPatterns(settings.getPatterns()) )
+				{
+					if ( pattern.getType().equals(Type.ITEM) && 
+							Perms.hasPerm(player, "dtl.trader.patterns." + pattern.getName()) )
+					{
+						for ( StockItem sItem : ((Item)pattern).getStock("sell") )
+						{
+							stock.get("sell").remove(sItem);
+							stock.get("sell").add(sItem);
+						}
+						for ( StockItem sItem : ((Item)pattern).getStock("buy") )
+						{
+							stock.get("buy").remove(sItem);
+							stock.get("buy").add(sItem);
+						}
+					}
+				}
+			}
+		}
 	}
 
 	@Override
@@ -96,6 +124,27 @@ public class StockPlayer extends StockTrader {
 	public Player getPlayer()
 	{
 		return player;
+	}
+	
+	//override to support item patterns
+	public StockItem getItem(int slot, String stock)
+	{
+		StockItem resultItem = null;
+		for ( StockItem stockItem : this.stock.get(stock) )
+			if ( stockItem.getSlot() == slot )
+				resultItem = stockItem;
+		return resultItem;
+	}
+
+	//override to support item patterns
+	public StockItem getItem(StockItem item, String stock)
+	{
+		for ( StockItem sItem : this.stock.get(stock) )
+			if ( sItem.equalsWeak(item) )
+			{
+				return sItem;
+			}
+		return null;
 	}
 	
 	@Override

@@ -19,6 +19,7 @@ import net.dandielo.citizens.traders_v3.utils.items.flags.Abstract;
 import net.dandielo.citizens.traders_v3.utils.items.flags.DataCheck;
 import net.dandielo.citizens.traders_v3.utils.items.flags.Lore;
 import net.dandielo.citizens.traders_v3.utils.items.flags.NoStack;
+import net.dandielo.citizens.traders_v3.utils.items.flags.PatternItem;
 import net.dandielo.citizens.traders_v3.utils.items.flags.Splash;
 import net.dandielo.citizens.traders_v3.utils.items.flags.StackPrice;
 
@@ -317,6 +318,7 @@ public abstract class ItemFlag {
 		
 		try 
 		{
+			registerFlag(PatternItem.class);
 			registerFlag(StackPrice.class);
 			registerFlag(DataCheck.class);
 			registerFlag(Abstract.class);

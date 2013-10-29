@@ -12,6 +12,7 @@ import net.dandielo.citizens.traders_v3.traders.setting.Settings;
 import net.dandielo.citizens.traders_v3.traders.setting.TGlobalSettings;
 import net.dandielo.citizens.traders_v3.utils.NBTUtils;
 import net.dandielo.citizens.traders_v3.utils.items.flags.Lore;
+import net.dandielo.citizens.traders_v3.utils.items.flags.PatternItem;
 import net.dandielo.citizens.traders_v3.utils.items.flags.StackPrice;
 
 import org.bukkit.Bukkit;
@@ -45,7 +46,7 @@ public class StockTrader extends Stock {
 	{
 		//debug info
 		dB.info("Loading traders stock");
-		
+
 		if ( data.keyExists("sell") )
 		{
 			for ( Object item : (List<Object>) data.getRaw("sell") ) 
@@ -104,28 +105,38 @@ public class StockTrader extends Stock {
 	{
 		//debug info
 		dB.info("Saving traders stock");
-		
+
 		List<Object> sellList = new ArrayList<Object>();
 		for ( StockItem item : stock.get("sell") )
-			if ( item.hasFlag(Lore.class) )
+		{
+			if ( !item.hasFlag(PatternItem.class) )
 			{
-				Map<String, List<String>> temp = new HashMap<String, List<String>>();
-				temp.put(item.toString(), item.getLore());
-				sellList.add(temp);
+				if ( item.hasFlag(Lore.class) )
+				{
+					Map<String, List<String>> temp = new HashMap<String, List<String>>();
+					temp.put(item.toString(), item.getLore());
+					sellList.add(temp);
+				}
+				else
+					sellList.add(item.toString());
 			}
-			else
-				sellList.add(item.toString());
+		}
 
 		List<Object> buyList = new ArrayList<Object>();
 		for ( StockItem item : stock.get("buy") )
-			if ( item.hasFlag(Lore.class) )
+		{
+			if ( !item.hasFlag(PatternItem.class) )
 			{
-				Map<String, List<String>> temp = new HashMap<String, List<String>>();
-				temp.put(item.toString(), item.getLore());
-				buyList.add(temp);
+				if ( item.hasFlag(Lore.class) )
+				{
+					Map<String, List<String>> temp = new HashMap<String, List<String>>();
+					temp.put(item.toString(), item.getLore());
+					buyList.add(temp);
+				}
+				else
+					buyList.add(item.toString());
 			}
-			else
-				buyList.add(item.toString());
+		}
 
 		data.setRaw("sell", sellList);
 		data.setRaw("buy", buyList);
@@ -156,7 +167,7 @@ public class StockTrader extends Stock {
 	{
 		//debug info
 		dB.info("Setting inventory, status: ", status.name().toLowerCase());
-		
+
 		//clear the inventory
 		inventory.clear();
 		for ( StockItem item : this.stock.get(status.asStock()) )
@@ -169,18 +180,18 @@ public class StockTrader extends Stock {
 			ItemMeta meta = itemStack.getItemMeta();
 			meta.setLore(item.getTempLore(status, itemStack.clone()));
 			itemStack.setItemMeta(meta);
-			
+
 			//set the item 
 			inventory.setItem(item.getSlot(), NBTUtils.markItem(itemStack));
 		}
 		setUi(inventory, null, status);
 	}
-	
+
 	public void setAmountsInventory(Inventory inventory, tNpcStatus status, StockItem item)
 	{
 		//debug info
 		dB.info("Setting inventory, status: ", tNpcStatus.SELL_AMOUNTS.name().toLowerCase());
-		
+
 		//clear the inventory
 		inventory.clear();
 		for ( Integer amount : item.getAmounts() )
@@ -188,12 +199,12 @@ public class StockTrader extends Stock {
 			//set new amount
 			ItemStack itemStack = item.getItem(false);
 			itemStack.setAmount(amount);
-			
+
 			//set the lore
 			ItemMeta meta = itemStack.getItemMeta();
 			meta.setLore(item.getTempLore(status, itemStack.clone()));
 			itemStack.setItemMeta(meta);
-			
+
 			//set the item
 			inventory.setItem(inventory.firstEmpty(), NBTUtils.markItem(itemStack));
 		}
@@ -204,7 +215,7 @@ public class StockTrader extends Stock {
 	{
 		//debug info
 		dB.info("Setting management inventory, status: ", status.name().toLowerCase(), ", base status: ", baseStatus.name().toLowerCase());
-		
+
 		//clear the inventory
 		inventory.clear();
 		for ( StockItem item : this.stock.get(baseStatus.asStock()) )
@@ -217,7 +228,7 @@ public class StockTrader extends Stock {
 			ItemMeta meta = itemStack.getItemMeta();
 			meta.setLore(item.getTempLore(status, itemStack.clone()));
 			itemStack.setItemMeta(meta);
-			
+
 			//set the item 
 			inventory.setItem(item.getSlot(), NBTUtils.markItem(itemStack));
 		}
@@ -233,10 +244,10 @@ public class StockTrader extends Stock {
 		switch(status)
 		{
 		case SELL:
-		    // Don't show buy-action when npc doesn't buy anything 
-		    if (this.stock.get("buy") != null && this.stock.get("buy").size() > 0) {
-		        inventory.setItem(this.getFinalInventorySize() - 1, items.get("buy"));
-		    }
+			// Don't show buy-action when npc doesn't buy anything 
+			if (this.stock.get("buy") != null && this.stock.get("buy").size() > 0) {
+				inventory.setItem(this.getFinalInventorySize() - 1, items.get("buy"));
+			}
 			break;
 		case SELL_AMOUNTS:
 			inventory.setItem(this.getFinalInventorySize() - 1, items.get("back"));
@@ -278,11 +289,11 @@ public class StockTrader extends Stock {
 	public double parsePrice(StockItem item, int slot) {
 		//debug low
 		dB.low(item.getPrice());
-		
+
 		if ( item.hasFlag(StackPrice.class) )
 			return item.getPrice() * item.getAmount(slot) / item.getAmount();
 		else
-		    return item.getPrice() * item.getAmount(slot);
+			return item.getPrice() * item.getAmount(slot);
 	}
 
 	@Override

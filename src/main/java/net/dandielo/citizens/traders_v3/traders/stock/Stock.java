@@ -39,9 +39,17 @@ public abstract class Stock implements InventoryHolder {
 	{
 		StockPlayer stock = new StockPlayer(settings, player);
 		
-		//for ( Map.Entry<String, List<StockItem>> entry : this.stock.entrySet() )
 		//add all items to the new player stock
-		stock.stock = this.stock;
+		for ( StockItem sItem : this.stock.get("sell") )
+		{
+			stock.stock.get("sell").remove(sItem);
+			stock.stock.get("sell").add(sItem);
+		}
+		for ( StockItem sItem :  this.stock.get("buy") )
+		{
+			stock.stock.get("buy").remove(sItem);
+			stock.stock.get("buy").add(sItem);
+		}
 		
 		return stock;
 	}

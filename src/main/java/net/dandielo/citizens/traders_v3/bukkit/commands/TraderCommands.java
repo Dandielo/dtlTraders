@@ -2,6 +2,7 @@ package net.dandielo.citizens.traders_v3.bukkit.commands;
 
 import java.util.Iterator;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.EntityType;
@@ -636,6 +637,11 @@ public class TraderCommands {
 		}
 	}
 	
+	/*public static void main(String[] a)
+	{
+		System.out.print(Pattern.compile("&.").matcher("&3ANPC &7Name").replaceAll("")
+	}*/
+	
 	@Command(
 	name = "trader", syntax = "manage <trader>",
 	perm = "dtl.trader.commands.manage",
@@ -643,10 +649,12 @@ public class TraderCommands {
 	public void traderManage(DtlTraders plugin, Player sender, Trader trader, Map<String, String> args) throws TraderTypeNotFoundException, InvalidTraderTypeException
 	{
 		Iterator<NPC> it = CitizensAPI.getNPCRegistry().iterator();
+		Pattern pat = Pattern.compile("&.");
 		NPC result = null;
 		while(it.hasNext() && result == null)
 		{
-			if ( !(result = it.next()).getName().equals(args.get("trader")) )
+			
+			if ( !pat.matcher((result = it.next()).getName()).replaceAll("").equals(args.get("trader")) )
 			{
 				try
 				{
