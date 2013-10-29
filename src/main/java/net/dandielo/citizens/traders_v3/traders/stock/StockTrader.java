@@ -234,7 +234,7 @@ public class StockTrader extends Stock {
 		{
 		case SELL:
 		    // Don't show buy-action when npc doesn't buy anything 
-		    if (this.stock.get(tNpcStatus.BUY) != null && this.stock.get(tNpcStatus.BUY).size() > 0) {
+		    if (this.stock.get("buy") != null && this.stock.get("buy").size() > 0) {
 		        inventory.setItem(this.getFinalInventorySize() - 1, items.get("buy"));
 		    }
 			break;
