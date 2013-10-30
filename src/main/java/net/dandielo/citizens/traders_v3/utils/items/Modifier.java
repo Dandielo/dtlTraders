@@ -26,6 +26,6 @@ public class Modifier
 	
 	public String toString()
 	{
-		return name + "/" + String.format("%.1f", value) + "/" + operation; 
+		return name + "/" + String.format("%.2f", value) + "/" + operation; 
 	}
 }
