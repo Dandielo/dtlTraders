@@ -11,7 +11,7 @@
 		<craftbukkit.version>1.6.4-R1.1-SNAPSHOT</craftbukkit.version>
 		<citizens.version>2.0.9-SNAPSHOT</citizens.version>
 		<vault.version>1.2.27-SNAPSHOT</vault.version>
-		<denizen.version>0.9.2-SNAPSHOT</denizen.version>
+		<denizen.version>0.9.3-SNAPSHOT</denizen.version>
 		<wallets.version>1.0.0-SNAPSHOT</wallets.version>
 		<stats.version>1.2.0-SNAPSHOT</stats.version>
 	</properties> 
@@ -65,12 +65,12 @@
 			<type>jar</type>
 			<scope>provided</scope>
 		</dependency> 
-	<!-- <dependency> 
+	    <!-- <dependency> 
 			<groupId>net.aufdemrand</groupId>
 			<artifactId>denizen</artifactId>
 			<version>${denizen.version}</version>
 			<scope>provided</scope> 
-		</dependency>  -->	
+		</dependency> -->  
 		<dependency> 
 		    <groupId>net.dandielo</groupId>
 		    <artifactId>dtlStats</artifactId> 

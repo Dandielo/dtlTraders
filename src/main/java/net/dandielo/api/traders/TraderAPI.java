@@ -18,21 +18,8 @@ import net.dandielo.citizens.traders_v3.traits.TraderTrait;
 import net.dandielo.citizens.traders_v3.traits.WalletTrait;
 
 public class TraderAPI {
-	
-	//Core related
-	public boolean registerTraderType(Class<? extends Trader> type)
-	{
-		try
-		{
-			tNpcManager.registerType(type);
-		}
-		catch( TraderTypeRegistrationException e )
-		{
-			return false;
-		}
-		return true;
-	}
-	
+	private static tNpcManager manager = tNpcManager.instance(); 
+		
 	//trader type related
 	public <T extends Trader> TraderTrait createTrader(Location loc, String name, String type)
 	{
@@ -63,7 +50,6 @@ public class TraderAPI {
 		
 		return trader;
 	}
-	
 	public boolean removeTrader(int id)
 	{
 		NPC npc = CitizensAPI.getNPCRegistry().getById(id);
@@ -72,7 +58,6 @@ public class TraderAPI {
 		npc.destroy();
 		return true;
 	}
-	
 	public boolean toggleStatus(Player player, tNpcStatus status)
 	{
 		Trader trader = tNpcManager.instance().getTraderRelation(player);

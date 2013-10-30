@@ -5,8 +5,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import net.dandielo.citizens.traders_v3.bukkit.CraftBukkitInterface;
+import net.dandielo.citizens.traders_v3.utils.items.Modifier;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Price;
 
 import org.bukkit.ChatColor;
@@ -28,9 +30,15 @@ public class NBTUtils {
 	private static Class NBTTagCompoundClazz = CraftBukkitInterface.getNMClass("NBTTagCompound");
 	//net.minecraft.server.{$VERSION}.NBTTagString
 	private static Class NBTTagStringClazz = CraftBukkitInterface.getNMClass("NBTTagString");
+	//net.minecraft.server.{$VERSION}.NBTTagDouble
+	private static Class NBTTagDoubleClazz = CraftBukkitInterface.getNMClass("NBTTagDouble");
 	//net.minecraft.server.{$VERSION}.NBTTagList
 	private static Class NBTTagListClazz = CraftBukkitInterface.getNMClass("NBTTagList");
-	//net.minecraft.server.{$VERSION}.NBTTagList
+	//net.minecraft.server.{$VERSION}.NBTTagLong
+	private static Class NBTTagLongClazz = CraftBukkitInterface.getNMClass("NBTTagLong");
+	//net.minecraft.server.{$VERSION}.NBTTagInt
+	private static Class NBTTagIntClazz = CraftBukkitInterface.getNMClass("NBTTagInt");
+	//net.minecraft.server.{$VERSION}.NBTBase
 	private static Class NBTBaseClazz = CraftBukkitInterface.getNMClass("NBTBase");
 	//net.minecraft.server.{$VERSION}.ItemStack
 	private static Class ItemStackClazz = CraftBukkitInterface.getNMClass("ItemStack");
@@ -44,7 +52,7 @@ public class NBTUtils {
 	private static Method hasTag, getTag, setTag;
 	//net.minecraft.server.{$VERSION}.NBTTagCompound
 	private static Method hasKey, getString, setString, getCompound, getList, set, 
-	remove, add, get, size, getName;
+	remove, add, get, size, getName, getDouble, getInt;
 	
 	//NTBTagString data field
 	private static Field data;
@@ -63,6 +71,8 @@ public class NBTUtils {
 			setTag = ItemStackClazz.getMethod("setTag", NBTTagCompoundClazz);
 			hasKey = NBTTagCompoundClazz.getMethod("hasKey", String.class);
 			getString = NBTTagCompoundClazz.getMethod("getString", String.class);
+			getDouble = NBTTagCompoundClazz.getMethod("getDouble", String.class);
+			getInt = NBTTagCompoundClazz.getMethod("getInt", String.class);
 			setString = NBTTagCompoundClazz.getMethod("setString", String.class, String.class);
 			getCompound = NBTTagCompoundClazz.getMethod("getCompound", String.class);
 			getList = NBTTagCompoundClazz.getMethod("getList", String.class);
@@ -183,6 +193,113 @@ public class NBTUtils {
         
         //return as new item
         return (ItemStack) asCraftMirror.invoke(null, cis);
+    }
+    
+    /* Attributes support
+     * 
+     * 
+     */
+    private static ItemStack _setModifier(ItemStack item, String name, String attrName, double value, int operation) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException, NoSuchMethodException, SecurityException
+    {
+    	// tag (net.minecraft.server.{$VERSION}.NBTTagCompound) 
+    	Object tag;
+    	
+        //cis (net.minecraft.server.{$VERSION}.ItemStack)
+    	Object nms = asNMSCopy.invoke(null, item);
+		
+		//search for the tag
+		if( !((Boolean) hasTag.invoke(nms)) )
+			setTag.invoke(nms, NBTTagCompoundClazz.newInstance());
+		tag = getTag.invoke(nms);
+    	
+		//get the attribute list
+    	Object attrList = null;
+    	if ( (Boolean) hasKey.invoke(tag, "AttributeModifiers") )
+    		attrList = getList.invoke(tag, "AttributeModifiers");
+		else
+			attrList = NBTTagListClazz.newInstance();
+    	
+    	//create a new list
+    	Object nList = NBTTagListClazz.newInstance();
+    	
+    	//copy all tags (not including the set one)
+		for ( int j = 0 ; j < (Integer) size.invoke(attrList) ; ++j )
+			if ( !getString.invoke(get.invoke(attrList, j), "Name").equals(name) )
+				add.invoke(nList, get.invoke(attrList, j));
+				
+		//create the new attribute tag
+		Object attr = NBTTagCompoundClazz.newInstance();
+		set.invoke(attr, "Name", NBTTagStringClazz.getConstructor(String.class, String.class).newInstance("", name));
+		set.invoke(attr, "AttributeName", NBTTagStringClazz.getConstructor(String.class, String.class).newInstance("", attrName));
+		set.invoke(attr, "Amount", NBTTagDoubleClazz.getConstructor(String.class, double.class).newInstance("", value));
+    	set.invoke(attr, "Operation", NBTTagIntClazz.getConstructor(String.class, int.class).newInstance("", operation));
+    	
+    	//generate a random UUID
+        UUID randUUID = UUID.randomUUID();
+    	set.invoke(attr, "UUIDMost", NBTTagLongClazz.getConstructor(String.class, long.class).newInstance("", randUUID.getMostSignificantBits()));
+    	set.invoke(attr, "UUIDLeast", NBTTagLongClazz.getConstructor(String.class, long.class).newInstance("", randUUID.getLeastSignificantBits()));
+		add.invoke(nList, attr);
+		
+		set.invoke(tag, "AttributeModifiers", nList);
+		
+        //return as new item
+        return (ItemStack) asCraftMirror.invoke(null, nms);
+    }
+    
+    public static ItemStack setModifier(ItemStack item, String name, String attr, double value, int operation)
+    {
+    	try
+		{
+			return _setModifier(item, name, attr, value, operation);
+		}
+		catch(Exception e) { return null; }
+    }
+    
+    private static List<Modifier> _getModifiers(ItemStack item, String attrName) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException, NoSuchMethodException, SecurityException
+    {
+    	// tag (net.minecraft.server.{$VERSION}.NBTTagCompound) 
+    	Object tag;
+    	
+        //cis (net.minecraft.server.{$VERSION}.ItemStack)
+    	Object nms = asNMSCopy.invoke(null, item);
+		
+		//search for the tag
+		if( !((Boolean) hasTag.invoke(nms)) ) return null;
+		tag = getTag.invoke(nms);
+    	
+		//get the attribute list
+    	Object attrList = null;
+    	if ( (Boolean) hasKey.invoke(tag, "AttributeModifiers") )
+    		attrList = getList.invoke(tag, "AttributeModifiers");
+		else return null;
+    	
+
+    	List<Modifier> mods = new ArrayList<Modifier>();
+    	//copy all tags (not including the set one)
+		for ( int j = 0 ; j < (Integer) size.invoke(attrList) ; ++j )
+		{
+			Object attr = get.invoke(attrList, j);
+			if ( getString.invoke(attr, "AttributeName").equals(attrName) )
+			mods.add(
+					new Modifier(
+							(String)  getString.invoke(attr, "Name"), 
+							(Double)  getDouble.invoke(attr, "Amount"), 
+							(Integer) getInt.invoke(attr, "Operation")
+					)
+			);
+		}
+		
+        //return as new item
+        return mods;
+    }
+    
+    public static List<Modifier> getModifiers(ItemStack item, String attr)
+    {
+    	try
+		{
+			return _getModifiers(item, attr);
+		}
+		catch(Exception e) { return null; }
     }
 	
 	/*

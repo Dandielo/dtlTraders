@@ -20,6 +20,10 @@ import net.dandielo.citizens.traders_v3.utils.items.attributes.Book;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Durability;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Enchant;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Firework;
+import net.dandielo.citizens.traders_v3.utils.items.attributes.GenericDamage;
+import net.dandielo.citizens.traders_v3.utils.items.attributes.GenericHealth;
+import net.dandielo.citizens.traders_v3.utils.items.attributes.GenericKnockback;
+import net.dandielo.citizens.traders_v3.utils.items.attributes.GenericSpeed;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.LeatherColor;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Multiplier;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Name;
@@ -83,6 +87,24 @@ public abstract class ItemAttr {
 
 	/**
 	 * Called when the given item needs attributes re-set
+	 * @return 
+	 *     The updated item
+	 * @param item
+	 *     The item for which we set the attribute values
+	 * @param endItem 
+	 *     tells the method if the item is just displayed in the traders inventory or if it's the users end-item he bought  
+	 * @throws InvalidItemException
+	 */
+	public ItemStack onReturnAssign(ItemStack item, boolean endItem) throws InvalidItemException
+	{
+		onAssign(item, endItem);
+		return item;
+	}
+	
+	/**
+	 * Called when the given item needs attributes re-set
+	 * @return 
+	 *     The updated item
 	 * @param item
 	 *     The item for which we set the attribute values
 	 * @param endItem 
@@ -93,7 +115,7 @@ public abstract class ItemAttr {
 	{
 		onAssign(item);
 	}
-
+	
 	/**
 	 * Called when the given item needs attributes re-set. This method is called as a end-user item assigning method.
 	 * @param item
@@ -453,7 +475,11 @@ public abstract class ItemAttr {
 		try 
 		{
 			//item related
+			registerAttr(GenericKnockback.class);
+			registerAttr(GenericDamage.class);
+			registerAttr(GenericHealth.class);
 			registerAttr(StoredEnchant.class);
+			registerAttr(GenericSpeed.class);
 			registerAttr(LeatherColor.class);
 			registerAttr(PatternItem.class);
 			registerAttr(Multiplier.class);

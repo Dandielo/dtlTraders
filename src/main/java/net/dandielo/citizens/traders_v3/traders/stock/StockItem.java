@@ -465,7 +465,7 @@ public final class StockItem {
 			try 
 			{
 				//try assign the attribute
-			    itemAttr.onAssign(clone, endItem);
+			    clone = itemAttr.onReturnAssign(clone, endItem);
 			} 
 			catch (InvalidItemException e)
 			{
