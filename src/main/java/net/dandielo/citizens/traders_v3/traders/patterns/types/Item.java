@@ -1,13 +1,14 @@
 package net.dandielo.citizens.traders_v3.traders.patterns.types;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.Player;
 
+import net.dandielo.citizens.traders_v3.bukkit.Perms;
 import net.dandielo.citizens.traders_v3.traders.patterns.Pattern;
 import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
 
@@ -52,7 +53,7 @@ public class Item extends Pattern {
 				for ( String item : data.getStringList(key) )
 				{
 					StockItem stockItem = new StockItem(item);
-					stockItem.addFlag(".pat");
+					stockItem.addAttr("pat", String.valueOf(priority));
 					if ( tier ) stockItem.addAttr("t", getName());
 
 					sell.add(stockItem);
@@ -65,7 +66,7 @@ public class Item extends Pattern {
 					for ( String item : data.getStringList(key) )
 					{
 						StockItem stockItem = new StockItem(item);
-						stockItem.addFlag(".pat");
+						stockItem.addAttr("pat", String.valueOf(priority));
 						if ( tier ) stockItem.addAttr("t", getName());
 
 						sell.add(stockItem);
@@ -77,7 +78,7 @@ public class Item extends Pattern {
 						for ( String item : data.getStringList(key) )
 						{
 							StockItem stockItem = new StockItem(item);
-							stockItem.addFlag(".pat");
+							stockItem.addAttr("pat", String.valueOf(priority));
 							if ( tier ) stockItem.addAttr("t", getName());
 
 							buy.add(stockItem);
@@ -101,8 +102,14 @@ public class Item extends Pattern {
 		this.items.put("buy", buy);
 	}
 
-	public List<StockItem> getStock(String key)
+	public List<StockItem> updateStock(List<StockItem> stock, String key, Player player)
 	{
-		return items.get(key);
+		for ( StockItem sItem : this.items.get(key) ) 
+			if ( !stock.contains(sItem) ) stock.add(sItem);
+
+		for ( Map.Entry<String, Item> e : tiers.entrySet() )
+			if ( Perms.hasPerm(player, "dtl.trader.tiers." + e.getKey()) )
+				e.getValue().updateStock(stock, key, player);
+		return stock;
 	}
 }

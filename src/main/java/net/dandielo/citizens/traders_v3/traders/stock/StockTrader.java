@@ -11,8 +11,8 @@ import net.dandielo.citizens.traders_v3.core.dB;
 import net.dandielo.citizens.traders_v3.traders.setting.Settings;
 import net.dandielo.citizens.traders_v3.traders.setting.TGlobalSettings;
 import net.dandielo.citizens.traders_v3.utils.NBTUtils;
+import net.dandielo.citizens.traders_v3.utils.items.attributes.PatternItem;
 import net.dandielo.citizens.traders_v3.utils.items.flags.Lore;
-import net.dandielo.citizens.traders_v3.utils.items.flags.PatternItem;
 import net.dandielo.citizens.traders_v3.utils.items.flags.StackPrice;
 
 import org.bukkit.Bukkit;
@@ -45,8 +45,7 @@ public class StockTrader extends Stock {
 	public void load(DataKey data) 
 	{
 		//debug info
-		dB.info("Loading traders stock");
-
+		dB.info("Loading trader specific stock");
 		if ( data.keyExists("sell") )
 		{
 			for ( Object item : (List<Object>) data.getRaw("sell") ) 
@@ -109,7 +108,7 @@ public class StockTrader extends Stock {
 		List<Object> sellList = new ArrayList<Object>();
 		for ( StockItem item : stock.get("sell") )
 		{
-			if ( !item.hasFlag(PatternItem.class) )
+			if ( !item.hasAttr(PatternItem.class) )
 			{
 				if ( item.hasFlag(Lore.class) )
 				{
@@ -125,7 +124,7 @@ public class StockTrader extends Stock {
 		List<Object> buyList = new ArrayList<Object>();
 		for ( StockItem item : stock.get("buy") )
 		{
-			if ( !item.hasFlag(PatternItem.class) )
+			if ( !item.hasAttr(PatternItem.class) )
 			{
 				if ( item.hasFlag(Lore.class) )
 				{
@@ -220,17 +219,20 @@ public class StockTrader extends Stock {
 		inventory.clear();
 		for ( StockItem item : this.stock.get(baseStatus.asStock()) )
 		{
-			if ( item.getSlot() < 0 )
-				item.setSlot(inventory.firstEmpty());
+			if ( !item.hasAttr(PatternItem.class) )
+			{
+				if ( item.getSlot() < 0 )
+					item.setSlot(inventory.firstEmpty());
 
-			//set the lore
-			ItemStack itemStack = item.getItem(false);
-			ItemMeta meta = itemStack.getItemMeta();
-			meta.setLore(item.getTempLore(status, itemStack.clone()));
-			itemStack.setItemMeta(meta);
+				//set the lore
+				ItemStack itemStack = item.getItem(false);
+				ItemMeta meta = itemStack.getItemMeta();
+				meta.setLore(item.getTempLore(status, itemStack.clone()));
+				itemStack.setItemMeta(meta);
 
-			//set the item 
-			inventory.setItem(item.getSlot(), NBTUtils.markItem(itemStack));
+				//set the item 
+				inventory.setItem(item.getSlot(), NBTUtils.markItem(itemStack));
+			}
 		}
 		setUi(inventory, baseStatus, status);
 	}

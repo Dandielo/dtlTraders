@@ -23,6 +23,7 @@ import net.dandielo.citizens.traders_v3.utils.items.attributes.Firework;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.LeatherColor;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Multiplier;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Name;
+import net.dandielo.citizens.traders_v3.utils.items.attributes.PatternItem;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Potion;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Price;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Skull;
@@ -454,6 +455,7 @@ public abstract class ItemAttr {
 			//item related
 			registerAttr(StoredEnchant.class);
 			registerAttr(LeatherColor.class);
+			registerAttr(PatternItem.class);
 			registerAttr(Multiplier.class);
 			registerAttr(Durability.class);
 			registerAttr(Firework.class);

@@ -2,13 +2,20 @@ package net.dandielo.citizens.traders_v3.traders.stock;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import net.citizensnpcs.api.util.DataKey;
 import net.dandielo.citizens.traders_v3.tNpcStatus;
+import net.dandielo.citizens.traders_v3.bukkit.Perms;
 import net.dandielo.citizens.traders_v3.core.dB;
+import net.dandielo.citizens.traders_v3.traders.patterns.Pattern;
+import net.dandielo.citizens.traders_v3.traders.patterns.PatternManager;
+import net.dandielo.citizens.traders_v3.traders.patterns.Pattern.Type;
+import net.dandielo.citizens.traders_v3.traders.patterns.types.Item;
 import net.dandielo.citizens.traders_v3.traders.setting.Settings;
+import net.dandielo.citizens.traders_v3.utils.items.attributes.PatternItem;
 
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -38,17 +45,31 @@ public abstract class Stock implements InventoryHolder {
 	public StockPlayer toPlayerStock(Player player)
 	{
 		StockPlayer stock = new StockPlayer(settings, player);
-		
-		//add all items to the new player stock
-		for ( StockItem sItem : this.stock.get("sell") )
+		stock.stock = this.stock;
+
+		//remove all pattern items
+		Iterator<StockItem> it = stock.stock.get("sell").iterator();
+		while(it.hasNext()) if ( it.next().hasAttr(PatternItem.class) ) it.remove(); 
+		it = stock.stock.get("buy").iterator();
+		while(it.hasNext()) if ( it.next().hasAttr(PatternItem.class) ) it.remove(); 
+
+		//update stock with pattern items
+		if ( settings.getPatterns() != null && !settings.getPatterns().isEmpty() )
 		{
-			stock.stock.get("sell").remove(sItem);
-			stock.stock.get("sell").add(sItem);
-		}
-		for ( StockItem sItem :  this.stock.get("buy") )
-		{
-			stock.stock.get("buy").remove(sItem);
-			stock.stock.get("buy").add(sItem);
+			List<Pattern> patterns = PatternManager.getPatterns(settings.getPatterns());
+			
+			if ( !patterns.isEmpty() )
+			{
+				for ( Pattern pattern : PatternManager.getPatterns(settings.getPatterns()) )
+				{
+					if ( pattern.getType().equals(Type.ITEM) && 
+							Perms.hasPerm(player, "dtl.trader.patterns." + pattern.getName()) )
+					{
+						((Item)pattern).updateStock(stock.stock.get("sell"), "sell", player);
+						((Item)pattern).updateStock(stock.stock.get("buy"), "buy", player);
+					}
+				}
+			}
 		}
 		
 		return stock;

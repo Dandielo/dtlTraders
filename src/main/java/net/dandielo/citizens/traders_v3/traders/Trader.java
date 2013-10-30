@@ -33,6 +33,7 @@ import net.dandielo.citizens.traders_v3.traits.TraderTrait;
 import net.dandielo.citizens.traders_v3.traits.WalletTrait;
 import net.dandielo.citizens.traders_v3.utils.ItemUtils;
 import net.dandielo.citizens.traders_v3.utils.NBTUtils;
+import net.dandielo.citizens.traders_v3.utils.items.attributes.PatternItem;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Price;
 
 public abstract class Trader implements tNpc {
@@ -402,7 +403,7 @@ public abstract class Trader implements tNpc {
 				StockItem matchedItem = null;
 				//match old items to persist item data
 				for ( StockItem item : oldItems )
-					if ( matchedItem == null && item.equalsStrong(sItem) )
+					if ( matchedItem == null && !item.hasAttr(PatternItem.class) && item.equalsStrong(sItem) )
 						matchedItem = item; 
 				
 				if ( matchedItem != null ) 

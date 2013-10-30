@@ -26,33 +26,6 @@ public class StockPlayer extends StockTrader {
 	public StockPlayer(Settings settings, Player player) {
 		super(settings);
 		this.player = player;
-		
-		//add all pattern items to the stock
-		if ( settings.getPatterns() != null && !settings.getPatterns().isEmpty() )
-		{
-			List<Pattern> patterns = PatternManager.getPatterns(settings.getPatterns());
-			
-			if ( !patterns.isEmpty() )
-			{
-				for ( Pattern pattern : PatternManager.getPatterns(settings.getPatterns()) )
-				{
-					if ( pattern.getType().equals(Type.ITEM) && 
-							Perms.hasPerm(player, "dtl.trader.patterns." + pattern.getName()) )
-					{
-						for ( StockItem sItem : ((Item)pattern).getStock("sell") )
-						{
-							stock.get("sell").remove(sItem);
-							stock.get("sell").add(sItem);
-						}
-						for ( StockItem sItem : ((Item)pattern).getStock("buy") )
-						{
-							stock.get("buy").remove(sItem);
-							stock.get("buy").add(sItem);
-						}
-					}
-				}
-			}
-		}
 	}
 
 	@Override
@@ -170,11 +143,20 @@ public class StockPlayer extends StockTrader {
 			}
 			else
 			{
+				boolean priceParsed = false;
 				for ( Pattern pattern : PatternManager.getPatterns(settings.getPatterns()) )
 				{
 					if ( pattern.getType().equals(Type.PRICE) &&
 							Perms.hasPerm(player, "dtl.trader.patterns." + pattern.getName()) )
+					{
 						match.merge(((net.dandielo.citizens.traders_v3.traders.patterns.types.Price)pattern).findPriceFor(player, stock, item));
+						priceParsed = true;
+					}
+				}
+				if ( !priceParsed )
+				{
+					match.price(item.getPrice());
+					match.multiplier(item.getMultiplier());
 				}
 			}
 		}
