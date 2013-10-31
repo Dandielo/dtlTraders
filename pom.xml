@@ -143,21 +143,4 @@
     </plugins>
   </build>
   
-  <distributionManagement>
-	  <!-- use the following if you're not using a snapshot version. -->
-	  <repository>
-	    <id>dtlTradersRel</id>
-	    <name>dtlTraders</name>
-	    <url>file:///var/lib/jenkins/workspace</url>
-	  </repository>
-	  <!-- use the following if you ARE using a snapshot version. -->
-	  <snapshotRepository>
-	    <id>trSnap</id>
-	    <name>dtlTraders Snapshots</name>
-	    <url>file:///var/lib/jenkins/workspace</url>
-	  </snapshotRepository>
-  </distributionManagement>
-
-  
-  
 </project>
