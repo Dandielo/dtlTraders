@@ -33,7 +33,31 @@
 			<id>vault-repo</id>
 			<url>http://ci.herocraftonline.com/plugin/repository/everything</url>
 		</repository>
+		
+      <repository>
+         <id>upstream</id>
+         <url>${env.Jenkins.Repository}</url>
+         <releases>
+             <enabled>true</enabled>
+         </releases>
+         <snapshots>
+            <enabled>true</enabled>
+         </snapshots>
+      </repository>
 	</repositories> 
+	
+    <pluginRepositories>
+      <pluginRepository>
+          <id>upstream</id>
+          <url>${env.Jenkins.Repository}</url>
+          <releases>
+            <enabled>true</enabled>
+          </releases>
+          <snapshots>
+            <enabled>true</enabled>
+         </snapshots>
+      </pluginRepository>
+    </pluginRepositories>
 	
 	<!-- Dependencies -->
  	<dependencies>
@@ -65,12 +89,12 @@
 			<type>jar</type>
 			<scope>provided</scope>
 		</dependency> 
-	    <!-- <dependency> 
+	    <dependency> 
 			<groupId>net.aufdemrand</groupId>
 			<artifactId>denizen</artifactId>
 			<version>${denizen.version}</version>
 			<scope>provided</scope> 
-		</dependency> -->  
+		</dependency>
 		<dependency> 
 		    <groupId>net.dandielo</groupId>
 		    <artifactId>dtlStats</artifactId> 
