@@ -14,6 +14,8 @@
 		<denizen.version>0.9.3-SNAPSHOT</denizen.version>
 		<wallets.version>1.0.0-SNAPSHOT</wallets.version>
 		<stats.version>1.2.0-SNAPSHOT</stats.version>
+        <build.number>Unknown</build.number>
+        <BUILD_NUMBER>Unknown</BUILD_NUMBER>
 	</properties> 
 
 	<!-- Repositories --> 
