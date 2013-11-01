@@ -3,6 +3,7 @@ package net.dandielo.api.traders;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import net.citizensnpcs.api.CitizensAPI;
@@ -10,7 +11,6 @@ import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.trait.trait.MobType;
 import net.dandielo.citizens.traders_v3.tNpcManager;
 import net.dandielo.citizens.traders_v3.tNpcStatus;
-import net.dandielo.citizens.traders_v3.core.exceptions.TraderTypeRegistrationException;
 import net.dandielo.citizens.traders_v3.traders.Trader;
 import net.dandielo.citizens.traders_v3.traders.setting.TGlobalSettings;
 import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
@@ -19,13 +19,15 @@ import net.dandielo.citizens.traders_v3.traits.WalletTrait;
 
 public class TraderAPI {
 	private static tNpcManager manager = tNpcManager.instance(); 
-		
+	
+	private TraderAPI() { };
+	
 	//trader type related
-	public <T extends Trader> TraderTrait createTrader(Location loc, String name, String type)
+	public static <T extends Trader> TraderTrait createTrader(Location loc, String name, String type)
 	{
 		return createTrader(loc, name, type, EntityType.PLAYER);
 	}
-	public <T extends Trader> TraderTrait createTrader(Location location, String name, String type, EntityType entity)
+	public static <T extends Trader> TraderTrait createTrader(Location location, String name, String type, EntityType entity)
 	{
 		//add Traits
 		NPC npc = CitizensAPI.getNPCRegistry().createNPC(entity, name);
@@ -50,7 +52,7 @@ public class TraderAPI {
 		
 		return trader;
 	}
-	public boolean removeTrader(int id)
+	public static boolean removeTrader(int id)
 	{
 		NPC npc = CitizensAPI.getNPCRegistry().getById(id);
 		if ( npc == null )
@@ -58,7 +60,7 @@ public class TraderAPI {
 		npc.destroy();
 		return true;
 	}
-	public boolean toggleStatus(Player player, tNpcStatus status)
+	public static boolean toggleStatus(Player player, tNpcStatus status)
 	{
 		Trader trader = tNpcManager.instance().getTraderRelation(player);
 		if ( trader == null )
@@ -67,13 +69,49 @@ public class TraderAPI {
 		return true;
 	}
 	
-	public boolean openTrader(Player player, TraderTrait trader)
+	public static boolean openTrader(Player player, TraderTrait trait, tNpcStatus status, boolean openInv)
 	{
-		return false;
+		//check for a relation
+		Trader trader = manager.getTraderRelation(player);
+		//if found then close it and create a new one
+		if ( trader != null && !trader.equals(trait.getNPC()) )
+		{
+			//close the inventory and remove the relation
+			player.closeInventory();
+			manager.removeRelation(player);
+			//create a new relation
+			try
+			{
+				trader = (Trader) tNpcManager.create_tNpc(trait.getNPC(), trait.getType(), player, TraderTrait.class);
+			} catch( Exception e ) { return false; }
+		}
+		
+		//parse the status
+		trader.parseStatus(status);
+		//open the traders inventory
+		if ( openInv )
+		{
+			//get the inventory ready to display
+			Inventory inventory = trader.getStock().getInventory(status);
+			//update the players inventory
+			trader.updatePlayerInventory();
+		    player.openInventory(inventory);
+			//register the inventory as a traderInventory
+			tNpcManager.instance().registerOpenedInventory(player, inventory);
+		}
+		return true;
 	}
-	public boolean closeTrader(Player player, TraderTrait trader)
+	public static boolean closeTrader(Player player)
 	{
-		return false;
+		//check for a relation
+		Trader trader = manager.getTraderRelation(player);
+		//if found then close it
+		if ( trader == null ) return false;
+
+		//close the inventory and remove the relation
+		player.closeInventory();
+		manager.removeRelation(player);
+		return true;
 	}
 	
 	//transaction related

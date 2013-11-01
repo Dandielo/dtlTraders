@@ -307,7 +307,7 @@ public abstract class Trader implements tNpc {
 	/**
 	 * Updates the players inventory resetting all transaction lores.
 	 */
-	protected void updatePlayerInventory()
+	public void updatePlayerInventory()
 	{
 		//the inventory that will be reseted
 		Inventory inv = player.getInventory();
@@ -472,9 +472,12 @@ public abstract class Trader implements tNpc {
 	 * @return
 	 * true if the players inventory has enough place to buy the clicked item
 	 */
+	private int sizeLeft(Inventory inv) {int size = 0; for ( ItemStack item : inv.getContents() ) if ( item == null ) ++size; return size;}
 	protected final boolean _inventoryHasPlace(int amount) 
 	{
-		if ( inventory.firstEmpty() >= 0 && inventory.firstEmpty() < inventory.getSize() )
+		final int sizeLeft = sizeLeft(player.getInventory());
+		System.out.print(sizeLeft);
+		if ( inventory.firstEmpty() >= 0 && sizeLeft > 0 && sizeLeft >= (amount / selectedItem.getItem(false).getMaxStackSize()) )
 			return true;
 		
 		//the players inventory
@@ -565,15 +568,20 @@ public abstract class Trader implements tNpc {
 			}
 		}
 
-		if ( inventory.firstEmpty() < inventory.getSize() 
+		final int sizeLeft = sizeLeft(player.getInventory());
+		if ( sizeLeft > 0 && sizeLeft >= (amountLeft / generatedItem.getMaxStackSize())
 				&& inventory.firstEmpty() >= 0 ) 
 		{
-			//new stack
-			ItemStack is = generatedItem;//selectedItem.getItem(true);
-			is.setAmount(amountLeft);
+			while(amountLeft > 0)
+			{
+				//new stack
+				ItemStack is = generatedItem.clone();//selectedItem.getItem(true);
+				is.setAmount(amountLeft > generatedItem.getMaxStackSize() ? generatedItem.getMaxStackSize() : amountLeft);
+				amountLeft -= generatedItem.getMaxStackSize();
 
-			//set the item info the inv
-			inventory.setItem(inventory.firstEmpty(), is);
+				//set the item info the inv
+				inventory.setItem(inventory.firstEmpty(), is);
+			}
 			return true;
 		}
 		return false;
