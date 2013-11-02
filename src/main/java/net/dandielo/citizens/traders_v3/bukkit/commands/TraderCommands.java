@@ -24,6 +24,7 @@ import net.dandielo.citizens.traders_v3.traders.setting.TGlobalSettings;
 import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
 import net.dandielo.citizens.traders_v3.traits.TraderTrait;
 import net.dandielo.citizens.traders_v3.traits.WalletTrait;
+import net.dandielo.citizens.traders_v3.utils.ItemUtils;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Price;
 
 /**
@@ -709,6 +710,22 @@ public class TraderCommands {
 		}
 	}
 
+	@Command(
+			name = "trader", syntax = "give {args}",
+			perm = "dtl.trader.commands.give",
+			usage = "", desc = "", npc = false)
+	public void traderGive(DtlTraders plugin, Player sender, Trader trader, Map<String, String> args)
+	{
+		if ( args.get("free") != null )
+		{
+			try
+			{
+				StockItem item = new StockItem(args.get("free"));
+				sender.setItemInHand(item.getItem(true));
+			} catch(NumberFormatException e) { }
+		}
+	}
+	
 	@Command(
 			name = "trader", syntax = "open",
 			perm = "dtl.trader.commands.open",

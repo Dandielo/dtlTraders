@@ -116,6 +116,8 @@ public final class StockItem {
 		if ( itemData[0].contains(":") )
 			addFlag(".dc");
 		
+		if ( itemData.length == 1 ) return;
+		
 		//load the regex matcher
 		Matcher matcher = RegexMatcher.instance().getMatcher("item", itemData[1]);
 
