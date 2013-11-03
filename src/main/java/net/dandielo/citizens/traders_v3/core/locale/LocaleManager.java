@@ -13,12 +13,10 @@ import net.dandielo.citizens.traders_v3.bukkit.DtlTraders;
 import net.dandielo.citizens.traders_v3.core.dB;
 import net.dandielo.citizens.traders_v3.core.PluginSettings;
 
-import org.apache.commons.io.input.ReaderInputStream;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.craftbukkit.libs.jline.internal.InputStreamReader;
 
 /**
  * Manages all message, and UI requests by using the chosen localization file
@@ -179,7 +177,7 @@ public class LocaleManager {
 		{
 			//load yaml from file
 		    // Bypass UTF-8 loading issue on windows
-		    InputStream inputStream = new ReaderInputStream(new InputStreamReader(new FileInputStream(localeFile), "UTF-8"));
+		    InputStream inputStream = new FileInputStream(localeFile);
 			localeYaml.load(inputStream);
 			//get the locale version
 			String currentVersion = localeYaml.getString("ver");
