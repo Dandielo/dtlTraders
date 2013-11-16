@@ -1,128 +1,141 @@
 ver: 1.1.5
 messages:
-  banker-tab-select-item-canceled: '^6La selezione è stata annullata'
-  trader-managermode-toggle: '^6Passato alla modalità ^3{mode}'
-  plugin-reload: '^3dtlTraders ^6ricaricato con successo'
-  banker-item-update: '^6Oggetto aggiornato'
-  error-argument-invalid: '^6L''argomento è invalido: ^3{argument}'
-  trader-transaction-failed-trader-money: '^6{npc} non ha abbastanza denaro'
-  trader-stock-item-invalid: '^6Questo oggetto non è valido'
-  banker-created: '^6Hai creato un nuovo banchiere: {banker}'
-  banker-tab-switch: '^6Cambio al ^3{tab}'
-  error-nopermission-creative: '^6Non hai i permessi per farlo nella ^3modalità creativa'
-  wallet-balance: '^6Bilancio Wallet: ^3{amount}'
-  trader-stock-item-update: '^6Oggetto aggiornato'
-  banker-tab-select-item: '^6Seleziona un un nuova cassaforte'
-  error-nopermission: '^6Non hai i permessi per farlo'
-  wallet-invalid: '^6Non puoi usare il commando su questo tipo di Wallet'
-  denizen-item-hint: '{item}: {price}$'
-  wallet-withdraw: '^6Prelevato ^3{amount}'
-  trader-transaction-failed-limit: '^6Il limite per questo oggetto è stato raggiunto'
-  banker-tab-select-item-success: '^6Il nuovo oggetto è stato selezionato'
-  trader-stock-item-add: '^6Oggetto aggiunto'
-  pattern-save-success: '^6Modello creato con successo ^3{pattern}'
-  banker-deposit-success: '^6Oggetto depositato'
-  wallet-deposit: ^6Depositato '^3{amount}'
-  error-managermode-enabled: '^6Non puoi farlo nella modalità gestione'
-  error-npc-not-selected: '^6Non hai selezionato nessun venditore'
-  trader-managermode-enabled: '^6Modalità gestione abilitata per ^3{npc}'
-  banker-withdraw-success: '^6Oggetto ritirato'
-  banker-tab-buy-success: '^6Nuova cassaforte banca acquistata'
-  error-argument-missing: '^6L''argomento è mancante: {argument}'
-  wallet-deposit-fail: 'Non hai abbastanza denaro'
-  trader-stock-item-select: '^6Oggetto selezionato'
-  pattern-save-fail-exists: '^6Questo modello è già esistente ^3{pattern}'
+  plugin-reload: ^3dtlTraders ^6ricaricato con successo
+  plugin-command-message: ^6== dtlTraders ^3{version} ^6==
   trader-created: '^6Hai creato un venditore: {trader}'
-  trader-managermode-disabled: '^6Modalità gestione disabilitata per ^3{npc}'
-  trader-hire-limit: '^6Non puoi assumere altri venditori'
-  trader-transaction-failed-inventory: '^6Non hai abbastanza spazio in inventario'
-  trader-transaction-success: '^3Hai acquistato/venduto un oggetto'
-  wallet-withdraw-fail: '^6Questo wallet ha abbastanza denaro?'
-  plugin-command-message: '^6== dtlTraders ^3{version} ^6=='
+  trader-hire-limit: ^6Non puoi assumere altri venditori
+  trader-stock-item-add: ^6Oggetto aggiunto
+  trader-stock-item-update: ^6Oggetto aggiornato
+  trader-stock-item-select: ^6Oggetto selezionato
+  trader-stock-item-invalid: ^6Questo oggetto non è valido
+  trader-stock-item-remove: ^6Oggetto rimosso
+  trader-stock-toggled: ^3Sei passato alla modalità stock!
+  trader-stock-back: ^6Sei tornato alla modalità stock
+  trader-stock-price-set: '^6Settato il prezzo per: ^3{items}^6 oggetti'
+  trader-stock-price-reset: '^6Resetato tutti i prezzi dello stock'
   trader-transaction-item: '^6{item}, price: {price}'
+  trader-transaction-success: ^3Hai acquistato/venduto un oggetto
+  trader-transaction-failed-player-money: ^6Non hai abbastanza denaro
+  trader-transaction-failed-trader-money: ^6{npc} non ha abbastanza denaro
+  trader-transaction-failed-inventory: ^6Non hai abbastanza spazio nell'inventario
+  trader-transaction-failed-limit: ^6Il limite per quell'oggetto è stato raggiunto
+  trader-managermode-stock-locked: ^6Stock bloccato
+  trader-managermode-stock-unlocked: ^6Stock sbloccato
+  trader-managermode-toggled: ^6Passato alla modalità ^3{mode}
+  trader-managermode-enabled: ^6Modalità gestione abilitata per ^3{npc}
+  trader-managermode-disabled: ^6Modalità gestione disabilitata per ^3{npc}
+  pattern-save-fail-exists: ^6Questo modello è già esistente ^3{pattern}
+  pattern-save-success: ^6Modello creato con successo ^3{pattern}
+  banker-created: '^6Hai creato un nuovo banchiere: {banker}'
+  banker-tab-switch: ^6Cambio al ^3{tab}
+  banker-tab-locked: '^6Bloccato tabella banca: ^3{tab}'
+  banker-tab-unlocked: '^6Sbloccato tabella banca: ^3{tab}'
+  banker-tab-buy-success: '^6Acquistato nuova tabella'
+  banker-tab-buy-fail: '^6Acquisto fallito della nuova tabella'
+  wallet-balance: '^6Bilancio Wallet: ^3{amount}'
+  wallet-invalid: ^6Non puoi usare il commando su questo tipo di Wallet
+  wallet-withdraw: ^6Prelevato ^3{amount}
+  wallet-deposit: ^6Depositato ^3{amount}
+  wallet-withdraw-fail: ^6C'è abbastanza denaro per prelevare da questo Wallet?
+  wallet-deposit-fail: Non hai abbastanza denaro
+  denizen-item-hint: '{item}: {price}$'
+  error-npc-invalid: '^6Questo NPC non è un venditore'
+  error-npc-not-selected: ^6Non hai selezionato nessun venditore
+  error-nopermission-creative: ^6Non hai i permessi per farlo nella ^3modalità creativa
+  error-nopermission-command: '^6Non hai i permessi per usare questo commando'
+  error-nopermission: ^6Non hai i permessi per farlo
+  error-argument-missing: ^6L'argomento è mancante: ^3{argument}
+  error-argument-invalid: ^6L'argomento è invalido: ^3{argument}
+  error-managermode-enabled: ^6Non puoi farlo nella modalità gestione
+  error-command-invalid: ^6Questo commando non è valido
   key-value: '^6{key}: ^3{value}'
-  banker-withdraw-item: '^6Oggetto ritirato'
-  trader-transaction-failed-player-money:'^6Non hai abbastanza denaro'
-  error-command-invalid: '^6Questo commando non è valido'
   key-change: '^6Cambiato {key}: ^3{value}'
-  trader-stock-item-remove: '^6Oggetto rimosso'
-  trader-stock-toggled: '^3Sei passato alla modalità stock!'
-  trader-managermode-toggled: '^6Sei passato alla modalità gestione'
-  trader-managermode-stock-locked: '^6Stock bloccato'
-  trader-managermode-stock-unlocked: '^6Stock sbloccato'
-  trader-stock-back: '^6Sei tornato alla modalità stock'
 keywords:
-  limit: 'Limit'
-  manage-global-limit: 'Amministra il limite generale'
-  sold: 'Venduto'
-  enabled: 'Abilitato'
-  banker-money: 'Banchiere di denaro'
-  manage-player-limit: 'Amministra limite per i player'
-  manage-price: 'Amministra Prezzo'
-  wallet: 'Wallet'
-  owner: 'Proprietario'
-  tab-price: 'Tabella prezzi'
-  disabled: 'Disabilitato'
-  stack-price: 'Prezzo per stock'
-  trader-type: 'Tipo di venditore'
-  banker-type: 'Tipo di banchiere'
-  price: 'Prezzo'
-  type: 'Tipo'
-  banker-private: 'Banchiere privato'
-  bought: 'Acquistato'
-  trader-market: 'Venditore Mercato'
-  trader-server: 'Venditore Server'
-  trader-player: 'Venditore Player'
-  manage-stock: 'Amministra Stock'
-  stock-buy: 'Acquista stock'
-  stock-sell: 'Vendi stock'
-  stock-amounts: 'Quantità stock'
-  stock: 'Stock'
-  wallet-type: 'Tipo Wallet'
-  wallet-player: 'Player bersaglio'
-  wallet-balance: 'Bilancio'
-  wallet-deposit: 'Depositato'
-  wallet-withdraw: 'Ritirato'
+  'true': On
+  'false': Off
+  type: Tipo
+  trader-type: Tipo di venditore
+  banker-type: Tipo di banchiere
+  trader-market: Venditore Mercato
+  trader-server: Venditore Server
+  trader-player: Venditore Player
+  banker-money: Banchiere di denaro
+  banker-private: Banca Privata
+  stack-price: Prezzo stack
+  stack-disable: Stack disabilitato
+  tab-price: Tabella prezzi
+  tab-name: Tabella nomi
+  tab-icon: Tabella icone 
+  bank-name: Nome banca
+  visible-tabs: Tabelle visibili 
+  stock-amounts: Quantità stock
+  stock-start: Stock iniziale
+  stock-size: Dimensione stock
+  stock-name: Nome stock
+  stock-sell: Vendi stock
+  stock-buy: Acquista stock
+  stock: Stock
+  pattern-list: Set Patterns
+  pattern-add: Pattern aggiunto
+  pattern-remove: Pattern rimosso
+  pattern-remove-all: Patterns rimossi
+  pattern-default: Pattern settato come default
+  wallet: Wallet
+  wallet-type: Tipo Wallet
+  wallet-player: Player bersaglio
+  wallet-balance: Bilancio
+  wallet-deposit: Depositato
+  wallet-withdraw: Ritirato
+  bought: Acquistato
+  owner: Proprietario
+  amount: Ammontare
+  limit: Limite
+  price: Prezzo
+  name: Nome
+  sold: Vendi
+  enabled: Abilitato
+  disabled: Disabilitato
 ui:
-  limit:
-    name: '^r^6Modifica limite'
-    lore:
-    - '^7Clicca per passare alla modalità modifica limite'
-  unlock:
-    name: '^r^6Sblocca stock'
-    lore:
-    - '^7Clicca per sbloccare lo stock'
-    - '^7Permette di inserire e rimuovere gli stock'
-  price:
-    name: '^r^6Modifica prezzi'
-    lore:
-    - '^7Clicca per passare alla modalità modifica prezzi'
-  sell:
-    name: '^r^6Vendi stock'
-    lore:
-    - '^7Clicca per passare alla modalità vendita stock'
   buy:
-    name: '^r^6Acquista stock'
+    name: ^r^6Acquista stock
     lore:
-    - '^7Clicca per passare alla modalità acquisto stock'
-  lock:
-    name: '^r^6Blocca stock'
+    - ^7Clicca per passare alla modalità acquisto stock
+  sell:
+    name: ^r^6Vendi stock
     lore:
-    - '^7Clicca per salvare tutti'
-    - '^7gli oggetti e bloccare gli stock'
+    - ^7Clicca per passare alla modalità vendita stock
   back:
-    name: '^r^6Indietro'
+    name: ^r^6Indietro
     lore:
-    - '^7Ritorna allo stock'
+    - ^7Ritorna allo stock  
+  price:
+    name: ^r^6Modifica prezzi
+    lore:
+    - ^7Clicca per passare alla modalità modifica prezzi
+  limit:
+    name: ^r^6Modifica limite
+    lore:
+    - ^7Clicca per passare alla modalità modifica limite
+  lock:
+    name: ^r^6Blocca stock
+    lore:
+    - ^7Clicca per salvare tutti
+    - ^7gli oggetti e bloccare gli stock	
+  unlock:
+    name: ^r^6Sblocca stock
+    lore:
+    - ^7Clicca per sbloccare lo stock
+    - ^7Permette l'inserimento e la rimozione degli stock
   item-unitPrice:
     lore:
     - '^6Prezzo unitario: ^7{price}'
   item-price:
     lore:
-    - '^6Prezzo: ^7$ {price}'
+    - '^6Prezzo: ^7{price}'
   item-sell:
     lore:
-    - '^6Clicca qui per acquistare questo oggetto'
+    - '^6Clicca per acquistare questo item'
   item-buy:
     lore:
-    - '^6Clicca questo oggetto'
+    - '^6Clicca su questo oggetto'
+    - '^6per venderlo'
