@@ -25,13 +25,13 @@ public class Name extends ItemAttr {
 	@Override
 	public void onLoad(String data) 
 	{
-		name = data.replace('^', '§');
+		name = data.replace('^', '§').replace('&', '§');
 	}
 
 	@Override
 	public String onSave() 
 	{
-		return name.replace('§', '^');
+		return name.replace('§', '&');
 	}
 
 	@Override
