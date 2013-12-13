@@ -26,9 +26,9 @@ import net.dandielo.citizens.traders_v3.utils.items.attributes.Slot;
 import net.dandielo.citizens.traders_v3.utils.items.flags.Abstract;
 import net.dandielo.citizens.traders_v3.utils.items.flags.DataCheck;
 import net.dandielo.citizens.traders_v3.utils.items.flags.Lore;
-import net.minecraft.server.v1_6_R3.Material;
 
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.Material;
 
 /**
  * Item structure using in each trader stock, this structure allows to save and store more data than the commom ItemStack bukkit structure.
