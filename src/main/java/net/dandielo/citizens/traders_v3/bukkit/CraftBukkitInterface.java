@@ -1,5 +1,7 @@
 package net.dandielo.citizens.traders_v3.bukkit;
 
+import net.minecraft.server.v1_7_R1.NBTTagCompound;
+
 import org.bukkit.Bukkit;
 
 /*

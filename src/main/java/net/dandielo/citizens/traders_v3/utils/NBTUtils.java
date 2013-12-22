@@ -8,8 +8,12 @@ import java.util.List;
 import java.util.UUID;
 
 import net.dandielo.citizens.traders_v3.bukkit.CraftBukkitInterface;
+import net.dandielo.citizens.traders_v3.core.dB;
 import net.dandielo.citizens.traders_v3.utils.items.Modifier;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Price;
+import net.minecraft.server.v1_7_R1.NBTTagDouble;
+import net.minecraft.server.v1_7_R1.NBTTagList;
+import net.minecraft.server.v1_7_R1.NBTTagString;
 
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
@@ -52,7 +56,8 @@ public class NBTUtils {
 	private static Method hasTag, getTag, setTag;
 	//net.minecraft.server.{$VERSION}.NBTTagCompound
 	private static Method hasKey, getString, setString, getCompound, getList, set, 
-	remove, add, get, size, getName, getDouble, getInt;
+	remove, add, get, size, getTypeID, getName, getDouble, getInt;
+	
 	
 	//NTBTagString data field
 	private static Field data;
@@ -75,18 +80,25 @@ public class NBTUtils {
 			getInt = NBTTagCompoundClazz.getMethod("getInt", String.class);
 			setString = NBTTagCompoundClazz.getMethod("setString", String.class, String.class);
 			getCompound = NBTTagCompoundClazz.getMethod("getCompound", String.class);
-			getList = NBTTagCompoundClazz.getMethod("getList", String.class);
+			getList = NBTTagCompoundClazz.getMethod("getList", String.class, int.class);
 			set = NBTTagCompoundClazz.getMethod("set", String.class, NBTBaseClazz);
 			remove = NBTTagCompoundClazz.getMethod("remove", String.class);
 			add = NBTTagListClazz.getMethod("add", NBTBaseClazz);
 			get = NBTTagListClazz.getMethod("get", int.class);
 			size = NBTTagListClazz.getMethod("size");
-			getName = NBTTagStringClazz.getMethod("getName");
+			getTypeID = NBTBaseClazz.getMethod("getTypeId");
+			getName = NBTBaseClazz.getMethod("getTagName", int.class);
 			
-			data = NBTTagStringClazz.getField("data");
+			data = NBTTagStringClazz.getDeclaredField("data");
+			data.setAccessible(true);
 		}
 		catch( Exception e )
 		{ e.printStackTrace(); }
+	}
+	
+	static String getTagName(Object tag) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException
+	{
+		return (String) getName.invoke(null, getTypeID.invoke(tag));
 	}
 	
 	public static boolean hasCustomNBT(ItemStack item, String key)
@@ -201,46 +213,58 @@ public class NBTUtils {
      */
     private static ItemStack _setModifier(ItemStack item, String name, String attrName, double value, int operation) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException, NoSuchMethodException, SecurityException
     {
+    //	System.out.print("MInit - Done");
     	// tag (net.minecraft.server.{$VERSION}.NBTTagCompound) 
     	Object tag;
     	
         //cis (net.minecraft.server.{$VERSION}.ItemStack)
     	Object nms = asNMSCopy.invoke(null, item);
-		
+
+    //	System.out.print("Start - Done");
 		//search for the tag
 		if( !((Boolean) hasTag.invoke(nms)) )
 			setTag.invoke(nms, NBTTagCompoundClazz.newInstance());
 		tag = getTag.invoke(nms);
-    	
+
+    //	System.out.print("MTag - Done");
 		//get the attribute list
     	Object attrList = null;
     	if ( (Boolean) hasKey.invoke(tag, "AttributeModifiers") )
-    		attrList = getList.invoke(tag, "AttributeModifiers");
+    		attrList = getList.invoke(tag, "AttributeModifiers", 0);
 		else
 			attrList = NBTTagListClazz.newInstance();
     	
     	//create a new list
     	Object nList = NBTTagListClazz.newInstance();
+
+   // 	System.out.print("MList - Done");
     	
     	//copy all tags (not including the set one)
 		for ( int j = 0 ; j < (Integer) size.invoke(attrList) ; ++j )
 			if ( !getString.invoke(get.invoke(attrList, j), "Name").equals(name) )
 				add.invoke(nList, get.invoke(attrList, j));
-				
+
+    //	System.out.print("OldList - Done");
+    	
+    	
+    	
 		//create the new attribute tag
 		Object attr = NBTTagCompoundClazz.newInstance();
-		set.invoke(attr, "Name", NBTTagStringClazz.getConstructor(String.class, String.class).newInstance("", name));
-		set.invoke(attr, "AttributeName", NBTTagStringClazz.getConstructor(String.class, String.class).newInstance("", attrName));
-		set.invoke(attr, "Amount", NBTTagDoubleClazz.getConstructor(String.class, double.class).newInstance("", value));
-    	set.invoke(attr, "Operation", NBTTagIntClazz.getConstructor(String.class, int.class).newInstance("", operation));
+		set.invoke(attr, "Name", NBTTagStringClazz.getConstructor(String.class).newInstance(name));
+		set.invoke(attr, "AttributeName", NBTTagStringClazz.getConstructor(String.class).newInstance(attrName));
+		set.invoke(attr, "Amount", NBTTagDoubleClazz.getConstructor(double.class).newInstance(value));
+    	set.invoke(attr, "Operation", NBTTagIntClazz.getConstructor(int.class).newInstance(operation));
     	
     	//generate a random UUID
         UUID randUUID = UUID.randomUUID();
-    	set.invoke(attr, "UUIDMost", NBTTagLongClazz.getConstructor(String.class, long.class).newInstance("", randUUID.getMostSignificantBits()));
-    	set.invoke(attr, "UUIDLeast", NBTTagLongClazz.getConstructor(String.class, long.class).newInstance("", randUUID.getLeastSignificantBits()));
+    	set.invoke(attr, "UUIDMost", NBTTagLongClazz.getConstructor(long.class).newInstance(randUUID.getMostSignificantBits()));
+    	set.invoke(attr, "UUIDLeast", NBTTagLongClazz.getConstructor(long.class).newInstance(randUUID.getLeastSignificantBits()));
 		add.invoke(nList, attr);
-		
+
+    //	System.out.print("NewList - Done");
+    	
 		set.invoke(tag, "AttributeModifiers", nList);
+   // 	System.out.print("DoneList - Done");
 		
         //return as new item
         return (ItemStack) asCraftMirror.invoke(null, nms);
@@ -270,7 +294,7 @@ public class NBTUtils {
 		//get the attribute list
     	Object attrList = null;
     	if ( (Boolean) hasKey.invoke(tag, "AttributeModifiers") )
-    		attrList = getList.invoke(tag, "AttributeModifiers");
+    		attrList = getList.invoke(tag, "AttributeModifiers", 0);
 		else return null;
     	
 
@@ -335,38 +359,51 @@ public class NBTUtils {
 	
 	private static ItemStack _addLore(ItemStack i, List<String> lore) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException, NoSuchMethodException, SecurityException
 	{		
+	//	System.out.print("Init - Done");
 		//create a NMS copy (net.minecraft.server.{$VERSION}.ItemStack)
 		Object nms = asNMSCopy.invoke(null, i);
 		
 		//net.minecraft.server.{$VERSION}.NBTTagCompound
 		Object tag;
+
+	//	System.out.print("Start - Done");
 		
 		//search for the tag
 		if( !((Boolean) hasTag.invoke(nms)) )
 			setTag.invoke(nms, NBTTagCompoundClazz.newInstance());
 		tag = getTag.invoke(nms);
 
+	//	System.out.print("GeneralTag - Done");
+		
 		//net.minecraft.server.{$VERSION}.NBTTagCompound (display tag)
 		Object display;
 		if ( !((Boolean) hasKey.invoke(tag, "display")) )
 			set.invoke(tag, "display", NBTTagCompoundClazz.newInstance());
 		display = getCompound.invoke(tag, "display");
 
+	//	System.out.print("DisplayTag - Done");
+		
 		//net.minecraft.server.{$VERSION}.NBTTagList
 		Object list;
 		if ( (Boolean) hasKey.invoke(display, "Lore") )
-			list = getList.invoke(display, "Lore");
+			list = getList.invoke(display, "Lore", 0);
 		else
 			list = NBTTagListClazz.newInstance();
 
+	//	System.out.print("ListTag - Done");
+		
 		//add the lore
 		for ( String line : lore )
 	    //net.minecraft.server.{$VERSION}.NBTTagList (add method)
-			add.invoke(list, NBTTagStringClazz.getConstructor(String.class, String.class).newInstance("dtltrader", line));//new NBTTagString("dtltrader", line));
+			add.invoke(list, NBTTagStringClazz.getConstructor(String.class).newInstance(line));//new NBTTagString("dtltrader", line));
 
+	//	System.out.print("EditList - Done");
+		
 		//set the new list
 		set.invoke(display, "Lore", list);
 
+	//	System.out.print("SaveList - Done");
+		
 		//return the new item;
 		return (ItemStack) asCraftMirror.invoke(null, nms);
 	}
@@ -405,15 +442,19 @@ public class NBTUtils {
 		//net.minecraft.server.{$VERSION}.NBTTagList
 		Object list;
 		if ( (Boolean) hasKey.invoke(display, "Lore") )
-			list = getList.invoke(display, "Lore");
+			list = getList.invoke(display, "Lore", 0);
 		else
 			list = NBTTagListClazz.newInstance();
 
+		
 		//get the specific and normal lore!
 		for ( int j = 0 ; j < (Integer) size.invoke(list) ; ++j )
-			if ( !getName.invoke(get.invoke(list, j)).equals("dtltrader") &&
+		{
+		//	System.out.print("---- " + getTagName(get.invoke(list, j)) + " ----");
+			if ( !getTagName(get.invoke(list, j)).equals("dtltrader") &&
 				 !(((String) data.get(get.invoke(list, j))).startsWith(Price.lorePattern)) )
 				result.add((String) data.get(get.invoke(list, j)));
+		}
 
 		//return the new item;
 		return result;
@@ -450,13 +491,13 @@ public class NBTUtils {
 		//net.minecraft.server.{$VERSION}.NBTTagList
 		Object list;
 		if ( (Boolean) hasKey.invoke(display, "Lore") )
-			list = getList.invoke(display, "Lore");
+			list = getList.invoke(display, "Lore", 0);
 		else
 			return false;
 
 		//search for trader lores
 		for ( int j = 0 ; j < (Integer) size.invoke(list) ; ++j )
-			if ( getName.invoke(get.invoke(list, j)).equals("dtltrader") || 
+			if ( getTagName(get.invoke(list, j)).equals("dtltrader") || 
 				 ((String) data.get(get.invoke(list, j))).startsWith(Price.lorePattern) )
 				return true;
 
