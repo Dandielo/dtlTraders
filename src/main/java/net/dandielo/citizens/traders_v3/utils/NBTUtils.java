@@ -8,12 +8,8 @@ import java.util.List;
 import java.util.UUID;
 
 import net.dandielo.citizens.traders_v3.bukkit.CraftBukkitInterface;
-import net.dandielo.citizens.traders_v3.core.dB;
 import net.dandielo.citizens.traders_v3.utils.items.Modifier;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Price;
-import net.minecraft.server.v1_7_R1.NBTTagDouble;
-import net.minecraft.server.v1_7_R1.NBTTagList;
-import net.minecraft.server.v1_7_R1.NBTTagString;
 
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
@@ -22,7 +18,7 @@ import org.bukkit.inventory.ItemStack;
 public class NBTUtils {	
 	
 	/*
-     * Some static methods for dealing with Minecraft NBT data, which is used to store
+     * Some static methods for dealing with Minecraft NBT a_, which is used to store
      * custom NBT.
      * 
      * All credits to Denizen - Aufdemrand
@@ -56,12 +52,10 @@ public class NBTUtils {
 	private static Method hasTag, getTag, setTag;
 	//net.minecraft.server.{$VERSION}.NBTTagCompound
 	private static Method hasKey, getString, setString, getCompound, getList, set, 
-	remove, add, get, size, getTypeID, getName, getDouble, getInt;
+	remove, add, get, size, getTypeID, getName, getDouble, getInt, a_;
 	
 	
-	//NTBTagString data field
-	private static Field data;
-	
+	//NTBTagString a_ field	
 	static
 	{
 	    try
@@ -88,9 +82,6 @@ public class NBTUtils {
 			size = NBTTagListClazz.getMethod("size");
 			getTypeID = NBTBaseClazz.getMethod("getTypeId");
 			getName = NBTBaseClazz.getMethod("getTagName", int.class);
-			
-			data = NBTTagStringClazz.getDeclaredField("data");
-			data.setAccessible(true);
 		}
 		catch( Exception e )
 		{ e.printStackTrace(); }
@@ -386,7 +377,7 @@ public class NBTUtils {
 		//net.minecraft.server.{$VERSION}.NBTTagList
 		Object list;
 		if ( (Boolean) hasKey.invoke(display, "Lore") )
-			list = getList.invoke(display, "Lore", 0);
+			list = getList.invoke(display, "Lore", getTypeID.invoke(NBTTagStringClazz.newInstance()));
 		else
 			list = NBTTagListClazz.newInstance();
 
@@ -442,18 +433,21 @@ public class NBTUtils {
 		//net.minecraft.server.{$VERSION}.NBTTagList
 		Object list;
 		if ( (Boolean) hasKey.invoke(display, "Lore") )
-			list = getList.invoke(display, "Lore", 0);
+			list = getList.invoke(display, "Lore", 8);
 		else
 			list = NBTTagListClazz.newInstance();
 
+		System.out.print("ID: " + getTypeID.invoke(NBTTagStringClazz.newInstance()));
+		System.out.print(result);
+		System.out.print(size.invoke(list));
 		
 		//get the specific and normal lore!
 		for ( int j = 0 ; j < (Integer) size.invoke(list) ; ++j )
 		{
-		//	System.out.print("---- " + getTagName(get.invoke(list, j)) + " ----");
+			System.out.print("---- " + NBTTagStringClazz.isInstance(get.invoke(list, j)) + " ----");
 			if ( !getTagName(get.invoke(list, j)).equals("dtltrader") &&
-				 !(((String) data.get(get.invoke(list, j))).startsWith(Price.lorePattern)) )
-				result.add((String) data.get(get.invoke(list, j)));
+				 !(((String) a_.invoke(get.invoke(list, j))).startsWith(Price.lorePattern)) )
+				result.add((String) a_.invoke(get.invoke(list, j)));
 		}
 
 		//return the new item;
@@ -469,7 +463,7 @@ public class NBTUtils {
     	return false;
 	}
 	
-	private static boolean _hasTraderLore(ItemStack i) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException
+	private static boolean _hasTraderLore(ItemStack i) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException
 	{
 		//create a NMS copy (net.minecraft.server.{$VERSION}.ItemStack)
 		Object nms = asNMSCopy.invoke(null, i);
@@ -487,18 +481,18 @@ public class NBTUtils {
 		if ( !((Boolean) hasKey.invoke(tag, "display")) )
 			return false;
 		display = getCompound.invoke(tag, "display");
-
+		
 		//net.minecraft.server.{$VERSION}.NBTTagList
 		Object list;
 		if ( (Boolean) hasKey.invoke(display, "Lore") )
-			list = getList.invoke(display, "Lore", 0);
+			list = getList.invoke(display, "Lore", getTypeID.invoke(NBTTagStringClazz.newInstance()));
 		else
 			return false;
 
 		//search for trader lores
 		for ( int j = 0 ; j < (Integer) size.invoke(list) ; ++j )
 			if ( getTagName(get.invoke(list, j)).equals("dtltrader") || 
-				 ((String) data.get(get.invoke(list, j))).startsWith(Price.lorePattern) )
+				 ((String) a_.invoke(get.invoke(list, j))).startsWith(Price.lorePattern) )
 				return true;
 
 		//return false as no lores was found;

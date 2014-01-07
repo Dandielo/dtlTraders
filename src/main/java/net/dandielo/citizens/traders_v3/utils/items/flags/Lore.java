@@ -47,11 +47,13 @@ public class Lore extends ItemFlag {
 	{	
 		if ( !item.getItemMeta().hasLore() )
 			throw new AttributeValueNotFoundException();
-		
+		System.out.print("Has lore");
 		//get the lore without any dtlTrader lore lines
 		List<String> cleanedLore = NBTUtils.getLore(item);
+		System.out.print("Cleaned lore" + cleanedLore);
 		if ( cleanedLore.isEmpty() )
 			throw new AttributeValueNotFoundException();
+		System.out.print("End lore");
 		
 		this.lore = cleanedLore;
 	}
