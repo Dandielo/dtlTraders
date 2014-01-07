@@ -35,6 +35,7 @@ import net.dandielo.citizens.traders_v3.utils.ItemUtils;
 import net.dandielo.citizens.traders_v3.utils.NBTUtils;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.PatternItem;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Price;
+import net.dandielo.citizens.traders_v3.utils.items.flags.Lore;
 
 public abstract class Trader implements tNpc {
 	
@@ -324,7 +325,7 @@ public abstract class Trader implements tNpc {
 				if ( item.getAmount() >= selectedItem.getAmount() )
 				{
 				    //set the new lore
-				    inv.setItem(i, NBTUtils.addLore(NBTUtils.cleanItem(item), Price.loreRequest(stock.parsePrice(selectedItem, "buy", item.getAmount()), new ArrayList<String>(), baseStatus)));
+				    inv.setItem(i, Lore.addLore(NBTUtils.cleanItem(item), Price.loreRequest(stock.parsePrice(selectedItem, "buy", item.getAmount()), new ArrayList<String>(), baseStatus)));
 				}
 				else
 					//clean the item from any lore
@@ -359,7 +360,7 @@ public abstract class Trader implements tNpc {
 				{
 					List<String> lore = new ArrayList<String>();
 					lore.add(ChatColor.GOLD + "Block value: " + ChatColor.YELLOW + String.format("%.2f", value) );
-					inv.setItem(i, NBTUtils.addLore(NBTUtils.cleanItem(item), lore));
+					inv.setItem(i, Lore.addLore(NBTUtils.cleanItem(item), lore));
 				}
 			}
 			else
@@ -476,7 +477,7 @@ public abstract class Trader implements tNpc {
 	protected final boolean _inventoryHasPlace(int amount) 
 	{
 		final int sizeLeft = sizeLeft(player.getInventory());
-		System.out.print(sizeLeft);
+
 		if ( inventory.firstEmpty() >= 0 && sizeLeft > 0 && sizeLeft >= (amount / selectedItem.getItem(false).getMaxStackSize()) )
 			return true;
 		

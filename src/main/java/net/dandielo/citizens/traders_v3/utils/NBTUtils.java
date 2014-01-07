@@ -1,6 +1,5 @@
 package net.dandielo.citizens.traders_v3.utils;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -18,7 +17,7 @@ import org.bukkit.inventory.ItemStack;
 public class NBTUtils {	
 	
 	/*
-     * Some static methods for dealing with Minecraft NBT a_, which is used to store
+     * Some static methods for dealing with Minecraft NBT toString, which is used to store
      * custom NBT.
      * 
      * All credits to Denizen - Aufdemrand
@@ -52,10 +51,10 @@ public class NBTUtils {
 	private static Method hasTag, getTag, setTag;
 	//net.minecraft.server.{$VERSION}.NBTTagCompound
 	private static Method hasKey, getString, setString, getCompound, getList, set, 
-	remove, add, get, size, getTypeID, getName, getDouble, getInt, a_;
+	remove, add, get, size, getTypeID, getName, getDouble, getInt, toString;
 	
 	
-	//NTBTagString a_ field	
+	//NTBTagString toString field	
 	static
 	{
 	    try
@@ -68,6 +67,7 @@ public class NBTUtils {
 			hasTag = ItemStackClazz.getMethod("hasTag");
 			getTag = ItemStackClazz.getMethod("getTag");
 			setTag = ItemStackClazz.getMethod("setTag", NBTTagCompoundClazz);
+			toString = NBTTagCompoundClazz.getMethod("toString");
 			hasKey = NBTTagCompoundClazz.getMethod("hasKey", String.class);
 			getString = NBTTagCompoundClazz.getMethod("getString", String.class);
 			getDouble = NBTTagCompoundClazz.getMethod("getDouble", String.class);
@@ -339,6 +339,7 @@ public class NBTUtils {
 	/**
 	 * adding and removing NBT lores
 	 */
+	/*
 	public static ItemStack addLore(ItemStack i, List<String> lore)
 	{
 		try
@@ -346,7 +347,7 @@ public class NBTUtils {
     		return _addLore(i, lore);
     	} catch(Exception e) { }
     	return null;
-	}
+	}*/
 	
 	private static ItemStack _addLore(ItemStack i, List<String> lore) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException, NoSuchMethodException, SecurityException
 	{		
@@ -399,14 +400,14 @@ public class NBTUtils {
 		return (ItemStack) asCraftMirror.invoke(null, nms);
 	}
 	
-	public static List<String> getLore(ItemStack i)
+/*	public static List<String> getLore(ItemStack i)
 	{
 		try
     	{
     		return _getLore(i);
     	} catch(Exception e) { }
     	return null;
-	}
+	}*/
 	
 	private static List<String> _getLore(ItemStack i) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException, InstantiationException
 	{
@@ -441,19 +442,21 @@ public class NBTUtils {
 		System.out.print(result);
 		System.out.print(size.invoke(list));
 		
+		
 		//get the specific and normal lore!
 		for ( int j = 0 ; j < (Integer) size.invoke(list) ; ++j )
 		{
-			System.out.print("---- " + NBTTagStringClazz.isInstance(get.invoke(list, j)) + " ----");
+			System.out.print("---- " + toString.invoke(get.invoke(list, j)) + " ----");
 			if ( !getTagName(get.invoke(list, j)).equals("dtltrader") &&
-				 !(((String) a_.invoke(get.invoke(list, j))).startsWith(Price.lorePattern)) )
-				result.add((String) a_.invoke(get.invoke(list, j)));
+				 !(((String) toString.invoke(get.invoke(list, j))).startsWith(Price.lorePattern)) )
+				result.add((String) toString.invoke(get.invoke(list, j)));
 		}
 
 		//return the new item;
 		return result;
 	}
 	
+	/*
 	public static boolean hasTraderLore(ItemStack i)
 	{
 		try
@@ -461,7 +464,7 @@ public class NBTUtils {
     		return _hasTraderLore(i);
     	} catch(Exception e) { }
     	return false;
-	}
+	}*/
 	
 	private static boolean _hasTraderLore(ItemStack i) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException
 	{
@@ -492,7 +495,7 @@ public class NBTUtils {
 		//search for trader lores
 		for ( int j = 0 ; j < (Integer) size.invoke(list) ; ++j )
 			if ( getTagName(get.invoke(list, j)).equals("dtltrader") || 
-				 ((String) a_.invoke(get.invoke(list, j))).startsWith(Price.lorePattern) )
+				 ((String) toString.invoke(get.invoke(list, j))).startsWith(Price.lorePattern) )
 				return true;
 
 		//return false as no lores was found;

@@ -8,9 +8,9 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import net.dandielo.citizens.traders_v3.core.exceptions.InvalidItemException;
 import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeValueNotFoundException;
-import net.dandielo.citizens.traders_v3.utils.NBTUtils;
 import net.dandielo.citizens.traders_v3.utils.items.Attribute;
 import net.dandielo.citizens.traders_v3.utils.items.ItemFlag;
+import net.dandielo.citizens.traders_v3.utils.items.attributes.Price;
 
 @Attribute(name="Lore", key=".lore")
 public class Lore extends ItemFlag {
@@ -47,13 +47,11 @@ public class Lore extends ItemFlag {
 	{	
 		if ( !item.getItemMeta().hasLore() )
 			throw new AttributeValueNotFoundException();
-		System.out.print("Has lore");
+		
 		//get the lore without any dtlTrader lore lines
-		List<String> cleanedLore = NBTUtils.getLore(item);
-		System.out.print("Cleaned lore" + cleanedLore);
+		List<String> cleanedLore = cleanLore(item.getItemMeta().getLore());
 		if ( cleanedLore.isEmpty() )
 			throw new AttributeValueNotFoundException();
-		System.out.print("End lore");
 		
 		this.lore = cleanedLore;
 	}
@@ -87,4 +85,38 @@ public class Lore extends ItemFlag {
 	{
 		return equalsStrong(flag);
 	}
+	
+	public static List<String> cleanLore(List<String> lore)
+	{
+		List<String> cleaned = new ArrayList<String>();
+		for (String entry : lore)
+			if ( !entry.startsWith(Price.lorePattern) )
+				cleaned.add(entry);
+		return cleaned;
+	}
+	
+	//static helper methods
+	public static ItemStack addLore(ItemStack item, List<String> lore)
+	{
+		ItemMeta meta = item.getItemMeta();
+		List<String> newLore = meta.getLore();
+		newLore.addAll(lore);
+		meta.setLore(newLore);
+		
+		ItemStack newItem = item.clone();
+		newItem.setItemMeta(meta);
+		return newItem; 
+	}
+	
+	public static boolean hasTraderLore(ItemStack item)
+	{
+		if ( !item.hasItemMeta() || !item.getItemMeta().hasLore() ) return false;
+		
+		boolean has = false;
+		for (String entry : item.getItemMeta().getLore())
+			if ( !has && entry.startsWith(Price.lorePattern) )
+				has = true;
+		return has;
+	}
+	
 }

@@ -16,6 +16,7 @@ import net.dandielo.citizens.traders_v3.traders.setting.Settings;
 import net.dandielo.citizens.traders_v3.traits.BankerTrait;
 import net.dandielo.citizens.traders_v3.traits.TraderTrait;
 import net.dandielo.citizens.traders_v3.utils.NBTUtils;
+import net.dandielo.citizens.traders_v3.utils.items.flags.Lore;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -114,7 +115,7 @@ public class tNpcListener implements Listener {
 		{
 			if ( item != null )
 			{
-				if ( NBTUtils.hasTraderLore(item) )
+				if ( Lore.hasTraderLore(item) )
 				{
 					//send specific debug messages
 					dB.spec(DebugLevel.S1_ADONDRIEL, "Item with trader price lore found on player join event");
@@ -142,7 +143,7 @@ public class tNpcListener implements Listener {
 					//send specific debug messages
 					dB.spec(DebugLevel.S1_ADONDRIEL, "Marked item found on player inventory click");
 					dB.spec(DebugLevel.S1_ADONDRIEL, "Marked: ", NBTUtils.isMarked(item));
-					dB.spec(DebugLevel.S1_ADONDRIEL, "Lore: ", NBTUtils.hasTraderLore(item));
+					dB.spec(DebugLevel.S1_ADONDRIEL, "Lore: ", Lore.hasTraderLore(item));
 					dB.spec(DebugLevel.S1_ADONDRIEL, "Item: ", item);
 					
 					//remove the item
@@ -501,7 +502,7 @@ public class tNpcListener implements Listener {
 					else
 					{		
 						dB.spec(DebugLevel.S1_ADONDRIEL, "Item: ", item);	
-						dB.spec(DebugLevel.S1_ADONDRIEL, "Has trader lore: ", NBTUtils.hasTraderLore(item));
+						dB.spec(DebugLevel.S1_ADONDRIEL, "Has trader lore: ", Lore.hasTraderLore(item));
 						dB.spec(DebugLevel.S1_ADONDRIEL, "Cleaned Item: ", NBTUtils.cleanItem(item));	
 						
 						//clean transaction lores 
