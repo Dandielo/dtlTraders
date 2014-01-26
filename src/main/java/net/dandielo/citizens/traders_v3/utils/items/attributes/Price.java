@@ -2,7 +2,6 @@ package net.dandielo.citizens.traders_v3.utils.items.attributes;
 
 import java.util.List;
 
-import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 
 import net.dandielo.citizens.traders_v3.core.dB;
@@ -18,7 +17,7 @@ import net.dandielo.citizens.traders_v3.utils.items.ItemAttr;
 name="Price", key = "p", standalone = true, priority = 0,
 status = {tNpcStatus.BUY, tNpcStatus.SELL, tNpcStatus.SELL_AMOUNTS, tNpcStatus.MANAGE_PRICE})
 public class Price extends ItemAttr {
-    public static String lorePattern = ChatColor.GOLD + "Price: " + ChatColor.GRAY;
+    //public static String lorePattern = ChatColor.GOLD + "Price: " + ChatColor.GRAY;
 	private double price;
 
 	public Price(String key) {

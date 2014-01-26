@@ -12,6 +12,7 @@ import java.util.Map;
 import net.dandielo.citizens.traders_v3.bukkit.DtlTraders;
 import net.dandielo.citizens.traders_v3.core.dB;
 import net.dandielo.citizens.traders_v3.core.PluginSettings;
+import net.dandielo.citizens.traders_v3.utils.items.flags.Lore;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
@@ -399,7 +400,7 @@ public class LocaleManager {
 				++i;
 		}
 		//return the prepared message
-		return message.replace('^', '§');
+		return message.replace('^', '§').replace('^', '§');
 	}
 	
 	public String getKeyword(String keyword) {
@@ -490,7 +491,7 @@ public class LocaleManager {
 		List<String> list = new ArrayList<String>();
 		if ( ui.containsKey(new LocaleEntry(key, localeVersion)) ) {
 			for ( String l : ui.get(new LocaleEntry(key, localeVersion)).lore() )
-				list.add(l.replace('^', '§'));
+				list.add(/* add the trader lore prefix */ Lore.traderLorePrefix + l.replace('&', '§').replace('^', '§'));
 		} else {
 		    // The Lore-List may be empty, but if the ui-entry is missing, the locale is incomplete
 		    dB.high("Missing Locale: " + key);
@@ -516,7 +517,7 @@ public class LocaleManager {
             // The Name may be empty, but if the ui-entry is missing, the locale is incomplete
             dB.high("Missing Locale: " + key);
         }
-		return name.replace('^', '§');
+		return name.replace('^', '§').replace('^', '§');
 	}
 
 	/**

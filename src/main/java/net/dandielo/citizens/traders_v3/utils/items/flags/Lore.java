@@ -14,6 +14,7 @@ import net.dandielo.citizens.traders_v3.utils.items.attributes.Price;
 
 @Attribute(name="Lore", key=".lore")
 public class Lore extends ItemFlag {
+	public static final String traderLorePrefix = "§3§d§d§f"; 
 	private List<String> lore = new ArrayList<String>();
 
 	public Lore(String key) {
@@ -90,7 +91,7 @@ public class Lore extends ItemFlag {
 	{
 		List<String> cleaned = new ArrayList<String>();
 		for (String entry : lore)
-			if ( !entry.startsWith(Price.lorePattern) )
+			if ( !entry.startsWith(traderLorePrefix) )
 				cleaned.add(entry);
 		return cleaned;
 	}
@@ -120,7 +121,7 @@ public class Lore extends ItemFlag {
 		
 		boolean has = false;
 		for (String entry : item.getItemMeta().getLore())
-			if ( !has && entry.startsWith(Price.lorePattern) )
+			if ( !has && entry.startsWith(traderLorePrefix) )
 				has = true;
 		return has;
 	}

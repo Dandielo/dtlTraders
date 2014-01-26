@@ -9,6 +9,7 @@ import java.util.UUID;
 import net.dandielo.citizens.traders_v3.bukkit.CraftBukkitInterface;
 import net.dandielo.citizens.traders_v3.utils.items.Modifier;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Price;
+import net.dandielo.citizens.traders_v3.utils.items.flags.Lore;
 
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
@@ -448,7 +449,7 @@ public class NBTUtils {
 		{
 			System.out.print("---- " + toString.invoke(get.invoke(list, j)) + " ----");
 			if ( !getTagName(get.invoke(list, j)).equals("dtltrader") &&
-				 !(((String) toString.invoke(get.invoke(list, j))).startsWith(Price.lorePattern)) )
+				 !(((String) toString.invoke(get.invoke(list, j))).startsWith(Lore.traderLorePrefix)) )
 				result.add((String) toString.invoke(get.invoke(list, j)));
 		}
 
@@ -495,7 +496,7 @@ public class NBTUtils {
 		//search for trader lores
 		for ( int j = 0 ; j < (Integer) size.invoke(list) ; ++j )
 			if ( getTagName(get.invoke(list, j)).equals("dtltrader") || 
-				 ((String) toString.invoke(get.invoke(list, j))).startsWith(Price.lorePattern) )
+				 ((String) toString.invoke(get.invoke(list, j))).startsWith(Lore.traderLorePrefix) )
 				return true;
 
 		//return false as no lores was found;
