@@ -98,11 +98,17 @@ public class Lore extends ItemFlag {
 	//static helper methods
 	public static ItemStack addLore(ItemStack item, List<String> lore)
 	{
-		ItemMeta meta = item.getItemMeta();
-		List<String> newLore = meta.getLore();
+		//get the lore
+		ItemMeta meta = item.getItemMeta();	
+		List<String> newLore = meta.getLore();	
+		if (newLore == null)
+			newLore = new ArrayList<String>();
+		
+		//add the new lore
 		newLore.addAll(lore);
 		meta.setLore(newLore);
 		
+		//create a new item
 		ItemStack newItem = item.clone();
 		newItem.setItemMeta(meta);
 		return newItem; 
