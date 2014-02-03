@@ -36,6 +36,7 @@ public class Item extends Pattern {
 		this.tier = tier;
 	}
 
+	@SuppressWarnings("unchecked")
 	public void loadItems(ConfigurationSection data)
 	{
 		//create both buy and sell lists
@@ -50,38 +51,81 @@ public class Item extends Pattern {
 		{
 			if ( key.equals("all") )
 			{
-				for ( String item : data.getStringList(key) )
+				for ( Object item : (List<Object>) data.get("all") ) 
 				{
-					StockItem stockItem = new StockItem(item);
-					stockItem.addAttr("pat", String.valueOf(priority));
-					if ( tier ) stockItem.addAttr("t", getName());
+					if ( item instanceof String )
+					{
+						StockItem stockItem = new StockItem((String)item);
+						stockItem.addAttr("pat", String.valueOf(priority));
+						if ( tier ) stockItem.addAttr("t", getName());
+						
+						sell.add(stockItem);
+						buy.add(stockItem);
+					}
+					else
+					{
+						StockItem stockItem = null;
+						for ( Map.Entry<String, List<String>> entry : ((Map<String, List<String>>) item).entrySet() )
+							stockItem = new StockItem(entry.getKey(), entry.getValue());
 
-					sell.add(stockItem);
-					buy.add(stockItem);
+						stockItem.addAttr("pat", String.valueOf(priority));
+						if ( tier ) stockItem.addAttr("t", getName());
+
+						sell.add(stockItem);
+						buy.add(stockItem);
+					}
 				}
 			}
 			else
 				if ( key.equals("sell") )
 				{
-					for ( String item : data.getStringList(key) )
+					for ( Object item : (List<Object>) data.get("sell") ) 
 					{
-						StockItem stockItem = new StockItem(item);
-						stockItem.addAttr("pat", String.valueOf(priority));
-						if ( tier ) stockItem.addAttr("t", getName());
+						if ( item instanceof String )
+						{
+							StockItem stockItem = new StockItem((String)item);
+							stockItem.addAttr("pat", String.valueOf(priority));
+							if ( tier ) stockItem.addAttr("t", getName());
+							
+							sell.add(stockItem);
+						}
+						else
+						{
+							StockItem stockItem = null;
+							for ( Map.Entry<String, List<String>> entry : ((Map<String, List<String>>) item).entrySet() )
+								stockItem = new StockItem(entry.getKey(), entry.getValue());
 
-						sell.add(stockItem);
+							stockItem.addAttr("pat", String.valueOf(priority));
+							if ( tier ) stockItem.addAttr("t", getName());
+
+							sell.add(stockItem);
+						}
 					}
 				}
 				else
 					if ( key.equals("buy") )
 					{
-						for ( String item : data.getStringList(key) )
+						for ( Object item : (List<Object>) data.get("all") ) 
 						{
-							StockItem stockItem = new StockItem(item);
-							stockItem.addAttr("pat", String.valueOf(priority));
-							if ( tier ) stockItem.addAttr("t", getName());
+							if ( item instanceof String )
+							{
+								StockItem stockItem = new StockItem((String)item);
+								stockItem.addAttr("pat", String.valueOf(priority));
+								if ( tier ) stockItem.addAttr("t", getName());
+								
+								buy.add(stockItem);
+							}
+							else
+							{
+								StockItem stockItem = null;
+								for ( Map.Entry<String, List<String>> entry : ((Map<String, List<String>>) item).entrySet() )
+									stockItem = new StockItem(entry.getKey(), entry.getValue());
 
-							buy.add(stockItem);
+								stockItem.addAttr("pat", String.valueOf(priority));
+								if ( tier ) stockItem.addAttr("t", getName());
+
+								buy.add(stockItem);
+							}
 						}
 					}
 					else

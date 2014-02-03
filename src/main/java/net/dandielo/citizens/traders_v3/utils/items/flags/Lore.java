@@ -58,7 +58,12 @@ public class Lore extends ItemFlag {
 	}
 
 	public List<String> getLore() {
-		return lore;
+		//parse the whole lore
+		List<String> itemLore = new ArrayList<String>();
+		for (String lore : this.lore)
+			itemLore.add(lore.replace('^', '§').replace('&', '§'));
+		//return the parsed lore
+		return itemLore;
 	}
 	
 	//this should be always 0 to be assigned first

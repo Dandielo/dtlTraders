@@ -222,7 +222,7 @@ public class NBTUtils {
 		//get the attribute list
     	Object attrList = null;
     	if ( (Boolean) hasKey.invoke(tag, "AttributeModifiers") )
-    		attrList = getList.invoke(tag, "AttributeModifiers", 0);
+    		attrList = getList.invoke(tag, "AttributeModifiers", getTypeID.invoke(tag));
 		else
 			attrList = NBTTagListClazz.newInstance();
     	
@@ -286,7 +286,7 @@ public class NBTUtils {
 		//get the attribute list
     	Object attrList = null;
     	if ( (Boolean) hasKey.invoke(tag, "AttributeModifiers") )
-    		attrList = getList.invoke(tag, "AttributeModifiers", 0);
+    		attrList = getList.invoke(tag, "AttributeModifiers", getTypeID.invoke(tag));
 		else return null;
     	
 

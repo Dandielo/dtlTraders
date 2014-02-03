@@ -171,6 +171,7 @@ public final class StockItem {
 		//if the key starts with a dot then it's a flag
 		if ( key.startsWith(".") )
 			addFlag(key);
+		
 		//else if it's not empty it's a attribute 
 		else /* compatibility start */ if ( !key.startsWith("!") && value != null ) /* compatibility end */
 		if ( !key.isEmpty() )
