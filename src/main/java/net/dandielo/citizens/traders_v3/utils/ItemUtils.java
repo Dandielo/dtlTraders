@@ -50,7 +50,7 @@ public class ItemUtils {
 			mat = Material.getMaterial(Integer.parseInt(d[0]));
 		
 		if ( d.length > 1 )
-			return new ItemStack(mat, 1, Byte.parseByte(d[1]));
+			return new ItemStack(mat, 1, Short.parseShort(d[1]));
 		else
 			return new ItemStack(mat);
 	}

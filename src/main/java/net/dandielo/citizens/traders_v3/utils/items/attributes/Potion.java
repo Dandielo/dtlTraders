@@ -40,7 +40,7 @@ public class Potion extends ItemAttr {
 		{
 			String[] effectData = savedEffect.split("/");
 			PotionEffect effect = new PotionEffect(
-					PotionEffectType.getById(Integer.parseInt(effectData[0])),
+					PotionEffectType.getByName(effectData[0]),
 					Integer.parseInt(effectData[1]),
 					Integer.parseInt(effectData[2]),
 					Boolean.parseBoolean(effectData[3]));
@@ -55,7 +55,7 @@ public class Potion extends ItemAttr {
 		
 		//save each potion effect with a comma separated
 		for ( PotionEffect e : effects )
-			result += "," + e.getType().getId() + "/" + e.getDuration() + "/" + e.getAmplifier() + "/" + e.isAmbient();
+			result += "," + e.getType().getName() + "/" + e.getDuration() + "/" + e.getAmplifier() + "/" + e.isAmbient();
 		
 		return result.substring(1);
 	}
