@@ -35,7 +35,8 @@
 			<id>vault-repo</id>
 			<url>http://ci.herocraftonline.com/plugin/repository/everything</url>
 		</repository> 
-		
+	</repositories> 
+	<!-- 
       <repository>
          <id>upstream</id>
          <url>${env.Jenkins.Repository}</url>
@@ -60,7 +61,8 @@
          </snapshots>
       </pluginRepository>
     </pluginRepositories>
-	
+    -->
+	 
 	<!-- Dependencies -->
  	<dependencies>
         <dependency>
@@ -108,7 +110,7 @@
   <build>
     
 	<directory>${basedir}/target</directory>
-	<finalName>${artifactId}-${version}</finalName>
+	<finalName>${project.artifactId}-${project.version}</finalName>
   
     <resources>
       <resource>
