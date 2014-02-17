@@ -10,7 +10,6 @@ import net.dandielo.citizens.traders_v3.core.exceptions.InvalidItemException;
 import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeValueNotFoundException;
 import net.dandielo.citizens.traders_v3.utils.items.Attribute;
 import net.dandielo.citizens.traders_v3.utils.items.ItemFlag;
-import net.dandielo.citizens.traders_v3.utils.items.attributes.Price;
 
 @Attribute(name="Lore", key=".lore")
 public class Lore extends ItemFlag {

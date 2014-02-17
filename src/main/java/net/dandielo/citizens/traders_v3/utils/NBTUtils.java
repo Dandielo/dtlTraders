@@ -8,7 +8,6 @@ import java.util.UUID;
 
 import net.dandielo.citizens.traders_v3.bukkit.CraftBukkitInterface;
 import net.dandielo.citizens.traders_v3.utils.items.Modifier;
-import net.dandielo.citizens.traders_v3.utils.items.attributes.Price;
 import net.dandielo.citizens.traders_v3.utils.items.flags.Lore;
 
 import org.bukkit.ChatColor;
@@ -350,6 +349,7 @@ public class NBTUtils {
     	return null;
 	}*/
 	
+	@SuppressWarnings("unused")
 	private static ItemStack _addLore(ItemStack i, List<String> lore) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException, NoSuchMethodException, SecurityException
 	{		
 	//	System.out.print("Init - Done");
@@ -410,6 +410,7 @@ public class NBTUtils {
     	return null;
 	}*/
 	
+	@SuppressWarnings("unused")
 	private static List<String> _getLore(ItemStack i) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException, InstantiationException
 	{
 		//create a NMS copy (net.minecraft.server.{$VERSION}.ItemStack)
@@ -467,6 +468,7 @@ public class NBTUtils {
     	return false;
 	}*/
 	
+	@SuppressWarnings("unused")
 	private static boolean _hasTraderLore(ItemStack i) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException
 	{
 		//create a NMS copy (net.minecraft.server.{$VERSION}.ItemStack)

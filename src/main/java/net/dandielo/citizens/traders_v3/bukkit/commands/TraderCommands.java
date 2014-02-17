@@ -24,7 +24,6 @@ import net.dandielo.citizens.traders_v3.traders.setting.TGlobalSettings;
 import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
 import net.dandielo.citizens.traders_v3.traits.TraderTrait;
 import net.dandielo.citizens.traders_v3.traits.WalletTrait;
-import net.dandielo.citizens.traders_v3.utils.ItemUtils;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Price;
 
 /**
@@ -62,7 +61,7 @@ public class TraderCommands {
 		String name = args.get("free");
 
 		//get the entity
-		EntityType entity = EntityType.fromName(args.get("e") == null ? "player" : args.get("e"));
+		EntityType entity = EntityType.valueOf(args.get("e") == null ? "player" : args.get("e").toUpperCase());
 
 		//the the type
 		String type = args.get("t") == null ? "server" : args.get("t");

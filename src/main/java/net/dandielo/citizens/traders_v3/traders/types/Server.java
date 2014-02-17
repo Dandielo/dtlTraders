@@ -736,6 +736,7 @@ public class Server extends Trader {
 		dB.info("slot: ", e.getSlot(), ", left: ", e.isLeftClick(), ", shift: ", e.isShiftClick());
 	}
 
+	@SuppressWarnings("deprecation")
 	@ClickHandler(status = {tNpcStatus.SELL, tNpcStatus.BUY, tNpcStatus.SELL_AMOUNTS}, inventory = InventoryType.PLAYER)
 	public void __last(InventoryClickEvent e)
 	{

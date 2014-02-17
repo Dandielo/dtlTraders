@@ -15,6 +15,7 @@ import net.dandielo.citizens.traders_v3.traders.clicks.ClickHandler;
 import net.dandielo.citizens.traders_v3.traders.clicks.InventoryType;
 import net.dandielo.citizens.traders_v3.traits.BankerTrait;
 import net.dandielo.citizens.traders_v3.traits.WalletTrait;
+import net.minecraft.server.v1_7_R1.Material;
 
 @tNpcType(author = "dandielo", name = "private")
 public class Private extends Banker {
@@ -63,7 +64,7 @@ public class Private extends Banker {
 		e.setCancelled(true);
 		
 		//if air or null then return
-		if ( e.getCurrentItem() == null || e.getCurrentItem().getTypeId() == 0 )
+		if ( e.getCurrentItem() == null || e.getCurrentItem().getType().equals(Material.AIR) )
 			return;
 		
 		if ( e.isShiftClick() )

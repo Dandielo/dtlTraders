@@ -8,7 +8,6 @@ import net.dandielo.citizens.traders_v3.core.dB;
 import net.dandielo.citizens.traders_v3.traders.patterns.Pattern;
 import net.dandielo.citizens.traders_v3.traders.patterns.Pattern.Type;
 import net.dandielo.citizens.traders_v3.traders.patterns.PatternManager;
-import net.dandielo.citizens.traders_v3.traders.patterns.types.Item;
 import net.dandielo.citizens.traders_v3.traders.patterns.types.Price.PriceMatch;
 import net.dandielo.citizens.traders_v3.traders.setting.Settings;
 import net.dandielo.citizens.traders_v3.utils.NBTUtils;

@@ -22,6 +22,7 @@ public class Enchant extends ItemAttr {
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public void onLoad(String data) throws AttributeInvalidValueException
 	{
 		//split all enchants into name/id
@@ -54,7 +55,7 @@ public class Enchant extends ItemAttr {
 		
 		//for each enchant saved, with name and lvl
 		for ( Map.Entry<Enchantment, Integer> enchant : enchants.entrySet() )
-			result += "," + enchant.getKey().getId() + "/" + enchant.getValue();
+			result += "," + enchant.getKey().getName().toLowerCase() + "/" + enchant.getValue();
 		
 		//return the save string
 		return result.substring(1);
