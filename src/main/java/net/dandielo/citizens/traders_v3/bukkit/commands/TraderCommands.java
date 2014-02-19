@@ -61,7 +61,7 @@ public class TraderCommands {
 		String name = args.get("free");
 
 		//get the entity
-		EntityType entity = EntityType.valueOf(args.get("e") == null ? "player" : args.get("e").toUpperCase());
+		EntityType entity = EntityType.valueOf(args.get("e") == null ? "PLAYER" : args.get("e").toUpperCase());
 
 		//the the type
 		String type = args.get("t") == null ? "server" : args.get("t");

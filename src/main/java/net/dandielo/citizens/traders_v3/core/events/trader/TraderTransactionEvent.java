@@ -66,7 +66,7 @@ public class TraderTransactionEvent extends TraderEvent
 	
 	public static enum TransactionResult
 	{
-		SUCCESS_PLAYER_BUY, SUCCESS_PLAYER_SELL, INVENTORY_FULL, PLAYER_LACKS_MONEY, TRADER_LACKS_MONEY;
+		SUCCESS_PLAYER_BUY, SUCCESS_PLAYER_SELL, LIMIT_REACHED, INVENTORY_FULL, PLAYER_LACKS_MONEY, TRADER_LACKS_MONEY;
 		
 		public boolean success()
 		{

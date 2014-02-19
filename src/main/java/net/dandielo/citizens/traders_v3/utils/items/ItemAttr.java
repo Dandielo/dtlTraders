@@ -25,6 +25,7 @@ import net.dandielo.citizens.traders_v3.utils.items.attributes.GenericHealth;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.GenericKnockback;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.GenericSpeed;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.LeatherColor;
+import net.dandielo.citizens.traders_v3.utils.items.attributes.Limit;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Multiplier;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Name;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.PatternItem;
@@ -495,6 +496,7 @@ public abstract class ItemAttr {
 
 			//Stock item related
 			//	registerAttr(Multiplier.class);
+			registerAttr(Limit.class);
 			registerAttr(Price.class);
 			registerAttr(Slot.class);
 

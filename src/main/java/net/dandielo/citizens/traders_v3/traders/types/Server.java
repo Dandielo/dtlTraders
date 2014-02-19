@@ -264,7 +264,6 @@ public class Server extends Trader {
 			}
 			stock.setManagementInventory(inventory, baseStatus, status);
 			
-			//TODO add lores to special blocks
 			setSpecialBlockPrices();
 			
 			e.setCancelled(true);
@@ -294,6 +293,15 @@ public class Server extends Trader {
 					transactionEvent(TransactionResult.INVENTORY_FULL);
 				}
 				else
+				if ( !checkLimits(slot) )
+				{
+					//send message
+					locale.sendMessage(player, "trader-transaction-failed-limit-reached");
+					
+					//send event
+					transactionEvent(TransactionResult.LIMIT_REACHED);
+				}
+				else 
 				if ( !sellTransaction(slot) )
 				{
 					//send message
@@ -312,6 +320,9 @@ public class Server extends Trader {
 					locale.sendMessage(player, "trader-transaction-success", "trader", getNPC().getName(),
 							"player", player.getName(), "action", "#bought", "item", getSelectedItem().getName(),
 							"amount", String.valueOf(getSelectedItem().getAmount(slot)), "price", String.format("%.2f", stock.parsePrice(getSelectedItem(), "sell", getSelectedItem().getAmount(slot))).replace(',', '.'));
+					
+					//update limits
+					updateLimits(slot);
 					
 					//update inventory - lore
 					updatePlayerInventory();
@@ -362,6 +373,15 @@ public class Server extends Trader {
 						transactionEvent(TransactionResult.INVENTORY_FULL);
 					}
 					else
+					if ( !checkLimits() )
+					{
+						//send message
+						locale.sendMessage(player, "trader-transaction-failed-limit-reached");
+						
+						//send event
+						transactionEvent(TransactionResult.LIMIT_REACHED);
+					}
+					else
 					if ( !sellTransaction() )
 					{
 						//send message
@@ -381,6 +401,9 @@ public class Server extends Trader {
 						locale.sendMessage(player, "trader-transaction-success", "trader", getNPC().getName(),
 								"player", player.getName(), "action", "#bought", "item", getSelectedItem().getName(),
 								"amount", String.valueOf(getSelectedItem().getAmount()), "price", String.format("%.2f", stock.parsePrice(getSelectedItem(), "sell", getSelectedItem().getAmount())).replace(',', '.'));
+						
+						//update limits
+						updateLimits();
 						
 						//update inventory - lore
 						updatePlayerInventory();
@@ -408,6 +431,15 @@ public class Server extends Trader {
 						
 						//send event
 						transactionEvent(TransactionResult.INVENTORY_FULL);
+					}
+					else
+					if ( !checkLimits() )
+					{
+						//send message
+						locale.sendMessage(player, "trader-transaction-failed-limit-reached");
+						
+						//send event
+						transactionEvent(TransactionResult.LIMIT_REACHED);
 					}
 					else
 					if ( !sellTransaction() )
@@ -743,8 +775,10 @@ public class Server extends Trader {
 		//Temporary fix for Touchscreen issue!
 		if ( e.isCancelled() )
 		{
-			e.setCurrentItem(e.getCurrentItem());
+			//e.setCurrentItem(null);
+			//e.setCurrentItem(e.getCurrentItem());
 			//This should be fixed soon! 
+			//e.getWhoClicked().
 			((Player)e.getWhoClicked()).updateInventory();
 		}
 	}

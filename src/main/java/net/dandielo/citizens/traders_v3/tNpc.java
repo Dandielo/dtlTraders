@@ -38,7 +38,7 @@ public interface tNpc {
 	 * @param e
 	 * the inventory click event that will be handled
 	 */
-    public void onInventoryClick(InventoryClickEvent e);
+    public void onInventoryClick(InventoryClickEvent e); 
 	
 	/**
 	 * Handles the inventory click event for the manager mode (same as for the normal mode) 

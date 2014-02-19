@@ -11,6 +11,7 @@ import net.dandielo.citizens.traders_v3.traders.patterns.PatternManager;
 import net.dandielo.citizens.traders_v3.traders.patterns.types.Price.PriceMatch;
 import net.dandielo.citizens.traders_v3.traders.setting.Settings;
 import net.dandielo.citizens.traders_v3.utils.NBTUtils;
+import net.dandielo.citizens.traders_v3.utils.items.attributes.Limit;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Price;
 import net.dandielo.citizens.traders_v3.utils.items.flags.StackPrice;
 
@@ -53,6 +54,7 @@ public class StockPlayer extends StockTrader {
 			List<String> lore = item.getTempLore(status, itemStack.clone());
 
 			lore = Price.loreRequest(parsePrice(item, status.asStock(), item.getAmount()), lore, status);
+			lore = Limit.loreRequest(player.getName(), item, lore, status);
 			meta.setLore(lore);
 			
 			itemStack.setItemMeta(meta);
@@ -83,6 +85,7 @@ public class StockPlayer extends StockTrader {
 			List<String> lore = item.getTempLore(status, itemStack.clone());
 			//if ( !item.hasPrice() )
 			lore = Price.loreRequest(parsePrice(item, "sell", amount), lore, status);
+			lore = Limit.loreRequest(player.getName(), item, lore, status);
 			meta.setLore(lore);
 			
 			itemStack.setItemMeta(meta);

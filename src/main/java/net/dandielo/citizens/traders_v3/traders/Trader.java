@@ -24,6 +24,7 @@ import net.dandielo.citizens.traders_v3.core.events.trader.TraderTransactionEven
 import net.dandielo.citizens.traders_v3.core.locale.LocaleManager;
 import net.dandielo.citizens.traders_v3.core.tools.StringTools;
 import net.dandielo.citizens.traders_v3.traders.clicks.ClickHandler;
+import net.dandielo.citizens.traders_v3.traders.limits.LimitManager;
 import net.dandielo.citizens.traders_v3.traders.setting.Settings;
 import net.dandielo.citizens.traders_v3.traders.setting.TGlobalSettings;
 import net.dandielo.citizens.traders_v3.traders.stock.Stock;
@@ -65,6 +66,11 @@ public abstract class Trader implements tNpc {
 	 * Permissions manager instance
 	 */
 	protected Perms perms = Perms.perms;
+	
+	/**
+	 * Limits manager 
+	 */
+	protected LimitManager limits = LimitManager.self;
 	
 	/**
 	 * Locale manager instance
@@ -638,6 +644,43 @@ public abstract class Trader implements tNpc {
 			inventory.setItem(slot, null);
 	}
 
+	/**
+	 * Checks the current trader item against a items limit
+	 * @return
+	 *     true if a player still has not reached his limit
+	 */
+	protected boolean checkLimits()
+	{
+		return checkLimits(0);
+	}
+	
+	/**
+	 * Checks the current trader item against a items limit
+	 * @param i
+	 *     the slot that should that contains the items amount to check
+	 * @return
+	 *     true if a player still has not reached his limit
+	 */
+	protected boolean checkLimits(int i)
+	{
+		return limits.checkLimit(player, selectedItem, selectedItem.getAmount(i));
+	}
+	
+	/**
+	 * Updates the limit using data from a players transaction 
+	 */
+	protected void updateLimits()
+	{
+		updateLimits(0);
+	}
+
+	/**
+	 * Updates the limit using data from a players transaction 
+	 */
+	protected void updateLimits(int i)
+	{
+		limits.updateLimit(player, selectedItem, selectedItem.getAmount(i));
+	}
 	
 	/**
 	 * Selects a new item based on the given ItemStack

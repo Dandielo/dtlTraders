@@ -11,6 +11,7 @@ import net.dandielo.citizens.traders_v3.core.dB;
 import net.dandielo.citizens.traders_v3.core.PluginSettings;
 import net.dandielo.citizens.traders_v3.core.commands.CommandManager;
 import net.dandielo.citizens.traders_v3.stats.TraderStats;
+import net.dandielo.citizens.traders_v3.traders.limits.LimitManager;
 import net.dandielo.citizens.traders_v3.traders.setting.TGlobalSettings;
 import net.dandielo.citizens.traders_v3.traits.BankerTrait;
 import net.dandielo.citizens.traders_v3.traits.TraderTrait;
@@ -38,6 +39,7 @@ public class DtlTraders extends JavaPlugin {
 	
 	//plugin resources
 	AccountLoader accLoader;
+	LimitManager limits;
 	
 	@Override
 	public void onLoad()
@@ -111,6 +113,10 @@ public class DtlTraders extends JavaPlugin {
 		accLoader = AccountLoader.accLoader;
 		info("Accounts loaded: " + ChatColor.YELLOW + accLoader.accountsLoaded());
 		
+		//load all limits
+		limits = LimitManager.self;
+		limits.init();
+		
 		//enabled info
 		info("Enabled");
 	}
@@ -119,6 +125,9 @@ public class DtlTraders extends JavaPlugin {
 	public void onDisable()
 	{		
 		accLoader.save();
+		
+		//save all limits
+		limits.save();
 	}
 	
 	private void initDenizens()
