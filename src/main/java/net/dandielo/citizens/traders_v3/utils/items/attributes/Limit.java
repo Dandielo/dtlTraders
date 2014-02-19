@@ -13,7 +13,8 @@ import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
 import net.dandielo.citizens.traders_v3.utils.items.Attribute;
 import net.dandielo.citizens.traders_v3.utils.items.ItemAttr;
 
-@Attribute(name = "Limit", key = "l")
+@Attribute(name = "Limit", key = "l", standalone = true, priority = 0,
+status = {tNpcStatus.MANAGE_LIMIT})
 public class Limit extends ItemAttr {
 	private String id;
 	private int limit;
@@ -37,6 +38,26 @@ public class Limit extends ItemAttr {
 	public long getTimeout()
 	{
 		return timeout;
+	}
+	
+	public void increaseLimit(int l)
+	{
+		limit += l;
+	}
+	
+	public void decreaseLimit(int l)
+	{
+		limit = limit - l < 0 ? 0 : limit - l;
+	}
+	
+	public void increaseTimeout(long t)
+	{
+		timeout += t;
+	}
+	
+	public void decreaseTimeout(long t)
+	{
+		timeout = timeout - t < 0 ? 0 : timeout - t;
 	}
 	
 	@Override
@@ -67,6 +88,18 @@ public class Limit extends ItemAttr {
 			throws AttributeValueNotFoundException
 	{		
 		throw new AttributeValueNotFoundException();
+	}
+
+	@Override
+	public void onStatusLoreRequest(tNpcStatus status, ItemStack target, List<String> lore)
+	{
+		//If not in manager mode then we don't want to manage this request
+		//Maybe later just update the Attribute settings?
+		if ( !status.inManagementMode() ) return;
+
+		//add the lore to the item
+		for ( String pLore : LocaleManager.locale.getLore("item-rawLimit") )
+			lore.add(pLore.replace("{limit}", String.valueOf(limit)).replace("{timeout}", LimitManager.timeoutString(timeout)));
 	}
 	
 	public static List<String> loreRequest(String player, StockItem item, List<String> lore, tNpcStatus status)

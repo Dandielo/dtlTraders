@@ -12,9 +12,9 @@ import org.bukkit.inventory.meta.ItemMeta;
 import net.dandielo.citizens.traders_v3.core.dB;
 import net.dandielo.citizens.traders_v3.core.PluginSettings;
 import net.dandielo.citizens.traders_v3.core.locale.LocaleManager;
+import net.dandielo.citizens.traders_v3.traders.limits.LimitManager;
 import net.dandielo.citizens.traders_v3.utils.ItemUtils;
 
-@SuppressWarnings("deprecation")
 public class TGlobalSettings extends PluginSettings {
 	//the trader soncig section
 	protected static ConfigurationSection tConfig;
@@ -24,6 +24,7 @@ public class TGlobalSettings extends PluginSettings {
 	
 	//manage settings
 	protected static Map<ItemStack, Double> specialBlocks = new HashMap<ItemStack, Double>();
+	protected static Map<ItemStack, Long> timeoutBlocks = new HashMap<ItemStack, Long>();
 	protected static String mmStockStart;
 	protected static ItemStack mmItemToggle; 
 	protected static boolean mmRightToggle; 
@@ -91,6 +92,26 @@ public class TGlobalSettings extends PluginSettings {
 			dB.normal("StackTrace: ", e.getStackTrace());
 		}
 
+		try
+		{
+			List<String> specials = (List<String>) tConfig.getList("managing.time-blocks");
+			for ( String entry : specials )
+			{
+				String[] data = entry.split(" ");
+				timeoutBlocks.put(ItemUtils.createItemStack(data[0]), LimitManager.parseTimeout(data[1]));
+			}
+		}
+		catch(Exception e)
+		{
+			//debug high
+			dB.high("While loading timeoutblocks blocks, a exception occured");
+			dB.high("Exception: ", e.getClass().getSimpleName());
+			
+			//debug normal
+			dB.normal("Exception message: ", e.getMessage());
+			dB.normal("StackTrace: ", e.getStackTrace());
+		}
+		
 		//load stock settings
 		stockStart = tConfig.getString("stock.start-stock", "sell");
 		stockSize = tConfig.getInt("stock.size", 6);
@@ -104,11 +125,6 @@ public class TGlobalSettings extends PluginSettings {
 		try
 		{
 			defaultPatterns = (List<String>) tConfig.getList("pattern.defaults", new ArrayList<String>());
-			//for ( String entry : defaults )
-			//{
-			//	String[] data = entry.split(" ");
-			//	defaultPatterns.put(data[0], Integer.parseInt(data[1]));
-			//}
 			patternFile = tConfig.getString("pattern.file", "patterns.yml");
 		}
 		catch(Exception e)
@@ -240,9 +256,22 @@ public class TGlobalSettings extends PluginSettings {
 	 */
 	public static double getBlockValue(ItemStack item)
 	{
-		ItemStack tempItem = new ItemStack(item.getTypeId());
+		ItemStack tempItem = new ItemStack(item.getType());
 		tempItem.setAmount(1);
 		return specialBlocks.containsKey(tempItem) ? specialBlocks.get(tempItem) : 1.0;
+	}
+	
+	/**
+	 * @param item
+	 * checks the item if its a special block
+	 * @return
+	 * the special block value, or 1 if no block was found
+	 */
+	public static long getBlockTimeoutValue(ItemStack item)
+	{
+		ItemStack tempItem = new ItemStack(item.getType());
+		tempItem.setAmount(1);
+		return timeoutBlocks.containsKey(tempItem) ? timeoutBlocks.get(tempItem) : 1;
 	}
 	
 	/**

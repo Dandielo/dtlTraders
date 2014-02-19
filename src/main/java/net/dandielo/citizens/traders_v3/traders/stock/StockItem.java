@@ -19,6 +19,7 @@ import net.dandielo.citizens.traders_v3.utils.items.Attribute;
 import net.dandielo.citizens.traders_v3.utils.items.ItemAttr;
 import net.dandielo.citizens.traders_v3.utils.items.ItemFlag;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Amount;
+import net.dandielo.citizens.traders_v3.utils.items.attributes.Limit;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Multiplier;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Name;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Price;
@@ -586,6 +587,15 @@ public final class StockItem {
 	public boolean hasMultiplier()
 	{
 		return hasAttr(Multiplier.class);
+	}
+	
+	/**
+	 * @return
+	 *     the limit attribute, if there is no attrib it will create one.
+	 */
+	public Limit getLimitAttr()
+	{
+		return tryGetAttr(Limit.class);
 	}
 	
 	/**

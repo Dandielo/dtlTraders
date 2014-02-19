@@ -15,12 +15,14 @@ import net.dandielo.citizens.traders_v3.core.events.trader.TraderTransactionEven
 import net.dandielo.citizens.traders_v3.traders.Trader;
 import net.dandielo.citizens.traders_v3.traders.clicks.ClickHandler;
 import net.dandielo.citizens.traders_v3.traders.clicks.InventoryType;
+import net.dandielo.citizens.traders_v3.traders.limits.LimitManager;
 import net.dandielo.citizens.traders_v3.traders.setting.Settings;
 import net.dandielo.citizens.traders_v3.traders.setting.TGlobalSettings;
 import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
 import net.dandielo.citizens.traders_v3.traits.TraderTrait;
 import net.dandielo.citizens.traders_v3.traits.WalletTrait;
 import net.dandielo.citizens.traders_v3.utils.NBTUtils;
+import net.dandielo.citizens.traders_v3.utils.items.attributes.Limit;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Price;
 import net.dandielo.citizens.traders_v3.utils.items.flags.StackPrice;
 
@@ -95,9 +97,11 @@ public class Server extends Trader {
 			new TraderClickEvent(this, player, false, false).callEvent();
 		}
 		
-			
 		//debug info
 		dB.info(this.getClass().getSimpleName(), " Trader right click event, by: ", player.getName());
+
+		//update all limits
+		limits.updateAll();
 		
 		if ( status.inManagementMode() )
 			inventory = stock.getManagementInventory(baseStatus, status);
@@ -735,6 +739,109 @@ public class Server extends Trader {
 		e.setCancelled(true);
 	}
 	
+	/**
+	 * Limit managing for manager stock, this allows you to change limits for all items in your traders stock
+	 * @param e
+	 */
+	@ClickHandler(status={tNpcStatus.MANAGE_LIMIT}, inventory=InventoryType.TRADER, shift = true)
+	public void manageLimits(InventoryClickEvent e)
+	{
+		//debug info
+		dB.info("Limit managing click event");
+		
+		//select the item that should have the price changed
+		if ( selectAndCheckItem(e.getSlot()) )
+		{
+			//get the selected item
+			StockItem item = getSelectedItem();
+			
+			//get the limit attribute
+			if (!item.hasAttr(Limit.class))
+				item.addAttr("l", this.settings.getNPC().getId() + "@" + item.getSlot() + "/0/0s");
+			Limit limit = item.getAttr(Limit.class);
+			
+			//show the current price in chat, if cursor is AIR
+			if ( e.getCursor().getType().equals(Material.AIR) )
+			{
+				//sends the message
+				locale.sendMessage(player, "key-value", 
+						"key", "#limit", "value", limit.getLimit() != 0 ? String.valueOf(limit.getLimit()) : "none");
+				locale.sendMessage(player, "key-value", 
+						"key", "#timeout", "value", LimitManager.timeoutString(limit.getTimeout()));
+			}
+			else
+			{
+				//change the limit
+				if ( !e.isShiftClick() )
+				{
+					//adds value to the current price
+					if ( e.isLeftClick() )
+					{
+						//increases the price using specialBlockValue*cursorAmount
+						limit.increaseLimit((int)Settings.getBlockValue(e.getCursor())*e.getCursor().getAmount());
+						
+						//sends a message
+						locale.sendMessage(player, "key-change", 
+								"key", "#limit", "value", limit.getLimit() != 0 ? String.valueOf(limit.getLimit()) : "none");
+					}
+					else
+					//remove value from the current price
+					if ( e.isRightClick() )
+					{
+						//decreases the price using specialBlockValue*cursorAmount
+						limit.decreaseLimit((int)Settings.getBlockValue(e.getCursor())*e.getCursor().getAmount());
+						
+						//sends a message
+						locale.sendMessage(player, "key-change", 
+								"key", "#limit", "value", limit.getLimit() != 0 ? String.valueOf(limit.getLimit()) : "none");
+					}
+				}
+				//change the timeout
+				else
+				{
+					//adds value to the current price
+					if ( e.isLeftClick() )
+					{
+						//increases the price using specialBlockValue*cursorAmount
+						limit.increaseTimeout(Settings.getBlockTimeoutValue(e.getCursor())*e.getCursor().getAmount());
+						
+						//sends a message
+						locale.sendMessage(player, "key-change", 
+								"key", "#timeout", "value", LimitManager.timeoutString(limit.getTimeout()));
+					}
+					else
+					//remove value from the current price
+					if ( e.isRightClick() )
+					{
+						//decreases the price using specialBlockValue*cursorAmount
+						limit.decreaseTimeout(Settings.getBlockTimeoutValue(e.getCursor())*e.getCursor().getAmount());
+						
+						//sends a message
+						locale.sendMessage(player, "key-change", 
+								"key", "#timeout", "value", LimitManager.timeoutString(limit.getTimeout()));
+					}
+				}
+				
+				//Get a clean item and it's meta
+	            ItemStack itemStack = item.getItem(false);
+	            ItemMeta meta = itemStack.getItemMeta();
+	            
+	            //Set the temp lore by the current status
+	            meta.setLore(item.getTempLore(status, itemStack.clone()));
+	            itemStack.setItemMeta(meta); 
+	            
+	            //replace the item with that one in the inventory
+	            e.getInventory().setItem(item.getSlot(), NBTUtils.markItem(itemStack));
+			}
+			
+			//remove the attribute if not needed
+			if (limit.getLimit() == 0)
+			{
+				item.removeAttr(Limit.class);
+			}
+		}
+		e.setCancelled(true);
+	}
 	
 	
 	//shift handler

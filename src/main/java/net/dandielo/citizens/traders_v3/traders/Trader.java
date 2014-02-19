@@ -365,7 +365,7 @@ public abstract class Trader implements tNpc {
 				if ( value != 1.0 )
 				{
 					List<String> lore = new ArrayList<String>();
-					lore.add(ChatColor.GOLD + "Block value: " + ChatColor.YELLOW + String.format("%.2f", value) );
+					lore.add(Lore.traderLorePrefix + ChatColor.GOLD + "Block value: " + ChatColor.YELLOW + String.format("%.2f", value) );
 					inv.setItem(i, Lore.addLore(NBTUtils.cleanItem(item), lore));
 				}
 			}

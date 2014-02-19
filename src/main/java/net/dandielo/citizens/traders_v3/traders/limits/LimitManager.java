@@ -125,6 +125,11 @@ public class LimitManager {
 		}
 	}
 	
+	public void updateAll()
+	{
+		for (LimitEntry entry : limits.values())
+			entry.limitUpdate();
+	}
 	
 	public boolean checkLimit(Player player, StockItem item, int amount)
 	{

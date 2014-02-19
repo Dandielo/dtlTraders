@@ -91,6 +91,7 @@ keywords:
   owner: Owner
   amount: Amount
   limit: Limit
+  timeout: Timeout
   price: Price
   name: Name
   sold: Sold
@@ -132,6 +133,10 @@ ui:
   item-price:
     lore:
     - '^6Price: ^7{price}'
+  item-rawLimit:
+    lore:
+    - '^6Limit: ^7{limit}'
+    - '^6Timeout: ^7{timeout}'
   item-limit:
     lore:
     - '^6Stock: ^7{limit-used}^6/^7{limit-total}'
