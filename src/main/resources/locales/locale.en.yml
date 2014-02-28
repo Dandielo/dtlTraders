@@ -137,9 +137,12 @@ ui:
     lore:
     - '^6Limit: ^7{limit}'
     - '^6Timeout: ^7{timeout}'
-  item-limit:
+  item-sell-limit:
     lore:
-    - '^6Stock: ^7{limit-used}^6/^7{limit-total}'
+    - '^7{limit-avail} ^6items left'
+  item-buy-limit:
+    lore:
+    - '^6Has place for ^7{limit-avail} ^6more items'
   item-sell:
     lore:
     - '^6Click to buy this item'

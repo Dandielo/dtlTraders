@@ -109,13 +109,13 @@ public class Limit extends ItemAttr {
 		if (!item.hasAttr(Limit.class)) return lore;
 		
 		//add the Price lore
-		for ( String pLore : LocaleManager.locale.getLore("item-limit") )
+		for ( String pLore : LocaleManager.locale.getLore("item-" + status.asStock() + "-limit") )
 		{
 			lore.add(
 					pLore
 					.replace("{limit-total}", String.valueOf(limits.getTotalLimit(item)))
-					.replace("{limit-used}",  String.valueOf(limits.getTotalUsed(item)))
-					.replace("{limit-avail}", String.valueOf(limits.getTotalLimit(item)-limits.getTotalUsed(item)))
+					.replace("{limit-used}",  String.valueOf(Math.abs(limits.getTotalUsed(item))))
+					.replace("{limit-avail}", String.valueOf(limits.getTotalLimit(item)-Math.abs(limits.getTotalUsed(item))))
 					//.replace("{limit-player}",  String.valueOf(limits.getPlayerLimit(item)))
 					//.replace("{limit-player-used}",  String.valueOf(limits.getPlayerUsed(player, item)))
 					//.replace("{limit-player-avail}", String.valueOf(limits.getPlayerLimit(item)-limits.getPlayerUsed(player, item)))

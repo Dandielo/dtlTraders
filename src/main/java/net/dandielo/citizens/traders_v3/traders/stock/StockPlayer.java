@@ -52,9 +52,8 @@ public class StockPlayer extends StockTrader {
 			ItemMeta meta = itemStack.getItemMeta();
 			
 			List<String> lore = item.getTempLore(status, itemStack.clone());
-
-			lore = Price.loreRequest(parsePrice(item, status.asStock(), item.getAmount()), lore, status);
 			lore = Limit.loreRequest(player.getName(), item, lore, status);
+			lore = Price.loreRequest(parsePrice(item, status.asStock(), item.getAmount()), lore, status);
 			meta.setLore(lore);
 			
 			itemStack.setItemMeta(meta);
@@ -83,9 +82,8 @@ public class StockPlayer extends StockTrader {
 			ItemMeta meta = itemStack.getItemMeta();
 			
 			List<String> lore = item.getTempLore(status, itemStack.clone());
-			//if ( !item.hasPrice() )
-			lore = Price.loreRequest(parsePrice(item, "sell", amount), lore, status);
 			lore = Limit.loreRequest(player.getName(), item, lore, status);
+			lore = Price.loreRequest(parsePrice(item, "sell", amount), lore, status);
 			meta.setLore(lore);
 			
 			itemStack.setItemMeta(meta);

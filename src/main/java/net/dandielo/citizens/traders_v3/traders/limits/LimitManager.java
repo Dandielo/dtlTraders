@@ -70,7 +70,7 @@ public class LimitManager {
 				ConfigurationSection cs = limits_yaml.getConfigurationSection(id);
 				
 				//load a new entry
-				LimitEntry entry = new LimitEntry(id, 
+				LimitEntry entry = new LimitEntry(id,
 						cs.getInt("limit"),  
 						cs.getLong("timeout"),
 						cs.getInt("plimit"), 
@@ -111,9 +111,9 @@ public class LimitManager {
 				LimitEntry limit = entry.getValue();
 				limits_yaml.set(id + ".limit", limit.getLimit());
 				limits_yaml.set(id + ".timeout", limit.getTimeout());
-		//		limits_yaml.set(id + ".plimit", limit.getPlayerLimit());
-		//		limits_yaml.set(id + ".ptimeout", limit.getPlayerTimeout());
-				limits_yaml.set(id + ".players", limit.entries());
+				limits_yaml.set(id + ".plimit", limit.getPlayerLimit());
+				limits_yaml.set(id + ".ptimeout", limit.getPlayerTimeout());
+				limits_yaml.set(id + ".players", limit.playerEntries());
 			}
 
 			limits_yaml.save(limits_file);
@@ -125,13 +125,13 @@ public class LimitManager {
 		}
 	}
 	
-	public void updateAll()
+	public void refreshAll()
 	{
 		for (LimitEntry entry : limits.values())
-			entry.limitUpdate();
+			entry.limitRefresh();
 	}
 	
-	public boolean checkLimit(Player player, StockItem item, int amount)
+	public boolean checkLimit(Player player, StockItem item, int amount, String type)
 	{
 		if( item.hasAttr(Limit.class) )
 		{
@@ -144,12 +144,12 @@ public class LimitManager {
 				entry = new LimitEntry(lm.getID(), lm.getLimit(), lm.getTimeout());
 
 			//remove timed out entries
-			entry.limitUpdate();
+			entry.limitRefresh();
 			
 			//all checks
 			boolean result = true;
-			result = entry.isAvailable(amount);
-			result = result ? entry.isAvailable(player.getName(), amount) : result;
+			result = entry.isAvailable(type, amount);
+			result = result ? entry.isPlayerAvailable(player.getName(), type, amount) : result;
 
 			//save the entry
 			limits.put(lm.getID(), entry);
@@ -158,7 +158,7 @@ public class LimitManager {
 		return true;
 	}
 	
-	public void updateLimit(Player player, StockItem item, int amount)
+	public void updateLimit(Player player, StockItem item, int amount, String type)
 	{
 		if( item.hasAttr(Limit.class) )
 		{
@@ -169,7 +169,7 @@ public class LimitManager {
 			LimitEntry entry = limits.get(lm.getID());
 
 			//update the limit
-			entry.playerUpdate(player.getName(), amount);
+			entry.playerUpdate(player.getName(), type, amount);
 			
 			//save the entry
 			limits.put(lm.getID(), entry);

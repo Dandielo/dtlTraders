@@ -11,14 +11,14 @@ public class LimitEntry {
 	private String id;
 	
 	//limit settings
-	private int limit;
+	private int limit; 
 	private long timeout;
 
 	private int playerLimit;
 	private long playerTimeout;
 	
 	//limit usage
-	private Map<String, Map<Long, Integer>> used;	
+	private Map<String, Map<Long, Integer>> playerUsed;	
 	
 	//constructors
 	public LimitEntry(String id, int limit, long timeout)
@@ -26,33 +26,36 @@ public class LimitEntry {
 		//limit id
 		this.id = id;
 		
-		playerLimit = this.limit = limit;
-		playerTimeout = this.timeout = timeout;
+		this.limit = limit;
+		this.timeout = timeout;
 		
-		used = new HashMap<String, Map<Long, Integer>>();
+		playerLimit = limit;
+		playerTimeout = timeout;
+		
+		playerUsed = new HashMap<String, Map<Long, Integer>>();
 	}
 	
 	public LimitEntry(String id, int limit, long timeout, int plimit, long ptimeout)
 	{
 		//limit id
 		this.id = id;
-
+		
 		this.limit = limit;
 		this.timeout = timeout;
 		
-		playerLimit = plimit;
-		playerTimeout = ptimeout;
+		playerLimit = -1;
+		playerTimeout = -1;
 		
-		used = new HashMap<String, Map<Long, Integer>>();
+		playerUsed = new HashMap<String, Map<Long, Integer>>();
 	}
 	
 	//methods
-	public void limitUpdate()
+	public void limitRefresh()
 	{
 		long now = new Date().getTime();
 		
 		//remove all timed out data
-		for ( Map<Long, Integer> entries : used.values() )
+		for ( Map<Long, Integer> entries : playerUsed.values() )
 		{
 			Iterator<Map.Entry<Long, Integer>> it = entries.entrySet().iterator();
 			while(it.hasNext())
@@ -66,50 +69,68 @@ public class LimitEntry {
 	}
 	
 	//methods
-	public int totalPlayer(String palyer)
+	public int totalPlayer(String palyerEntry)
 	{
 		int result = 0;
 		//get the players total amount
-		for ( Integer value : used.get(palyer).values() )
+		for ( Integer value : playerUsed.get(palyerEntry).values() )
 			result += value.intValue();
 		return result;
 	}
 	public int totalUsed()
 	{
 		int result = 0;
-		for( String player : used.keySet() )
-			result += totalPlayer(player);
+		for(String playerEntry : playerUsed.keySet())
+			result += totalPlayer(playerEntry);
 		return result;
 	}
 	
 	//general methods
-	public boolean isAvailable(int amount)
+	/**
+	 * Checks if the given amount can be added or subtracted from the limit pool
+	 * <br><br>
+	 * If the <strong>type</strong> equals <i>sell</i> it checks if the player can <i>sell</i> the given
+	 * amount to a trader. Amount should be a negative integer.
+	 * <br>
+	 * If the <strong>type</strong> equals <i>buy</i> it checks if the player can <i>buy</i> the given
+	 * amount from the trader. Amount should be a positive.
+	 */
+	public boolean isAvailable(String type, int amount)
 	{
-		return totalUsed() + amount <= limit;
+		boolean result = false;
+		if (type.equals("buy"))
+		{
+			int h = totalUsed();
+			result = (h>0?0:h) + amount <= limit;
+		}
+		else if (type.equals("sell"))
+		{
+			result = totalUsed() - amount >= 0;
+		}
+		return result;
 	}
 	
-	public boolean isAvailable(String player, int amount)
+	public boolean isPlayerAvailable(String player, String type, int amount)
 	{
-		//TODO player limits
-		return used.containsKey(player) ? totalPlayer(player) + amount <= limit : amount <= limit;
-	}
-
-	public void playerUpdate(String player, int amount)
-	{
-		if ( !used.containsKey(player) )
-			used.put(player, new HashMap<Long, Integer>());
-		used.get(player).put(new Date().getTime(), amount);
+		return playerLimit == -1 || ( playerUsed.containsKey(player + "@" + type) ? Math.abs(totalPlayer(player + "@" + type)) + Math.abs(amount) <= playerLimit : Math.abs(amount) <= playerLimit );
 	}
 	
-	public void playerLoad(String player, long time, int amount)
+	public void playerUpdate(String player, String type, int amount)
 	{
-		if ( !used.containsKey(player) )
-			used.put(player, new HashMap<Long, Integer>());
-		used.get(player).put(time, amount);
+		if ( !playerUsed.containsKey(player + "@" + type) )
+			playerUsed.put(player + "@" + type, new HashMap<Long, Integer>());
+		playerUsed.get(player + "@" + type).put(new Date().getTime(), amount);
+	}
+	
+	public void playerLoad(String playerEntry, long time, int amount)
+	{
+		if ( !playerUsed.containsKey(playerEntry) )
+			playerUsed.put(playerEntry, new HashMap<Long, Integer>());
+		playerUsed.get(playerEntry).put(time, amount);
 	}
 	
 	//getters
-	int getLimit()
+	int getLimit()	
 	{
 		return limit;
 	}
@@ -125,8 +146,8 @@ public class LimitEntry {
 	{
 		return playerTimeout;
 	}
-	Map<String, Map<Long, Integer>> entries()
+	Map<String, Map<Long, Integer>> playerEntries()
 	{
-		return used;
+		return playerUsed;
 	}
 }

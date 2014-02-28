@@ -29,7 +29,6 @@ import net.dandielo.citizens.traders_v3.utils.items.flags.StackPrice;
 @tNpcType(name="server", author="dandielo")
 public class Server extends Trader {
 	
-
 	public Server(TraderTrait trader, WalletTrait wallet, Player player) {
 		super(trader, wallet, player);
 	}
@@ -101,7 +100,7 @@ public class Server extends Trader {
 		dB.info(this.getClass().getSimpleName(), " Trader right click event, by: ", player.getName());
 
 		//update all limits
-		limits.updateAll();
+		limits.refreshAll();
 		
 		if ( status.inManagementMode() )
 			inventory = stock.getManagementInventory(baseStatus, status);
@@ -115,7 +114,7 @@ public class Server extends Trader {
 		tNpcManager.instance().registerOpenedInventory(player, inventory);
 		
 		//open the traders inventory
-		player.openInventory(inventory);
+		player.openInventory(inventory);			
 		
 		return true;
 	}
@@ -297,7 +296,7 @@ public class Server extends Trader {
 					transactionEvent(TransactionResult.INVENTORY_FULL);
 				}
 				else
-				if ( !checkLimits(slot) )
+				if ( !checkSellLimits(slot) )
 				{
 					//send message
 					locale.sendMessage(player, "trader-transaction-failed-limit-reached");
@@ -326,7 +325,7 @@ public class Server extends Trader {
 							"amount", String.valueOf(getSelectedItem().getAmount(slot)), "price", String.format("%.2f", stock.parsePrice(getSelectedItem(), "sell", getSelectedItem().getAmount(slot))).replace(',', '.'));
 					
 					//update limits
-					updateLimits(slot);
+					updateSellLimits(slot);
 					
 					//update inventory - lore
 					updatePlayerInventory();
@@ -377,7 +376,7 @@ public class Server extends Trader {
 						transactionEvent(TransactionResult.INVENTORY_FULL);
 					}
 					else
-					if ( !checkLimits() )
+					if ( !checkSellLimits() )
 					{
 						//send message
 						locale.sendMessage(player, "trader-transaction-failed-limit-reached");
@@ -407,7 +406,7 @@ public class Server extends Trader {
 								"amount", String.valueOf(getSelectedItem().getAmount()), "price", String.format("%.2f", stock.parsePrice(getSelectedItem(), "sell", getSelectedItem().getAmount())).replace(',', '.'));
 						
 						//update limits
-						updateLimits();
+						updateSellLimits();
 						
 						//update inventory - lore
 						updatePlayerInventory();
@@ -437,7 +436,7 @@ public class Server extends Trader {
 						transactionEvent(TransactionResult.INVENTORY_FULL);
 					}
 					else
-					if ( !checkLimits() )
+					if ( !checkSellLimits() )
 					{
 						//send message
 						locale.sendMessage(player, "trader-transaction-failed-limit-reached");
@@ -465,6 +464,9 @@ public class Server extends Trader {
 								"player", player.getName(), "action", "#bought", "item", getSelectedItem().getName(),
 								"amount", String.valueOf(getSelectedItem().getAmount()), 
 								"price", String.format("%.2f", stock.parsePrice(getSelectedItem(), "sell", getSelectedItem().getAmount())).replace(',', '.'));
+						
+						//update limits
+						updateSellLimits();
 						
 						//update inventory - lore
 						updatePlayerInventory();
@@ -507,6 +509,15 @@ public class Server extends Trader {
 				
 				if ( handleClick(e.getRawSlot()) )
 				{
+					if ( !checkBuyLimits(scale) )
+					{
+						//send message
+						locale.sendMessage(player, "trader-transaction-failed-limit-reached");
+						
+						//send event
+						transactionEvent(TransactionResult.LIMIT_REACHED);
+					}
+					else
 					if ( !buyTransaction(scale) )
 					{						
 						//send message
@@ -528,6 +539,8 @@ public class Server extends Trader {
 								"player", player.getName(), "action", "#sold", "item", getSelectedItem().getName(),
 								"amount", String.valueOf(getSelectedItem().getAmount()*scale), 
 								"price", String.format("%.2f", stock.parsePrice(getSelectedItem(), "buy", getSelectedItem().getAmount())*scale).replace(',', '.'));
+						
+						updateBuyLimits(scale);
 						
 						//update the inventory lore
 						updatePlayerInventory();
@@ -551,6 +564,15 @@ public class Server extends Trader {
 				
 				if ( handleClick(e.getRawSlot()) )
 				{
+					if ( !checkBuyLimits() )
+					{
+						//send message
+						locale.sendMessage(player, "trader-transaction-failed-limit-reached");
+						
+						//send event
+						transactionEvent(TransactionResult.LIMIT_REACHED);
+					}
+					else
 					if ( !buyTransaction() )
 					{
 						//send message
@@ -573,6 +595,9 @@ public class Server extends Trader {
 								"amount", String.valueOf(getSelectedItem().getAmount()), 
 								"price", String.format("%.2f", stock.parsePrice(getSelectedItem(), "buy", getSelectedItem().getAmount())).replace(',', '.'));
 
+						//update limits
+						updateBuyLimits();
+						
 						//update the inventory lore
 						updatePlayerInventory();
 					}
@@ -587,8 +612,6 @@ public class Server extends Trader {
 			}
 		}
 	}
-	
-	
 	
 	/* manager mode handlers */
 	@ClickHandler(status={tNpcStatus.MANAGE_UNLOCKED}, inventory=InventoryType.TRADER)
@@ -757,7 +780,7 @@ public class Server extends Trader {
 			
 			//get the limit attribute
 			if (!item.hasAttr(Limit.class))
-				item.addAttr("l", this.settings.getNPC().getId() + "@" + item.getSlot() + "/0/0s");
+				item.addAttr("l", this.settings.getNPC().getId() + "@" + baseStatus.asStock() + ":" + item.getSlot() + "/0/0s");
 			Limit limit = item.getAttr(Limit.class);
 			
 			//show the current price in chat, if cursor is AIR
@@ -842,8 +865,7 @@ public class Server extends Trader {
 		}
 		e.setCancelled(true);
 	}
-	
-	
+		
 	//shift handler
 	@ClickHandler(status = {tNpcStatus.SELL, tNpcStatus.BUY, tNpcStatus.SELL_AMOUNTS, tNpcStatus.MANAGE_BUY, tNpcStatus.MANAGE_SELL}, shift = true, inventory = InventoryType.TRADER)
 	public void topShift(InventoryClickEvent e)
@@ -875,6 +897,25 @@ public class Server extends Trader {
 		dB.info("slot: ", e.getSlot(), ", left: ", e.isLeftClick(), ", shift: ", e.isShiftClick());
 	}
 
+	@ClickHandler(status = {tNpcStatus.SELL, tNpcStatus.BUY, tNpcStatus.SELL_AMOUNTS}, inventory = InventoryType.TRADER)
+	public void __topUpdate(InventoryClickEvent e)
+	{
+		limits.refreshAll();
+		if (status.equals(tNpcStatus.SELL_AMOUNTS))
+			stock.setAmountsInventory(inventory, status, getSelectedItem());
+		else
+			stock.setInventory(inventory, status);
+	}
+	@ClickHandler(status = {tNpcStatus.SELL, tNpcStatus.BUY, tNpcStatus.SELL_AMOUNTS}, inventory = InventoryType.PLAYER)
+	public void __bottomUpdate(InventoryClickEvent e)
+	{
+		limits.refreshAll();
+		if (status.equals(tNpcStatus.SELL_AMOUNTS))
+			stock.setAmountsInventory(inventory, status, getSelectedItem());
+		else
+			stock.setInventory(inventory, status);
+	}
+	
 	@SuppressWarnings("deprecation")
 	@ClickHandler(status = {tNpcStatus.SELL, tNpcStatus.BUY, tNpcStatus.SELL_AMOUNTS}, inventory = InventoryType.PLAYER)
 	public void __last(InventoryClickEvent e)
@@ -887,6 +928,8 @@ public class Server extends Trader {
 			//This should be fixed soon! 
 			//e.getWhoClicked().
 			((Player)e.getWhoClicked()).updateInventory();
+			
+			//update the trader inventory too
 		}
 	}
 }

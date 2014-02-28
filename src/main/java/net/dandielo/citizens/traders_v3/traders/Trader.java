@@ -649,9 +649,9 @@ public abstract class Trader implements tNpc {
 	 * @return
 	 *     true if a player still has not reached his limit
 	 */
-	protected boolean checkLimits()
+	protected boolean checkSellLimits()
 	{
-		return checkLimits(0);
+		return checkSellLimits(0);
 	}
 	
 	/**
@@ -661,25 +661,65 @@ public abstract class Trader implements tNpc {
 	 * @return
 	 *     true if a player still has not reached his limit
 	 */
-	protected boolean checkLimits(int i)
+	protected boolean checkSellLimits(int i)
 	{
-		return limits.checkLimit(player, selectedItem, selectedItem.getAmount(i));
+		return limits.checkLimit(player, selectedItem, selectedItem.getAmount(i), "buy");
+	}
+	
+	/**
+	 * Checks the current trader item against a items limit
+	 * @param i
+	 *     the slot that should that contains the items amount to check
+	 * @return
+	 *     true if a player still has not reached his limit
+	 */
+	protected boolean checkBuyLimits()
+	{
+		return checkBuyLimits(1);
+	}
+	
+	/**
+	 * Checks the current trader item against a items limit
+	 * @param i
+	 *     the slot that should that contains the items amount to check
+	 * @return
+	 *     true if a player still has not reached his limit
+	 */
+	protected boolean checkBuyLimits(int scale)
+	{
+		return limits.checkLimit(player, selectedItem, selectedItem.getAmount(0) * scale, "sell");
 	}
 	
 	/**
 	 * Updates the limit using data from a players transaction 
 	 */
-	protected void updateLimits()
+	protected void updateSellLimits()
 	{
-		updateLimits(0);
+		updateSellLimits(0);
 	}
 
 	/**
 	 * Updates the limit using data from a players transaction 
 	 */
-	protected void updateLimits(int i)
+	protected void updateSellLimits(int i)
 	{
-		limits.updateLimit(player, selectedItem, selectedItem.getAmount(i));
+		limits.updateLimit(player, selectedItem, selectedItem.getAmount(i), "buy");
+	}
+	
+	/**
+	 * Updates the limit using data from a players transaction 
+	 */
+	protected void updateBuyLimits()
+	{
+		updateBuyLimits(1);
+	}
+	
+	/**
+	 * Updates the limit using data from a players transaction 
+	 */
+	protected void updateBuyLimits(int scale)
+	{
+		limits.updateLimit(player, selectedItem, -(selectedItem.getAmount(0) * scale), "sell");
 	}
 	
 	/**
