@@ -390,6 +390,7 @@ public abstract class Trader implements tNpc {
 				if ( item != null )
 				    inv.setItem(i, NBTUtils.cleanItem(item));
 			}
+			
 			//next item please
 			i++;
 		}
@@ -564,7 +565,7 @@ public abstract class Trader implements tNpc {
 	{
 		PlayerInventory inventory = player.getInventory();
 		int amountLeft = amount;
-
+		
 		//Generate it just once!
 		ItemStack generatedItem = selectedItem.getItem(true);
 		

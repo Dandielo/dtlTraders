@@ -11,6 +11,7 @@ import net.dandielo.citizens.traders_v3.tNpcStatus;
 import net.dandielo.citizens.traders_v3.tNpcType;
 import net.dandielo.citizens.traders_v3.core.dB;
 import net.dandielo.citizens.traders_v3.core.events.trader.TraderClickEvent;
+import net.dandielo.citizens.traders_v3.core.events.trader.TraderOpenEvent;
 import net.dandielo.citizens.traders_v3.core.events.trader.TraderTransactionEvent.TransactionResult;
 import net.dandielo.citizens.traders_v3.traders.Trader;
 import net.dandielo.citizens.traders_v3.traders.clicks.ClickHandler;
@@ -114,7 +115,10 @@ public class Server extends Trader {
 		tNpcManager.instance().registerOpenedInventory(player, inventory);
 		
 		//open the traders inventory
-		player.openInventory(inventory);			
+		player.openInventory(inventory);
+		
+		TraderOpenEvent event = new TraderOpenEvent(this, player);
+		event.callEvent();
 		
 		return true;
 	}

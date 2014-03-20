@@ -2,14 +2,14 @@ name: dtlTraders
 main: net.dandielo.citizens.traders_v3.bukkit.DtlTraders
 depend: [Citizens,Vault]
 soft-depend: [Denizen,dtlStats]
-version: 3.0.9-snapshot
+version: 3.1.0-snapshot
 load: startup
 description: >
              Citizens2 trader trait. 
 commands:
   trader: 
     aliases: dtrader
-    description: Dtl - Trader commands.
+    description: Trader commands.
 permissions:
   dtl.trader.default:
     default: true
