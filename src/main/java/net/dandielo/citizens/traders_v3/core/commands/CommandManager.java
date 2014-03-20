@@ -104,7 +104,7 @@ public class CommandManager {
 			if ( command != null )
 			{
 				//register information about the command (This is used by the "help command")
-				GeneralCommands.registerCommandInfo(command.name(), command);
+				GeneralCommands.registerCommandInfo(command);
 				
 				//debug info
 			    dB.info("Registered command: '", ChatColor.GREEN, command.name(), " ", command.syntax(), ",");

@@ -77,91 +77,20 @@ public class GeneralCommands {
 		locale.sendMessage(sender, "plugin-reload");
 	}
 	
-	
-	@Command(
-	name = "banker",
-	syntax = "",
-	perm = "dtl.banker.commands",
-	desc = "shows the current selected bankers information",
-	npc = false)
-	public void banker(DtlTraders plugin, CommandSender sender, Banker npc, Map<String, String> args)
-	{
-		locale.sendMessage(sender, "plugin-command-message", "version", plugin.getDescription().getVersion());
-		
-		//if an NPC is selected
-		if ( npc != null )
-		{
-			locale.sendMessage(sender, "plugin-command-message", "version", plugin.getDescription().getVersion(), "name", plugin.getName());
-			locale.sendMessage(sender, "key-value", "key", "#type", "value", "#banker-" + npc.getSettings().getType());	
-			locale.sendMessage(sender, "key-value", "key", "#bank-name", "value", npc.getSettings().getAccountNameFormat());	
-			locale.sendMessage(sender, "key-value", "key", "#visible-tabs", "value", String.valueOf(npc.getSettings().getMaxVisibleTabs()));
-		}
-	}
-	
-	@Command(
-	name = "banker",
-	syntax = "reload",
-	perm = "dtl.banker.commands.reload",
-	desc = "reloads the locale and the config file",
-	npc = false)
-	public void bankerReload(DtlTraders plugin, CommandSender sender, Banker npc, Map<String, String> args)
-	{
-		//reload the general config file
-		plugin.reloadConfig();
-		
-		//reload global settings
-		PluginSettings.initPluginSettings();
-		TGlobalSettings.initGlobalSettings();
-		
-		//reload the locale
-		locale.load();
-		
-		//Account reload
-	    AccountLoader.accLoader.reload();
-		
-		locale.sendMessage(sender, "plugin-reload");
-	}
-	
-	//Type help command
-	@Command(
-	name = "banker",
-	syntax = "help",
-	desc = "allows to get information about all banker commands",
-	perm = "dtl.banker.commands.help",
-	npc = false)
-	public void bankerHelp(DtlTraders plugin, CommandSender sender, NPC npc, Map<String, String> args)
-	{
-
-		List<Command> cmds = commands.get("banker");
-		
-	    if ( cmds == null )
-			dB.high("Command informations are not loaded");
-		
-		sender.sendMessage(ChatColor.GOLD + "== " + ChatColor.YELLOW + "Banker commands" + ChatColor.GOLD + " ==");
-		sender.sendMessage("");
-		
-		for ( Command cmd : cmds )
-		{
-			sender.sendMessage(nameAndSyntax(cmd));
-		}
-	}
-	
-	
 	//Commands description holder
-	private static Map<String, List<Command>> commands = new HashMap<String, List<Command>>(); 
+	private static List<Command> commands = new ArrayList<Command>(); 
 	
 	/**
 	 * Registers a command for the help command 
 	 * @param type
 	 * @param command
 	 */
-	public static void registerCommandInfo(String type, Command command)
+	public static void registerCommandInfo(Command command)
 	{
-		List<Command> list = commands.get(type);
+		List<Command> list = commands;
 		if ( list == null )
 			list = new ArrayList<Command>();
 		list.add(command);
-		commands.put(type, list);
 	}
 	
 	@Command(
@@ -172,8 +101,7 @@ public class GeneralCommands {
 	npc = false)
 	public void traderHelpBasic(DtlTraders plugin, CommandSender sender, Trader npc, Map<String, String> args)
 	{
-		List<Command> cmds = commands.get("trader");
-		dB.spec(dB.DebugLevel.S1_ADONDRIEL, cmds);
+		List<Command> cmds = commands;
 		
 	    if ( cmds == null )
 			dB.high("Command informations are not loaded");
@@ -182,10 +110,7 @@ public class GeneralCommands {
 		sender.sendMessage("");
 		
 		for ( Command cmd : cmds )
-		{
-			dB.spec(dB.DebugLevel.S1_ADONDRIEL, nameAndSyntax(cmd));
 			sender.sendMessage(nameAndSyntax(cmd));
-		}
 	}
 /*	
 	//Type help command

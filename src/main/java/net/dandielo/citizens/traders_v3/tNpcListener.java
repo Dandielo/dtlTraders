@@ -3,17 +3,16 @@ package net.dandielo.citizens.traders_v3;
 import net.citizensnpcs.api.event.NPCDamageByEntityEvent;
 import net.citizensnpcs.api.event.NPCLeftClickEvent;
 import net.citizensnpcs.api.event.NPCRightClickEvent;
-import net.dandielo.citizens.traders_v3.bankers.Banker;
 import net.dandielo.citizens.traders_v3.bukkit.DtlTraders;
 import net.dandielo.citizens.traders_v3.bukkit.Perms;
 import net.dandielo.citizens.traders_v3.core.dB;
 import net.dandielo.citizens.traders_v3.core.dB.DebugLevel;
+import net.dandielo.citizens.traders_v3.core.events.trader.TraderPrepareEvent;
 import net.dandielo.citizens.traders_v3.core.exceptions.InvalidTraderTypeException;
 import net.dandielo.citizens.traders_v3.core.exceptions.TraderTypeNotFoundException;
 import net.dandielo.citizens.traders_v3.core.locale.LocaleManager;
 import net.dandielo.citizens.traders_v3.traders.Trader;
 import net.dandielo.citizens.traders_v3.traders.setting.Settings;
-import net.dandielo.citizens.traders_v3.traits.BankerTrait;
 import net.dandielo.citizens.traders_v3.traits.TraderTrait;
 import net.dandielo.citizens.traders_v3.utils.NBTUtils;
 import net.dandielo.citizens.traders_v3.utils.items.flags.Lore;
@@ -272,7 +271,6 @@ public class tNpcListener implements Listener {
 			if ( !trader.getStatus().inManagementMode() )
 				manager.removeRelation(e.getClicker());
 			
-			//cancel to not dmg traders //TODO add a PVP check and shift "enable" toggling
 			e.setCancelled(true);
 		}
 		catch (TraderTypeNotFoundException e1) 
@@ -342,13 +340,21 @@ public class tNpcListener implements Listener {
 					manager.registerRelation(e.getClicker(), trader);
 				}
 			}
+			
+			//preparation event, called before the trader right click, allows to change the stock or cancel the event totally
+			TraderPrepareEvent event = new TraderPrepareEvent(trader, e.getClicker());
+			event.callEvent();
+			
+			//event cancelled, now you can do your own code
+			if (event.isCancelled()) return;
 
+			//event not cancelled
 			if ( !trader.onRightClick(e.getClicker().getItemInHand()) )
 				//check the mode 
 				if ( !trader.getStatus().inManagementMode() )
 					manager.removeRelation(e.getClicker());
-			
-			
+
+
 		}
 		catch (TraderTypeNotFoundException e1) 
 		{
@@ -360,96 +366,6 @@ public class tNpcListener implements Listener {
 		{
 			//debug critical
 			dB.critical("Trader type is invalid, type: ", traderTrait.getType());
-			dB.critical("Contact the dev to fix this!");
-		}
-	}
-	
-	
-	//npc events for bankers
-	@EventHandler(priority=EventPriority.HIGHEST)
-	public void bankerLeftClickEvent(NPCLeftClickEvent e)
-	{
-		//check trait
-		if ( !e.getNPC().hasTrait(BankerTrait.class) ) return;
-
-		//check permission
-		if ( !perms.has(e.getClicker(), "dtl.banker.use") )
-		{
-			locale.sendMessage(e.getClicker(), "error-nopermission");
-			return;
-		}
-		
-		//dont allow creative to open traders
-		if ( e.getClicker().getGameMode().equals(GameMode.CREATIVE)
-				&& !perms.has(e.getClicker(), "dtl.banker.bypass.creative") ) 
-		{
-			locale.sendMessage(e.getClicker(), "error-nopermission-creative");
-			return;
-		}
-		
-		BankerTrait bankerTrait = e.getNPC().getTrait(BankerTrait.class);
-		Banker banker;
-		try 
-		{
-			banker = (Banker) tNpcManager.create_tNpc(e.getNPC(), bankerTrait.getType(), e.getClicker(), BankerTrait.class);
-			manager.registerRelation(e.getClicker(), banker);
-
-			banker.onLeftClick(e.getClicker().getItemInHand());
-		}
-		catch (TraderTypeNotFoundException e1) 
-		{
-			//debug critical
-			dB.critical("Banker type was not found, type: ", bankerTrait.getType());
-			dB.critical("Did you changed the save file?");
-		} 
-		catch (InvalidTraderTypeException e1) 
-		{
-			//debug critical
-			dB.critical("TBanker type is invalid, type: ", bankerTrait.getType());
-			dB.critical("Contact the dev to fix this!");
-		}
-	}
-
-	@EventHandler(priority=EventPriority.HIGHEST)
-	public void bankerightClickEvent(NPCRightClickEvent e) 
-	{
-		//check trait
-		if ( !e.getNPC().hasTrait(BankerTrait.class) ) return;
-
-		//check permission
-		if ( !perms.has(e.getClicker(), "dtl.banker.use") )
-		{
-			locale.sendMessage(e.getClicker(), "error-nopermission");
-			return;
-		}
-
-		//dont allow creative to open traders
-		if ( e.getClicker().getGameMode().equals(GameMode.CREATIVE)
-				&& !perms.has(e.getClicker(), "dtl.banker.bypass.creative") ) 
-		{
-			locale.sendMessage(e.getClicker(), "error-nopermission-creative");
-			return;
-		}
-
-		BankerTrait bankerTrait = e.getNPC().getTrait(BankerTrait.class);
-		Banker banker;
-		try 
-		{
-			banker = (Banker) tNpcManager.create_tNpc(e.getNPC(), bankerTrait.getType(), e.getClicker(), BankerTrait.class);
-			manager.registerRelation(e.getClicker(), banker);
-
-			banker.onRightClick(e.getClicker().getItemInHand());
-		}
-		catch (TraderTypeNotFoundException e1) 
-		{
-			//debug critical
-			dB.critical("Banker type was not found, type: ", bankerTrait.getType());
-			dB.critical("Did you changed the save file?");
-		} 
-		catch (InvalidTraderTypeException e1) 
-		{
-			//debug critical
-			dB.critical("TBanker type is invalid, type: ", bankerTrait.getType());
 			dB.critical("Contact the dev to fix this!");
 		}
 	}
