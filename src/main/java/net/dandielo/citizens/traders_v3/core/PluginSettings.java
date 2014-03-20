@@ -9,7 +9,7 @@ public class PluginSettings {
 	protected static FileConfiguration config;
 
 	//debug settings
-	private static String debugLevel;
+	private static String debugLevel = "none";
 	
 	//locale settings, cached
 	private static String locale;

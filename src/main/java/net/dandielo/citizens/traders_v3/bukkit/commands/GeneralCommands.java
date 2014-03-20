@@ -1,13 +1,9 @@
 package net.dandielo.citizens.traders_v3.bukkit.commands;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.citizensnpcs.api.npc.NPC;
-import net.dandielo.citizens.traders_v3.bankers.Banker;
-import net.dandielo.citizens.traders_v3.bankers.backend.AccountLoader;
 import net.dandielo.citizens.traders_v3.bukkit.DtlTraders;
 import net.dandielo.citizens.traders_v3.core.dB;
 import net.dandielo.citizens.traders_v3.core.PluginSettings;
