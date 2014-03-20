@@ -199,7 +199,7 @@ public class tNpcListener implements Listener {
 		    	if ( npc.getStatus().equals(tNpcStatus.MANAGE_PRICE) )
 		    	{
 		    		//remove all special block lores 
-		    		((Trader)npc).setSpecialBlockPrices();
+		    		((Trader)npc).setSpecialBlockValues();
 		    	}
 		    }
 		}

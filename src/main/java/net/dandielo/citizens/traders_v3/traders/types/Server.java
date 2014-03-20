@@ -267,7 +267,7 @@ public class Server extends Trader {
 			}
 			stock.setManagementInventory(inventory, baseStatus, status);
 			
-			setSpecialBlockPrices();
+			setSpecialBlockValues();
 			
 			e.setCancelled(true);
 		}

@@ -348,7 +348,7 @@ public abstract class Trader implements tNpc {
 	/**
 	 * Updates the players inventory resetting all transaction lores.
 	 */
-	public void setSpecialBlockPrices()
+	public void setSpecialBlockValues()
 	{
 		//the inventory that will be reseted
 		Inventory inv = player.getInventory();
@@ -361,13 +361,29 @@ public abstract class Trader implements tNpc {
 		{
 			if ( selectAndCheckNewItem(item) && status.equals(tNpcStatus.MANAGE_PRICE) )
 			{
+				//set price lore to special items
 				double value = TGlobalSettings.getBlockValue(item);
 				if ( value != 1.0 )
 				{
 					List<String> lore = new ArrayList<String>();
-					lore.add(Lore.traderLorePrefix + ChatColor.GOLD + "Block value: " + ChatColor.YELLOW + String.format("%.2f", value) );
+					lore.add(Lore.traderLorePrefix + ChatColor.GOLD + "Price value: " + ChatColor.YELLOW + String.format("%.2f", value));
 					inv.setItem(i, Lore.addLore(NBTUtils.cleanItem(item), lore));
 				}
+			}
+			else if (selectAndCheckNewItem(item) && status.equals(tNpcStatus.MANAGE_LIMIT))
+			{
+				//set time and limit lore for special items
+				List<String> lore = new ArrayList<String>();
+				
+				long time = TGlobalSettings.getBlockTimeoutValue(item);
+				if (time != 1)
+					lore.add(Lore.traderLorePrefix + ChatColor.GOLD + "Time value: " + ChatColor.YELLOW + LimitManager.timeoutString(time));
+				
+				int limit = (int) TGlobalSettings.getBlockValue(item);
+				if (limit > 1)
+					lore.add(Lore.traderLorePrefix + ChatColor.GOLD + "Limit value: " + ChatColor.YELLOW + String.valueOf(limit));
+				
+				inv.setItem(i, Lore.addLore(NBTUtils.cleanItem(item), lore));
 			}
 			else
 			{
