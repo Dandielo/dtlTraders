@@ -24,7 +24,6 @@ public class dB {
 	{
 		DEBUG = ChatColor.DARK_PURPLE + "[DEBUG]" + ChatColor.RESET;
 		debugLevel = DebugLevel.valueOf(PluginSettings.debugLevel());
-		sender = DtlTraders.getInstance().getServer().getConsoleSender();
 	}
 	
 	/**
