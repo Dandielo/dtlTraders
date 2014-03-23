@@ -1,5 +1,6 @@
 package net.dandielo.citizens.traders_v3.bankers.types;
 
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
@@ -15,7 +16,6 @@ import net.dandielo.citizens.traders_v3.traders.clicks.ClickHandler;
 import net.dandielo.citizens.traders_v3.traders.clicks.InventoryType;
 import net.dandielo.citizens.traders_v3.traits.BankerTrait;
 import net.dandielo.citizens.traders_v3.traits.WalletTrait;
-import net.minecraft.server.v1_7_R1.Material;
 
 @tNpcType(author = "dandielo", name = "private")
 public class Private extends Banker {
