@@ -248,7 +248,11 @@ public abstract class ItemFlag {
 		try 
 		{
 			//debug low
+			//debug low
 			dB.low("Initializing new flag instance");
+			dB.low("Flag: " + attr.name());
+			dB.info("With key: " + key);
+			dB.info("-------------------------------------");
 			
 			//get the attribute declaring class
 			ItemFlag itemflag = flags.get(attr).getConstructor(String.class).newInstance(key);

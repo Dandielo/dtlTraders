@@ -60,6 +60,10 @@ public class Server extends Trader {
 	@Override
 	public boolean onRightClick(ItemStack itemInHand)
 	{
+		dB.info("-------------------------------------");
+		dB.info("Trader right click");
+		dB.info("-------------------------------------");
+		
 		//right click toggling is enabled, handle it and check permission
 		if ( GlobalSettings.mmRightToggle() && perms.has(player, "dtl.trader.manage") )
 		{

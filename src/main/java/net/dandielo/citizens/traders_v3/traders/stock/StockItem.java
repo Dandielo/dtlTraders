@@ -29,6 +29,7 @@ import net.dandielo.citizens.traders_v3.utils.items.flags.DataCheck;
 import net.dandielo.citizens.traders_v3.utils.items.flags.Lore;
 
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 
 /**
@@ -226,7 +227,7 @@ public final class StockItem {
 	public void factorize(ItemStack item)
 	{
 		//debug low
-	//	dB.low("Factorizing item: ", item.getType().name().toLowerCase());
+		dB.low("Factorizing item: ", item.getType().name().toLowerCase());
 		
 		for ( ItemAttr iAttr : ItemAttr.getAllAttributes() )
 		{
@@ -234,6 +235,13 @@ public final class StockItem {
 			{
 				iAttr.setItem(this);
 				iAttr.onFactorize(item);
+				
+				dB.low("Initialized new attribute instance");
+				dB.low("Attribute: " + iAttr.getInfo().name());
+				dB.info("With key: " + iAttr.getKey());
+				dB.info("With value: " + iAttr.onSave());
+				dB.info("-------------------------------------");
+				
 				attr.put(iAttr.getClass(), iAttr);
 			}
 			catch (AttributeValueNotFoundException e)
@@ -996,8 +1004,8 @@ public final class StockItem {
 	 */
 	private void debugMsgClass(String key)
 	{
-	//	dB.high("Attribute/Flag class exception, the attribute class is invalid");
-	//	dB.high("Attribute/Flag key: ", ChatColor.GOLD, key);
+		dB.high("Attribute/Flag class exception, the attribute class is invalid");
+		dB.high("Attribute/Flag key: ", ChatColor.GOLD, key);
 	}
 
 	/**
@@ -1005,8 +1013,8 @@ public final class StockItem {
 	 */
 	private void debugMsgValue(Attribute attr, String value)
 	{
-	//	dB.normal("Attribute value initialization exception");
-	//	dB.normal("Attribute: ", (attr != null ? attr.name() : "null"), ", value: ", ChatColor.GOLD, value);
+		dB.normal("Attribute value initialization exception");
+		dB.normal("Attribute: ", (attr != null ? attr.name() : "null"), ", value: ", ChatColor.GOLD, value);
 	}
 
 	/**
@@ -1014,7 +1022,7 @@ public final class StockItem {
 	 */
 	private void debugMsgItem(Attribute attr)
 	{
-	//	dB.normal("Attribute/Flag item incompatibility");
-	//	dB.normal("Attribute/Flag: ", (attr != null ? attr.name() : "null"), ", item: ", ChatColor.GOLD, this.getName());
+		dB.normal("Attribute/Flag item incompatibility");
+		dB.normal("Attribute/Flag: ", (attr != null ? attr.name() : "null"), ", item: ", ChatColor.GOLD, this.getName());
 	}
 }

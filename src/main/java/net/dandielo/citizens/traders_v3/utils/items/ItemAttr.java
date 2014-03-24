@@ -335,6 +335,7 @@ public abstract class ItemAttr {
 			//debug low
 			dB.low("Initializing new attribute instance");
 			dB.low("Attribute: " + attr.name());
+			dB.info("-------------------------------------");
 
 			//get the attribute declaring class
 			T itemAttr = clazz.getConstructor(String.class).newInstance(attr.key());
