@@ -101,6 +101,8 @@ public final class StockItem {
 	 */
 	public void load(String format)
 	{
+		dB.info("Loading item: " + format);
+		
 		//always create the item as abstract
 		addFlag(".abstract");
 		

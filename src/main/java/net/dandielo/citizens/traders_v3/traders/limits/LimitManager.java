@@ -1,7 +1,6 @@
 package net.dandielo.citizens.traders_v3.traders.limits;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -13,12 +12,10 @@ import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Limit;
 
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
-@SuppressWarnings("unused")
 public class LimitManager {
 	public final static LimitManager self = new LimitManager();
 	

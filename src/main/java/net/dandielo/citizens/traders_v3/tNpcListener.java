@@ -171,13 +171,6 @@ public class tNpcListener implements Listener {
 			//if the trader is not in mm, remove the relation too
 		    if ( !npc.getStatus().inManagementMode() )
 		    {
-		    	//check accounts for unlocked stock
-		    	if ( npc.getStatus().equals(tNpcStatus.ACCOUNT_UNLOCKED) )
-		    	{
-		    		//lock and save the content first
-		    		npc.lockAndSave();
-		    	}
-		    	
 		    	//remove the relation
 		    	manager.removeRelation((Player) e.getPlayer());
 

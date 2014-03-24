@@ -12,7 +12,7 @@ import net.dandielo.citizens.traders_v3.core.PluginSettings;
 import net.dandielo.citizens.traders_v3.core.commands.CommandManager;
 import net.dandielo.citizens.traders_v3.stats.TraderStats;
 import net.dandielo.citizens.traders_v3.traders.limits.LimitManager;
-import net.dandielo.citizens.traders_v3.traders.setting.TGlobalSettings;
+import net.dandielo.citizens.traders_v3.traders.setting.GlobalSettings;
 import net.dandielo.citizens.traders_v3.traits.BankerTrait;
 import net.dandielo.citizens.traders_v3.traits.TraderTrait;
 import net.dandielo.citizens.traders_v3.traits.WalletTrait;
@@ -85,7 +85,7 @@ public class DtlTraders extends JavaPlugin {
 		
 		info("Loading config files");
 		//init global settings
-		TGlobalSettings.initGlobalSettings();
+		GlobalSettings.initGlobalSettings();
 		
 		//register traits
 		CitizensAPI.getTraitFactory().registerTrait(TraitInfo.create(TraderTrait.class).withName("trader"));

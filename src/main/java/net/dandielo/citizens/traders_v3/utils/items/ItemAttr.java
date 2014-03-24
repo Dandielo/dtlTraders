@@ -334,6 +334,7 @@ public abstract class ItemAttr {
 		{
 			//debug low
 			dB.low("Initializing new attribute instance");
+			dB.low("Attribute: " + attr.name());
 
 			//get the attribute declaring class
 			T itemAttr = clazz.getConstructor(String.class).newInstance(attr.key());
@@ -405,6 +406,10 @@ public abstract class ItemAttr {
 		{
 			//debug low
 			dB.low("Initializing new attribute instance");
+			dB.low("Attribute: " + attr.name());
+			dB.info("With key: " + key);
+			dB.info("With value: " + value);
+			dB.info("-------------------------------------");
 
 			//get the attribute declaring class
 			ItemAttr itemAttr = attributes.get(attr).getConstructor(String.class).newInstance(key);

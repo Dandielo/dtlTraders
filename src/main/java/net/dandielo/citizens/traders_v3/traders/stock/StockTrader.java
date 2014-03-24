@@ -9,7 +9,7 @@ import net.citizensnpcs.api.util.DataKey;
 import net.dandielo.citizens.traders_v3.tNpcStatus;
 import net.dandielo.citizens.traders_v3.core.dB;
 import net.dandielo.citizens.traders_v3.traders.setting.Settings;
-import net.dandielo.citizens.traders_v3.traders.setting.TGlobalSettings;
+import net.dandielo.citizens.traders_v3.traders.setting.GlobalSettings;
 import net.dandielo.citizens.traders_v3.utils.NBTUtils;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.PatternItem;
 import net.dandielo.citizens.traders_v3.utils.items.flags.Lore;
@@ -239,7 +239,7 @@ public class StockTrader extends Stock {
 
 	public void setUi(Inventory inventory, tNpcStatus baseStatus, tNpcStatus status)
 	{
-		Map<String, ItemStack> items = TGlobalSettings.getUiItems();
+		Map<String, ItemStack> items = GlobalSettings.getUiItems();
 
 		//TODO mark items
 		//Switch betwean all status values
@@ -280,7 +280,13 @@ public class StockTrader extends Stock {
 			inventory.setItem(this.getFinalInventorySize() - 1, items.get("back"));
 			break;
 		case MANAGE_LIMIT:
-			inventory.setItem(this.getFinalInventorySize() - 2, items.get("back"));
+			inventory.setItem(this.getFinalInventorySize() - 3, items.get("back"));
+			inventory.setItem(this.getFinalInventorySize() - 2, items.get("plimit"));
+			inventory.setItem(this.getFinalInventorySize() - 1, items.get(Stock.opositeStock(baseStatus.asStock())));
+			break;
+		case MANAGE_PLIMIT:
+			inventory.setItem(this.getFinalInventorySize() - 3, items.get("back"));
+			inventory.setItem(this.getFinalInventorySize() - 2, items.get("limit"));
 			inventory.setItem(this.getFinalInventorySize() - 1, items.get(Stock.opositeStock(baseStatus.asStock())));
 		default:
 			break;

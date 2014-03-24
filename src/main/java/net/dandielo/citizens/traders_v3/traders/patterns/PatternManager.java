@@ -9,7 +9,7 @@ import java.util.Map;
 
 import net.dandielo.citizens.traders_v3.traders.patterns.types.Item;
 import net.dandielo.citizens.traders_v3.traders.patterns.types.Price;
-import net.dandielo.citizens.traders_v3.traders.setting.TGlobalSettings;
+import net.dandielo.citizens.traders_v3.traders.setting.GlobalSettings;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -26,7 +26,7 @@ public class PatternManager {
 	
 	private PatternManager()
 	{		
-		String fileName = TGlobalSettings.getPatternFile();
+		String fileName = GlobalSettings.getPatternFile();
 		String baseDir = "plugins/dtlTraders";
 
 		if ( baseDir.contains("\\") && !"\\".equals(File.separator) ) 

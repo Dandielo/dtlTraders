@@ -11,7 +11,7 @@ import net.dandielo.citizens.traders_v3.core.commands.Command;
 import net.dandielo.citizens.traders_v3.core.locale.LocaleManager;
 import net.dandielo.citizens.traders_v3.traders.Trader;
 import net.dandielo.citizens.traders_v3.traders.patterns.PatternManager;
-import net.dandielo.citizens.traders_v3.traders.setting.TGlobalSettings;
+import net.dandielo.citizens.traders_v3.traders.setting.GlobalSettings;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -63,7 +63,7 @@ public class GeneralCommands {
 		
 		//reload global settings
 		PluginSettings.initPluginSettings();
-		TGlobalSettings.initGlobalSettings();
+		GlobalSettings.initGlobalSettings();
 		
 		//reload all patterns
 		PatternManager.instance.reload();

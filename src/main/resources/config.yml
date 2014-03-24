@@ -91,6 +91,8 @@ trader:
     price: wool:15
     #item that will "link" to limit managing
     limit: wool:3
+    #item that will "link" to player limit management (as a sub link of the limit management)
+    plimit: wool:6
     #item that will "unlock" the stock for eiding
     lock: wool:4
     #item that will "lock" the stock (saving all changes)

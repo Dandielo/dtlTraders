@@ -5,9 +5,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-@SuppressWarnings("unused")
 public class LimitEntry {	
 	//named ID
+	@SuppressWarnings("unused")
 	private String id;
 	
 	//limit settings
@@ -29,8 +29,8 @@ public class LimitEntry {
 		this.limit = limit;
 		this.timeout = timeout;
 		
-		playerLimit = limit;
-		playerTimeout = timeout;
+		playerLimit = -1;
+		playerTimeout = -1;
 		
 		playerUsed = new HashMap<String, Map<Long, Integer>>();
 	}
@@ -43,8 +43,8 @@ public class LimitEntry {
 		this.limit = limit;
 		this.timeout = timeout;
 		
-		playerLimit = -1;
-		playerTimeout = -1;
+		playerLimit = plimit;
+		playerTimeout = ptimeout;
 		
 		playerUsed = new HashMap<String, Map<Long, Integer>>();
 	}

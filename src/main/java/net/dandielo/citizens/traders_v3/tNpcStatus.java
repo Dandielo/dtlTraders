@@ -16,6 +16,7 @@ public enum tNpcStatus
 	MANAGE_AMOUNTS(TRADER, "mAmounts"),
 	MANAGE_PRICE(TRADER, "mPrice"),
 	MANAGE_LIMIT(TRADER, "mLimit"), 
+	MANAGE_PLIMIT(TRADER, "mpLimit"), 
 	MANAGE_UNLOCKED(TRADER, "mUnlocked"),
 	
 	/*
