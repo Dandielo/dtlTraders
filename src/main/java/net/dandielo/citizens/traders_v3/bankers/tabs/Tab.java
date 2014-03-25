@@ -4,11 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.dandielo.citizens.traders_v3.bankers.account.Account.AccountType;
-import net.dandielo.citizens.traders_v3.utils.ItemUtils;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 public abstract class Tab {
 

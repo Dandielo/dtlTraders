@@ -15,8 +15,6 @@ import net.dandielo.citizens.traders_v3.traders.setting.GlobalSettings;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import com.avaje.ebeaninternal.server.ddl.DdlGenContext;
-
 public class PatternManager {
 	public static PatternManager instance = new PatternManager();
 	

@@ -4,7 +4,6 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.Inventory;
 
-import net.dandielo.citizens.traders_v3.bankers.tabs.BankItem;
 import net.dandielo.citizens.traders_v3.bankers.tabs.Tab;
 
 public class PrivateAccount extends Account {
@@ -20,11 +19,6 @@ public class PrivateAccount extends Account {
 		inventory.clear();
 		
 		this.setTabUI(inventory);
-		
-		for ( BankItem item : tab.getItems() )
-		{
-			//add the item to the inventory
-		}
 	}
 
 	@Override
@@ -64,13 +58,4 @@ public class PrivateAccount extends Account {
 	{
 	}
 
-	private boolean tabCountPermCheck(int tabId)
-	{
-		boolean result = false;
-		for ( int i = tabId ; i < maxSize && !result ; ++i )
-		{
-			result = perms.has(viewer, "dtl.banker.tabs.count." + (i+1));
-		}
-		return result;
-	}
 }
