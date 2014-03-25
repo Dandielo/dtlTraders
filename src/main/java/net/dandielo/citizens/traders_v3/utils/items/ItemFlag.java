@@ -18,6 +18,7 @@ import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
 import net.dandielo.citizens.traders_v3.utils.items.flags.Abstract;
 import net.dandielo.citizens.traders_v3.utils.items.flags.DataCheck;
 import net.dandielo.citizens.traders_v3.utils.items.flags.Lore;
+import net.dandielo.citizens.traders_v3.utils.items.flags.AnyLore;
 import net.dandielo.citizens.traders_v3.utils.items.flags.NoStack;
 import net.dandielo.citizens.traders_v3.utils.items.flags.Regex;
 import net.dandielo.citizens.traders_v3.utils.items.flags.Splash;
@@ -343,6 +344,7 @@ public abstract class ItemFlag {
 			registerFlag(Abstract.class);
 			registerFlag(NoStack.class);
 			registerFlag(Splash.class);
+			registerFlag(AnyLore.class);
 			registerFlag(Regex.class);
 			registerFlag(Lore.class);
 			

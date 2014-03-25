@@ -76,6 +76,7 @@ public class Lore extends ItemFlag {
 	public boolean equalsStrong(ItemFlag o)
 	{		
 		Lore itemLore = (Lore) o;
+		if ( item.hasFlag(AnyLore.class) ) return true;
 		if ( !(itemLore.lore == null && this.lore == null) && !(itemLore.lore != null && this.lore != null) ) return false;
 		if ( itemLore.lore.size() != this.lore.size() ) return false;
 

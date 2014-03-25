@@ -865,12 +865,13 @@ public final class StockItem {
 			//for each attribute in this item
 			for ( ItemFlag tFlag : flags.values() )
 			{
-				//if only once is false then return false
+				System.out.print("S" + equals);
+				
+				//if only one is false then return false
 				if ( !equals ) break;
 				
 				//temporary false
 				equals = tFlag.getInfo().standalone();
-				
 				
 				//check each item in the second item, if the attribute is found and strong equal continue
 				for ( ItemFlag iFlag : item.flags.values() )
@@ -900,6 +901,10 @@ public final class StockItem {
 
 		//checking attribute missmatching
 		equals = equals ? !attributeMissmatch(item) : equals;
+
+		System.out.print(equals);
+		System.out.print(save());
+		System.out.print(item.save());
 
 	//	dB.low("After ID and data check: ", equals);
 		
@@ -936,8 +941,10 @@ public final class StockItem {
 			//for each attribute in this item
 			for ( ItemFlag tFlag : flags.values() )
 			{
-				//if only once is false then return false
-				if ( !equals ) break; //tFlag.getInfo().standalone();
+				System.out.print("W" + equals);
+				
+				//if only one is false then return false
+				if ( !equals ) break; 
 				
 				//temporary false
 				equals = tFlag.getInfo().standalone();
