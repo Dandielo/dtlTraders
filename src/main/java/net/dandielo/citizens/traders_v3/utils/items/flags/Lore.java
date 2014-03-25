@@ -103,8 +103,9 @@ public class Lore extends ItemFlag {
 	{
 		List<String> cleaned = new ArrayList<String>();
 		for (String entry : lore)
-			if ( !entry.startsWith(traderLorePrefix) )
-				cleaned.add(entry);
+			if ( !entry.startsWith(traderLorePrefix) ) {
+				cleaned.add(entry.replace('§', '^'));
+			}
 		return cleaned;
 	}
 	
