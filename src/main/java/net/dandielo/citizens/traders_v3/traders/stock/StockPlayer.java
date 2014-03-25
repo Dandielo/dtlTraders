@@ -48,15 +48,10 @@ public class StockPlayer extends StockTrader {
 				item.setSlot(inventory.firstEmpty());
 			
 			//set the lore
-			ItemStack itemStack = item.getItem(false);
-			ItemMeta meta = itemStack.getItemMeta();
-			
-			List<String> lore = item.getTempLore(status, itemStack.clone());
+			List<String> lore = item.getTempLore(status);
 			lore = Limit.loreRequest(player.getName(), item, lore, status);
 			lore = Price.loreRequest(parsePrice(item, status.asStock(), item.getAmount()), lore, status);
-			meta.setLore(lore);
-			
-			itemStack.setItemMeta(meta);
+			ItemStack itemStack = item.getItem(false, lore);
 			
 			//set the item 
 			inventory.setItem(item.getSlot(), NBTUtils.markItem(itemStack));
@@ -75,15 +70,16 @@ public class StockPlayer extends StockTrader {
 		for ( Integer amount : item.getAmounts() )
 		{
 			//set new amount
-			ItemStack itemStack = item.getItem(false);
+			List<String> lore = item.getTempLore(status);
+			lore = Limit.loreRequest(player.getName(), item, lore, status);
+			lore = Price.loreRequest(parsePrice(item, "sell", amount), lore, status);
+			
+			ItemStack itemStack = item.getItem(false, lore);
 			itemStack.setAmount(amount);
 
 			//set the lore
 			ItemMeta meta = itemStack.getItemMeta();
 			
-			List<String> lore = item.getTempLore(status, itemStack.clone());
-			lore = Limit.loreRequest(player.getName(), item, lore, status);
-			lore = Price.loreRequest(parsePrice(item, "sell", amount), lore, status);
 			meta.setLore(lore);
 			
 			itemStack.setItemMeta(meta);

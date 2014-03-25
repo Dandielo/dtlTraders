@@ -450,7 +450,7 @@ public final class BankItem extends tNpcItem {
 		for ( ItemAttr itemAttr : this.attr.values() )
 			for ( tNpcStatus attrStatus : itemAttr.getInfo().status() )
 				if ( attrStatus.equals(status) )
-			        itemAttr.onStatusLoreRequest(status, target, lore);
+			        itemAttr.onStatusLoreRequest(status, lore);
 		
 		//for each flag
 		for ( ItemFlag flag : flags.values() )

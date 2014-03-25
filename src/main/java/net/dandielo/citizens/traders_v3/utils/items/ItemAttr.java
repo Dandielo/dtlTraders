@@ -139,12 +139,10 @@ public abstract class ItemAttr {
 	 * Called when a status lore request is send for the given status set in the attributes information.
 	 * @param status
 	 *     The calling status.
-	 * @param target
-	 *     The a copy of item that will get the lore assigned
 	 * @param lore
 	 *     Lore list, allows to re-arrange previous assigned lore. 
 	 */
-	public void onStatusLoreRequest(tNpcStatus status, ItemStack target, List<String> lore)
+	public void onStatusLoreRequest(tNpcStatus status, List<String> lore)
 	{
 	}
 

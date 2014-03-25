@@ -33,6 +33,7 @@ import net.dandielo.citizens.traders_v3.utils.items.flags.Lore;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 /**
  * Item structure using in each trader stock, this structure allows to save and store more data than the commom ItemStack bukkit structure.
@@ -453,18 +454,35 @@ public final class StockItem {
 	}
 	
 	/**
-	 * @param inStock tells the onAssign method if the item is going to be displayed in the traders stock or if it's the users new End-Item
+	 * @param endItem tells the onAssign method if the item is going to be displayed in the traders stock or if it's the users new End-Item
 	 * @return
 	 *     a Item Stack item with all attributes and flag data assigned to it.
 	 */
 	public ItemStack getItem(boolean endItem)
 	{
+		return getItem(endItem, null);
+	}
+	
+	/**
+	 * @param inStock tells the onAssign method if the item is going to be displayed in the traders stock or if it's the users new End-Item
+	 * @param lore lore to add to the item
+	 * @return
+	 *     a Item Stack item with all attributes and flag data assigned to it.
+	 */
+	public ItemStack getItem(boolean endItem, List<String> lore)
+	{
 		//clone the "clean" item
 		ItemStack clone = this.item.clone();
 
 		//add the lore as the first one
-		if ( flags.containsKey(Lore.class) )
-			try { flags.get(Lore.class).onAssign(clone, endItem); } catch(Exception e) { }
+		if (lore == null) {
+			if ( flags.containsKey(Lore.class) )
+				try { flags.get(Lore.class).onAssign(clone, endItem); } catch(Exception e) { }
+		} else {
+			ItemMeta meta = clone.getItemMeta();
+			meta.setLore(lore);
+			clone.setItemMeta(meta);
+		}
 		
 		//assign attribute data to it
 		// Do this in two passes, first the Bukkit-internal classes that will modify metadata, then all others.
@@ -532,12 +550,10 @@ public final class StockItem {
 	 * Returns a list of temporary lore strings that should be applied depending on the traders status. 
 	 * @param status
 	 *     Status that is checked
-	 * @param target
-	 *     The a copy of item that gets the lore assigned
 	 * @return
 	 *     List of lore strings
 	 */ 
-	public List<String> getTempLore(tNpcStatus status, ItemStack target)
+	public List<String> getTempLore(tNpcStatus status)
 	{
 		//create a new list
 		List<String> lore = new ArrayList<String>();
@@ -550,7 +566,7 @@ public final class StockItem {
 		for ( ItemAttr itemAttr : this.attr.values() )
 			for ( tNpcStatus attrStatus : itemAttr.getInfo().status() )
 				if ( attrStatus.equals(status) )
-			        itemAttr.onStatusLoreRequest(status, target, lore);
+			        itemAttr.onStatusLoreRequest(status, lore);
 		
 		//for each flag
 		for ( ItemFlag itemFlag : flags.values() )
