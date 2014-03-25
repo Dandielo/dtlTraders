@@ -7,12 +7,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.dandielo.citizens.traders_v3.core.dB;
 import net.dandielo.citizens.traders_v3.traders.patterns.types.Item;
 import net.dandielo.citizens.traders_v3.traders.patterns.types.Price;
 import net.dandielo.citizens.traders_v3.traders.setting.GlobalSettings;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+
+import com.avaje.ebeaninternal.server.ddl.DdlGenContext;
 
 public class PatternManager {
 	public static PatternManager instance = new PatternManager();
@@ -66,6 +69,7 @@ public class PatternManager {
 			for ( String patternName : patternsConfig.getKeys(false) )
 			{
 				Pattern pattern = createPattern(patternName, patternsConfig.getString(patternName + ".type"));
+				dB.normal(patternName);
 				pattern.loadItems(patternsConfig.getConfigurationSection(patternName));
 				patterns.put(patternName.toLowerCase(), pattern);
 			}
@@ -89,8 +93,10 @@ public class PatternManager {
 	{
 		List<Pattern> result = new ArrayList<Pattern>();
 		for ( Map.Entry<String, Pattern> e : instance.patterns.entrySet() )
+		{
 			if ( names.contains(e.getKey()) )
 				result.add(e.getValue());
+		}
 		return result;
 	}
 }
