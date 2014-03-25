@@ -54,16 +54,4 @@ public class ItemUtils {
 		else
 			return new ItemStack(mat);
 	}
-
-	public static BankItem createBankItem(ItemStack vItem)
-	{
-		//creating a clean item
-		BankItem bItem = new BankItem(vItem);
-		
-		//getting data out of it (by force ;>)
-		bItem.factorize(vItem);
-		
-		//returning the item
-		return bItem;
-	}
 }

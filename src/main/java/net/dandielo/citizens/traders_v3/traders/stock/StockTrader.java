@@ -175,10 +175,7 @@ public class StockTrader extends Stock {
 				item.setSlot(inventory.firstEmpty());
 
 			//set the lore
-			ItemStack itemStack = item.getItem(false);
-			ItemMeta meta = itemStack.getItemMeta();
-			meta.setLore(item.getTempLore(status, itemStack.clone()));
-			itemStack.setItemMeta(meta);
+			ItemStack itemStack = item.getItem(false, item.getTempLore(status));
 
 			//set the item 
 			inventory.setItem(item.getSlot(), NBTUtils.markItem(itemStack));
@@ -196,13 +193,8 @@ public class StockTrader extends Stock {
 		for ( Integer amount : item.getAmounts() )
 		{
 			//set new amount
-			ItemStack itemStack = item.getItem(false);
+			ItemStack itemStack = item.getItem(false, item.getTempLore(status));
 			itemStack.setAmount(amount);
-
-			//set the lore
-			ItemMeta meta = itemStack.getItemMeta();
-			meta.setLore(item.getTempLore(status, itemStack.clone()));
-			itemStack.setItemMeta(meta);
 
 			//set the item
 			inventory.setItem(inventory.firstEmpty(), NBTUtils.markItem(itemStack));
@@ -225,10 +217,7 @@ public class StockTrader extends Stock {
 					item.setSlot(inventory.firstEmpty());
 
 				//set the lore
-				ItemStack itemStack = item.getItem(false);
-				ItemMeta meta = itemStack.getItemMeta();
-				meta.setLore(item.getTempLore(status, itemStack.clone()));
-				itemStack.setItemMeta(meta);
+				ItemStack itemStack = item.getItem(false, item.getTempLore(status));
 
 				//set the item 
 				inventory.setItem(item.getSlot(), NBTUtils.markItem(itemStack));

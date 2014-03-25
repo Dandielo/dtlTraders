@@ -232,14 +232,6 @@ public abstract class Banker implements tNpc {
 			//check if the given item is not null
 			if ( vItem != null && !account.isUIRow(slot) )
 			{
-				//to bank item
-				BankItem bItem = ItemUtils.createBankItem(vItem);
-				
-				//set the items new slot 
-				bItem.setSlot(slot); 
-				
-				//add to tab 
-				tab.addItem(bItem); 
 			}
 			
 			++slot;

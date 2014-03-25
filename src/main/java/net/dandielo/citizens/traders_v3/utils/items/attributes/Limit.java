@@ -122,7 +122,7 @@ public class Limit extends ItemAttr {
 	}
 
 	@Override
-	public void onStatusLoreRequest(tNpcStatus status, ItemStack target, List<String> lore)
+	public void onStatusLoreRequest(tNpcStatus status, List<String> lore)
 	{
 		//If not in manager mode then we don't want to manage this request
 		//Maybe later just update the Attribute settings?

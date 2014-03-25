@@ -2,6 +2,7 @@ package net.dandielo.citizens.traders_v3.core;
 
 import net.dandielo.citizens.traders_v3.bukkit.DtlTraders;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.ConsoleCommandSender;
 
@@ -24,7 +25,7 @@ public class dB {
 	{
 		DEBUG = ChatColor.DARK_PURPLE + "[DEBUG]" + ChatColor.RESET;
 		debugLevel = DebugLevel.valueOf(PluginSettings.debugLevel());
-		sender = DtlTraders.getInstance().getServer().getConsoleSender();
+		sender = Bukkit.getServer().getConsoleSender();
 	}
 	
 	/**
@@ -142,6 +143,13 @@ public class dB {
 	/** Helper function to send messages to console */
 	private static void sendMessage(ChatColor color, String prefix, Object... args)
 	{
+		if (sender == null) {
+			sender = Bukkit.getServer().getConsoleSender();
+		}
+		if (sender == null) {
+			Bukkit.getLogger().info("NULL console sender...");
+			return;
+		}
 		sender.sendMessage(mergeArgs(DtlTraders.PREFIX, DEBUG, color, "[" + prefix + "] ", ChatColor.RESET, args));
 	}
 	

@@ -763,15 +763,10 @@ public class Server extends Trader {
 					}
 
 				//Get a clean item and it's meta
-				ItemStack itemStack = item.getItem(false);
-				ItemMeta meta = itemStack.getItemMeta();
-
-				//Set the temp lore by the current status
-				meta.setLore(item.getTempLore(status, itemStack.clone()));
-				itemStack.setItemMeta(meta); 
-
-				//replace the item with that one in the inventory
-				e.getInventory().setItem(item.getSlot(), NBTUtils.markItem(itemStack));
+	            ItemStack itemStack = item.getItem(false, item.getTempLore(status));
+	            
+	            //replace the item with that one in the inventory
+	            e.getInventory().setItem(item.getSlot(), NBTUtils.markItem(itemStack));
 			}
 		}
 		e.setCancelled(true);
@@ -861,13 +856,7 @@ public class Server extends Trader {
 				}
 
 				//Get a clean item and it's meta
-				ItemStack itemStack = item.getItem(false);
-				ItemMeta meta = itemStack.getItemMeta();
-
-				//Set the temp lore by the current status
-				meta.setLore(item.getTempLore(status, itemStack.clone()));
-				itemStack.setItemMeta(meta); 
-
+				ItemStack itemStack = item.getItem(false, item.getTempLore(status));
 				//replace the item with that one in the inventory
 				e.getInventory().setItem(item.getSlot(), NBTUtils.markItem(itemStack));
 			}
@@ -965,24 +954,20 @@ public class Server extends Trader {
 				}
 
 				//Get a clean item and it's meta
-				ItemStack itemStack = item.getItem(false);
-				ItemMeta meta = itemStack.getItemMeta();
-
-				//Set the temp lore by the current status
-				meta.setLore(item.getTempLore(status, itemStack.clone()));
-				itemStack.setItemMeta(meta); 
+				ItemStack itemStack = item.getItem(false, item.getTempLore(status));
 
 				//replace the item with that one in the inventory
 				e.getInventory().setItem(item.getSlot(), NBTUtils.markItem(itemStack));
-			}
 
-			//remove the attribute if not needed
-			if (limit.getLimit() == 0 && limit.getPlayerLimit() == 0)
-			{
-				item.removeAttr(Limit.class);
+
+				//remove the attribute if not needed
+				if (limit.getLimit() == 0 && limit.getPlayerLimit() == 0)
+				{
+					item.removeAttr(Limit.class);
+				}
 			}
+			e.setCancelled(true);
 		}
-		e.setCancelled(true);
 	}
 
 	//shift handler

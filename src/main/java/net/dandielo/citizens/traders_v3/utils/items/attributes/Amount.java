@@ -111,7 +111,7 @@ public class Amount extends ItemAttr {
 	}
 	
 	@Override
-	public void onStatusLoreRequest(tNpcStatus status, ItemStack target, List<String> lore)
+	public void onStatusLoreRequest(tNpcStatus status, List<String> lore)
 	{
 		//TODO implement later
 	}
