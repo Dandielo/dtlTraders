@@ -112,7 +112,7 @@ public class StockTrader extends Stock {
 				if ( item.hasFlag(Lore.class) )
 				{
 					Map<String, List<String>> temp = new HashMap<String, List<String>>();
-					temp.put(item.toString(), item.getLore());
+					temp.put(item.toString(), item.getRawLore());
 					sellList.add(temp);
 				}
 				else
@@ -128,7 +128,7 @@ public class StockTrader extends Stock {
 				if ( item.hasFlag(Lore.class) )
 				{
 					Map<String, List<String>> temp = new HashMap<String, List<String>>();
-					temp.put(item.toString(), item.getLore());
+					temp.put(item.toString(), item.getRawLore());
 					buyList.add(temp);
 				}
 				else

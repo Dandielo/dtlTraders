@@ -752,6 +752,15 @@ public final class StockItem {
 	{
 		return hasFlag(Lore.class) ? getFlag(Lore.class).getLore() : null;
 	}
+	
+	/**
+	 * @return
+	 *    the assigned lore, or null otherwise
+	 */
+	public List<String> getRawLore()
+	{
+		return hasFlag(Lore.class) ? getFlag(Lore.class).getRawLore() : null;
+	}
 
 	/**
 	 * holds info if the lore was managed by another plugin
