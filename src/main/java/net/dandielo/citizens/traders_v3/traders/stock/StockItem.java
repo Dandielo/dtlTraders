@@ -19,17 +19,20 @@ import net.dandielo.citizens.traders_v3.utils.items.Attribute;
 import net.dandielo.citizens.traders_v3.utils.items.ItemAttr;
 import net.dandielo.citizens.traders_v3.utils.items.ItemFlag;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Amount;
+import net.dandielo.citizens.traders_v3.utils.items.attributes.Book;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Limit;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Multiplier;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Name;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Price;
+import net.dandielo.citizens.traders_v3.utils.items.attributes.Skull;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Slot;
+import net.dandielo.citizens.traders_v3.utils.items.attributes.StoredEnchant;
 import net.dandielo.citizens.traders_v3.utils.items.flags.Abstract;
 import net.dandielo.citizens.traders_v3.utils.items.flags.DataCheck;
 import net.dandielo.citizens.traders_v3.utils.items.flags.Lore;
 
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 
 /**
  * Item structure using in each trader stock, this structure allows to save and store more data than the commom ItemStack bukkit structure.
@@ -224,7 +227,7 @@ public final class StockItem {
 	public void factorize(ItemStack item)
 	{
 		//debug low
-	//	dB.low("Factorizing item: ", item.getType().name().toLowerCase());
+		//dB.low("Factorizing item: ", item.getType().name().toLowerCase());
 		
 		for ( ItemAttr iAttr : ItemAttr.getAllAttributes() )
 		{
@@ -380,8 +383,8 @@ public final class StockItem {
 			else
 			{
 				//debug message that this key does not exists
-	//			dB.high("The given key is not registered, skipping...");
-	//			dB.high("key: ", key);
+				//dB.high("The given key is not registered, skipping...");
+				//dB.high("key: ", key);
 			}
 		} 
 		catch (AttributeInvalidClassException e) 
@@ -464,11 +467,42 @@ public final class StockItem {
 			try { flags.get(Lore.class).onAssign(clone, endItem); } catch(Exception e) { }
 		
 		//assign attribute data to it
+		// Do this in two passes, first the Bukkit-internal classes that will modify metadata, then all others.
+		// This is a little hacky, but lets other plugins provide custom NBT data without it getting wiped.
+		List<ItemAttr> firstPass = new ArrayList<ItemAttr>();
+		List<ItemAttr> secondPass = new ArrayList<ItemAttr>();
+		
 		for ( ItemAttr itemAttr : this.attr.values() )
+		{
+			if (itemAttr instanceof Name || itemAttr instanceof Skull || itemAttr instanceof StoredEnchant || itemAttr instanceof Book)
+			{
+				firstPass.add(itemAttr);
+			} else 
+			{
+				secondPass.add(itemAttr);
+			}
+		}
+		
+		for ( ItemAttr itemAttr : firstPass )
 		{
 			try 
 			{
 				//try assign the attribute
+				dB.info("Assigning attribue ", itemAttr.getClass().getName() ," to item");
+			    clone = itemAttr.onReturnAssign(clone, endItem);
+			} 
+			catch (InvalidItemException e)
+			{
+				debugMsgItem(itemAttr.getInfo());
+			}
+		}
+		
+		for ( ItemAttr itemAttr : secondPass )
+		{
+			try 
+			{
+				//try assign the attribute
+				dB.info("Assigning attribue ", itemAttr.getClass().getName() ," to item");
 			    clone = itemAttr.onReturnAssign(clone, endItem);
 			} 
 			catch (InvalidItemException e)
