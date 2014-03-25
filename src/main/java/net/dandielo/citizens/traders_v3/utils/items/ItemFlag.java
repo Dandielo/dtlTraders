@@ -57,6 +57,22 @@ public abstract class ItemFlag {
 	{
 		this.key = key;
 	}
+	
+	/**
+	 * Called when the given item needs attributes re-set
+	 * @return 
+	 *     The updated item
+	 * @param item
+	 *     The item for which we set the attribute values
+	 * @param endItem 
+	 *     tells the method if the item is just displayed in the traders inventory or if it's the users end-item he bought  
+	 * @throws InvalidItemException
+	 */
+	public ItemStack onReturnAssign(ItemStack item, boolean endItem) throws InvalidItemException
+	{
+		onAssign(item, endItem);
+		return item;
+	}
 
 	/**
 	 * Called when the given item needs flags re-set

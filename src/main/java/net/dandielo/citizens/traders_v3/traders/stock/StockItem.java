@@ -493,7 +493,7 @@ public final class StockItem {
 			{
 				//try assign the flag
 				if ( !flag.getKey().equals(".lore") )
-				    flag.onAssign(clone, endItem);
+				    clone = flag.onReturnAssign(clone, endItem);
 			} 
 			catch (InvalidItemException e)
 			{
