@@ -112,7 +112,11 @@ public class StockTrader extends Stock {
 				if ( item.hasFlag(Lore.class) )
 				{
 					Map<String, List<String>> temp = new HashMap<String, List<String>>();
+<<<<<<< Upstream, based on origin/master
 					temp.put(item.toString(), item.getRawLore());
+=======
+					temp.put(item.toString(), escapeLore(item.getLore()));
+>>>>>>> 7983414 A better way to escape lore, perhaps?
 					sellList.add(temp);
 				}
 				else
@@ -128,7 +132,11 @@ public class StockTrader extends Stock {
 				if ( item.hasFlag(Lore.class) )
 				{
 					Map<String, List<String>> temp = new HashMap<String, List<String>>();
+<<<<<<< Upstream, based on origin/master
 					temp.put(item.toString(), item.getRawLore());
+=======
+					temp.put(item.toString(), escapeLore(item.getLore()));
+>>>>>>> 7983414 A better way to escape lore, perhaps?
 					buyList.add(temp);
 				}
 				else
@@ -138,6 +146,16 @@ public class StockTrader extends Stock {
 
 		data.setRaw("sell", sellList);
 		data.setRaw("buy", buyList);
+	}
+	
+	protected List<String> escapeLore(List<String> lore)
+	{
+		if (lore == null) return null;
+		ArrayList<String> escaped = new ArrayList<String>();
+		for (String loreLine : lore) {
+			escaped.add(loreLine.replace('§', '^'));
+		}
+		return escaped;
 	}
 
 	//stock display
