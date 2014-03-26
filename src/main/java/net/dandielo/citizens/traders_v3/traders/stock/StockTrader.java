@@ -112,7 +112,7 @@ public class StockTrader extends Stock {
 				if ( item.hasFlag(Lore.class) )
 				{
 					Map<String, List<String>> temp = new HashMap<String, List<String>>();
-					temp.put(item.toString(), item.getLore());
+					temp.put(item.toString(), escapeLore(item.getLore()));
 					sellList.add(temp);
 				}
 				else
@@ -128,7 +128,7 @@ public class StockTrader extends Stock {
 				if ( item.hasFlag(Lore.class) )
 				{
 					Map<String, List<String>> temp = new HashMap<String, List<String>>();
-					temp.put(item.toString(), item.getLore());
+					temp.put(item.toString(), escapeLore(item.getLore()));
 					buyList.add(temp);
 				}
 				else
@@ -138,6 +138,16 @@ public class StockTrader extends Stock {
 
 		data.setRaw("sell", sellList);
 		data.setRaw("buy", buyList);
+	}
+	
+	protected List<String> escapeLore(List<String> lore)
+	{
+		if (lore == null) return null;
+		ArrayList<String> escaped = new ArrayList<String>();
+		for (String loreLine : lore) {
+			escaped.add(loreLine.replace('§', '^'));
+		}
+		return escaped;
 	}
 
 	//stock display
