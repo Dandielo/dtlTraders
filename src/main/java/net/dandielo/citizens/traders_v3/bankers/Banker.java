@@ -17,7 +17,6 @@ import net.dandielo.citizens.traders_v3.tNpc;
 import net.dandielo.citizens.traders_v3.tNpcStatus;
 import net.dandielo.citizens.traders_v3.bankers.account.Account;
 import net.dandielo.citizens.traders_v3.bankers.setting.Settings;
-import net.dandielo.citizens.traders_v3.bankers.tabs.BankItem;
 import net.dandielo.citizens.traders_v3.bankers.tabs.Tab;
 import net.dandielo.citizens.traders_v3.bukkit.Perms;
 import net.dandielo.citizens.traders_v3.core.dB;
@@ -27,7 +26,6 @@ import net.dandielo.citizens.traders_v3.traders.clicks.ClickHandler;
 import net.dandielo.citizens.traders_v3.traders.wallet.Wallet;
 import net.dandielo.citizens.traders_v3.traits.BankerTrait;
 import net.dandielo.citizens.traders_v3.traits.WalletTrait;
-import net.dandielo.citizens.traders_v3.utils.ItemUtils;
 
 public abstract class Banker implements tNpc {
 
@@ -232,14 +230,6 @@ public abstract class Banker implements tNpc {
 			//check if the given item is not null
 			if ( vItem != null && !account.isUIRow(slot) )
 			{
-				//to bank item
-				BankItem bItem = ItemUtils.createBankItem(vItem);
-				
-				//set the items new slot 
-				bItem.setSlot(slot); 
-				
-				//add to tab 
-				tab.addItem(bItem); 
 			}
 			
 			++slot;

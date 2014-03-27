@@ -12,10 +12,11 @@ import org.bukkit.inventory.meta.ItemMeta;
 import net.dandielo.citizens.traders_v3.core.dB;
 import net.dandielo.citizens.traders_v3.core.PluginSettings;
 import net.dandielo.citizens.traders_v3.core.locale.LocaleManager;
+import net.dandielo.citizens.traders_v3.core.tools.StringTools;
 import net.dandielo.citizens.traders_v3.traders.limits.LimitManager;
 import net.dandielo.citizens.traders_v3.utils.ItemUtils;
 
-public class TGlobalSettings extends PluginSettings {
+public class GlobalSettings extends PluginSettings {
 	//the trader soncig section
 	protected static ConfigurationSection tConfig;
 
@@ -104,12 +105,12 @@ public class TGlobalSettings extends PluginSettings {
 		catch(Exception e)
 		{
 			//debug high
-			dB.high("While loading timeoutblocks blocks, a exception occured");
+			dB.high("While loading timeout-blocks blocks, a exception occured");
 			dB.high("Exception: ", e.getClass().getSimpleName());
 			
 			//debug normal
 			dB.normal("Exception message: ", e.getMessage());
-			dB.normal("StackTrace: ", e.getStackTrace());
+			dB.normal("StackTrace: ", StringTools.stackTrace(e.getStackTrace()));
 		}
 		
 		//load stock settings
@@ -135,7 +136,7 @@ public class TGlobalSettings extends PluginSettings {
 			
 			//debug normal
 			dB.normal("Exception message: ", e.getMessage());
-			dB.normal("StackTrace: ", e.getStackTrace());
+			dB.normal("StackTrace: ", StringTools.stackTrace(e.getStackTrace()));
 		}
 		
 		//load books settings
@@ -153,6 +154,7 @@ public class TGlobalSettings extends PluginSettings {
 		uiItems.put("back", asUIItem("ui.back", "wool:14"));
 		uiItems.put("price", asUIItem("ui.price", "wool:15"));
 		uiItems.put("limit", asUIItem("ui.limit", "wool:3"));
+		uiItems.put("plimit", asUIItem("ui.plimit", "wool:6"));
 		uiItems.put("lock", asUIItem("ui.lock", "wool:4"));
 		uiItems.put("unlock", asUIItem("ui.unlock", "wool:5"));
 		

@@ -18,7 +18,9 @@ import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
 import net.dandielo.citizens.traders_v3.utils.items.flags.Abstract;
 import net.dandielo.citizens.traders_v3.utils.items.flags.DataCheck;
 import net.dandielo.citizens.traders_v3.utils.items.flags.Lore;
+import net.dandielo.citizens.traders_v3.utils.items.flags.AnyLore;
 import net.dandielo.citizens.traders_v3.utils.items.flags.NoStack;
+import net.dandielo.citizens.traders_v3.utils.items.flags.Regex;
 import net.dandielo.citizens.traders_v3.utils.items.flags.Splash;
 import net.dandielo.citizens.traders_v3.utils.items.flags.StackPrice;
 
@@ -56,6 +58,22 @@ public abstract class ItemFlag {
 	public ItemFlag(String key)
 	{
 		this.key = key;
+	}
+	
+	/**
+	 * Called when the given item needs attributes re-set
+	 * @return 
+	 *     The updated item
+	 * @param item
+	 *     The item for which we set the attribute values
+	 * @param endItem 
+	 *     tells the method if the item is just displayed in the traders inventory or if it's the users end-item he bought  
+	 * @throws InvalidItemException
+	 */
+	public ItemStack onReturnAssign(ItemStack item, boolean endItem) throws InvalidItemException
+	{
+		onAssign(item, endItem);
+		return item;
 	}
 
 	/**
@@ -248,7 +266,11 @@ public abstract class ItemFlag {
 		try 
 		{
 			//debug low
+			//debug low
 			dB.low("Initializing new flag instance");
+			dB.low("Flag: " + attr.name());
+			dB.info("With key: " + key);
+			dB.info("-------------------------------------");
 			
 			//get the attribute declaring class
 			ItemFlag itemflag = flags.get(attr).getConstructor(String.class).newInstance(key);
@@ -322,6 +344,8 @@ public abstract class ItemFlag {
 			registerFlag(Abstract.class);
 			registerFlag(NoStack.class);
 			registerFlag(Splash.class);
+			registerFlag(AnyLore.class);
+			registerFlag(Regex.class);
 			registerFlag(Lore.class);
 			
 			DtlTraders.info("Registered core flags: " + flagsAsString());

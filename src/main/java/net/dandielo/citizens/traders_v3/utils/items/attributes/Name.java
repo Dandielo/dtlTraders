@@ -1,11 +1,15 @@
 package net.dandielo.citizens.traders_v3.utils.items.attributes;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeValueNotFoundException;
 import net.dandielo.citizens.traders_v3.utils.items.Attribute;
 import net.dandielo.citizens.traders_v3.utils.items.ItemAttr;
+import net.dandielo.citizens.traders_v3.utils.items.flags.Regex;
 
 @Attribute(name="Name", key="n", priority = 300)
 public class Name extends ItemAttr {
@@ -53,16 +57,22 @@ public class Name extends ItemAttr {
 		name = meta.getDisplayName();
 	}
 	
+	public boolean extendedCheck(ItemAttr attr)
+	{
+		Matcher match = Pattern.compile(name).matcher(((Name)attr).name);
+		return match.matches();
+	}
+	
 	@Override
 	public boolean equalsWeak(ItemAttr attr)
-	{
-		return name.equals(((Name)attr).name);
+	{			
+		return equalsStrong(attr);
 	}
 	
 	@Override
 	public boolean equalsStrong(ItemAttr attr)
 	{
-		return name.equals(((Name)attr).name);
+		return item.hasFlag(Regex.class) ? extendedCheck(attr) : name.equals(((Name)attr).name);
 	}
 
 

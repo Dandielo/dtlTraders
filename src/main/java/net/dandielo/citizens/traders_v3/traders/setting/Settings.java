@@ -8,16 +8,16 @@ import net.citizensnpcs.api.trait.trait.Owner;
 import net.citizensnpcs.api.util.DataKey;
 import net.dandielo.citizens.traders_v3.core.dB;
 
-public class Settings extends TGlobalSettings {	
+public class Settings extends GlobalSettings {	
     //the Npc associated with these settings
 	private final NPC npc;
 	private String owner = "no owner";
 	private String type = "server"; //needs to be here when some1 will apply it with the /trait command
 	
 	//npc related settings
-	private int stockSize = TGlobalSettings.stockSize;
-	private String stockNameFormat = TGlobalSettings.stockNameFormat;
-	private String stockStart = TGlobalSettings.stockStart;
+	private int stockSize = GlobalSettings.stockSize;
+	private String stockNameFormat = GlobalSettings.stockNameFormat;
+	private String stockStart = GlobalSettings.stockStart;
 	
 	//pattern settings
 	private List<String> patterns = new ArrayList<String>();
@@ -122,9 +122,9 @@ public class Settings extends TGlobalSettings {
 	    /* compatibility end */
 		
 		//load stock settings
-		stockSize = data.getInt("stock.size", TGlobalSettings.stockSize);
-		stockNameFormat = data.getString("stock.format", TGlobalSettings.stockNameFormat);
-		stockStart = data.getString("stock.default", TGlobalSettings.stockStart);
+		stockSize = data.getInt("stock.size", GlobalSettings.stockSize);
+		stockNameFormat = data.getString("stock.format", GlobalSettings.stockNameFormat);
+		stockStart = data.getString("stock.default", GlobalSettings.stockStart);
 		
 		//load pattern settings 
 		if ( data.getRaw("patterns") != null )
@@ -145,11 +145,11 @@ public class Settings extends TGlobalSettings {
 		data.setRaw("patterns", patterns);
 		
 		//save stock settings
-		if ( stockSize != TGlobalSettings.stockSize )
+		if ( stockSize != GlobalSettings.stockSize )
 			data.setInt("stock.size", stockSize);
-		if ( !stockNameFormat.equals(TGlobalSettings.stockNameFormat) )
+		if ( !stockNameFormat.equals(GlobalSettings.stockNameFormat) )
 			data.setString("stock.format", stockNameFormat);
-		if ( !stockStart.equals(TGlobalSettings.stockStart) )
+		if ( !stockStart.equals(GlobalSettings.stockStart) )
 			data.setString("stock.default", stockStart);
 			
 	} 

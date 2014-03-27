@@ -9,6 +9,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 import net.dandielo.citizens.traders_v3.bukkit.Perms;
+import net.dandielo.citizens.traders_v3.core.dB;
 import net.dandielo.citizens.traders_v3.traders.patterns.Pattern;
 import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
 
@@ -49,6 +50,7 @@ public class Item extends Pattern {
 		//load the patterns items
 		for ( String key : data.getKeys(false) )
 		{
+			dB.high(key);
 			if ( key.equals("all") )
 			{
 				for ( Object item : (List<Object>) data.get("all") ) 
@@ -105,8 +107,9 @@ public class Item extends Pattern {
 				else
 					if ( key.equals("buy") )
 					{
-						for ( Object item : (List<Object>) data.get("all") ) 
+						for ( Object item : (List<Object>) data.get("buy") ) 
 						{
+							dB.normal(item);
 							if ( item instanceof String )
 							{
 								StockItem stockItem = new StockItem((String)item);
@@ -119,7 +122,11 @@ public class Item extends Pattern {
 							{
 								StockItem stockItem = null;
 								for ( Map.Entry<String, List<String>> entry : ((Map<String, List<String>>) item).entrySet() )
+								{
+									dB.normal(entry.getKey());
+									dB.normal(entry.getValue().size());
 									stockItem = new StockItem(entry.getKey(), entry.getValue());
+								}
 
 								stockItem.addAttr("pat", String.valueOf(priority));
 								if ( tier ) stockItem.addAttr("t", getName());

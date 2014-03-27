@@ -17,8 +17,8 @@ import net.dandielo.citizens.traders_v3.utils.items.ItemAttr;
 status = {tNpcStatus.MANAGE_LIMIT})
 public class Limit extends ItemAttr {
 	private String id;
-	private int limit;
-	private long timeout;
+	private int limit, plimit;
+	private long timeout, ptimeout;
 
 	public Limit(String key)
 	{
@@ -30,32 +30,54 @@ public class Limit extends ItemAttr {
 		return id;
 	}
 	
+	//Global limits and timeouts
 	public int getLimit()
 	{
 		return limit;
 	}
-	
 	public long getTimeout()
 	{
 		return timeout;
 	}
-	
 	public void increaseLimit(int l)
 	{
 		limit += l;
 	}
-	
 	public void decreaseLimit(int l)
 	{
 		limit = limit - l < 0 ? 0 : limit - l;
 	}
-	
 	public void increaseTimeout(long t)
 	{
 		timeout += t;
 	}
-	
 	public void decreaseTimeout(long t)
+	{
+		timeout = timeout - t < 0 ? 0 : timeout - t;
+	}
+	
+	//Player limits and timeouts
+	public int getPlayerLimit()
+	{
+		return limit;
+	}
+	public long getPlayerTimeout()
+	{
+		return timeout;
+	}
+	public void increasePlayerLimit(int l)
+	{
+		limit += l;
+	}
+	public void decreasePlayerLimit(int l)
+	{
+		limit = limit - l < 0 ? 0 : limit - l;
+	}
+	public void increasePlayerTimeout(long t)
+	{
+		timeout += t;
+	}
+	public void decreasePlayerTimeout(long t)
 	{
 		timeout = timeout - t < 0 ? 0 : timeout - t;
 	}
@@ -70,6 +92,12 @@ public class Limit extends ItemAttr {
 			id = data[0];
 			limit = Integer.parseInt(data[1]);
 			timeout = LimitManager.parseTimeout(data[2]);
+			
+			if (data.length == 5)
+			{
+				plimit = Integer.parseInt(data[3]);
+				ptimeout = LimitManager.parseTimeout(data[4]);
+			}
 		}
 		catch(NumberFormatException e)
 		{
@@ -80,7 +108,10 @@ public class Limit extends ItemAttr {
 	@Override
 	public String onSave()
 	{
-		return id + "/" + limit + "/" + LimitManager.timeoutString(timeout);
+		String result = id + "/" + limit + "/" + LimitManager.timeoutString(timeout);
+		if (plimit != 0)
+			result += "/" + plimit + "/" + LimitManager.timeoutString(ptimeout);
+		return result;
 	}
 
 	@Override
@@ -107,8 +138,8 @@ public class Limit extends ItemAttr {
 		LimitManager limits = LimitManager.self;
 		
 		if (!item.hasAttr(Limit.class)) return lore;
-		
-		//add the Price lore
+
+		//add the limit lore
 		for ( String pLore : LocaleManager.locale.getLore("item-" + status.asStock() + "-limit") )
 		{
 			lore.add(
@@ -116,9 +147,16 @@ public class Limit extends ItemAttr {
 					.replace("{limit-total}", String.valueOf(limits.getTotalLimit(item)))
 					.replace("{limit-used}",  String.valueOf(Math.abs(limits.getTotalUsed(item))))
 					.replace("{limit-avail}", String.valueOf(limits.getTotalLimit(item)-Math.abs(limits.getTotalUsed(item))))
-					//.replace("{limit-player}",  String.valueOf(limits.getPlayerLimit(item)))
-					//.replace("{limit-player-used}",  String.valueOf(limits.getPlayerUsed(player, item)))
-					//.replace("{limit-player-avail}", String.valueOf(limits.getPlayerLimit(item)-limits.getPlayerUsed(player, item)))
+			);
+		}
+		//add the player limit lore
+		for ( String pLore : LocaleManager.locale.getLore("item-" + status.asStock() + "-plimit") )
+		{
+			lore.add(
+					pLore
+					.replace("{limit-total}", String.valueOf(limits.getTotalLimit(item)))
+					.replace("{limit-used}",  String.valueOf(Math.abs(limits.getTotalUsed(item))))
+					.replace("{limit-avail}", String.valueOf(limits.getTotalLimit(item)-Math.abs(limits.getTotalUsed(item))))
 			);
 		}
 		

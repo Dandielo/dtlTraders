@@ -33,6 +33,7 @@ import net.dandielo.citizens.traders_v3.utils.items.flags.Lore;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.ChatColor;
 import org.bukkit.inventory.meta.ItemMeta;
 
 /**
@@ -105,6 +106,8 @@ public final class StockItem {
 	 */
 	public void load(String format)
 	{
+		dB.info("Loading item: " + format);
+		
 		//always create the item as abstract
 		addFlag(".abstract");
 		
@@ -228,7 +231,7 @@ public final class StockItem {
 	public void factorize(ItemStack item)
 	{
 		//debug low
-		//dB.low("Factorizing item: ", item.getType().name().toLowerCase());
+		dB.low("Factorizing item: ", item.getType().name().toLowerCase());
 		
 		for ( ItemAttr iAttr : ItemAttr.getAllAttributes() )
 		{
@@ -236,6 +239,13 @@ public final class StockItem {
 			{
 				iAttr.setItem(this);
 				iAttr.onFactorize(item);
+				
+				dB.low("Initialized new attribute instance");
+				dB.low("Attribute: " + iAttr.getInfo().name());
+				dB.info("With key: " + iAttr.getKey());
+				dB.info("With value: " + iAttr.onSave());
+				dB.info("-------------------------------------");
+				
 				attr.put(iAttr.getClass(), iAttr);
 			}
 			catch (AttributeValueNotFoundException e)
@@ -465,7 +475,6 @@ public final class StockItem {
 	
 	/**
 	 * @param inStock tells the onAssign method if the item is going to be displayed in the traders stock or if it's the users new End-Item
-	 * @param lore lore to add to the item
 	 * @return
 	 *     a Item Stack item with all attributes and flag data assigned to it.
 	 */
@@ -535,7 +544,7 @@ public final class StockItem {
 			{
 				//try assign the flag
 				if ( !flag.getKey().equals(".lore") )
-				    flag.onAssign(clone, endItem);
+				    clone = flag.onReturnAssign(clone, endItem);
 			} 
 			catch (InvalidItemException e)
 			{
@@ -743,6 +752,15 @@ public final class StockItem {
 	{
 		return hasFlag(Lore.class) ? getFlag(Lore.class).getLore() : null;
 	}
+	
+	/**
+	 * @return
+	 *    the assigned lore, or null otherwise
+	 */
+	public List<String> getRawLore()
+	{
+		return hasFlag(Lore.class) ? getFlag(Lore.class).getRawLore() : null;
+	}
 
 	/**
 	 * holds info if the lore was managed by another plugin
@@ -856,12 +874,11 @@ public final class StockItem {
 			//for each attribute in this item
 			for ( ItemFlag tFlag : flags.values() )
 			{
-				//if only once is false then return false
+				//if only one is false then return false
 				if ( !equals ) break;
 				
 				//temporary false
 				equals = tFlag.getInfo().standalone();
-				
 				
 				//check each item in the second item, if the attribute is found and strong equal continue
 				for ( ItemFlag iFlag : item.flags.values() )
@@ -926,9 +943,9 @@ public final class StockItem {
 			
 			//for each attribute in this item
 			for ( ItemFlag tFlag : flags.values() )
-			{
-				//if only once is false then return false
-				if ( !equals ) break; //tFlag.getInfo().standalone();
+			{				
+				//if only one is false then return false
+				if ( !equals ) break; 
 				
 				//temporary false
 				equals = tFlag.getInfo().standalone();
@@ -1044,8 +1061,8 @@ public final class StockItem {
 	 */
 	private void debugMsgClass(String key)
 	{
-	//	dB.high("Attribute/Flag class exception, the attribute class is invalid");
-	//	dB.high("Attribute/Flag key: ", ChatColor.GOLD, key);
+		dB.high("Attribute/Flag class exception, the attribute class is invalid");
+		dB.high("Attribute/Flag key: ", ChatColor.GOLD, key);
 	}
 
 	/**
@@ -1053,8 +1070,8 @@ public final class StockItem {
 	 */
 	private void debugMsgValue(Attribute attr, String value)
 	{
-	//	dB.normal("Attribute value initialization exception");
-	//	dB.normal("Attribute: ", (attr != null ? attr.name() : "null"), ", value: ", ChatColor.GOLD, value);
+		dB.normal("Attribute value initialization exception");
+		dB.normal("Attribute: ", (attr != null ? attr.name() : "null"), ", value: ", ChatColor.GOLD, value);
 	}
 
 	/**
@@ -1062,7 +1079,7 @@ public final class StockItem {
 	 */
 	private void debugMsgItem(Attribute attr)
 	{
-	//	dB.normal("Attribute/Flag item incompatibility");
-	//	dB.normal("Attribute/Flag: ", (attr != null ? attr.name() : "null"), ", item: ", ChatColor.GOLD, this.getName());
+		dB.normal("Attribute/Flag item incompatibility");
+		dB.normal("Attribute/Flag: ", (attr != null ? attr.name() : "null"), ", item: ", ChatColor.GOLD, this.getName());
 	}
 }

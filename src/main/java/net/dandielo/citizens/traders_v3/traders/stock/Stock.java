@@ -44,27 +44,33 @@ public abstract class Stock implements InventoryHolder {
 	//stock changing
 	public StockPlayer toPlayerStock(Player player)
 	{
+		dB.high("Creating player specific stock");
 		StockPlayer stock = new StockPlayer(settings, player);
 		stock.stock = this.stock;
 
+		dB.high("Creating player specific stock");
 		//remove all pattern items
 		Iterator<StockItem> it = stock.stock.get("sell").iterator();
 		while(it.hasNext()) if ( it.next().hasAttr(PatternItem.class) ) it.remove(); 
 		it = stock.stock.get("buy").iterator();
 		while(it.hasNext()) if ( it.next().hasAttr(PatternItem.class) ) it.remove(); 
+		dB.high("Creating player specific stock");
 
 		//update stock with pattern items
 		if ( settings.getPatterns() != null && !settings.getPatterns().isEmpty() )
 		{
+			dB.high("Loaded all needed patterns");
 			List<Pattern> patterns = PatternManager.getPatterns(settings.getPatterns());
 			
 			if ( !patterns.isEmpty() )
 			{
 				for ( Pattern pattern : PatternManager.getPatterns(settings.getPatterns()) )
 				{
+					dB.high("Check permission for pattern: " + pattern.getName());
 					if ( pattern.getType().equals(Type.ITEM) && 
 							Perms.hasPerm(player, "dtl.trader.patterns." + pattern.getName()) )
 					{
+						dB.high("Update stock with pattern: " + pattern.getName());
 						((Item)pattern).updateStock(stock.stock.get("sell"), "sell", player);
 						((Item)pattern).updateStock(stock.stock.get("buy"), "buy", player);
 					}

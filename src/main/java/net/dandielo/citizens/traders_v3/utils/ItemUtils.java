@@ -3,7 +3,6 @@ package net.dandielo.citizens.traders_v3.utils;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-import net.dandielo.citizens.traders_v3.bankers.tabs.BankItem;
 import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
 
 @SuppressWarnings("deprecation")
@@ -53,17 +52,5 @@ public class ItemUtils {
 			return new ItemStack(mat, 1, Short.parseShort(d[1]));
 		else
 			return new ItemStack(mat);
-	}
-
-	public static BankItem createBankItem(ItemStack vItem)
-	{
-		//creating a clean item
-		BankItem bItem = new BankItem(vItem);
-		
-		//getting data out of it (by force ;>)
-		bItem.factorize(vItem);
-		
-		//returning the item
-		return bItem;
 	}
 }

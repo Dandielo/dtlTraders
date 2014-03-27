@@ -26,7 +26,7 @@ import net.dandielo.citizens.traders_v3.core.tools.StringTools;
 import net.dandielo.citizens.traders_v3.traders.clicks.ClickHandler;
 import net.dandielo.citizens.traders_v3.traders.limits.LimitManager;
 import net.dandielo.citizens.traders_v3.traders.setting.Settings;
-import net.dandielo.citizens.traders_v3.traders.setting.TGlobalSettings;
+import net.dandielo.citizens.traders_v3.traders.setting.GlobalSettings;
 import net.dandielo.citizens.traders_v3.traders.stock.Stock;
 import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
 import net.dandielo.citizens.traders_v3.traders.wallet.Wallet;
@@ -362,7 +362,7 @@ public abstract class Trader implements tNpc {
 			if ( selectAndCheckNewItem(item) && status.equals(tNpcStatus.MANAGE_PRICE) )
 			{
 				//set price lore to special items
-				double value = TGlobalSettings.getBlockValue(item);
+				double value = GlobalSettings.getBlockValue(item);
 				if ( value != 1.0 )
 				{
 					List<String> lore = new ArrayList<String>();
@@ -375,11 +375,11 @@ public abstract class Trader implements tNpc {
 				//set time and limit lore for special items
 				List<String> lore = new ArrayList<String>();
 				
-				long time = TGlobalSettings.getBlockTimeoutValue(item);
+				long time = GlobalSettings.getBlockTimeoutValue(item);
 				if (time != 1)
 					lore.add(Lore.traderLorePrefix + ChatColor.GOLD + "Time value: " + ChatColor.YELLOW + LimitManager.timeoutString(time));
 				
-				int limit = (int) TGlobalSettings.getBlockValue(item);
+				int limit = (int) GlobalSettings.getBlockValue(item);
 				if (limit > 1)
 					lore.add(Lore.traderLorePrefix + ChatColor.GOLD + "Limit value: " + ChatColor.YELLOW + String.valueOf(limit));
 				

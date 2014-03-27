@@ -1,4 +1,4 @@
-ver: 1.1.5 
+ver: 1.1.6 
 messages:
   plugin-reload: '^6Successfuly reloaded ^3dtlTraders'
   plugin-command-message: '^6== dtlTraders ^3{version} ^6=='
@@ -91,6 +91,7 @@ keywords:
   owner: Owner
   amount: Amount
   limit: Limit
+  plimit: Player limit
   timeout: Timeout
   price: Price
   name: Name
@@ -142,7 +143,13 @@ ui:
     - '^7{limit-avail} ^6items left'
   item-buy-limit:
     lore:
-    - '^6Has place for ^7{limit-avail} ^6more items'
+    - '^6Has place for ^7{limit-avail}^6 more items'
+  item-sell-plimit:
+    lore:
+    - '^6You can buy ^7{limit-avail}^6 more items'
+  item-buy-plimit:
+    lore:
+    - '^6Will buy from you ^7{limit-avail}^6 more items'
   item-sell:
     lore:
     - '^6Click to buy this item'

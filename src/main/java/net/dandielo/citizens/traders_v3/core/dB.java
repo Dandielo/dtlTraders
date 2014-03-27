@@ -116,7 +116,7 @@ public class dB {
 
 		for( Object arg : args )
 		{
-			if( arg.getClass().isArray() )
+			if( arg != null && arg.getClass().isArray() )
 			{
 				for( Object o : (Object[]) arg )
 				{

@@ -24,6 +24,10 @@ public class Lore extends ItemFlag {
 	{
 		this.lore = lore;
 	}
+	public List<String> getRawLore()
+	{
+		return lore;
+	}
 
 	@Override
 	public void onAssign(ItemStack item) throws InvalidItemException 
@@ -52,8 +56,11 @@ public class Lore extends ItemFlag {
 		List<String> cleanedLore = cleanLore(item.getItemMeta().getLore());
 		if ( cleanedLore.isEmpty() )
 			throw new AttributeValueNotFoundException();
-		
-		this.lore = cleanedLore;
+
+		//set the new lore
+		for (String line : cleanedLore)
+			lore.add(line.replace('§', '&'));
+		lore = cleanedLore;
 	}
 
 	public List<String> getLore() {
@@ -76,6 +83,7 @@ public class Lore extends ItemFlag {
 	public boolean equalsStrong(ItemFlag o)
 	{		
 		Lore itemLore = (Lore) o;
+		if ( item.hasFlag(AnyLore.class) ) return true;
 		if ( !(itemLore.lore == null && this.lore == null) && !(itemLore.lore != null && this.lore != null) ) return false;
 		if ( itemLore.lore.size() != this.lore.size() ) return false;
 
