@@ -57,8 +57,5 @@ public class PrivateAccount extends Account {
 	public void setTabUI(Inventory inventory)
 	{
 	}
-<<<<<<< Upstream, based on origin/master
 
-=======
->>>>>>> c593335 Cleanup
 }

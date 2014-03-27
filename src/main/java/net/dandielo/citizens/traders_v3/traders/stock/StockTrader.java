@@ -112,11 +112,7 @@ public class StockTrader extends Stock {
 				if ( item.hasFlag(Lore.class) )
 				{
 					Map<String, List<String>> temp = new HashMap<String, List<String>>();
-<<<<<<< Upstream, based on origin/master
-					temp.put(item.toString(), item.getRawLore());
-=======
 					temp.put(item.toString(), escapeLore(item.getLore()));
->>>>>>> 7983414 A better way to escape lore, perhaps?
 					sellList.add(temp);
 				}
 				else
@@ -132,11 +128,7 @@ public class StockTrader extends Stock {
 				if ( item.hasFlag(Lore.class) )
 				{
 					Map<String, List<String>> temp = new HashMap<String, List<String>>();
-<<<<<<< Upstream, based on origin/master
-					temp.put(item.toString(), item.getRawLore());
-=======
 					temp.put(item.toString(), escapeLore(item.getLore()));
->>>>>>> 7983414 A better way to escape lore, perhaps?
 					buyList.add(temp);
 				}
 				else
