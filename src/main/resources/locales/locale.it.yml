@@ -1,4 +1,4 @@
-ver: 1.1.5
+ver: 1.1.6
 messages:
   plugin-reload: ^3dtlTraders ^6ricaricato con successo
   plugin-command-message: ^6== dtlTraders ^3{version} ^6==
@@ -90,6 +90,7 @@ keywords:
   owner: Proprietario
   amount: Ammontare
   limit: Limite
+  plimit: Limite giocatori
   price: Prezzo
   name: Nome
   sold: Vendi
@@ -132,6 +133,22 @@ ui:
   item-price:
     lore:
     - '^6Prezzo: ^7{price}$'
+  item-rawLimit:
+    lore:
+    - '^6Limite: ^7{limit}'
+    - '^6Rimanente: ^7{timeout}'
+  item-sell-limit:
+    lore:
+    - '^7{limit-avail} ^6oggetti rimanenti'
+  item-buy-limit:
+    lore:
+    - '^6Ha spazio per altri ^7{limit-avail} oggetti'
+  item-sell-plimit:
+    lore:
+    - '^6Puoi acquiustare altri ^7{limit-avail}^6 oggetti'
+  item-buy-plimit:
+    lore:
+    - '^6Posso vendere da te altri ^7{limit-avail}^6 oggetti'
   item-sell:
     lore:
     - '^6Clicca per acquistare questo item'
