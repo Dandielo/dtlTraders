@@ -51,7 +51,7 @@ public class NBTUtils {
 	private static Method hasTag, getTag, setTag;
 	//net.minecraft.server.{$VERSION}.NBTTagCompound
 	private static Method hasKey, getString, setString, getCompound, getList, set, 
-	remove, add, get, size, getTypeID, getName, getDouble, getInt, toString;
+	remove, add, get, size, getTypeID, getDouble, getInt, toString;
 	
 	
 	//NTBTagString toString field	
@@ -81,15 +81,9 @@ public class NBTUtils {
 			get = NBTTagListClazz.getMethod("get", int.class);
 			size = NBTTagListClazz.getMethod("size");
 			getTypeID = NBTBaseClazz.getMethod("getTypeId");
-			getName = NBTBaseClazz.getMethod("getTagName", int.class);
 		}
 		catch( Exception e )
 		{ e.printStackTrace(); }
-	}
-	
-	static String getTagName(Object tag) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException
-	{
-		return (String) getName.invoke(null, getTypeID.invoke(tag));
 	}
 	
 	public static boolean hasCustomNBT(ItemStack item, String key)
@@ -514,4 +508,55 @@ public class NBTUtils {
 	{
 		return ItemUtils.createStockItem(i).getItem(true);
 	}
+	
+	static String getTagName(Object tag) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException
+	{
+		return getTagName(getTypeID.invoke(tag));
+	}
+	
+    public static String getTagName(int i) {
+        switch (i) {
+        case 0:
+            return "TAG_End";
+
+        case 1:
+            return "TAG_Byte";
+
+        case 2:
+            return "TAG_Short";
+
+        case 3:
+            return "TAG_Int";
+
+        case 4:
+            return "TAG_Long";
+
+        case 5:
+            return "TAG_Float";
+
+        case 6:
+            return "TAG_Double";
+
+        case 7:
+            return "TAG_Byte_Array";
+
+        case 8:
+            return "TAG_String";
+
+        case 9:
+            return "TAG_List";
+
+        case 10:
+            return "TAG_Compound";
+
+        case 11:
+            return "TAG_Int_Array";
+
+        case 99:
+            return "Any Numeric Tag";
+
+        default:
+            return "UNKNOWN";
+        }
+    }
 }
