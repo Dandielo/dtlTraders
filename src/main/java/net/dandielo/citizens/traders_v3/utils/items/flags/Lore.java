@@ -22,11 +22,23 @@ public class Lore extends ItemFlag {
 	
 	public void setLore(List<String> lore)
 	{
-		this.lore = lore;
+		this.lore = new ArrayList<String>(lore.size());
+		for (String unescaped : lore) {
+			this.lore.add(escape(unescaped));
+		}
 	}
+	
 	public List<String> getRawLore()
 	{
 		return lore;
+	}
+	
+	public static String escape(String lore) {
+		return lore.replace('§', '^');
+	}
+	
+	public static String unescape(String lore) {
+		return lore.replace('^', '§').replace('&', '§');
 	}
 
 	@Override
@@ -39,7 +51,7 @@ public class Lore extends ItemFlag {
 		
 		//add this lore
 		for ( String lore : this.lore )
-			itemLore.add(lore.replace('^', '§').replace('&', '§'));
+			itemLore.add(unescape(lore));
 		
 		//save the new lore
 		ItemMeta meta = item.getItemMeta();
@@ -58,16 +70,14 @@ public class Lore extends ItemFlag {
 			throw new AttributeValueNotFoundException();
 
 		//set the new lore
-		for (String line : cleanedLore)
-			lore.add(line.replace('§', '&'));
-		lore = cleanedLore;
+		setLore(cleanedLore);
 	}
 
 	public List<String> getLore() {
 		//parse the whole lore
 		List<String> itemLore = new ArrayList<String>();
 		for (String lore : this.lore)
-			itemLore.add(lore.replace('^', '§').replace('&', '§'));
+			itemLore.add(unescape(lore));
 		//return the parsed lore
 		return itemLore;
 	}
