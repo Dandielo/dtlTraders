@@ -331,7 +331,7 @@ public abstract class Trader implements tNpc {
 				if ( item.getAmount() >= selectedItem.getAmount() )
 				{
 				    //set the new lore
-				    inv.setItem(i, Lore.addLore(NBTUtils.cleanItem(item), Price.loreRequest(stock.parsePrice(selectedItem, "buy", item.getAmount()), new ArrayList<String>(), baseStatus)));
+				    inv.setItem(i, Lore.addLore(NBTUtils.cleanItem(item), Price.playerLoreRequest(stock.parsePrice(selectedItem, "buy", item.getAmount()), new ArrayList<String>(), baseStatus)));
 				}
 				else
 					//clean the item from any lore

@@ -2,16 +2,16 @@ package net.dandielo.citizens.traders_v3.utils.items.attributes;
 
 import java.util.List;
 
-import org.bukkit.inventory.ItemStack;
-
+import net.dandielo.citizens.traders_v3.tNpcStatus;
 import net.dandielo.citizens.traders_v3.core.dB;
 import net.dandielo.citizens.traders_v3.core.dB.DebugLevel;
 import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeInvalidValueException;
 import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeValueNotFoundException;
 import net.dandielo.citizens.traders_v3.core.locale.LocaleManager;
-import net.dandielo.citizens.traders_v3.tNpcStatus;
 import net.dandielo.citizens.traders_v3.utils.items.Attribute;
 import net.dandielo.citizens.traders_v3.utils.items.ItemAttr;
+
+import org.bukkit.inventory.ItemStack;
 
 @Attribute(
 name="Price", key = "p", standalone = true, priority = 0,
@@ -89,9 +89,19 @@ public class Price extends ItemAttr {
 			lore.add(pLore.replace("{price}", String.format("%.2f", price)).replace(',', '.'));
 	}
 	
+	public static List<String> playerLoreRequest(double price, List<String> lore, tNpcStatus status)
+	{
+		return loreRequest(price, lore, status, "player-");
+	}
+	
 	//This is here ONLY because I KNOW that when I need to debug anything 
 	//price related I will look in the Price Attribute automatically
 	public static List<String> loreRequest(double price, List<String> lore, tNpcStatus status)
+	{
+		return loreRequest(price, lore, status, "");
+	}
+	
+	protected static List<String> loreRequest(double price, List<String> lore, tNpcStatus status, String prefix)
 	{
 		if ( price < 0 ) return lore;
 		
@@ -100,7 +110,7 @@ public class Price extends ItemAttr {
 			lore.add(pLore.replace("{price}", String.format("%.2f", price)).replace(',', '.'));
 
 		//add additional click info lore
-		lore.addAll(LocaleManager.locale.getLore("item-" + status));
+		lore.addAll(LocaleManager.locale.getLore("item-" + prefix + status));
 		return lore;
 	}
 	

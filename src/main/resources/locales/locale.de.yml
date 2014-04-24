@@ -136,6 +136,12 @@ ui:
   item-sell:
     lore:
     - ^6Zum kaufen anklicken
+  item-player-buy:
+    lore:
+    - '^6Zum verkaufen anklicken'
+  item-player-sell:
+    lore:
+    - '^6Zum verkaufen anklicken'
   item-buy:
     lore:
     - ^6Zum verkaufen anklicken
