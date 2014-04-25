@@ -153,6 +153,12 @@ ui:
   item-sell:
     lore:
     - '^6Click to buy this item'
+  item-player-sell:
+    lore:
+    - '^6Click to sell this item'
+  item-player-buy:
+    lore:
+    - '^6Click to sell this item'
   item-buy:
     lore:
     - '^6Click on this item in'

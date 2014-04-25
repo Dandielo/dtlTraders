@@ -8,6 +8,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import net.dandielo.citizens.traders_v3.core.exceptions.InvalidItemException;
 import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeValueNotFoundException;
+import net.dandielo.citizens.traders_v3.utils.NBTUtils;
 import net.dandielo.citizens.traders_v3.utils.items.Attribute;
 import net.dandielo.citizens.traders_v3.utils.items.ItemFlag;
 
@@ -122,20 +123,30 @@ public class Lore extends ItemFlag {
 	//static helper methods
 	public static ItemStack addLore(ItemStack item, List<String> lore)
 	{
+		// Set this the raw way to avoid wiping other custom NBT data
+		// Thanks! ;) - NathanWolf
+		ItemStack newItem = NBTUtils.addLore(item, lore);
+		if (newItem != null) {
+			return newItem;
+		}
+		
+		// If that fails, then add to existing lore via Bukkit API
+		
 		//get the lore
 		ItemMeta meta = item.getItemMeta();	
 		List<String> newLore = meta.getLore();	
-		if (newLore == null)
+		if (newLore == null) {
 			newLore = new ArrayList<String>();
+		}
 		
 		//add the new lore
 		newLore.addAll(lore);
 		meta.setLore(newLore);
 		
 		//create a new item
-		ItemStack newItem = item.clone();
+		newItem = item.clone();
 		newItem.setItemMeta(meta);
-		return newItem; 
+		return newItem;
 	}
 	
 	public static boolean hasTraderLore(ItemStack item)

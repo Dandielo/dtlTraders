@@ -333,18 +333,19 @@ public class NBTUtils {
 	/**
 	 * adding and removing NBT lores
 	 */
-	/*
 	public static ItemStack addLore(ItemStack i, List<String> lore)
 	{
 		try
     	{
     		return _addLore(i, lore);
-    	} catch(Exception e) { }
+    	} catch(Exception e) { 
+    		
+    	}
+		
     	return null;
-	}*/
+	}
 	
-	@SuppressWarnings("unused")
-	private static ItemStack _addLore(ItemStack i, List<String> lore) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException, NoSuchMethodException, SecurityException
+	public static ItemStack _addLore(ItemStack i, List<String> lore) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException, NoSuchMethodException, SecurityException
 	{		
 	//	System.out.print("Init - Done");
 		//create a NMS copy (net.minecraft.server.{$VERSION}.ItemStack)
