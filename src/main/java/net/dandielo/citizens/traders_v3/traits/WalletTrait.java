@@ -1,5 +1,10 @@
 package net.dandielo.citizens.traders_v3.traits;
 
+import java.util.UUID;
+
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
+
 import net.citizensnpcs.api.persistence.Persist;
 import net.citizensnpcs.api.trait.Trait;
 import net.citizensnpcs.api.util.DataKey;
@@ -12,7 +17,9 @@ public class WalletTrait extends Trait {
 	@Persist String type = "infinite";
 	@Persist double money = 0.0;
 	
-	@Persist String player;
+	@Persist UUID playerUUID;
+	private OfflinePlayer player;
+	//@Persist Player player;
 	
 	//wallet object
 	private Wallet wallet;
@@ -23,10 +30,10 @@ public class WalletTrait extends Trait {
 	}
 	
 	//set wallet settings
-	public void setPlayer(String player)
+	public void setPlayer(OfflinePlayer player2)
 	{
-		this.player = player;
-		wallet.setPlayer(player);
+		this.player = player2;
+		wallet.setPlayer(player2);
 	}
 	
 	//set wallet settings
@@ -48,7 +55,7 @@ public class WalletTrait extends Trait {
 		return wallet.getMoney();
 	}
 
-	public String getPlayer()
+	public OfflinePlayer getPlayer()
 	{
 		return player;
 	}
@@ -79,6 +86,8 @@ public class WalletTrait extends Trait {
 	@Override
 	public void load(DataKey data)
 	{
+		player = Bukkit.getPlayer(playerUUID);
+		
 		wallet = new Wallet(type, money);
 		wallet.setPlayer(player);
 	}
@@ -86,6 +95,8 @@ public class WalletTrait extends Trait {
 	@Override
 	public void save(DataKey data)
 	{
+		playerUUID = player.getUniqueId();
+		
 		money = wallet.getMoney();
 	}
 }

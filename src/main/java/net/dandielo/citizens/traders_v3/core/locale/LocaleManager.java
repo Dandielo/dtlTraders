@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -93,7 +94,7 @@ public class LocaleManager {
 			    InputStream stream = DtlTraders.getInstance().getResource("locales/locale." + PluginSettings.getLocale() + ".yml");
 			    if (stream != null)
 			    {
-			        YamlConfiguration yconfig = YamlConfiguration.loadConfiguration(stream);
+			        YamlConfiguration yconfig = YamlConfiguration.loadConfiguration(new InputStreamReader(stream));
 					localeYaml = new YamlConfiguration();
 			        localeYaml.setDefaults(yconfig);
 			        localeYaml.options().copyDefaults(true);
@@ -134,7 +135,7 @@ public class LocaleManager {
 	    //if the stream is not empty (changes are present)
 	    if (stream != null)
 	    {
-	        YamlConfiguration yconfig = YamlConfiguration.loadConfiguration(stream);
+	        YamlConfiguration yconfig = YamlConfiguration.loadConfiguration(new InputStreamReader(stream));
 			locale = new YamlConfiguration();
 	        locale.setDefaults(yconfig);
 	        locale.options().copyDefaults(true);
@@ -179,7 +180,7 @@ public class LocaleManager {
 			//load yaml from file
 		    // Bypass UTF-8 loading issue on windows
 		    InputStream inputStream = new FileInputStream(localeFile);
-			localeYaml.load(inputStream);
+			localeYaml.load(new InputStreamReader(inputStream));
 			//get the locale version
 			String currentVersion = localeYaml.getString("ver");
 			

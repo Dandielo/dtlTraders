@@ -4,9 +4,12 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.trait.trait.MobType;
@@ -384,7 +387,12 @@ public class TraderCommands {
 			else
 				if ( option.equals("player") )
 				{
-					wallet.setPlayer(value);
+					OfflinePlayer player = null;
+					for (OfflinePlayer pl : Bukkit.getOfflinePlayers())
+						if (pl.getName().equals(value))
+							player = pl;
+						
+					wallet.setPlayer(player);
 
 					//send a message
 					locale.sendMessage(sender, "key-change", 

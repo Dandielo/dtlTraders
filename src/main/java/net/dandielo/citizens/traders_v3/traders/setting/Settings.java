@@ -2,6 +2,10 @@ package net.dandielo.citizens.traders_v3.traders.setting;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.trait.trait.Owner;
@@ -11,7 +15,7 @@ import net.dandielo.citizens.traders_v3.core.dB;
 public class Settings extends GlobalSettings {	
     //the Npc associated with these settings
 	private final NPC npc;
-	private String owner = "no owner";
+	private OfflinePlayer owner = null;
 	private String type = "server"; //needs to be here when some1 will apply it with the /trait command
 	
 	//npc related settings
@@ -47,11 +51,11 @@ public class Settings extends GlobalSettings {
 	}
 	
 	//trader owner
-	public String getOwner()
+	public OfflinePlayer getOwner()
 	{
 		return owner;
 	}
-	public void setOwner(String owner)
+	public void setOwner(OfflinePlayer owner)
 	{
 		this.owner = owner;
 	}
@@ -114,7 +118,10 @@ public class Settings extends GlobalSettings {
 		
 		//load trader settings
 		type = data.getString("type");
-		owner = data.getString("owner", "no owner");
+		
+		//load the owner from UUID String
+		String ownerUUID = data.getString("owner-uuid", "");
+		owner = ownerUUID.length() > 0 ? Bukkit.getOfflinePlayer(UUID.fromString(ownerUUID)) : null;
 		
 		/* compatibility start */
 		if ( type.equals("trader") )
@@ -138,7 +145,7 @@ public class Settings extends GlobalSettings {
 		
 		//save trader settings
 		data.setString("type", type);
-		data.setString("owner", owner);
+		data.setString("owner-uuid", owner.getUniqueId().toString());
 		data.setRaw("stock", null);
 		
 		//save patterns

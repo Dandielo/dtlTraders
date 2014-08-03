@@ -1,5 +1,8 @@
 package net.dandielo.citizens.traders_v3.bukkit;
 
+import java.util.UUID;
+
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
@@ -38,14 +41,14 @@ public class Econ {
 		return enabled;
 	}
 	
-	public boolean deposit(String name, double amount)
+	public boolean deposit(UUID uid, double amount)
 	{
-		return economy.depositPlayer(name, amount).transactionSuccess();
+		return economy.depositPlayer(Bukkit.getOfflinePlayer(uid), amount).transactionSuccess();
 	}
 	
-	public boolean withdraw(String name, double amount)
+	public boolean withdraw(UUID uid, double amount)
 	{
-		return economy.withdrawPlayer(name, amount).transactionSuccess();
+		return economy.withdrawPlayer(Bukkit.getOfflinePlayer(uid), amount).transactionSuccess();
 	}
 	
 }

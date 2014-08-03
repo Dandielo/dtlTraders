@@ -1,6 +1,6 @@
 package net.dandielo.citizens.traders_v3.traders.wallet;
 
-import org.bukkit.entity.Player;
+import org.bukkit.OfflinePlayer;
 
 import static net.dandielo.citizens.traders_v3.bukkit.Econ.econ;
 import net.dandielo.citizens.traders_v3.bankers.Banker;
@@ -8,7 +8,7 @@ import net.dandielo.citizens.traders_v3.core.dB;
 import net.dandielo.citizens.traders_v3.traders.Trader;
 
 public class Wallet {
-	String player = null;
+	OfflinePlayer player = null;
 	
 	private double money;
 	private Type type;
@@ -37,24 +37,24 @@ public class Wallet {
 	}
 	
 	//set target player
-	public void setPlayer(String player)
+	public void setPlayer(OfflinePlayer player)
 	{
 		this.player = player;
 	}
 	
-	public String getPlayer()
+	public OfflinePlayer getPlayer()
 	{
 		return player;
 	}
 	
 	//deposit to player or trader
-	public boolean deposit(Player player, double amount)
+	public boolean deposit(OfflinePlayer player, double amount)
 	{
 		//debug info
 		dB.info("Deposit money, to: player, name: ", player.getName());
 		dB.info("Amount: ", amount);
 		
-		return econ.deposit(player.getName(), amount);
+		return econ.deposit(player.getUniqueId(), amount);
 	}
 	public boolean deposit(Trader trader, double amount)
 	{
@@ -69,13 +69,13 @@ public class Wallet {
 		else 
 		if ( type.equals(Type.OWNER) )
 		{
-			return econ.deposit(trader.getSettings().getOwner(), amount);
+			return econ.deposit(trader.getSettings().getOwner().getUniqueId(), amount);
 		}
 		else
 		if ( type.equals(Type.PLAYER) )
 		{
 			if ( player != null )
-			    return econ.deposit(player, amount);
+			    return econ.deposit(player.getUniqueId(), amount);
 			return false;
 		}
 		return true;
@@ -104,13 +104,13 @@ public class Wallet {
 	}
 
 	//withdraw from player or trader
-	public boolean withdraw(Player player, double amount)
+	public boolean withdraw(OfflinePlayer player, double amount)
 	{
 		//debug info
 		dB.info("Withdraw money, from: player, name: ", player.getName());
 		dB.info("Amount: ", amount);
 		
-		return econ.withdraw(player.getName(), amount);
+		return econ.withdraw(player.getUniqueId(), amount);
 	}
 	public boolean withdraw(Trader trader, double amount)
 	{
@@ -128,12 +128,12 @@ public class Wallet {
 		else
 		if ( type.equals(Type.OWNER) ) 
 		{
-			return econ.withdraw(trader.getSettings().getOwner(), amount);
+			return econ.withdraw(trader.getSettings().getOwner().getUniqueId(), amount);
 		}
 		else
 		{
 			if ( player != null )
-				return econ.withdraw(player, amount);
+				return econ.withdraw(player.getUniqueId(), amount);
 			return false;
 		}
 	}
