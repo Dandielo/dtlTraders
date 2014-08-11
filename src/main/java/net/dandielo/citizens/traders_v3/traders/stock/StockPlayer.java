@@ -109,10 +109,12 @@ public class StockPlayer extends StockTrader {
 	public StockItem getItem(StockItem item, String stock)
 	{
 		for ( StockItem sItem : this.stock.get(stock) )
+		{
 			if ( sItem.equalsWeak(item) )
 			{
 				return sItem;
 			}
+		}
 		return null;
 	}
 	

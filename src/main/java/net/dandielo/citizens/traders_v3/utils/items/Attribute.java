@@ -46,7 +46,7 @@ public @interface Attribute {
     public boolean required() default false;
     
     /**
-     * Determines if the Attribute needs to be present in both items when a weak or string check is done.  
+     * Determines if the Attribute needs to be present in both items when a weak or strong check is done.  
      * @return
      *     true if only one instance is needed
      */

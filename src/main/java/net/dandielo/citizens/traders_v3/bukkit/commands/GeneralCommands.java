@@ -43,7 +43,7 @@ public class GeneralCommands {
 		{
 			//Send trader information
 			locale.sendMessage(sender, "key-value", "key", "#type", "value", "#trader-" + npc.getSettings().getType());
-			locale.sendMessage(sender, "key-value", "key", "#owner", "value", npc.getSettings().getOwner());
+			locale.sendMessage(sender, "key-value", "key", "#owner", "value", npc.getSettings().getOwner() == null ? "" : npc.getSettings().getOwner());
 			locale.sendMessage(sender, "key-value", "key", "#stock-name", "value", npc.getSettings().getStockName());
 			locale.sendMessage(sender, "key-value", "key", "#stock-start", "value", npc.getSettings().getStockStart());
 			locale.sendMessage(sender, "key-value", "key", "#stock-size", "value", String.valueOf(npc.getSettings().getStockSize()));	

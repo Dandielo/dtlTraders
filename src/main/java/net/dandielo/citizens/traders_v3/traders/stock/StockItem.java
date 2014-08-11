@@ -854,7 +854,7 @@ public final class StockItem {
 				equals = tAttr.getInfo().standalone();
 				
 				//debug low
-		//		dB.low("Before ", tAttr.getInfo().name() ," check: ", equals, ", with: ", tAttr.onSave());
+				dB.low("Before ", tAttr.getInfo().name() ," check: ", equals, ", with: ", tAttr.onSave());
 				
 				//check each item in the second item, if the attribute is found and strong equal continue
 				for ( ItemAttr iAttr : item.attr.values() )
@@ -909,7 +909,7 @@ public final class StockItem {
 		//checking attribute missmatching
 		equals = equals ? !attributeMissmatch(item) : equals;
 
-	//	dB.low("After ID and data check: ", equals);
+		dB.low("After ID and data check: ", equals);
 		
 		//now a if block to not make thousands of not needed checks 
 		if ( equals )
@@ -920,11 +920,11 @@ public final class StockItem {
 				//if only once is false then return false
 				if ( !equals ) break;
 				
-				//temporary false
+				//temporary false (or true)
 				equals = tAttr.getInfo().standalone();
 
 				//debug low
-		//		dB.low("Before ", tAttr.getInfo().name() ," check: ", equals, ", with: ", tAttr.onSave());
+				dB.low("Before ", tAttr.getInfo().name() ," check: ", equals, ", with: ", tAttr.onSave());
 				
 				//check each item in the second item, if the attribute is found and strong equal continue
 				for ( ItemAttr iAttr : item.attr.values() )
