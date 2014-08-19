@@ -145,7 +145,7 @@ public class Settings extends GlobalSettings {
 		
 		//save trader settings
 		data.setString("type", type);
-		data.setString("owner-uuid", owner.getUniqueId().toString());
+		data.setString("owner-uuid", owner == null ? "none" : owner.getUniqueId().toString());
 		data.setRaw("stock", null);
 		
 		//save patterns
