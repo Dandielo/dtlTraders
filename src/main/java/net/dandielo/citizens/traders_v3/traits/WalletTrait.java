@@ -17,7 +17,7 @@ public class WalletTrait extends Trait {
 	@Persist String type = "infinite";
 	@Persist double money = 0.0;
 	
-	@Persist String playerUUID;
+	private String playerUUID;
 	private OfflinePlayer player;
 	//@Persist Player player;
 	
@@ -86,7 +86,8 @@ public class WalletTrait extends Trait {
 	@Override
 	public void load(DataKey data)
 	{
-		player = playerUUID == "none" ? null : Bukkit.getOfflinePlayer(UUID.fromString(playerUUID));
+		playerUUID = data.getString("player-uuid", "none");
+		player = playerUUID.equals("none") ? null : Bukkit.getOfflinePlayer(UUID.fromString(playerUUID));
 		
 		wallet = new Wallet(type, money);
 		wallet.setPlayer(player);
@@ -96,6 +97,7 @@ public class WalletTrait extends Trait {
 	public void save(DataKey data)
 	{
 		playerUUID = player == null ? "none" : player.getUniqueId().toString();
+		data.setString("player-uuid", playerUUID);
 		
 		money = wallet.getMoney();
 	}

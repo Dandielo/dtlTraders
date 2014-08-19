@@ -44,6 +44,11 @@ trader:
     - log 10
     - cobblestone 100
     - stone 10000
+    time-blocks:
+    - dirt 1s
+    - wood 1m
+    - log 1h
+    - cobblestone 1d
   #stock related settings
   stock:
     #default starting stock (if this stock is set and not empty!, this does not apply for player traders)

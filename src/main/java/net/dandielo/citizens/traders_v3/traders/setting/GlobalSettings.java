@@ -98,7 +98,7 @@ public class GlobalSettings extends PluginSettings {
 			List<String> specials = (List<String>) tConfig.getList("managing.time-blocks");
 			for ( String entry : specials )
 			{
-				String[] data = entry.split(" ");
+				String[] data = entry.split(" ", 2);
 				timeoutBlocks.put(ItemUtils.createItemStack(data[0]), LimitManager.parseTimeout(data[1]));
 			}
 		}

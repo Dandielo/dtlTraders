@@ -120,8 +120,8 @@ public class Settings extends GlobalSettings {
 		type = data.getString("type");
 		
 		//load the owner from UUID String
-		String ownerUUID = data.getString("owner-uuid", "");
-		owner = ownerUUID.length() > 0 ? Bukkit.getOfflinePlayer(UUID.fromString(ownerUUID)) : null;
+		String ownerUUID = data.getString("owner-uuid", "none");
+		owner = ownerUUID.equals("none") ? null : Bukkit.getOfflinePlayer(UUID.fromString(ownerUUID));
 		
 		/* compatibility start */
 		if ( type.equals("trader") )
