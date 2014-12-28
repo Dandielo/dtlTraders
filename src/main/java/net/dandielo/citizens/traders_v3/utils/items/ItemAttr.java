@@ -48,28 +48,48 @@ import org.bukkit.inventory.ItemStack;
 public abstract class ItemAttr {
 
 	/**
-	 * Attribute key, used for saving and identification (is Unique)
+	 * @brief Attribute key, used for saving and identification (is Unique)
 	 */
 	private final String key;
+	private final String sub;
 
 	/**
-	 * All informations about this attribute 
+	 * @brief All informations about this attribute 
 	 */
 	protected Attribute info;
 
 	/**
-	 * The item associated with the attribute
+	 * @brief The item associated with the attribute
 	 */
 	protected StockItem item;
 
 	/**
-	 * default constructor (needs a key)
+	 * @brief Default constructor (needs a key)
 	 * @param key
 	 *     the attribute key
 	 */
 	public ItemAttr(String key)
 	{
 		this.key = key;
+		this.sub = null;
+	}
+	
+	/** 
+	 * Sub constructor, creates a sub-attribute
+	 *  
+	 * Creates a sub-attribute, using the same class that the main key uses. 
+	 * The sub parameter is readable later in each request thus allowing to make one class for multiple parameters
+	 * The created serialized key will be have the following pattern: {key}.{sub}:{value}
+	 * 
+	 *  @param key
+	 *      The key parameter for the attribute class (from the @Attribute interface)
+	 *  @param sub
+	 *      Provided on registration sub-name for the new attribute
+	 */
+	public ItemAttr(String key, String sub)
+	{
+		this.key = key + "." + sub;
+		this.sub = sub;
 	}
 
 	/**
@@ -207,18 +227,28 @@ public abstract class ItemAttr {
 	public String getKey() {
 		return key;
 	}
+	
+	/**
+	 * @return
+	 *     Returns the attributes subkey.
+	 */
+	public String getSub() {
+		return sub;
+	}
 
 	@Override
 	@SuppressWarnings("all")
 	public final boolean equals(Object o)
 	{
-		return (o instanceof ItemAttr && key.equals(((ItemAttr)o).key));
+		return (o instanceof ItemAttr && key.equals(((ItemAttr)o).key) && (sub == null ? ((ItemAttr)o).sub == null : sub.equals(((ItemAttr)o).sub)));
+		//TODO check
 	}
 
 	@Override
 	public final int hashCode()
 	{
-		return key.hashCode();
+		return key.hashCode() + sub.hashCode();
+		//TODO check
 	}
 
 	/**
@@ -229,7 +259,8 @@ public abstract class ItemAttr {
 	 * Map containing all registered attributes
 	 */
 	private static final Map<Attribute, Class<? extends ItemAttr>> attributes = new HashMap<Attribute, Class<? extends ItemAttr>>();
-
+	private static final Map<String, Attribute> keys = new HashMap<String, Attribute>();
+	
 	/**
 	 * Returns all attribute instances in a list. This list is used later to factorize data from a item.
 	 * @return
@@ -246,6 +277,14 @@ public abstract class ItemAttr {
 				ItemAttr iAttr = attr.getValue().getConstructor(String.class).newInstance(attr.getKey().key());
 				iAttr.info = attr.getKey();
 				result.add(iAttr);
+				
+				//With subkeys
+				for (String sub : attr.getKey().sub())
+				{
+					iAttr = attr.getValue().getConstructor(String.class, String.class).newInstance(attr.getKey().key(), sub);
+					iAttr.info = attr.getKey();
+					result.add(iAttr);
+				}
 			} 
 			catch (Exception e)
 			{
@@ -263,6 +302,7 @@ public abstract class ItemAttr {
 
 	/**
 	 * Returns required attribute instances in a list. This list is used later to init any item with required attributes.
+	 * Initial attributes do not contain sub-attributes.
 	 * @return
 	 *     A list of each attribute instance
 	 */
@@ -296,7 +336,7 @@ public abstract class ItemAttr {
 	}
 
 	/**
-	 * Registers a new arrtibute to the system, should be done before Citizens2 loading.
+	 * Registers a new attribute to the system, should be done before Citizens2 loading.
 	 * @param clazz
 	 *     The attribute class that should be registered.
 	 * @throws InvalidDataNodeException
@@ -312,10 +352,15 @@ public abstract class ItemAttr {
 		dB.low("Registering attribute \'", ChatColor.GREEN, attr.name(), ChatColor.RESET, "\' with key: ", attr.key());
 
 		attributes.put(attr, clazz);
+		
+		//create all key pairs
+		keys.put(attr.key(), attr);
+		for (String sub : attr.sub())
+			keys.put(attr.key() + "." + sub, attr);
 	}
 
 	/**
-	 * Creates a attribute with default values based class given.
+	 * Creates a attribute with default values based on the class given. Does not create sub attributes.
 	 * @param item
 	 *     The item associated with the flag
 	 * @param clazz
@@ -394,9 +439,9 @@ public abstract class ItemAttr {
 	{
 		//Search for the attribute
 		Attribute attr = null;
-		for ( Attribute attrEntry : attributes.keySet() )
-			if ( attrEntry.key().equals(key) )
-				attr = attrEntry;
+		for ( String attrKey : keys.keySet() )
+			if ( attrKey.equals(key) )
+				attr = keys.get(attrKey);
 
 		//if attribute key is not valid return null
 		if ( attr == null ) return null;

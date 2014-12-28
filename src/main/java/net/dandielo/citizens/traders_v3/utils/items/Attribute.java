@@ -30,6 +30,13 @@ public @interface Attribute {
     public String key();
     
     /**
+     * Attribute sub-keys, used to create more attributes based on the same class, later you can check what sub-key was used.
+     * @return 
+     *     Returns a list of all sub-keys.
+     */
+    public String[] sub() default { };
+    
+    /**
      * Priority value used for valid searching of item definitions in price patterns, if negative then it wont use this attribute for the priority check.
      * @return
      *     returns the priority
