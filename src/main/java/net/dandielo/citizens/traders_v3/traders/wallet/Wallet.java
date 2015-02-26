@@ -3,7 +3,6 @@ package net.dandielo.citizens.traders_v3.traders.wallet;
 import org.bukkit.OfflinePlayer;
 
 import static net.dandielo.citizens.traders_v3.bukkit.Econ.econ;
-import net.dandielo.citizens.traders_v3.bankers.Banker;
 import net.dandielo.citizens.traders_v3.core.dB;
 import net.dandielo.citizens.traders_v3.traders.Trader;
 
@@ -80,28 +79,6 @@ public class Wallet {
 		}
 		return true;
 	} 
-	public boolean deposit(Banker banker, double amount)
-	{
-		//debug info
-		dB.info("Deposit money, to: trader, name: ", banker.getSettings().getNPC().getName());
-		dB.info("Amount: ", amount, ", wallet: ", type.name().toLowerCase());
-
-		if ( type.equals(Type.PRIVATE) )
-		{
-			money += amount;
-		}
-		else 
-		if ( type.equals(Type.OWNER) )
-		{//same as private here
-			money += amount;
-		}
-		else
-		if ( type.equals(Type.PLAYER) )
-		{//same as private here
-			money += amount;
-		}
-		return true;
-	}
 
 	//withdraw from player or trader
 	public boolean withdraw(OfflinePlayer player, double amount)
