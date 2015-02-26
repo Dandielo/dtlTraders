@@ -284,7 +284,7 @@ public abstract class ItemAttr {
 			
 			//check if we need this attribute
 			if (attrInfo.required() || Arrays.binarySearch(attrInfo.items(), item.getType()) >= 0 ||
-				attrInfo.items().length == 0)
+				(attrInfo.items().length == 0 && !attrInfo.standalone()))
 			{
 				try 
 				{
@@ -394,8 +394,8 @@ public abstract class ItemAttr {
 		if ( !clazz.isAnnotationPresent(Attribute.class) )
 			throw new AttributeInvalidClassException();
 
-		if ( !keys.containsKey(key) )
-			throw new AttributeException();
+		//if ( !keys.containsKey(key) )
+		//	throw new AttributeException();
 
 		Attribute attr = clazz.getAnnotation(Attribute.class);
 
@@ -586,11 +586,7 @@ public abstract class ItemAttr {
 		try 
 		{
 			//item related
-			registerAttr(GenericKnockback.class);
-			registerAttr(GenericDamage.class);
-			registerAttr(GenericHealth.class);
 			registerAttr(StoredEnchant.class);
-			registerAttr(GenericSpeed.class);
 			registerAttr(LeatherColor.class);
 			registerAttr(PatternItem.class);
 			registerAttr(Multiplier.class);
@@ -604,6 +600,12 @@ public abstract class ItemAttr {
 			registerAttr(Book.class);
 			registerAttr(Name.class);
 
+			//NBT generic data
+			extendAttrKey("g", GenericKnockback.class);
+			extendAttrKey("g", GenericDamage.class);
+			extendAttrKey("g", GenericHealth.class);
+			extendAttrKey("g", GenericSpeed.class);
+			
 	 		//Stock item related
 			registerAttr(Limit.class);
 			registerAttr(Price.class);

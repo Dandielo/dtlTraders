@@ -12,14 +12,14 @@ import net.dandielo.citizens.traders_v3.utils.items.Attribute;
 import net.dandielo.citizens.traders_v3.utils.items.ItemAttr;
 import net.dandielo.citizens.traders_v3.utils.items.Modifier;
 
-@Attribute(name="GenericSpeed", key="g.speed", priority = 5)
+@Attribute(name="GenericSpeed", key="g", sub={"speed"}, priority = 5)
 public class GenericSpeed extends ItemAttr {
 	private static String ATTRIBUTE = "generic.movementSpeed";
 	private List<Modifier> modifiers;
 	
-	public GenericSpeed(String key)
+	public GenericSpeed(String key, String sub)
 	{
-		super(key);
+		super(key, sub);
 		modifiers = new ArrayList<Modifier>();
 	}
 

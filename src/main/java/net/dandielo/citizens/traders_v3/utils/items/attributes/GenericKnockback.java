@@ -12,14 +12,14 @@ import net.dandielo.citizens.traders_v3.utils.items.Attribute;
 import net.dandielo.citizens.traders_v3.utils.items.ItemAttr;
 import net.dandielo.citizens.traders_v3.utils.items.Modifier;
 
-@Attribute(name="GenericKnockback", key="g.kr", priority = 5)
+@Attribute(name="GenericKnockback", key="g", sub={"kr"}, priority = 5)
 public class GenericKnockback extends ItemAttr {
 	private static String ATTRIBUTE = "generic.knockbackResistance";
 	private List<Modifier> modifiers;
 	
-	public GenericKnockback(String key)
+	public GenericKnockback(String key, String sub)
 	{
-		super(key);
+		super(key, sub);
 		modifiers = new ArrayList<Modifier>();
 	}
 

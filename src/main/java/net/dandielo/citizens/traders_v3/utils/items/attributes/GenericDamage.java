@@ -12,14 +12,14 @@ import net.dandielo.citizens.traders_v3.utils.items.Attribute;
 import net.dandielo.citizens.traders_v3.utils.items.ItemAttr;
 import net.dandielo.citizens.traders_v3.utils.items.Modifier;
 
-@Attribute(name="GenericDamage", key="g.dmg", priority = 5)
+@Attribute(name="GenericDamage", key="g", sub={"dmg"}, priority = 5)
 public class GenericDamage extends ItemAttr {
 	private static String ATTRIBUTE = "generic.attackDamage";
 	private List<Modifier> modifiers;
 	
-	public GenericDamage(String key)
+	public GenericDamage(String key, String sub)
 	{
-		super(key);
+		super(key, sub);
 		modifiers = new ArrayList<Modifier>();
 	}
 

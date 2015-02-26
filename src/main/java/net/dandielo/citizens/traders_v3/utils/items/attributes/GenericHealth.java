@@ -12,14 +12,14 @@ import net.dandielo.citizens.traders_v3.utils.items.Attribute;
 import net.dandielo.citizens.traders_v3.utils.items.ItemAttr;
 import net.dandielo.citizens.traders_v3.utils.items.Modifier;
 
-@Attribute(name="GenericHealth", key="g.hp", priority = 5)
+@Attribute(name="GenericHealth", key="g", sub={"hp"}, priority = 5)
 public class GenericHealth extends ItemAttr {
 	private static String ATTRIBUTE = "generic.maxHealth";
 	private List<Modifier> modifiers;
 	
-	public GenericHealth(String key)
+	public GenericHealth(String key, String sub)
 	{
-		super(key);
+		super(key, sub);
 		modifiers = new ArrayList<Modifier>();
 	}
 
