@@ -31,7 +31,7 @@ public class ItemPricing {
 	}
 	
 	public boolean onPriceCheckRequest(int amount) {
-		boolean result = true;
+		boolean result = sItem.getAttribs("p").size() > 0;
 		for (ItemAttr attr : sItem.getAttribs("p"))
 		{
 			TransactionHandler tHandler = (TransactionHandler) attr;
@@ -41,7 +41,7 @@ public class ItemPricing {
 	}
 	
 	public boolean tryCompleteTransaction(int amount) {
-		boolean result = true;
+		boolean result = sItem.getAttribs("p").size() > 0;
 		for (ItemAttr attr : sItem.getAttribs("p"))
 		{
 			TransactionHandler tHandler = (TransactionHandler) attr;

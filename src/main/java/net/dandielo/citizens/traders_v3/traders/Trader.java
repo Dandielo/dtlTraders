@@ -277,7 +277,7 @@ public abstract class Trader implements tNpc {
 		int amount = selectedItem.getAmount(slot);
 		double price = stock.parsePrice(selectedItem, "sell", amount);
 		
-		if (pricing.onPriceCheckRequest(amount) && wallet.withdraw(player, price))
+		if (pricing.onPriceCheckRequest(amount) && (amount >= 0 && wallet.withdraw(player, price)))
 		{
 			if (!pricing.tryCompleteTransaction(amount))
 			{
@@ -310,7 +310,7 @@ public abstract class Trader implements tNpc {
 		int amount = selectedItem.getAmount();
 		double price = stock.parsePrice(selectedItem, "buy", amount) * scale;
 		
-		if (pricing.onPriceCheckRequest(scale) && wallet.withdraw(this, price))
+		if (pricing.onPriceCheckRequest(scale) && (amount >= 0 && wallet.withdraw(this, price)))
 		{
 			if (!pricing.tryCompleteTransaction(scale))
 			{
