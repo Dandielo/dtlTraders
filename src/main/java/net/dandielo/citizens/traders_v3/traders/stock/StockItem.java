@@ -262,7 +262,7 @@ public final class StockItem {
 		}
 		
 		//factorize flags
-		for ( ItemFlag iFlag : ItemFlag.getAllFlags() )
+		for ( ItemFlag iFlag : ItemFlag.getAllFlags(item) )
 		{
 			try 
 			{

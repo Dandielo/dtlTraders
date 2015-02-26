@@ -9,7 +9,7 @@ import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeValu
 import net.dandielo.citizens.traders_v3.utils.items.Attribute;
 import net.dandielo.citizens.traders_v3.utils.items.ItemFlag;
 
-@Attribute(name="SplashPotion", key = ".splash")
+@Attribute(name="SplashPotion", key = ".splash", items = {Material.POTION})
 public class Splash extends ItemFlag {
 
 	public Splash(String key)

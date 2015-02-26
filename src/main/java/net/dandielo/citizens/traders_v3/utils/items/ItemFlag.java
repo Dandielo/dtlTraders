@@ -2,6 +2,7 @@ package net.dandielo.citizens.traders_v3.utils.items;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -196,7 +197,7 @@ public abstract class ItemFlag {
 	 * @return
 	 *     A list of each flag instance
 	 */
-	public static List<ItemFlag> getAllFlags()
+	public static List<ItemFlag> getAllFlags(ItemStack item)
 	{
 		//create the list holding all flag instances
 		List<ItemFlag> result = new ArrayList<ItemFlag>();
@@ -204,22 +205,29 @@ public abstract class ItemFlag {
 		{
 			//we don't want the lore flag in here
 			if ( flag.getValue().equals(Lore.class) ) continue;
+
+			Attribute attrInfo = flag.getKey();
 			
-			try 
+			//check if we need this flag
+			if (attrInfo.required() || Arrays.binarySearch(attrInfo.items(), item.getType()) >= 0 ||
+					(attrInfo.items().length == 0 && !attrInfo.standalone()))
 			{
-				ItemFlag iFlag = flag.getValue().getConstructor(String.class).newInstance(flag.getKey().key());
-				iFlag.info = flag.getKey();
-				result.add(iFlag);
-			} 
-			catch (Exception e)
-			{
-				//debug normal
-				dB.normal("Flag exception on initialization");
-				dB.normal("Flag name: ", ChatColor.GREEN, flag.getKey().name());
-				
-				//debug low
-				dB.low("Exception: ", e.getClass().getSimpleName());
-				dB.low("Stack trace: ", StringTools.stackTrace(e.getStackTrace()));
+				try 
+				{
+					ItemFlag iFlag = flag.getValue().getConstructor(String.class).newInstance(flag.getKey().key());
+					iFlag.info = flag.getKey();
+					result.add(iFlag);
+				} 
+				catch (Exception e)
+				{
+					//debug normal
+					dB.normal("Flag exception on initialization");
+					dB.normal("Flag name: ", ChatColor.GREEN, flag.getKey().name());
+
+					//debug low
+					dB.low("Exception: ", e.getClass().getSimpleName());
+					dB.low("Stack trace: ", StringTools.stackTrace(e.getStackTrace()));
+				}
 			}
 		}
 		return result;
