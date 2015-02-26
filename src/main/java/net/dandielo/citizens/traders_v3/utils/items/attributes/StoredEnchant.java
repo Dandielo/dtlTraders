@@ -14,7 +14,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 
-@Attribute(name="StoredEnchants", key="se", priority = 5)
+@Attribute(name="StoredEnchants", key="se", priority = 5, items = {Material.ENCHANTED_BOOK})
 public class StoredEnchant extends ItemAttr {
 	Map<Enchantment, Integer> enchants = new HashMap<Enchantment, Integer>();
 	

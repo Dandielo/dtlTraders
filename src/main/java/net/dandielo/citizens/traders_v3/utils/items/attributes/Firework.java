@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 
@@ -16,7 +17,7 @@ import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeValu
 import net.dandielo.citizens.traders_v3.utils.items.Attribute;
 import net.dandielo.citizens.traders_v3.utils.items.ItemAttr;
 
-@Attribute(name="Firework", key="fw", priority = 5)
+@Attribute(name="Firework", key="fw", priority = 5, items = {Material.FIREWORK})
 public class Firework extends ItemAttr {
 	//the firework effect builder
 	private static FireworkEffect.Builder effectBuilder = FireworkEffect.builder();

@@ -1,7 +1,9 @@
 package net.dandielo.citizens.traders_v3.utils.items;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,12 +12,14 @@ import net.dandielo.citizens.traders_v3.tNpcStatus;
 import net.dandielo.citizens.traders_v3.bukkit.DtlTraders;
 import net.dandielo.citizens.traders_v3.core.dB;
 import net.dandielo.citizens.traders_v3.core.exceptions.InvalidItemException;
+import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeException;
 import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeInvalidClassException;
 import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeValueNotFoundException;
 import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeInvalidValueException;
 import net.dandielo.citizens.traders_v3.core.tools.StringTools;
 import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Amount;
+import net.dandielo.citizens.traders_v3.utils.items.attributes.BlockCurrency;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Book;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Durability;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Enchant;
@@ -29,6 +33,7 @@ import net.dandielo.citizens.traders_v3.utils.items.attributes.Limit;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Multiplier;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Name;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.PatternItem;
+import net.dandielo.citizens.traders_v3.utils.items.attributes.PlayerResourcesCurrency;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Potion;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Price;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Skull;
@@ -73,7 +78,7 @@ public abstract class ItemAttr {
 		this.key = key;
 		this.sub = null;
 	}
-	
+
 	/** 
 	 * Sub constructor, creates a sub-attribute
 	 *  
@@ -88,7 +93,7 @@ public abstract class ItemAttr {
 	 */
 	public ItemAttr(String key, String sub)
 	{
-		this.key = key + "." + sub;
+		this.key = key;// + "." + sub;
 		this.sub = sub;
 	}
 
@@ -121,7 +126,7 @@ public abstract class ItemAttr {
 		onAssign(item, endItem);
 		return item;
 	}
-	
+
 	/**
 	 * Called when the given item needs attributes re-set
 	 * @return 
@@ -136,7 +141,7 @@ public abstract class ItemAttr {
 	{
 		onAssign(item);
 	}
-	
+
 	/**
 	 * Called when the given item needs attributes re-set. This method is called as a end-user item assigning method.
 	 * @param item
@@ -202,7 +207,7 @@ public abstract class ItemAttr {
 	{
 		return info;
 	}
-	
+
 	/**
 	 * Sets the stock item for this item attribute
 	 */
@@ -217,7 +222,7 @@ public abstract class ItemAttr {
 	@Override
 	public final String toString()
 	{
-		return key + ":" + onSave();
+		return key + (sub != null ? "." + sub : "") + ":" + onSave();
 	}
 
 	/**
@@ -227,7 +232,7 @@ public abstract class ItemAttr {
 	public String getKey() {
 		return key;
 	}
-	
+
 	/**
 	 * @return
 	 *     Returns the attributes subkey.
@@ -247,7 +252,7 @@ public abstract class ItemAttr {
 	@Override
 	public final int hashCode()
 	{
-		return key.hashCode() + sub.hashCode();
+		return (key + (sub == null ? "" : sub)).hashCode();
 		//TODO check
 	}
 
@@ -260,41 +265,59 @@ public abstract class ItemAttr {
 	 */
 	private static final Map<Attribute, Class<? extends ItemAttr>> attributes = new HashMap<Attribute, Class<? extends ItemAttr>>();
 	private static final Map<String, Attribute> keys = new HashMap<String, Attribute>();
-	
+
 	/**
 	 * Returns all attribute instances in a list. This list is used later to factorize data from a item.
+	 * @param item
+	 *     The item thats material will be checked for getting all attributes for it.</br>
+	 *     Set to <strong>null</strong> if you want to get ALL attributes
 	 * @return
 	 *     A list of each attribute instance
 	 */
-	public static List<ItemAttr> getAllAttributes()
+	public static List<ItemAttr> getAllAttributes(ItemStack item)
 	{
 		//create the list holding all attribute instances
 		List<ItemAttr> result = new ArrayList<ItemAttr>();
 		for ( Map.Entry<Attribute, Class<? extends ItemAttr>> attr : attributes.entrySet() )
 		{
-			try 
+			Attribute attrInfo = attr.getKey();
+			
+			//check if we need this attribute
+			if (attrInfo.required() || Arrays.binarySearch(attrInfo.items(), item.getType()) >= 0 ||
+				attrInfo.items().length == 0)
 			{
-				ItemAttr iAttr = attr.getValue().getConstructor(String.class).newInstance(attr.getKey().key());
-				iAttr.info = attr.getKey();
-				result.add(iAttr);
-				
-				//With subkeys
-				for (String sub : attr.getKey().sub())
+				try 
 				{
-					iAttr = attr.getValue().getConstructor(String.class, String.class).newInstance(attr.getKey().key(), sub);
-					iAttr.info = attr.getKey();
-					result.add(iAttr);
-				}
-			} 
-			catch (Exception e)
-			{
-				//debug high
-				dB.high("Attribute exception on initialization");
-				dB.high("Attribute name: ", ChatColor.GREEN, attr.getKey().name());
+					try {
+						Constructor<? extends ItemAttr> constr = attr.getValue().getConstructor(String.class);
+						if (constr != null)
+						{
+							ItemAttr iAttr = constr.newInstance(attrInfo.key());
+							iAttr.info = attrInfo;
+							result.add(iAttr);
+						}
+					}catch(NoSuchMethodException ex) {
+						dB.info("No Attribute constructor available");
+					}
 
-				//debug normal
-				dB.normal("Exception: ", e.getClass().getSimpleName());
-				dB.normal("Stack trace: ", StringTools.stackTrace(e.getStackTrace()));
+					//With subkeys
+					for (String sub : attrInfo.sub())
+					{
+						ItemAttr iAttr = attr.getValue().getConstructor(String.class, String.class).newInstance(attrInfo.key(), sub);
+						iAttr.info = attrInfo;
+						result.add(iAttr);
+					}
+				} 
+				catch (Exception e)
+				{
+					//debug high
+					dB.high("Attribute exception on initialization");
+					dB.high("Attribute name: ", ChatColor.GREEN, attr.getKey().name());
+
+					//debug normal
+					dB.normal("Exception: ", e.getClass().getSimpleName());
+					dB.normal("Stack trace: ", StringTools.stackTrace(e.getStackTrace()));
+				}
 			}
 		}
 		return result;
@@ -352,11 +375,38 @@ public abstract class ItemAttr {
 		dB.low("Registering attribute \'", ChatColor.GREEN, attr.name(), ChatColor.RESET, "\' with key: ", attr.key());
 
 		attributes.put(attr, clazz);
-		
+
 		//create all key pairs
 		keys.put(attr.key(), attr);
 		for (String sub : attr.sub())
 			keys.put(attr.key() + "." + sub, attr);
+	}
+
+	/**
+	 * Registers a new attribute to the system, should be done before Citizens2 loading.
+	 * @param clazz
+	 *     The attribute class that should be registered.
+	 * @throws AttributeException 
+	 * @throws InvalidDataNodeException
+	 */
+	public static void extendAttrKey(String key, Class<? extends ItemAttr> clazz) throws AttributeException
+	{
+		if ( !clazz.isAnnotationPresent(Attribute.class) )
+			throw new AttributeInvalidClassException();
+
+		if ( !keys.containsKey(key) )
+			throw new AttributeException();
+
+		Attribute attr = clazz.getAnnotation(Attribute.class);
+
+		//debug low
+		dB.low("Extending attribute with key \'", ChatColor.GREEN, key, ChatColor.RESET, "\' with: ", attr.name() + "." + attr.key());
+
+		attributes.put(attr, clazz);
+
+		//create all key pairs
+		for (String sub : attr.sub())
+			keys.put(key + "." + sub, attr);
 	}
 
 	/**
@@ -455,9 +505,20 @@ public abstract class ItemAttr {
 			dB.info("With value: " + value);
 			dB.info("-------------------------------------");
 
+			
+			ItemAttr itemAttr;
+			if (key.contains("."))
+			{
+				String[] ks = key.split("\\.");
+				itemAttr = attributes.get(attr).getConstructor(String.class, String.class).newInstance(ks[0], ks[1]);
+			}
+			else
+			{
+				itemAttr = attributes.get(attr).getConstructor(String.class).newInstance(key);
+			} 
+
 			//get the attribute declaring class
-			ItemAttr itemAttr = attributes.get(attr).getConstructor(String.class).newInstance(key);
-			//assoc the item
+			//assoc the item 
 			itemAttr.item = stockItem;
 			//calling the onLoad method
 			itemAttr.onLoad(value);
@@ -543,11 +604,14 @@ public abstract class ItemAttr {
 			registerAttr(Book.class);
 			registerAttr(Name.class);
 
-			//Stock item related
-			//	registerAttr(Multiplier.class);
+	 		//Stock item related
 			registerAttr(Limit.class);
 			registerAttr(Price.class);
 			registerAttr(Slot.class);
+			
+			//extending classes
+			extendAttrKey("p", BlockCurrency.class);
+			extendAttrKey("p", PlayerResourcesCurrency.class);
 
 			DtlTraders.info("Registered core attributes: " + attributesAsString());
 		} 
@@ -555,6 +619,15 @@ public abstract class ItemAttr {
 		{
 			//debug critical
 			dB.critical("Core attributes invalid");
+
+			//debug high
+			dB.high("Exception message: ", e.getMessage());
+			dB.high("Stack trace: ", StringTools.stackTrace(e.getStackTrace()));
+		}
+		catch (AttributeException e)
+		{
+			//debug critical
+			dB.critical("Core extended attributes invalid");
 
 			//debug high
 			dB.high("Exception message: ", e.getMessage());
@@ -572,7 +645,7 @@ public abstract class ItemAttr {
 		String result = "";
 		//format the string
 		for ( Attribute attr : attributes.keySet() )
-			result += " ," + ChatColor.YELLOW + attr.name() + ChatColor.RESET;
+			result += ", " + ChatColor.YELLOW + attr.name() + ChatColor.RESET;
 
 		return ChatColor.WHITE + "[" + result.substring(2) + ChatColor.WHITE + "]";
 	}

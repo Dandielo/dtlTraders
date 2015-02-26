@@ -8,15 +8,18 @@ import net.dandielo.citizens.traders_v3.core.dB.DebugLevel;
 import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeInvalidValueException;
 import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeValueNotFoundException;
 import net.dandielo.citizens.traders_v3.core.locale.LocaleManager;
+import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
+import net.dandielo.citizens.traders_v3.traders.wallet.TransactionHandler;
 import net.dandielo.citizens.traders_v3.utils.items.Attribute;
 import net.dandielo.citizens.traders_v3.utils.items.ItemAttr;
 
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 @Attribute(
 name="Price", key = "p", standalone = true, priority = 0,
 status = {tNpcStatus.BUY, tNpcStatus.SELL, tNpcStatus.SELL_AMOUNTS, tNpcStatus.MANAGE_PRICE})
-public class Price extends ItemAttr {
+public class Price extends ItemAttr implements TransactionHandler {
     //public static String lorePattern = ChatColor.GOLD + "Price: " + ChatColor.GRAY;
 	private double price;
 
@@ -113,6 +116,24 @@ public class Price extends ItemAttr {
 		lore.addAll(LocaleManager.locale.getLore("item-" + prefix + status));
 		return lore;
 	}
+
+	@Override
+	public boolean onCompleteTransaction(Player player, StockItem item,
+			String stock, int amount) {
+		return true; //Always return true we check this somewhere else, and yeah i wrote this from the bottom to the top
+	}
+
+	@Override
+	public boolean onCheckTransaction(Player player, StockItem item,
+			String stock, int amount) {
+		return true; //Always return true we check this somewhere else, again...
+	}
+
+	@Override
+	public void onPriceLoreRequest(Player player, StockItem item, String stock,
+			int amount, List<String> lore) {
+		//We handle the lore somewhere else, so do not do anything!
+	} 
 	
 	/*
 	public static List<String> loreRequest(double price, List<String> lore, tNpcStatus status)

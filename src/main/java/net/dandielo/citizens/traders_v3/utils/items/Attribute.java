@@ -6,6 +6,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.bukkit.Material;
+
 import net.dandielo.citizens.traders_v3.tNpcStatus;
 
 //import net.dandielo.citizens.traders_v3.traders.Trader.Status;
@@ -35,6 +37,13 @@ public @interface Attribute {
      *     Returns a list of all sub-keys.
      */
     public String[] sub() default { };
+    
+    /**
+     * All items that will use this attribute, this should be left empty if all items should be checked for this attribute.
+     * @return 
+     *     Returns a list of item Materials that will use this attribute.
+     */
+    public Material[] items() default { };
     
     /**
      * Priority value used for valid searching of item definitions in price patterns, if negative then it wont use this attribute for the priority check.

@@ -1,5 +1,6 @@
 package net.dandielo.citizens.traders_v3.utils.items.attributes;
 
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.MapMeta;
 
@@ -9,7 +10,7 @@ import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeValu
 import net.dandielo.citizens.traders_v3.utils.items.Attribute;
 import net.dandielo.citizens.traders_v3.utils.items.ItemAttr;
 
-@Attribute(name = "Map", key = "map", priority = 5)
+@Attribute(name = "Map", key = "map", priority = 5, items = {Material.MAP})
 public class Map extends ItemAttr {
 	
 	int scale = 1;

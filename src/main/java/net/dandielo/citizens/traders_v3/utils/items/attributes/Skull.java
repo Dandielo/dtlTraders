@@ -1,5 +1,6 @@
 package net.dandielo.citizens.traders_v3.utils.items.attributes;
 
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
@@ -9,7 +10,7 @@ import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeValu
 import net.dandielo.citizens.traders_v3.utils.items.Attribute;
 import net.dandielo.citizens.traders_v3.utils.items.ItemAttr;
 
-@Attribute(name="Skull", key="sk", priority = 5)
+@Attribute(name="Skull", key="sk", priority = 5, items = {Material.SKULL, Material.SKULL_ITEM})
 public class Skull extends ItemAttr {
 
 	private String owner;

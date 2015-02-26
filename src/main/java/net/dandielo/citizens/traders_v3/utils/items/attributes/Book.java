@@ -24,7 +24,7 @@ import net.dandielo.citizens.traders_v3.utils.items.ItemAttr;
  * @author dandielo
  * 
  */
-@Attribute(name="Book", key="bk", priority = 45)
+@Attribute(name="Book", key="bk", priority = 45, items = {Material.BOOK_AND_QUILL})
 public class Book extends ItemAttr {
 	//book id used for loading and saving
 	private String bookId;
