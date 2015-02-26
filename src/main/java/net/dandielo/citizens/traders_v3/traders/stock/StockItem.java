@@ -2,8 +2,11 @@ package net.dandielo.citizens.traders_v3.traders.stock;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 
 import net.dandielo.citizens.traders_v3.tNpcStatus;
@@ -54,7 +57,9 @@ public final class StockItem {
 	/**
 	 * All additional data set for the item
 	 */
-	private Map<Class<? extends ItemAttr>, ItemAttr> attr = new HashMap<Class<? extends ItemAttr>, ItemAttr>();
+	//private Map<Class<? extends ItemAttr>, ItemAttr> attr = new HashMap<Class<? extends ItemAttr>, ItemAttr>();
+	//private Map<ItemAttr, Class<? extends ItemAttr>> attr = new HashMap<ItemAttr, Class<? extends ItemAttr>>();
+	private Set<ItemAttr> attr = new HashSet<ItemAttr>();
 	
 	/**
 	 * Flags for checking some things fast
@@ -203,7 +208,8 @@ public final class StockItem {
 			result += ":" + item.getDurability();
 
 		//save each attribute
-		for ( ItemAttr entry : attr.values() )
+		//for ( ItemAttr entry : attr.keySet() )
+		for (ItemAttr entry : attr)
 			result += " " + entry.toString();
 
 
@@ -233,7 +239,7 @@ public final class StockItem {
 		//debug low
 		dB.low("Factorizing item: ", item.getType().name().toLowerCase());
 		
-		for ( ItemAttr iAttr : ItemAttr.getAllAttributes() )
+		for ( ItemAttr iAttr : ItemAttr.getAllAttributes(item) )
 		{
 			try 
 			{
@@ -246,7 +252,8 @@ public final class StockItem {
 				dB.info("With value: " + iAttr.onSave());
 				dB.info("-------------------------------------");
 				
-				attr.put(iAttr.getClass(), iAttr);
+				//attr.put(iAttr, iAttr.getClass());
+				attr.add(iAttr);
 			}
 			catch (AttributeValueNotFoundException e)
 			{
@@ -344,6 +351,21 @@ public final class StockItem {
 		return (T) flags.remove(clazz);
 	}
 	
+	private <T extends ItemAttr> ItemAttr _getAttr(Class<T> clazz)
+	{
+		ItemAttr result = null;
+		Iterator<ItemAttr> it = attr.iterator();
+		while(it.hasNext() && result == null)
+		{
+			result = it.next();
+			if (result.getSub() != null)
+				result = null;
+			else if (!result.getClass().equals(clazz))
+				result = null;
+		}
+		return result;
+	}
+	
 	/**
 	 * @param clazz
 	 *     attribute class that should be checked for
@@ -352,7 +374,7 @@ public final class StockItem {
 	 */
 	public boolean hasAttr(Class<? extends ItemAttr> clazz)
 	{
-		return attr.containsKey(clazz);
+		return _getAttr(clazz) != null;
 	}
 	
 	/**
@@ -364,7 +386,22 @@ public final class StockItem {
 	@SuppressWarnings("unchecked")
 	public <T extends ItemAttr> T getAttr(Class<T> clazz)
 	{
-		return hasAttr(clazz) ? (T) attr.get(clazz) : null;
+		return (T) _getAttr(clazz);
+	}
+	
+	public Set<ItemAttr> getAttribs(String key)
+	{
+		ItemAttr temp = null;
+		Set<ItemAttr> result = new HashSet<ItemAttr>();
+		Iterator<ItemAttr> it = attr.iterator();
+		while(it.hasNext())
+		{
+			temp = it.next();
+			if (temp.getKey().equals(key))
+				result.add(temp);
+			temp = null;
+		}
+		return result;
 	}
 
 	/**
@@ -390,7 +427,7 @@ public final class StockItem {
 				itemAttr = null;
 			
 			if ( itemAttr != null )
-			    this.attr.put(itemAttr.getClass(), itemAttr);
+			    attr.add(itemAttr);
 			else
 			{
 				//debug message that this key does not exists
@@ -423,7 +460,7 @@ public final class StockItem {
 		try
 		{
 			itemAttr = ItemAttr.initAttribute(this, clazz);
-			this.attr.put(clazz, itemAttr);
+			attr.add(itemAttr);
 		} 
 		catch (Exception e)
 		{
@@ -438,10 +475,9 @@ public final class StockItem {
 	 * @return
 	 *     true if the attr that was removed
 	 */
-	@SuppressWarnings("unchecked")
-	public <T extends ItemAttr> T removeAttr(Class<T> clazz)
+	public <T extends ItemAttr> boolean removeAttr(Class<T> clazz)
 	{
-		return (T) attr.remove(clazz);
+		return attr.remove(_getAttr(clazz));
 	}
 	
 	/**
@@ -451,7 +487,7 @@ public final class StockItem {
 	{
 		attr.clear();
 		for ( ItemAttr reqAttr : ItemAttr.getRequiredAttributes() )
-			attr.put(reqAttr.getClass(), reqAttr);
+			attr.add(reqAttr);
 	}
 	
 	/**
@@ -499,7 +535,7 @@ public final class StockItem {
 		List<ItemAttr> firstPass = new ArrayList<ItemAttr>();
 		List<ItemAttr> secondPass = new ArrayList<ItemAttr>();
 		
-		for ( ItemAttr itemAttr : this.attr.values() )
+		for ( ItemAttr itemAttr : this.attr )
 		{
 			if (itemAttr instanceof Name || itemAttr instanceof Skull || itemAttr instanceof StoredEnchant || itemAttr instanceof Book)
 			{
@@ -572,7 +608,7 @@ public final class StockItem {
 			lore.addAll(this.getLore());
 		
 		//for each attribute
-		for ( ItemAttr itemAttr : this.attr.values() )
+		for ( ItemAttr itemAttr : this.attr )
 			for ( tNpcStatus attrStatus : itemAttr.getInfo().status() )
 				if ( attrStatus.equals(status) )
 			        itemAttr.onStatusLoreRequest(status, lore);
@@ -780,10 +816,10 @@ public final class StockItem {
 	private boolean standaloneAttrCheck(StockItem item)
 	{
 		boolean containsAll = true;
-		for ( ItemAttr key : item.attr.values() )
-			containsAll = containsAll && !key.getInfo().standalone() ? this.attr.containsKey(key.getClass()) : containsAll;
-		for ( ItemAttr key : this.attr.values() )
-			containsAll = containsAll && !key.getInfo().standalone() ? item.attr.containsKey(key.getClass()) : containsAll;
+		for ( ItemAttr key : item.attr )//TODO
+			containsAll = containsAll && !key.getInfo().standalone() ? this.attr.contains(key) : containsAll;
+		for ( ItemAttr key : this.attr)//TODO
+			containsAll = containsAll && !key.getInfo().standalone() ? item.attr.contains(key) : containsAll;
 		return containsAll;
 	}
 	private boolean standaloneFlagCheck(StockItem item)
@@ -805,8 +841,8 @@ public final class StockItem {
 	private boolean patternStandaloneAttrCheck(StockItem item)
 	{
 		boolean containsAll = true;
-		for ( ItemAttr key : this.attr.values() )
-			containsAll = containsAll && !key.getInfo().standalone() ? item.attr.containsKey(key.getClass()) : containsAll;
+		for ( ItemAttr key : this.attr )//TODO
+			containsAll = containsAll && !key.getInfo().standalone() ? item.attr.contains(key) : containsAll;
 		return containsAll;
 	}
 	private boolean patternStandaloneFlagCheck(StockItem item)
@@ -845,7 +881,7 @@ public final class StockItem {
 		if ( equals )
 		{
 			//for each attribute in this item
-			for ( ItemAttr tAttr : attr.values() )
+			for ( ItemAttr tAttr : attr )//TODO
 			{
 				//if only once is false then return false
 				if ( !equals ) break;
@@ -857,7 +893,7 @@ public final class StockItem {
 				dB.low("Before ", tAttr.getInfo().name() ," check: ", equals, ", with: ", tAttr.onSave());
 				
 				//check each item in the second item, if the attribute is found and strong equal continue
-				for ( ItemAttr iAttr : item.attr.values() )
+				for ( ItemAttr iAttr : item.attr )//TODO
 				{
 					//debug low
 		//			dB.info("Checking ", iAttr.getInfo().name() ," with: ", iAttr.onSave());
@@ -915,7 +951,7 @@ public final class StockItem {
 		if ( equals )
 		{
 			//for each attribute in this item
-			for ( ItemAttr tAttr : attr.values() )
+			for ( ItemAttr tAttr : attr )//TODO
 			{
 				//if only once is false then return false
 				if ( !equals ) break;
@@ -927,7 +963,7 @@ public final class StockItem {
 				dB.low("Before ", tAttr.getInfo().name() ," check: ", equals, ", with: ", tAttr.onSave());
 				
 				//check each item in the second item, if the attribute is found and strong equal continue
-				for ( ItemAttr iAttr : item.attr.values() )
+				for ( ItemAttr iAttr : item.attr )//TODO
 				{
 					//debug low
 			//		dB.info("Checking ", iAttr.getInfo().name() ," with: ", iAttr.onSave());
@@ -1012,10 +1048,10 @@ public final class StockItem {
 		if ( priority < 0 ) return priority;
 
 		//for each attribute in this item
-		for ( ItemAttr tAttr : attr.values() )
+		for ( ItemAttr tAttr : attr )//TODO
 		{
 			//check each item in the second item, if the attribute is found and strong equal continue
-			for ( ItemAttr iAttr : that.attr.values() )
+			for ( ItemAttr iAttr : that.attr )//TODO
 			{
 				//debug low
 		//		dB.info("Checking ", iAttr.getInfo().name() ," with: ", iAttr.onSave());

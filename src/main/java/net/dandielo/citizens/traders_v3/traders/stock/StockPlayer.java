@@ -5,11 +5,13 @@ import java.util.List;
 import net.dandielo.citizens.traders_v3.tNpcStatus;
 import net.dandielo.citizens.traders_v3.bukkit.Perms;
 import net.dandielo.citizens.traders_v3.core.dB;
+import net.dandielo.citizens.traders_v3.core.locale.LocaleManager;
 import net.dandielo.citizens.traders_v3.traders.patterns.Pattern;
 import net.dandielo.citizens.traders_v3.traders.patterns.Pattern.Type;
 import net.dandielo.citizens.traders_v3.traders.patterns.PatternManager;
 import net.dandielo.citizens.traders_v3.traders.patterns.types.Price.PriceMatch;
 import net.dandielo.citizens.traders_v3.traders.setting.Settings;
+import net.dandielo.citizens.traders_v3.traders.wallet.ItemPricing;
 import net.dandielo.citizens.traders_v3.utils.NBTUtils;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Limit;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Price;
@@ -50,7 +52,10 @@ public class StockPlayer extends StockTrader {
 			//set the lore
 			List<String> lore = item.getTempLore(status);
 			lore = Limit.loreRequest(player.getName(), item, lore, status);
+			lore.addAll(LocaleManager.locale.getLore("item-price-list"));
+			lore.addAll(new ItemPricing(player, status.asStock(), item).getFullPriceDescription(item.getAmount()));
 			lore = Price.loreRequest(parsePrice(item, status.asStock(), item.getAmount()), lore, status);
+			
 			ItemStack itemStack = item.getItem(false, lore);
 			
 			//set the item 
@@ -72,6 +77,8 @@ public class StockPlayer extends StockTrader {
 			//set new amount
 			List<String> lore = item.getTempLore(status);
 			lore = Limit.loreRequest(player.getName(), item, lore, status);
+			lore.addAll(LocaleManager.locale.getLore("item-price-list"));
+			lore.addAll(new ItemPricing(player, "sell", item).getFullPriceDescription(amount));
 			lore = Price.loreRequest(parsePrice(item, "sell", amount), lore, status);
 			
 			ItemStack itemStack = item.getItem(false, lore);

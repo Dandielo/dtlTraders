@@ -9,7 +9,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<craftbukkit.version>1.7.9-R0.2-SNAPSHOT</craftbukkit.version>
+		<craftbukkit.version>1.8-R0.1-SNAPSHOT</craftbukkit.version>
 		<citizens.version>2.0.13-SNAPSHOT</citizens.version>
 		<vault.version>1.4.1</vault.version>
 		<denizen.version>0.9.3-SNAPSHOT</denizen.version>
@@ -26,7 +26,7 @@
 			<name>dtl Repository</name>
 			<url>http://dandielo.net:8081/nexus/content/repositories/releases/</url>
 		</repository>
-		<snapshotRepository>
+		<snapshotRepository> 
 			<uniqueVersion>true</uniqueVersion>
 			<id>deployment</id>
 			<url>http://dandielo.net:8081/nexus/content/repositories/snapshots</url>
@@ -35,6 +35,11 @@
 
 	<!-- Repositories -->
 	<repositories>
+	    <repository>
+	        <name>Spigot Repository</name>
+	        <id>spigot-repo</id>
+	        <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots</url>
+	    </repository>
 		<repository>
 			<name>Bukkit repository</name>
 			<id>bukkit-repo</id>
@@ -46,14 +51,9 @@
 			<url>http://repo.citizensnpcs.co</url>
 		</repository>
 		<repository>
-			<name>Vault repository</name>
-			<id>vault-repo</id>
-			<url>http://ci.herocraftonline.com/plugin/repository/everything</url>
-		</repository>
-		<repository>
 			<id>dtl-repo</id>
 			<name>dtl Repo</name>
-			<url>http://repo.dandielo.net/nexus/content/groups/public</url>
+			<url>http://repo.dandielo.net:8081/nexus/content/groups/public</url>
 			<releases>
 				<enabled>true</enabled>
 			</releases>
@@ -80,10 +80,10 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.bukkit</groupId>
-			<artifactId>craftbukkit</artifactId>
+			<artifactId>bukkit</artifactId>
 			<version>${craftbukkit.version}</version>
 			<type>jar</type>
-			<scope>provided</scope>
+			<scope>provided</scope> 
 		</dependency>
 		<dependency>
 			<groupId>net.citizensnpcs</groupId>

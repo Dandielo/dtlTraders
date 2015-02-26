@@ -153,8 +153,6 @@ public abstract class Stock implements InventoryHolder {
 	public abstract void setInventory(Inventory inventory, tNpcStatus status);
 	public abstract void setAmountsInventory(Inventory inventory, tNpcStatus status, StockItem item);
 	public abstract void setManagementInventory(Inventory inventory, tNpcStatus baseStatus, tNpcStatus status);
-
-	public abstract double parsePrice(StockItem item, int slot);
 	
 	//oposite stock
 	public static String opositeStock(String stock)
@@ -167,5 +165,6 @@ public abstract class Stock implements InventoryHolder {
 		return this.stock.get(stock);
 	}
 
+	public abstract double parsePrice(StockItem item, int slot);
 	public abstract double parsePrice(StockItem item, String stock, int amount);
 }

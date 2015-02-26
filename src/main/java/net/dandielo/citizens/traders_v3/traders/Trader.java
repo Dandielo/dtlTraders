@@ -29,6 +29,7 @@ import net.dandielo.citizens.traders_v3.traders.setting.Settings;
 import net.dandielo.citizens.traders_v3.traders.setting.GlobalSettings;
 import net.dandielo.citizens.traders_v3.traders.stock.Stock;
 import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
+import net.dandielo.citizens.traders_v3.traders.wallet.ItemPricing;
 import net.dandielo.citizens.traders_v3.traders.wallet.Wallet;
 import net.dandielo.citizens.traders_v3.traits.TraderTrait;
 import net.dandielo.citizens.traders_v3.traits.WalletTrait;
@@ -272,12 +273,17 @@ public abstract class Trader implements tNpc {
 	 */
 	protected boolean sellTransaction(int slot)
 	{
-		if ( wallet.withdraw(player, stock.parsePrice(selectedItem, "sell", selectedItem.getAmount(slot))) )
+		ItemPricing pricing = new ItemPricing(player, "sell", selectedItem);
+		int amount = selectedItem.getAmount(slot);
+		double price = stock.parsePrice(selectedItem, "sell", amount);
+		
+		if (pricing.onPriceCheckRequest(amount) && wallet.withdraw(player, price))
 		{
-			wallet.deposit(this, stock.parsePrice(selectedItem, "sell", selectedItem.getAmount(slot)));
-			
-			//Trader log
-			//TraderStats.traderLog(this, "buy", selectedItem, selectedItem.getAmount());
+			if (!pricing.tryCompleteTransaction(amount))
+			{
+				dB.critical("Some thing went REALLLLLLY WRONG HERE! GOT RIGHT NOW TO THE DEV!");
+			}
+			wallet.deposit(this, price);
 			return true;
 		}
 		return false;
@@ -300,12 +306,17 @@ public abstract class Trader implements tNpc {
 	 */
 	protected boolean buyTransaction(int scale)
 	{
-		if ( wallet.withdraw(this, stock.parsePrice(selectedItem, "buy", selectedItem.getAmount())*scale) )
+		ItemPricing pricing = new ItemPricing(player, "buy", selectedItem);
+		int amount = selectedItem.getAmount();
+		double price = stock.parsePrice(selectedItem, "buy", amount) * scale;
+		
+		if (pricing.onPriceCheckRequest(scale) && wallet.withdraw(this, price))
 		{
-			wallet.deposit(player, stock.parsePrice(selectedItem, "buy", selectedItem.getAmount())*scale);
-			
-			//Trader log
-			//TraderStats.traderLog(this, "sell", selectedItem, scale);
+			if (!pricing.tryCompleteTransaction(scale))
+			{
+				dB.critical("Some thing went REALLLLLLY WRONG HERE! GOT RIGHT NOW TO THE DEV!");
+			}
+			wallet.deposit(player, price);
 			return true;
 		}
 		return false;
@@ -327,11 +338,21 @@ public abstract class Trader implements tNpc {
 		{
 			if ( selectAndCheckItem(item, "buy") )
 			{
-				//check if a lore cann be added
-				if ( item.getAmount() >= selectedItem.getAmount() )
+				//check if a lore can be added
+				int amount = selectedItem.getAmount();
+				int scale = item.getAmount() / amount;
+				if ( item.getAmount() >= amount )
 				{
 				    //set the new lore
-				    inv.setItem(i, Lore.addLore(NBTUtils.cleanItem(item), Price.playerLoreRequest(stock.parsePrice(selectedItem, "buy", item.getAmount()), new ArrayList<String>(), baseStatus)));
+					double price = stock.parsePrice(selectedItem, "buy", amount);
+					List<String> lore = new ArrayList<String>();
+					lore.addAll(LocaleManager.locale.getLore("item-worth-list"));
+					lore.addAll(new ItemPricing(player, "buy", selectedItem).getFullPriceDescription(scale));
+					Price.playerLoreRequest(price * scale, lore, baseStatus);
+					
+					//create the item
+					ItemStack nItem = Lore.addLore(NBTUtils.cleanItem(item), lore);
+				    inv.setItem(i, nItem);
 				}
 				else
 					//clean the item from any lore
@@ -342,7 +363,7 @@ public abstract class Trader implements tNpc {
 		}
 		
 		//reassign the last selected item
-		selectedItem = selected;
+		selectedItem = selected; 
 	}
 	
 	/**
@@ -418,18 +439,21 @@ public abstract class Trader implements tNpc {
 		//save each item until stockSize() - uiSlots() are reached
 		for ( ItemStack bItem : inventory.getContents() )
 		{
+			dB.spec(dB.DebugLevel.S3_ATTRIB, "Item: ", bItem);
 			//check if the given item is not null
 			if ( bItem != null && !stock.isUiSlot(slot) )
 			{
 				//to stock item
 				StockItem sItem = ItemUtils.createAbstractStockItem(bItem);
+				dB.spec(dB.DebugLevel.S3_ATTRIB, "Item: ", sItem);
 				
 				StockItem matchedItem = null;
 				//match old items to persist item data
 				for ( StockItem item : oldItems )
 					if ( matchedItem == null && !item.hasAttr(PatternItem.class) && item.equalsStrong(sItem) )
 						matchedItem = item; 
-				
+
+				dB.spec(dB.DebugLevel.S3_ATTRIB, "Matched: ", matchedItem);
 				if ( matchedItem != null ) 
 				{ 
 					//update just its slot 
@@ -437,6 +461,7 @@ public abstract class Trader implements tNpc {
 
 					//add to the new stock 
 					stock.addItem(matchedItem, baseStatus.asStock()); 
+					dB.spec(dB.DebugLevel.S3_ATTRIB, "Stock size: ", stock.getStock(baseStatus.asStock()).size());
 				} 
 				else 
 				{ 
@@ -445,6 +470,7 @@ public abstract class Trader implements tNpc {
 
 					//add to stock 
 					stock.addItem(sItem, baseStatus.asStock()); 
+					dB.spec(dB.DebugLevel.S3_ATTRIB, "Stock size: ", stock.getStock(baseStatus.asStock()).size());
 				}
 			}
 			

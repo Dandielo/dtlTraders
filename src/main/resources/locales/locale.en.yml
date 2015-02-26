@@ -1,4 +1,4 @@
-ver: 1.1.6 
+ver: 1.1.7
 messages:
   plugin-reload: '^6Successfuly reloaded ^3dtlTraders'
   plugin-command-message: '^6== dtlTraders ^3{version} ^6=='
@@ -87,6 +87,10 @@ keywords:
   wallet-balance: Balance
   wallet-deposit: Deposited
   wallet-withdraw: Withdrawed
+  health-points: 'health points'
+  food-level: 'food'
+  experience: 'experience'
+  exp-level: 'levels'
   bought: Bought
   owner: Owner
   amount: Amount
@@ -130,10 +134,19 @@ ui:
     - ^7Enables item adding/removing from stock
   item-unitPrice:
     lore:
-    - '^6Unit-Price: ^7{price}'
+    - '^6Unit-Price: ^7{price}^6$'
+  item-price-list:
+    lore:
+    - '^6Requires:'
+  item-worth-list:
+    lore:
+    - '^6Is worth:'
   item-price:
     lore:
-    - '^6Price: ^7{price}'
+    - '^6- ^7{price}^6$'
+  item-currency-price:
+    lore:
+    - '^6- ^7{amount}^6{text}^a{currency}'
   item-rawLimit:
     lore:
     - '^6Limit: ^7{limit}'

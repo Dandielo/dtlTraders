@@ -220,6 +220,7 @@ public class StockTrader extends Stock {
 		inventory.clear();
 		for ( StockItem item : this.stock.get(baseStatus.asStock()) )
 		{
+			dB.spec(dB.DebugLevel.S3_ATTRIB, "Set inv: ", item);
 			if ( !item.hasAttr(PatternItem.class) )
 			{
 				if ( item.getSlot() < 0 )
@@ -228,6 +229,7 @@ public class StockTrader extends Stock {
 				//set the lore
 				ItemStack itemStack = item.getItem(false, item.getTempLore(status));
 
+				dB.spec(dB.DebugLevel.S3_ATTRIB, "End item: ", item);
 				//set the item 
 				inventory.setItem(item.getSlot(), NBTUtils.markItem(itemStack));
 			}

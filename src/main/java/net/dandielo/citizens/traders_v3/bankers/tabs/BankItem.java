@@ -203,7 +203,7 @@ public final class BankItem extends tNpcItem {
 		//debug low
 		dB.low("Factorizing item: ", item.getType().name().toLowerCase());
 		
-		for ( ItemAttr iAttr : ItemAttr.getAllAttributes() )
+		for ( ItemAttr iAttr : ItemAttr.getAllAttributes(item) )
 		{
 			try 
 			{
