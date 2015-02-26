@@ -19,6 +19,7 @@ import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeInva
 import net.dandielo.citizens.traders_v3.core.tools.StringTools;
 import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Amount;
+import net.dandielo.citizens.traders_v3.utils.items.attributes.Banner;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.BlockCurrency;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Book;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Durability;
@@ -246,14 +247,12 @@ public abstract class ItemAttr {
 	public final boolean equals(Object o)
 	{
 		return (o instanceof ItemAttr && key.equals(((ItemAttr)o).key) && (sub == null ? ((ItemAttr)o).sub == null : sub.equals(((ItemAttr)o).sub)));
-		//TODO check
 	}
 
 	@Override
 	public final int hashCode()
 	{
-		return (key + (sub == null ? "" : sub)).hashCode();
-		//TODO check
+		return (key + (sub != null ? "." + sub : "")).hashCode();
 	}
 
 	/**
@@ -593,6 +592,7 @@ public abstract class ItemAttr {
 			registerAttr(Durability.class);
 			registerAttr(Firework.class);
 			registerAttr(Enchant.class);
+			registerAttr(Banner.class);
 			registerAttr(Amount.class);
 			registerAttr(Potion.class);
 			registerAttr(Skull.class);
