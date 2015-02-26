@@ -2,6 +2,7 @@ package net.dandielo.citizens.traders_v3.utils.items.attributes;
 
 import java.util.List;
 
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -89,6 +90,7 @@ public class PlayerResourcesCurrency extends ItemAttr implements TransactionHand
 	@Override
 	public void onPriceLoreRequest(Player player, StockItem item, String stock, int amount, List<String> lore) {
 		LocaleManager lm = LocaleManager.locale; 
+		ChatColor mReqColor = this.onCheckTransaction(player, item, stock, amount) ? ChatColor.GREEN : ChatColor.RED;
 		for (String lLine : lm.getLore("item-currency-price"))
 		{
 			if (getSub().equals("h"))
@@ -96,7 +98,7 @@ public class PlayerResourcesCurrency extends ItemAttr implements TransactionHand
 				lore.add(
 						lLine
 						.replace("{amount}", String.valueOf(amount * health))
-						.replace("{text}", " ").replace("{currency}", lm.getKeyword("health-points"))
+						.replace("{text}", " ").replace("{currency}", mReqColor + lm.getKeyword("health-points"))
 						);
 			}
 			if (getSub().equals("f"))
@@ -104,7 +106,7 @@ public class PlayerResourcesCurrency extends ItemAttr implements TransactionHand
 				lore.add(
 						lLine
 						.replace("{amount}", String.valueOf(amount * food))
-						.replace("{text}", " ").replace("{currency}", lm.getKeyword("food-level"))
+						.replace("{text}", " ").replace("{currency}", mReqColor + lm.getKeyword("food-level"))
 						);
 			}
 			if (getSub().equals("e"))
@@ -112,7 +114,7 @@ public class PlayerResourcesCurrency extends ItemAttr implements TransactionHand
 				lore.add(
 						lLine
 						.replace("{amount}", String.valueOf(amount * experience))
-						.replace("{text}", " ").replace("{currency}", lm.getKeyword("experience"))
+						.replace("{text}", " ").replace("{currency}", mReqColor + lm.getKeyword("experience"))
 						);
 			}
 			if (getSub().equals("l"))
@@ -120,7 +122,7 @@ public class PlayerResourcesCurrency extends ItemAttr implements TransactionHand
 				lore.add(
 						lLine
 						.replace("{amount}", String.valueOf(amount * level))
-						.replace("{text}", " ").replace("{currency}", lm.getKeyword("level"))
+						.replace("{text}", " ").replace("{currency}", mReqColor + lm.getKeyword("level"))
 						);
 			}
 		}

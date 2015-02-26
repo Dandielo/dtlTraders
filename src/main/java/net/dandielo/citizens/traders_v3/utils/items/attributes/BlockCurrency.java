@@ -2,6 +2,7 @@ package net.dandielo.citizens.traders_v3.utils.items.attributes;
 
 import java.util.List;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -82,15 +83,15 @@ public class BlockCurrency extends ItemAttr implements TransactionHandler {
 	}
 
 	@Override
-	public void onPriceLoreRequest(Player pl, StockItem it, String st, int am, List<String> lore) {
+	public void onPriceLoreRequest(Player player, StockItem it, String stock, int am, List<String> lore) {
+		ChatColor mReqColor = this.onCheckTransaction(player, item, stock, amount) ? ChatColor.GREEN : ChatColor.RED;
 		
-
 		for ( String pLore : LocaleManager.locale.getLore("item-currency-price") )
 			lore.add(
 					pLore
 					    .replace("{amount}", String.valueOf(amount * am))
 					    .replace("{text}", " block of ")
-					    .replace("{currency}", is.getType().name().toLowerCase())
+					    .replace("{currency}", mReqColor + is.getType().name().toLowerCase())
 					);
 		
 		//String res = "&6Costs: &7" + String.valueOf(amount * am) + " &6blocks of &7" + is.getType().name().toLowerCase();
