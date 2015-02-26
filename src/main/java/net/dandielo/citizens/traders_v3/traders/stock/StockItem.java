@@ -427,7 +427,11 @@ public final class StockItem {
 				itemAttr = null;
 			
 			if ( itemAttr != null )
+			{
+				//Remove to be sure old values are replaced
+				attr.remove(itemAttr);
 			    attr.add(itemAttr);
+			}
 			else
 			{
 				//debug message that this key does not exists

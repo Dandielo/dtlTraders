@@ -60,12 +60,6 @@ public class Slot extends ItemAttr {
 	}
 
 	@Override
-	public void onAssign(ItemStack item)
-	{		
-		//unused
-	}
-
-	@Override
 	public void onFactorize(ItemStack item)
 	{
 		//unused
