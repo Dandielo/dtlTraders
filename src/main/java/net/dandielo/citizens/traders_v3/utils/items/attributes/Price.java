@@ -8,19 +8,20 @@ import net.dandielo.citizens.traders_v3.core.dB.DebugLevel;
 import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeInvalidValueException;
 import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeValueNotFoundException;
 import net.dandielo.citizens.traders_v3.core.locale.LocaleManager;
-import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
-import net.dandielo.citizens.traders_v3.traders.wallet.TransactionHandler;
+import net.dandielo.citizens.traders_v3.traders.transaction.CurrencyHandler;
+import net.dandielo.citizens.traders_v3.traders.transaction.TransactionInfo;
 import net.dandielo.citizens.traders_v3.utils.items.Attribute;
 import net.dandielo.citizens.traders_v3.utils.items.ItemAttr;
 
-import org.bukkit.entity.Player;
+import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 
 @Attribute(
 name="Price", key = "p", standalone = true, priority = 0,
 status = {tNpcStatus.BUY, tNpcStatus.SELL, tNpcStatus.SELL_AMOUNTS, tNpcStatus.MANAGE_PRICE})
-public class Price extends ItemAttr implements TransactionHandler {
+public class Price extends ItemAttr implements CurrencyHandler {
     //public static String lorePattern = ChatColor.GOLD + "Price: " + ChatColor.GRAY;
+	//private static Econ econ = Econ.econ;
 	private double price;
 
 	public Price(String key) {
@@ -92,62 +93,62 @@ public class Price extends ItemAttr implements TransactionHandler {
 			lore.add(pLore.replace("{price}", String.format("%.2f", price)).replace(',', '.'));
 	}
 	
-	public static List<String> playerLoreRequest(double price, List<String> lore, tNpcStatus status)
-	{
-		return loreRequest(price, lore, status, "player-");
+//	public static List<String> playerLoreRequest(double price, List<String> lore, tNpcStatus status)
+//	{
+//		return loreRequest(price, lore, status, "player-");
+//	}
+//	
+//	//This is here ONLY because I KNOW that when I need to debug anything 
+//	//price related I will look in the Price Attribute automatically
+//	public static List<String> loreRequest(double price, List<String> lore, tNpcStatus status)
+//	{
+//		return loreRequest(price, lore, status, "");
+//	}
+//	
+//	protected static List<String> loreRequest(double price, List<String> lore, tNpcStatus status, String prefix)
+//	{
+//		if ( price < 0 ) return lore;
+//		
+//		//add the Price lore
+//		for ( String pLore : LocaleManager.locale.getLore("item-price") )
+//			lore.add(pLore.replace("{price}", String.format("%.2f", price)).replace(',', '.'));
+//
+//		//add additional click info lore
+//		lore.addAll(LocaleManager.locale.getLore("item-" + prefix + status));
+//		return lore;
+//	}
+
+	@Override
+	public boolean finalizeTransaction(TransactionInfo info) {
+		info.getSeller().deposit(info.getTotalScaling() * price);
+		return info.getBuyer().withdraw(info.getTotalScaling() * price);
 	}
-	
-	//This is here ONLY because I KNOW that when I need to debug anything 
-	//price related I will look in the Price Attribute automatically
-	public static List<String> loreRequest(double price, List<String> lore, tNpcStatus status)
-	{
-		return loreRequest(price, lore, status, "");
+
+	@Override
+	public boolean allowTransaction(TransactionInfo info) {
+		if (price < 0)
+			return false;
+		return info.getBuyer().check(info.getTotalScaling() * price);
 	}
-	
-	protected static List<String> loreRequest(double price, List<String> lore, tNpcStatus status, String prefix)
-	{
-		if ( price < 0 ) return lore;
+
+	@Override
+	public void getDescription(TransactionInfo info, List<String> lore) {
+		//String status = info.getStock().name().toLowerCase();
+		ChatColor mReqColor = allowTransaction(info) ? ChatColor.GREEN : ChatColor.RED;
 		
 		//add the Price lore
 		for ( String pLore : LocaleManager.locale.getLore("item-price") )
-			lore.add(pLore.replace("{price}", String.format("%.2f", price)).replace(',', '.'));
+			lore.add(pLore
+				.replace("{price}", mReqColor + String.format("%.2f", info.getTotalScaling() * price))
+				.replace(',', '.')
+			);
 
 		//add additional click info lore
-		lore.addAll(LocaleManager.locale.getLore("item-" + prefix + status));
-		return lore;
+		//lore.addAll(LocaleManager.locale.getLore("item-" + prefix + status));
 	}
 
 	@Override
-	public boolean onCompleteTransaction(Player player, StockItem item,
-			String stock, int amount) {
-		return true; //Always return true we check this somewhere else, and yeah i wrote this from the bottom to the top
-	}
-
-	@Override
-	public boolean onCheckTransaction(Player player, StockItem item,
-			String stock, int amount) {
-		return true; //Always return true we check this somewhere else, again...
-	}
-
-	@Override
-	public void onPriceLoreRequest(Player player, StockItem item, String stock,
-			int amount, List<String> lore) {
-		//We handle the lore somewhere else, so do not do anything!
+	public String getName() {
+		return "Virtual money";
 	} 
-	
-	/*
-	public static List<String> loreRequest(double price, List<String> lore, tNpcStatus status)
-	{
-		if ( price < 0 ) return lore;
-		
-		//add the Price lore
-		for ( String pLore : LocaleManager.locale.getLore("item-price") )
-			lore.add(pLore.replace("{price}", String.format("%.2f", price)).replace(',', '.'));
-
-		if (status == tNpcStatus.BUY || status == tNpcStatus.SELL) {
-    		//add additional click info lore
-    		lore.addAll(LocaleManager.locale.getLore("item-" + status));
-		}
-		return lore;
-	}*/
 }

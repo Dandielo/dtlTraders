@@ -11,14 +11,14 @@ import net.dandielo.citizens.traders_v3.tNpcStatus;
 import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeInvalidValueException;
 import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeValueNotFoundException;
 import net.dandielo.citizens.traders_v3.core.locale.LocaleManager;
-import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
-import net.dandielo.citizens.traders_v3.traders.wallet.TransactionHandler;
+import net.dandielo.citizens.traders_v3.traders.transaction.CurrencyHandler;
+import net.dandielo.citizens.traders_v3.traders.transaction.TransactionInfo;
 import net.dandielo.citizens.traders_v3.utils.items.Attribute;
 import net.dandielo.citizens.traders_v3.utils.items.ItemAttr;
 
 @Attribute(key = "p", sub = {"b"}, name = "Block Price", standalone = true, priority = 0,
 status = {tNpcStatus.BUY, tNpcStatus.SELL, tNpcStatus.SELL_AMOUNTS, tNpcStatus.MANAGE_PRICE})
-public class BlockCurrency extends ItemAttr implements TransactionHandler {
+public class BlockCurrency extends ItemAttr implements CurrencyHandler {
 	private ItemStack is;
 	private int amount;
 
@@ -27,7 +27,12 @@ public class BlockCurrency extends ItemAttr implements TransactionHandler {
 	}
 
 	@Override
-	public boolean onCompleteTransaction(Player player, StockItem sItem, String stock, int amount) {
+	public boolean finalizeTransaction(TransactionInfo info) {
+		String stock = info.getStock().name().toLowerCase();
+		Player player = info.getPlayerParticipant();
+		int amount = info.getScale();
+		
+		
 		boolean result = false;
 		int endAmount = amount * this.amount;
 		ItemStack clone = is.clone();
@@ -60,7 +65,12 @@ public class BlockCurrency extends ItemAttr implements TransactionHandler {
 	}
 
 	@Override
-	public boolean onCheckTransaction(Player player, StockItem item, String stock, int amount) {
+	public boolean allowTransaction(TransactionInfo info) {
+		String stock = info.getStock().name().toLowerCase();
+		Player player = info.getPlayerParticipant();
+		int amount = info.getScale();
+		
+		
 		boolean result = false;
 		int endAmount = amount * this.amount;
 		if (stock == "sell")
@@ -83,19 +93,22 @@ public class BlockCurrency extends ItemAttr implements TransactionHandler {
 	}
 
 	@Override
-	public void onPriceLoreRequest(Player player, StockItem it, String stock, int am, List<String> lore) {
-		ChatColor mReqColor = this.onCheckTransaction(player, item, stock, amount) ? ChatColor.GREEN : ChatColor.RED;
+	public void getDescription(TransactionInfo info, List<String> lore) {
+		int amount = info.getScale();		
+		ChatColor mReqColor = allowTransaction(info) ? ChatColor.GREEN : ChatColor.RED;
 		
 		for ( String pLore : LocaleManager.locale.getLore("item-currency-price") )
 			lore.add(
 					pLore
-					    .replace("{amount}", String.valueOf(amount * am))
+					    .replace("{amount}", String.valueOf(amount * amount))
 					    .replace("{text}", " block of ")
 					    .replace("{currency}", mReqColor + is.getType().name().toLowerCase())
 					);
-		
-		//String res = "&6Costs: &7" + String.valueOf(amount * am) + " &6blocks of &7" + is.getType().name().toLowerCase();
-		//lore.add(res.replace('&', '§'));
+	}
+	
+	@Override
+	public String getName() {
+		return "Item exchange currency";
 	}
 
 	@Override

@@ -10,8 +10,8 @@ import net.dandielo.citizens.traders_v3.tNpcStatus;
 import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeInvalidValueException;
 import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeValueNotFoundException;
 import net.dandielo.citizens.traders_v3.core.locale.LocaleManager;
-import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
-import net.dandielo.citizens.traders_v3.traders.wallet.TransactionHandler;
+import net.dandielo.citizens.traders_v3.traders.transaction.CurrencyHandler;
+import net.dandielo.citizens.traders_v3.traders.transaction.TransactionInfo;
 import net.dandielo.citizens.traders_v3.utils.items.Attribute;
 import net.dandielo.citizens.traders_v3.utils.items.ItemAttr;
 
@@ -20,7 +20,7 @@ import net.dandielo.citizens.traders_v3.utils.items.ItemAttr;
 		key = "p", sub = {"h", "f", "e", "l"}, 
 		standalone = true, priority = 0,
 		status = {tNpcStatus.BUY, tNpcStatus.SELL, tNpcStatus.SELL_AMOUNTS, tNpcStatus.MANAGE_PRICE})
-public class PlayerResourcesCurrency extends ItemAttr implements TransactionHandler {
+public class PlayerResourcesCurrency extends ItemAttr implements CurrencyHandler {
 	private int experience;
 	private double health; 
 	private int level;
@@ -31,7 +31,10 @@ public class PlayerResourcesCurrency extends ItemAttr implements TransactionHand
 	}
 
 	@Override
-	public boolean onCompleteTransaction(Player player, StockItem item, String stock, int amount) {
+	public boolean finalizeTransaction(TransactionInfo info) {
+		String stock = info.getStock().name().toLowerCase();
+		Player player = info.getPlayerParticipant();
+		int amount = info.getScale();
 		if (stock.equals("sell"))
 		{
 			if (getSub().equals("h"))
@@ -39,7 +42,7 @@ public class PlayerResourcesCurrency extends ItemAttr implements TransactionHand
 			if (getSub().equals("f"))
 				player.setFoodLevel(player.getFoodLevel() - food * amount);
 			if (getSub().equals("e"))
-				giveSilentExperience(player, -experience * amount);
+				giveSilentExperience(player, (int) (-experience * info.getTotalScaling()));
 			if (getSub().equals("l"))
 				player.setLevel(player.getLevel() - level * amount);
 		}
@@ -57,7 +60,7 @@ public class PlayerResourcesCurrency extends ItemAttr implements TransactionHand
 			}
 			if (getSub().equals("e"))
 			{
-				giveSilentExperience(player, experience * amount);
+				giveSilentExperience(player, (int) (experience * info.getTotalScaling()));
 			}
 			if (getSub().equals("l"))
 			{
@@ -68,7 +71,10 @@ public class PlayerResourcesCurrency extends ItemAttr implements TransactionHand
 	} 
 
 	@Override
-	public boolean onCheckTransaction(Player player, StockItem item, String stock, int amount) {
+	public boolean allowTransaction(TransactionInfo info) {
+		String stock = info.getStock().name().toLowerCase();
+		Player player = info.getPlayerParticipant();
+		int amount = info.getScale();
 		if (stock.equals("sell"))
 		{
 			if (getSub().equals("h"))
@@ -76,7 +82,7 @@ public class PlayerResourcesCurrency extends ItemAttr implements TransactionHand
 			if (getSub().equals("f"))
 				return player.getFoodLevel() >= food * amount;
 			if (getSub().equals("e"))
-				return getTotalExperience(player) >= amount * experience;	
+				return getTotalExperience(player) >= (int) (info.getTotalScaling() * experience);	
 			if (getSub().equals("l"))
 				return player.getLevel() >= amount * level;					
 		}
@@ -88,9 +94,10 @@ public class PlayerResourcesCurrency extends ItemAttr implements TransactionHand
 	}
 
 	@Override
-	public void onPriceLoreRequest(Player player, StockItem item, String stock, int amount, List<String> lore) {
+	public void getDescription(TransactionInfo info, List<String> lore) {
+		int amount = info.getScale();
 		LocaleManager lm = LocaleManager.locale; 
-		ChatColor mReqColor = this.onCheckTransaction(player, item, stock, amount) ? ChatColor.GREEN : ChatColor.RED;
+		ChatColor mReqColor = this.allowTransaction(info) ? ChatColor.GREEN : ChatColor.RED;
 		for (String lLine : lm.getLore("item-currency-price"))
 		{
 			if (getSub().equals("h"))
@@ -113,7 +120,7 @@ public class PlayerResourcesCurrency extends ItemAttr implements TransactionHand
 			{
 				lore.add(
 						lLine
-						.replace("{amount}", String.valueOf(amount * experience))
+						.replace("{amount}", String.valueOf(info.getTotalScaling() * experience))
 						.replace("{text}", " ").replace("{currency}", mReqColor + lm.getKeyword("experience"))
 						);
 			}
@@ -126,6 +133,19 @@ public class PlayerResourcesCurrency extends ItemAttr implements TransactionHand
 						);
 			}
 		}
+	}
+	
+	@Override
+	public String getName() {
+		if (getSub().equals("h"))
+			return "Health currency";
+		if (getSub().equals("f"))
+			return "Food currency";
+		if (getSub().equals("e"))
+			return "Experience currency";
+		if (getSub().equals("l"))
+			return "Level currency";
+		return "Error!";
 	}
 
 	@Override

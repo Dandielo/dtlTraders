@@ -252,7 +252,6 @@ public final class StockItem {
 				dB.info("With value: " + iAttr.onSave());
 				dB.info("-------------------------------------");
 				
-				//attr.put(iAttr, iAttr.getClass());
 				attr.add(iAttr);
 			}
 			catch (AttributeValueNotFoundException e)

@@ -90,13 +90,13 @@ public class Server extends Trader {
 			{
 				//maybe we can do this bit more nicer?
 
-				//send a event withoug toggling
+				//send a event without toggling
 				new TraderClickEvent(this, player, false, false).callEvent();
 			}
 		}
 		else
 		{
-			//send a event withoug toggling
+			//send a event without toggling
 			new TraderClickEvent(this, player, false, false).callEvent();
 		}
 
@@ -336,7 +336,7 @@ public class Server extends Trader {
 					//send message
 					locale.sendMessage(player, "trader-transaction-success", "trader", getNPC().getName(),
 							"player", player.getName(), "action", "#bought", "item", getSelectedItem().getName(),
-							"amount", String.valueOf(getSelectedItem().getAmount(slot)), "price", String.format("%.2f", stock.parsePrice(getSelectedItem(), "sell", getSelectedItem().getAmount(slot))).replace(',', '.'));
+							"amount", String.valueOf(getSelectedItem().getAmount(slot))/*, "price", String.format("%.2f", stock.parsePrice(getSelectedItem(), "sell", getSelectedItem().getAmount(slot))).replace(',', '.')*/);
 
 					//update limits
 					updateSellLimits(slot);
@@ -349,8 +349,8 @@ public class Server extends Trader {
 			{
 				//informations about the item some1 wants to buy
 				locale.sendMessage(player, "trader-transaction-item",
-						"item", getSelectedItem().getName(), "amount", String.valueOf(getSelectedItem().getAmount(slot)), 
-						"price", String.format("%.2f", stock.parsePrice(getSelectedItem(), "sell", getSelectedItem().getAmount(slot))).replace(',', '.'));
+						"item", getSelectedItem().getName(), "amount", String.valueOf(getSelectedItem().getAmount(slot))/*, 
+						"price", String.format("%.2f", stock.parsePrice(getSelectedItem(), "sell", getSelectedItem().getAmount(slot))).replace(',', '.')*/);
 			}
 		}
 	}
@@ -417,7 +417,7 @@ public class Server extends Trader {
 									//send message
 									locale.sendMessage(player, "trader-transaction-success", "trader", getNPC().getName(),
 											"player", player.getName(), "action", "#bought", "item", getSelectedItem().getName(),
-											"amount", String.valueOf(getSelectedItem().getAmount()), "price", String.format("%.2f", stock.parsePrice(getSelectedItem(), "sell", getSelectedItem().getAmount())).replace(',', '.'));
+											"amount", String.valueOf(getSelectedItem().getAmount())/*, "price", String.format("%.2f", stock.parsePrice(getSelectedItem(), "sell", getSelectedItem().getAmount())).replace(',', '.')*/);
 
 									//update limits
 									updateSellLimits();
@@ -430,8 +430,8 @@ public class Server extends Trader {
 					{
 						//informations about the item some1 wants to buy
 						locale.sendMessage(player, "trader-transaction-item",
-								"item", getSelectedItem().getName(), "amount", String.valueOf(getSelectedItem().getAmount()), 
-								"price", String.format("%.2f", stock.parsePrice(getSelectedItem(), "sell", getSelectedItem().getAmount())).replace(',', '.'));
+								"item", getSelectedItem().getName(), "amount", String.valueOf(getSelectedItem().getAmount())/*, 
+								"price", String.format("%.2f", stock.parsePrice(getSelectedItem(), "sell", getSelectedItem().getAmount())).replace(',', '.')*/);
 					}
 			}
 		}
@@ -476,8 +476,8 @@ public class Server extends Trader {
 								//send message
 								locale.sendMessage(player, "trader-transaction-success", "trader", getNPC().getName(),
 										"player", player.getName(), "action", "#bought", "item", getSelectedItem().getName(),
-										"amount", String.valueOf(getSelectedItem().getAmount()), 
-										"price", String.format("%.2f", stock.parsePrice(getSelectedItem(), "sell", getSelectedItem().getAmount())).replace(',', '.'));
+										"amount", String.valueOf(getSelectedItem().getAmount())/*, 
+										"price", String.format("%.2f", stock.parsePrice(getSelectedItem(), "sell", getSelectedItem().getAmount())).replace(',', '.')*/);
 
 								//update limits
 								updateSellLimits();
@@ -490,8 +490,8 @@ public class Server extends Trader {
 				{
 					//informations about the item some1 wants to buy
 					locale.sendMessage(player, "trader-transaction-item",
-							"item", getSelectedItem().getName(), "amount", String.valueOf(getSelectedItem().getAmount()), 
-							"price", String.format("%.2f", stock.parsePrice(getSelectedItem(), "sell", getSelectedItem().getAmount())).replace(',', '.'));
+							"item", getSelectedItem().getName(), "amount", String.valueOf(getSelectedItem().getAmount())/*, 
+							"price", String.format("%.2f", stock.parsePrice(getSelectedItem(), "sell", getSelectedItem().getAmount())).replace(',', '.')*/);
 				}
 			}
 		}
@@ -551,8 +551,8 @@ public class Server extends Trader {
 							//send the transaction success message
 							locale.sendMessage(player, "trader-transaction-success", "trader", getNPC().getName(),
 									"player", player.getName(), "action", "#sold", "item", getSelectedItem().getName(),
-									"amount", String.valueOf(getSelectedItem().getAmount()*scale), 
-									"price", String.format("%.2f", stock.parsePrice(getSelectedItem(), "buy", getSelectedItem().getAmount())*scale).replace(',', '.'));
+									"amount", String.valueOf(getSelectedItem().getAmount()*scale)/*, 
+									"price", String.format("%.2f", stock.parsePrice(getSelectedItem(), "buy", getSelectedItem().getAmount())*scale).replace(',', '.')*/);
 
 							updateBuyLimits(scale);
 
@@ -564,8 +564,8 @@ public class Server extends Trader {
 				{
 					//send the information message
 					locale.sendMessage(player, "trader-transaction-item",
-							"item", getSelectedItem().getName(), "amount", String.valueOf(getSelectedItem().getAmount()), 
-							"price", String.format("%.2f", stock.parsePrice(getSelectedItem(), "buy", getSelectedItem().getAmount())*scale).replace(',', '.'));
+							"item", getSelectedItem().getName(), "amount", String.valueOf(getSelectedItem().getAmount())/*, 
+							"price", String.format("%.2f", stock.parsePrice(getSelectedItem(), "buy", getSelectedItem().getAmount())*scale).replace(',', '.')*/);
 				}
 			}
 		}
@@ -606,8 +606,8 @@ public class Server extends Trader {
 							//send the transaction success message
 							locale.sendMessage(player, "trader-transaction-success", "trader", getNPC().getName(),
 									"player", player.getName(), "action", "#sold", "item", getSelectedItem().getName(),
-									"amount", String.valueOf(getSelectedItem().getAmount()), 
-									"price", String.format("%.2f", stock.parsePrice(getSelectedItem(), "buy", getSelectedItem().getAmount())).replace(',', '.'));
+									"amount", String.valueOf(getSelectedItem().getAmount())/*, 
+									"price", String.format("%.2f", stock.parsePrice(getSelectedItem(), "buy", getSelectedItem().getAmount())).replace(',', '.')*/);
 
 							//update limits
 							updateBuyLimits();
@@ -620,8 +620,8 @@ public class Server extends Trader {
 				{
 					//send the information message
 					locale.sendMessage(player, "trader-transaction-item",
-							"item", getSelectedItem().getName(), "amount", String.valueOf(getSelectedItem().getAmount()), 
-							"price", String.format("%.2f", stock.parsePrice(getSelectedItem(), "buy", getSelectedItem().getAmount())).replace(',', '.'));
+							"item", getSelectedItem().getName(), "amount", String.valueOf(getSelectedItem().getAmount())/*, 
+							"price", String.format("%.2f", stock.parsePrice(getSelectedItem(), "buy", getSelectedItem().getAmount())).replace(',', '.')*/);
 				}
 			}
 		}

@@ -64,7 +64,7 @@ public abstract class ItemAttr {
 	 */
 	protected Attribute info;
 
-	/**
+	/***
 	 * @brief The item associated with the attribute
 	 */
 	protected StockItem item;
@@ -645,7 +645,6 @@ public abstract class ItemAttr {
 	private static String attributesAsString()
 	{
 		String result = "";
-		//format the string
 		for ( Attribute attr : attributes.keySet() )
 			result += ", " + ChatColor.YELLOW + attr.name() + ChatColor.RESET;
 
