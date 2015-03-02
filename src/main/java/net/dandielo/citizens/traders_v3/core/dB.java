@@ -161,7 +161,7 @@ public class dB {
 	{
 		 NONE, FALSE, DISABLE, CRITICAL, HIGH, NORMAL, LOW, INFO, 
 		 //specific levels
-		 S1_ADONDRIEL, S2_MAGIC_POWA, S3_ATTRIB;
+		 S1_ADONDRIEL, S2_MAGIC_POWA, S3_ATTRIB, CURRENCY;
 		 
 		 boolean showCritical()
 		 {
@@ -195,6 +195,7 @@ public class dB {
 			 case S1_ADONDRIEL: return equals(S1_ADONDRIEL);//return true;
 			 case S2_MAGIC_POWA: return equals(S2_MAGIC_POWA);//return true;
 			 case S3_ATTRIB: return equals(S3_ATTRIB);//return true;
+			 case CURRENCY: return equals(CURRENCY);
 			 default:
 				 break;
 			 }
