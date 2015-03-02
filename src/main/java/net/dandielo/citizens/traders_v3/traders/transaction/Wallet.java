@@ -1,4 +1,4 @@
-package net.dandielo.citizens.traders_v3.traders.wallet;
+package net.dandielo.citizens.traders_v3.traders.transaction;
 
 import org.bukkit.OfflinePlayer;
 
@@ -7,7 +7,7 @@ import net.dandielo.citizens.traders_v3.core.dB;
 import net.dandielo.citizens.traders_v3.traders.Trader;
 
 public class Wallet {
-	OfflinePlayer player = null;
+	private OfflinePlayer player = null;
 	
 	private double money;
 	private Type type;
@@ -46,15 +46,41 @@ public class Wallet {
 		return player;
 	}
 	
-	//deposit to player or trader
-	public boolean deposit(OfflinePlayer player, double amount)
+	public boolean check(Trader trader, double amount)
 	{
 		//debug info
-		dB.info("Deposit money, to: player, name: ", player.getName());
-		dB.info("Amount: ", amount);
+		dB.info("Withdraw money, from: trader, name: ", trader.getSettings().getNPC().getName());
+		dB.info("Amount: ", amount, ", wallet: ", type.name().toLowerCase(), ", balance: ", money);
 		
-		return econ.deposit(player.getUniqueId(), amount);
+		if ( type.equals(Type.INFINITE) )
+		    return true;
+		else 
+		if ( type.equals(Type.PRIVATE) )
+		{
+			return money - amount >= 0 ? (money -= amount) >= 0 : false;
+		}
+		else
+		if ( type.equals(Type.OWNER) ) 
+		{
+			return econ.withdraw(trader.getSettings().getOwner().getUniqueId(), amount);
+		}
+		else
+		{
+			if ( player != null )
+				return econ.withdraw(player.getUniqueId(), amount);
+			return false;
+		}
 	}
+	
+	//deposit to player or trader
+//	public boolean deposit(OfflinePlayer player, double amount)
+//	{
+//		//debug info
+//		dB.info("Deposit money, to: player, name: ", player.getName());
+//		dB.info("Amount: ", amount);
+//		
+//		return econ.deposit(player.getUniqueId(), amount);
+//	}
 	public boolean deposit(Trader trader, double amount)
 	{
 		//debug info
@@ -81,14 +107,14 @@ public class Wallet {
 	} 
 
 	//withdraw from player or trader
-	public boolean withdraw(OfflinePlayer player, double amount)
-	{
-		//debug info
-		dB.info("Withdraw money, from: player, name: ", player.getName());
-		dB.info("Amount: ", amount);
-		
-		return econ.withdraw(player.getUniqueId(), amount);
-	}
+//	public boolean withdraw(OfflinePlayer player, double amount)
+//	{
+//		//debug info
+//		dB.info("Withdraw money, from: player, name: ", player.getName());
+//		dB.info("Amount: ", amount);
+//		
+//		return econ.withdraw(player.getUniqueId(), amount);
+//	}
 	public boolean withdraw(Trader trader, double amount)
 	{
 		//debug info

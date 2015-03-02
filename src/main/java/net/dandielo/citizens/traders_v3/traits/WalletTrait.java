@@ -9,7 +9,7 @@ import net.citizensnpcs.api.persistence.Persist;
 import net.citizensnpcs.api.trait.Trait;
 import net.citizensnpcs.api.util.DataKey;
 import net.dandielo.citizens.traders_v3.core.dB;
-import net.dandielo.citizens.traders_v3.traders.wallet.Wallet;
+import net.dandielo.citizens.traders_v3.traders.transaction.Wallet;
 
 public class WalletTrait extends Trait {
 	
