@@ -31,10 +31,10 @@ public class Banner extends ItemAttr {
 		String[] bData = data.split("/");
 		for (String entry : bData)
 		{
-			String[] cpVal = entry.split(":");
+			String[] cpVal = entry.split("-");
 			if (cpVal.length == 1)
 			{
-				baseColor = DyeColor.getByColor(Color.fromRGB(Integer.parseInt(cpVal[0])));
+				baseColor = null;//DyeColor.getByColor(Color.fromRGB(Integer.parseInt(cpVal[0])));
 			}
 			else
 			{
@@ -48,10 +48,10 @@ public class Banner extends ItemAttr {
 
 	@Override
 	public String onSave() {
-		String result = String.valueOf(baseColor.getColor().asRGB());
+		String result = baseColor == null ? "b" : String.valueOf(baseColor.getColor().asRGB());
 		for (Pattern pat : bPatterns)
 		{
-			result += "/" + pat.getPattern().getIdentifier() + ":" + String.valueOf(pat.getColor().getColor().asRGB());
+			result += "/" + pat.getPattern().getIdentifier() + "-" + String.valueOf(pat.getColor().getColor().asRGB());
 		}
 		return result;
 	}
