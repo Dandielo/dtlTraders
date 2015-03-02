@@ -176,5 +176,30 @@ public class Book extends ItemAttr {
 			dB.high("Could not save the books file");
 		}
 	}
+	
+	@Override
+	public boolean equalsWeak(ItemAttr that)
+	{
+		return equalsStrong(that);
+	}
+	@Override
+	public boolean equalsStrong(ItemAttr thato)
+	{
+		if (!(thato instanceof Book)) return false;
+		Book that = (Book) thato;
+		
+		boolean result = true;
+		//check author and title
+		result &= author == null ? that.author == null : author.equals(that.author);
+		result &= title == null ? that.title == null : title.equals(that.title);
+		
+		//check each page
+		result &= pages.size() == that.pages.size();
+		for (int i = 0; i < pages.size() && result; ++i)
+			result &= pages.get(i).equals(that.pages.get(i));
+		
+		//return the result
+		return result;
+	}
 }
 
