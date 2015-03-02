@@ -29,14 +29,13 @@ import net.dandielo.citizens.traders_v3.traders.setting.Settings;
 import net.dandielo.citizens.traders_v3.traders.setting.GlobalSettings;
 import net.dandielo.citizens.traders_v3.traders.stock.Stock;
 import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
-import net.dandielo.citizens.traders_v3.traders.wallet.ItemPricing;
-import net.dandielo.citizens.traders_v3.traders.wallet.Wallet;
+import net.dandielo.citizens.traders_v3.traders.transaction.ShopSession;
+import net.dandielo.citizens.traders_v3.traders.transaction.Wallet;
 import net.dandielo.citizens.traders_v3.traits.TraderTrait;
 import net.dandielo.citizens.traders_v3.traits.WalletTrait;
 import net.dandielo.citizens.traders_v3.utils.ItemUtils;
 import net.dandielo.citizens.traders_v3.utils.NBTUtils;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.PatternItem;
-import net.dandielo.citizens.traders_v3.utils.items.attributes.Price;
 import net.dandielo.citizens.traders_v3.utils.items.flags.Lore;
 
 public abstract class Trader implements tNpc {
@@ -103,6 +102,11 @@ public abstract class Trader implements tNpc {
 	private int lastSlot = -1;
 	private StockItem selectedItem = null;
 	
+	/*
+	 * Transaction data
+	 */
+	private ShopSession session;
+	
 	/**
 	 * Creates a new ServerTrader type based on the trader and wallet trait. It also assigns a player to the new created trader. 
 	 * @param trader
@@ -123,6 +127,7 @@ public abstract class Trader implements tNpc {
 		stock = trader.getStock().toPlayerStock(player);
 		this.wallet = wallet.getWallet();
 		this.player = player;
+		this.session = new ShopSession(this, player);
 	}
 	
 	/**
@@ -160,6 +165,15 @@ public abstract class Trader implements tNpc {
 	public Player getPlayer()
 	{
 		return player;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 *   the traders wallet trait.
+	 */
+	public Wallet getWallet() {
+		return wallet;
 	}
 	
 	/**
@@ -273,17 +287,19 @@ public abstract class Trader implements tNpc {
 	 */
 	protected boolean sellTransaction(int slot)
 	{
-		ItemPricing pricing = new ItemPricing(player, "sell", selectedItem);
+		//ShopSession pricing = new ShopSession(player, "sell", selectedItem);
 		int amount = selectedItem.getAmount(slot);
-		double price = stock.parsePrice(selectedItem, "sell", amount);
+		//double price = stock.parsePrice(selectedItem, "sell", amount);
 		
-		if (pricing.onPriceCheckRequest(amount) && (price < 0.0 || wallet.withdraw(player, price)))
+		//if (pricing.onPriceCheckRequest(amount) && (price < 0.0 || wallet.withdraw(player, price)))
+		if (session.allowTransaction("sell", selectedItem, amount))
 		{
-			if (!pricing.tryCompleteTransaction(amount))
+			//if (!pricing.tryCompleteTransaction(amount))
+			if (!session.finalizeTransaction("sell", selectedItem, amount))
 			{
 				dB.critical("Some thing went REALLLLLLY WRONG HERE! GOT RIGHT NOW TO THE DEV!");
 			}
-			wallet.deposit(this, price);
+			//wallet.deposit(this, price);
 			return true;
 		}
 		return false;
@@ -306,17 +322,18 @@ public abstract class Trader implements tNpc {
 	 */
 	protected boolean buyTransaction(int scale)
 	{
-		ItemPricing pricing = new ItemPricing(player, "buy", selectedItem);
-		int amount = selectedItem.getAmount();
-		double price = stock.parsePrice(selectedItem, "buy", amount) * scale;
+//		int amount = selectedItem.getAmount();
+	//	double price = stock.parsePrice(selectedItem, "buy", amount) * scale;
 		
-		if (pricing.onPriceCheckRequest(scale) && (price < 0.0 || wallet.withdraw(this, price)))
+		//if (pricing.onPriceCheckRequest(scale) && (price < 0.0 || wallet.withdraw(this, price)))
+		if (session.allowTransaction("buy", selectedItem, scale))
 		{
-			if (!pricing.tryCompleteTransaction(scale))
+			//if (!pricing.tryCompleteTransaction(scale))
+			if (!session.finalizeTransaction("buy", selectedItem, scale))
 			{
 				dB.critical("Some thing went REALLLLLLY WRONG HERE! GOT RIGHT NOW TO THE DEV!");
 			}
-			wallet.deposit(player, price);
+//			wallet.deposit(player, price);
 			return true;
 		}
 		return false;
@@ -344,11 +361,8 @@ public abstract class Trader implements tNpc {
 				if ( item.getAmount() >= amount )
 				{
 				    //set the new lore
-					double price = stock.parsePrice(selectedItem, "buy", amount);
 					List<String> lore = new ArrayList<String>();
-					lore.addAll(LocaleManager.locale.getLore("item-worth-list"));
-					lore.addAll(new ItemPricing(player, "buy", selectedItem).getFullPriceDescription(scale));
-					Price.playerLoreRequest(price * scale, lore, baseStatus);
+					lore.addAll(session.getDescription("buy", selectedItem, scale));
 					
 					//create the item
 					ItemStack nItem = Lore.addLore(NBTUtils.cleanItem(item), lore);

@@ -13,23 +13,23 @@ import net.dandielo.citizens.traders_v3.core.dB;
 import net.dandielo.citizens.traders_v3.traders.patterns.Pattern;
 import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
 
-public class Item extends Pattern {
+public class ItemPattern extends Pattern {
 
 	private Map<String, List<StockItem>> items;
-	private Map<String, Item> inherits;
-	private Map<String, Item> tiers;
+	private Map<String, ItemPattern> inherits;
+	private Map<String, ItemPattern> tiers;
 
-	public Item(String name)
+	public ItemPattern(String name)
 	{
 		super(name, Type.ITEM);
 
 		//init all maps
 		items = new HashMap<String, List<StockItem>>();
-		inherits = new HashMap<String, Item>();
-		tiers = new HashMap<String, Item>();
+		inherits = new HashMap<String, ItemPattern>();
+		tiers = new HashMap<String, ItemPattern>();
 	}
 
-	public Item(String name, boolean tier)
+	public ItemPattern(String name, boolean tier)
 	{
 		this(name);
 
@@ -143,7 +143,7 @@ public class Item extends Pattern {
 						}
 						else if ( !key.equals("type") && !key.equals("priority") )
 						{
-							Item pattern = new Item(key, true);
+							ItemPattern pattern = new ItemPattern(key, true);
 							pattern.loadItems(data.getConfigurationSection(key));
 
 							tiers.put(key, pattern);
@@ -158,7 +158,7 @@ public class Item extends Pattern {
 		for ( StockItem sItem : this.items.get(key) ) 
 			if ( !stock.contains(sItem) ) stock.add(sItem);
 
-		for ( Map.Entry<String, Item> e : tiers.entrySet() )
+		for ( Map.Entry<String, ItemPattern> e : tiers.entrySet() )
 			if ( Perms.hasPerm(player, "dtl.trader.tiers." + e.getKey()) )
 				e.getValue().updateStock(stock, key, player);
 		return stock;

@@ -13,7 +13,7 @@ import net.dandielo.citizens.traders_v3.core.dB;
 import net.dandielo.citizens.traders_v3.traders.patterns.Pattern;
 import net.dandielo.citizens.traders_v3.traders.patterns.PatternManager;
 import net.dandielo.citizens.traders_v3.traders.patterns.Pattern.Type;
-import net.dandielo.citizens.traders_v3.traders.patterns.types.Item;
+import net.dandielo.citizens.traders_v3.traders.patterns.types.ItemPattern;
 import net.dandielo.citizens.traders_v3.traders.setting.Settings;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.PatternItem;
 
@@ -64,15 +64,15 @@ public abstract class Stock implements InventoryHolder {
 			
 			if ( !patterns.isEmpty() )
 			{
-				for ( Pattern pattern : PatternManager.getPatterns(settings.getPatterns()) )
+				for ( Pattern pattern : patterns )
 				{
 					dB.high("Check permission for pattern: " + pattern.getName());
 					if ( pattern.getType().equals(Type.ITEM) && 
 							Perms.hasPerm(player, "dtl.trader.patterns." + pattern.getName()) )
 					{
 						dB.high("Update stock with pattern: " + pattern.getName());
-						((Item)pattern).updateStock(stock.stock.get("sell"), "sell", player);
-						((Item)pattern).updateStock(stock.stock.get("buy"), "buy", player);
+						((ItemPattern)pattern).updateStock(stock.stock.get("sell"), "sell", player);
+						((ItemPattern)pattern).updateStock(stock.stock.get("buy"), "buy", player);
 					}
 				}
 			}
@@ -164,7 +164,7 @@ public abstract class Stock implements InventoryHolder {
 	{
 		return this.stock.get(stock);
 	}
-
-	public abstract double parsePrice(StockItem item, int slot);
-	public abstract double parsePrice(StockItem item, String stock, int amount);
+//
+//	public abstract double parsePrice(StockItem item, int slot);
+//	public abstract double parsePrice(StockItem item, String stock, int amount);
 }

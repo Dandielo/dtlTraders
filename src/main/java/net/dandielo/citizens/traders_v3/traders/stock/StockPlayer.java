@@ -3,19 +3,11 @@ package net.dandielo.citizens.traders_v3.traders.stock;
 import java.util.List;
 
 import net.dandielo.citizens.traders_v3.tNpcStatus;
-import net.dandielo.citizens.traders_v3.bukkit.Perms;
 import net.dandielo.citizens.traders_v3.core.dB;
-import net.dandielo.citizens.traders_v3.core.locale.LocaleManager;
-import net.dandielo.citizens.traders_v3.traders.patterns.Pattern;
-import net.dandielo.citizens.traders_v3.traders.patterns.Pattern.Type;
-import net.dandielo.citizens.traders_v3.traders.patterns.PatternManager;
-import net.dandielo.citizens.traders_v3.traders.patterns.types.Price.PriceMatch;
 import net.dandielo.citizens.traders_v3.traders.setting.Settings;
-import net.dandielo.citizens.traders_v3.traders.wallet.ItemPricing;
+import net.dandielo.citizens.traders_v3.traders.transaction.ShopSession;
 import net.dandielo.citizens.traders_v3.utils.NBTUtils;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Limit;
-import net.dandielo.citizens.traders_v3.utils.items.attributes.Price;
-import net.dandielo.citizens.traders_v3.utils.items.flags.StackPrice;
 
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -52,9 +44,7 @@ public class StockPlayer extends StockTrader {
 			//set the lore
 			List<String> lore = item.getTempLore(status);
 			lore = Limit.loreRequest(player.getName(), item, lore, status);
-			lore.addAll(LocaleManager.locale.getLore("item-price-list"));
-			lore.addAll(new ItemPricing(player, status.asStock(), item).getFullPriceDescription(item.getAmount()));
-			lore = Price.loreRequest(parsePrice(item, status.asStock(), item.getAmount()), lore, status);
+			lore.addAll(new ShopSession(settings, player).getDescription(status.asStock(), item, item.getAmount()));
 			
 			ItemStack itemStack = item.getItem(false, lore);
 			
@@ -77,9 +67,7 @@ public class StockPlayer extends StockTrader {
 			//set new amount
 			List<String> lore = item.getTempLore(status);
 			lore = Limit.loreRequest(player.getName(), item, lore, status);
-			lore.addAll(LocaleManager.locale.getLore("item-price-list"));
-			lore.addAll(new ItemPricing(player, "sell", item).getFullPriceDescription(amount));
-			lore = Price.loreRequest(parsePrice(item, "sell", amount), lore, status);
+			lore.addAll(new ShopSession(settings, player).getDescription("sell", item, amount));
 			
 			ItemStack itemStack = item.getItem(false, lore);
 			itemStack.setAmount(amount);
@@ -123,56 +111,5 @@ public class StockPlayer extends StockTrader {
 			}
 		}
 		return null;
-	}
-	
-	@Override
-	public double parsePrice(StockItem item, int amount) 
-	{
-		return -1.0;
-	}
-	
-	/* price methods */
-	@Override
-	public double parsePrice(StockItem item, String stock, int amount) 
-	{
-		PriceMatch match = new PriceMatch();
-
-		if ( settings.getPatterns() != null && !settings.getPatterns().isEmpty() )
-		{
-			List<Pattern> patterns = PatternManager.getPatterns(settings.getPatterns());
-			
-			if ( patterns.isEmpty() )
-			{
-				match.price(item.getPrice());
-				match.multiplier(item.getMultiplier());
-			}
-			else
-			{
-				boolean priceParsed = false;
-				for ( Pattern pattern : PatternManager.getPatterns(settings.getPatterns()) )
-				{
-					if ( pattern.getType().equals(Type.PRICE) &&
-							Perms.hasPerm(player, "dtl.trader.patterns." + pattern.getName()) )
-					{
-						match.merge(((net.dandielo.citizens.traders_v3.traders.patterns.types.Price)pattern).findPriceFor(player, stock, item));
-						priceParsed = true;
-					}
-				}
-				if ( !priceParsed )
-				{
-					match.price(item.getPrice());
-					match.multiplier(item.getMultiplier());
-				}
-			}
-		}
-		else
-		{
-			match.price(item.getPrice());
-			match.multiplier(item.getMultiplier());
-		}
-
-		if ( item.hasFlag(StackPrice.class) )
-			return match.finalPrice();
-		return match.finalPrice() * amount;
 	}
 }

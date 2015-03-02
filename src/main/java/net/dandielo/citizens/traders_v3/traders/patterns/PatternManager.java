@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Map;
 
 import net.dandielo.citizens.traders_v3.core.dB;
-import net.dandielo.citizens.traders_v3.traders.patterns.types.Item;
-import net.dandielo.citizens.traders_v3.traders.patterns.types.Price;
+import net.dandielo.citizens.traders_v3.traders.patterns.types.ItemPattern;
+import net.dandielo.citizens.traders_v3.traders.patterns.types.PricePattern;
 import net.dandielo.citizens.traders_v3.traders.setting.GlobalSettings;
 
 import org.bukkit.configuration.file.FileConfiguration;
@@ -78,12 +78,12 @@ public class PatternManager {
 		}
 	}
 
-	public static Pattern createPattern(String name, String type)
+	private static Pattern createPattern(String name, String type)
 	{
 		if ( type.equals("price") )
-			return new Price(name);
+			return new PricePattern(name);
 		if ( type.equals("item") )
-			return new Item(name);
+			return new ItemPattern(name);
 		return null;
 	}
 	
