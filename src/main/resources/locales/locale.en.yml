@@ -91,7 +91,7 @@ keywords:
   food-level: 'food'
   experience: 'experience'
   exp-level: 'levels'
-  buy: Buy
+  buy: Buying
   bought: Bought
   owner: Owner
   amount: Amount
@@ -100,7 +100,7 @@ keywords:
   timeout: Timeout
   price: Price
   name: Name
-  sell: Sell
+  sell: Selling
   sold: Sold
   enabled: Enabled
   disabled: Disabled
