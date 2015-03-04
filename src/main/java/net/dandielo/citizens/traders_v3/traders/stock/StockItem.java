@@ -47,7 +47,7 @@ public final class StockItem {
 	/**
 	 * Pattern used for loading data form strings
 	 */
-	public static String ITEM_PATTERN = "(([^ :]+):([^ :]+))|([^ :]*)";
+	public static final String ITEM_PATTERN = "(([^ :]+):([^ :]+))|([^ :]*)";
 
 	/**
 	 * The bukkit representation of the item, this item is always saved without any data assigned. Assigning is done on a copy when needed.

@@ -347,6 +347,8 @@ public class Server extends Trader {
 			}
 			else
 			{
+				
+				
 				//informations about the item some1 wants to buy
 				locale.sendMessage(player, "trader-transaction-item",
 						"item", getSelectedItem().getName(), "amount", String.valueOf(getSelectedItem().getAmount(slot))/*, 

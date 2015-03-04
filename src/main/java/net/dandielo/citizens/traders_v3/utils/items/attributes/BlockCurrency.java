@@ -129,4 +129,10 @@ public class BlockCurrency extends ItemAttr implements CurrencyHandler {
 		throw new AttributeValueNotFoundException();
 	}
 
+	@Override
+	public double getTotalPrice(TransactionInfo info) {
+		//Just pass 0, or whatever 
+		return 0.0;
+	}
+
 }

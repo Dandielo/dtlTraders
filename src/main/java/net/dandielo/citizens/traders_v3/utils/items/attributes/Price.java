@@ -84,8 +84,6 @@ public class Price extends ItemAttr implements CurrencyHandler {
 	@Override
 	public void onStatusLoreRequest(tNpcStatus status, List<String> lore)
 	{
-		//If not in manager mode then we don't want to manage this request
-		//Maybe later just update the Attribute settings?
 		if ( !status.inManagementMode() ) return;
 
 		//add the lore to the item
@@ -93,30 +91,9 @@ public class Price extends ItemAttr implements CurrencyHandler {
 			lore.add(pLore.replace("{price}", String.format("%.2f", price)).replace(',', '.'));
 	}
 	
-//	public static List<String> playerLoreRequest(double price, List<String> lore, tNpcStatus status)
-//	{
-//		return loreRequest(price, lore, status, "player-");
-//	}
-//	
-//	//This is here ONLY because I KNOW that when I need to debug anything 
-//	//price related I will look in the Price Attribute automatically
-//	public static List<String> loreRequest(double price, List<String> lore, tNpcStatus status)
-//	{
-//		return loreRequest(price, lore, status, "");
-//	}
-//	
-//	protected static List<String> loreRequest(double price, List<String> lore, tNpcStatus status, String prefix)
-//	{
-//		if ( price < 0 ) return lore;
-//		
-//		//add the Price lore
-//		for ( String pLore : LocaleManager.locale.getLore("item-price") )
-//			lore.add(pLore.replace("{price}", String.format("%.2f", price)).replace(',', '.'));
-//
-//		//add additional click info lore
-//		lore.addAll(LocaleManager.locale.getLore("item-" + prefix + status));
-//		return lore;
-//	}
+	public double getTotalPrice(TransactionInfo info) {
+		return info.getTotalScaling() * price;
+	}
 
 	@Override
 	public boolean finalizeTransaction(TransactionInfo info) {
@@ -133,7 +110,6 @@ public class Price extends ItemAttr implements CurrencyHandler {
 
 	@Override
 	public void getDescription(TransactionInfo info, List<String> lore) {
-		//String status = info.getStock().name().toLowerCase();
 		ChatColor mReqColor = allowTransaction(info) ? ChatColor.GREEN : ChatColor.RED;
 		
 		//add the Price lore
@@ -142,9 +118,6 @@ public class Price extends ItemAttr implements CurrencyHandler {
 				.replace("{price}", mReqColor + String.format("%.2f", info.getTotalScaling() * price))
 				.replace(',', '.')
 			);
-
-		//add additional click info lore
-		//lore.addAll(LocaleManager.locale.getLore("item-" + prefix + status));
 	}
 
 	@Override

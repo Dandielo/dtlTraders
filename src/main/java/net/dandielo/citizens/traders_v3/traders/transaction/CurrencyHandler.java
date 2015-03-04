@@ -54,6 +54,8 @@ public interface CurrencyHandler {
 	 */
 	public void getDescription(TransactionInfo tinfo, List<String> result);
 	
+	public double getTotalPrice(TransactionInfo info);
+	
 	/** The currency name
 	 * 
 	 * @return

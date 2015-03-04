@@ -94,6 +94,19 @@ public class PlayerResourcesCurrency extends ItemAttr implements CurrencyHandler
 	}
 
 	@Override
+	public double getTotalPrice(TransactionInfo info) {
+		if (getSub().equals("h"))
+			return health * info.getScale();
+		if (getSub().equals("f"))
+			return food * info.getScale();
+		if (getSub().equals("e"))
+			return (int)(experience * info.getTotalScaling());
+		if (getSub().equals("l"))
+			return level * info.getScale();
+		return 0.0;
+	}
+
+	@Override
 	public void getDescription(TransactionInfo info, List<String> lore) {
 		int amount = info.getScale();
 		LocaleManager lm = LocaleManager.locale; 

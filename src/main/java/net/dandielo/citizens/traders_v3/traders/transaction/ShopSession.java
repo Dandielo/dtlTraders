@@ -2,6 +2,7 @@ package net.dandielo.citizens.traders_v3.traders.transaction;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -24,7 +25,7 @@ public class ShopSession {
 	private Settings settings;
 	private Player player;
 	
-	private Map<StockItem, ItemCurrencies> cache = new HashMap<StockItem, ItemCurrencies>();
+	private Map<String, Map<StockItem, ItemCurrencies>> cache = new HashMap<String, Map<StockItem, ItemCurrencies>>();
 
 	/** Create a new session between a player and a trader
 	 * 
@@ -53,9 +54,13 @@ public class ShopSession {
 	}
 	
 	public ItemCurrencies getCurrencies(String stock, StockItem item) {
-		//check our cache
-		if (cache.containsKey(item))
-			return cache.get(item);
+		if (!cache.containsKey(stock))
+			cache.put(stock, new HashMap<StockItem, ItemCurrencies>());
+		
+		//check the cache
+		Map<StockItem, ItemCurrencies> cachedStock = cache.get(stock);
+		if (cachedStock.containsKey(item))
+			return cachedStock.get(item);
 		
 		//find the currencies
 		ItemCurrencies currencies = new ItemCurrencies();
@@ -70,7 +75,7 @@ public class ShopSession {
 				currencies.merge((CurrencyHandler) attr, 0);
 		
 		//set the cache
-		cache.put(item, currencies);
+		cachedStock.put(item, currencies);
 		return currencies;
 	}
 	
@@ -129,5 +134,24 @@ public class ShopSession {
 			);
 		}
 		return result;
+	}
+	
+	public double getCurrencyValue(String stock, StockItem item, int amount, Class<? extends CurrencyHandler> clazz) {
+		CurrencyHandler result = null;
+		ItemCurrencies currencies = getCurrencies(stock, item);
+		Iterator<CurrencyHandler> it = currencies.getCurrencies().iterator();
+		while(it.hasNext() && result == null)
+		{
+			result = it.next();
+			if (!clazz.isInstance(result))
+				result = null;
+		}
+		return result != null ? 
+				result.getTotalPrice(
+					new TransactionInfo(stock, item, amount)
+						.setParticipants(new PlayerParticipant(player), new TraderParticipant(trader))
+						.setMultiplier(currencies.getMultiplier())
+				)
+				/* else */ : 0.0;
 	}
 }

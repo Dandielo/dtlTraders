@@ -105,7 +105,7 @@ public abstract class Trader implements tNpc {
 	/*
 	 * Transaction data
 	 */
-	private ShopSession session;
+	protected ShopSession session;
 	
 	/**
 	 * Creates a new ServerTrader type based on the trader and wallet trait. It also assigns a player to the new created trader. 
