@@ -8,6 +8,7 @@ import org.bukkit.inventory.ItemStack;
 import net.dandielo.citizens.traders_v3.tNpcManager;
 import net.dandielo.citizens.traders_v3.tNpcStatus;
 import net.dandielo.citizens.traders_v3.tNpcType;
+import net.dandielo.citizens.traders_v3.bukkit.Econ.econ;
 import net.dandielo.citizens.traders_v3.core.dB;
 import net.dandielo.citizens.traders_v3.core.events.trader.TraderClickEvent;
 import net.dandielo.citizens.traders_v3.core.events.trader.TraderOpenEvent;
@@ -348,8 +349,8 @@ public class Server extends Trader {
 			else
 			{
 				//informations about the item some1 wants to buy
-				locale.sendMessage(player, "trader-transaction-item",
-						"item", getSelectedItem().getName(), "amount", String.valueOf(getSelectedItem().getAmount(slot))/*, 
+				locale.sendMessage(player, "trader-transaction-buyitem",
+						"item", getSelectedItem().getName(), "amount", String.valueOf(econ.getBalance() - getSelectedItem().getAmount(slot))/*, 
 						"price", String.format("%.2f", stock.parsePrice(getSelectedItem(), "sell", getSelectedItem().getAmount(slot))).replace(',', '.')*/);
 			}
 		}
@@ -429,8 +430,8 @@ public class Server extends Trader {
 					else
 					{
 						//informations about the item some1 wants to buy
-						locale.sendMessage(player, "trader-transaction-item",
-								"item", getSelectedItem().getName(), "amount", String.valueOf(getSelectedItem().getAmount())/*, 
+						locale.sendMessage(player, "trader-transaction-buyitem",
+								"item", getSelectedItem().getName(), "amount", String.valueOf(econ.getBalance() - getSelectedItem().getAmount()/*, 
 								"price", String.format("%.2f", stock.parsePrice(getSelectedItem(), "sell", getSelectedItem().getAmount())).replace(',', '.')*/);
 					}
 			}
@@ -489,8 +490,8 @@ public class Server extends Trader {
 				else
 				{
 					//informations about the item some1 wants to buy
-					locale.sendMessage(player, "trader-transaction-item",
-							"item", getSelectedItem().getName(), "amount", String.valueOf(getSelectedItem().getAmount())/*, 
+					locale.sendMessage(player, "trader-transaction-buyitem",
+							"item", getSelectedItem().getName(), "amount", String.valueOf(econ.getBalance() - getSelectedItem().getAmount())/*, 
 							"price", String.format("%.2f", stock.parsePrice(getSelectedItem(), "sell", getSelectedItem().getAmount())).replace(',', '.')*/);
 				}
 			}
@@ -563,8 +564,8 @@ public class Server extends Trader {
 				else
 				{
 					//send the information message
-					locale.sendMessage(player, "trader-transaction-item",
-							"item", getSelectedItem().getName(), "amount", String.valueOf(getSelectedItem().getAmount())/*, 
+					locale.sendMessage(player, "trader-transaction-sellitem",
+							"item", getSelectedItem().getName(), "amount", String.valueOf(econ.getBalance() + getSelectedItem().getAmount())/*, 
 							"price", String.format("%.2f", stock.parsePrice(getSelectedItem(), "buy", getSelectedItem().getAmount())*scale).replace(',', '.')*/);
 				}
 			}
@@ -620,7 +621,7 @@ public class Server extends Trader {
 				{
 					//send the information message
 					locale.sendMessage(player, "trader-transaction-item",
-							"item", getSelectedItem().getName(), "amount", String.valueOf(getSelectedItem().getAmount())/*, 
+							"item", getSelectedItem().getName(), "amount", String.valueOf(econ.getBalance() + getSelectedItem().getAmount())/*, 
 							"price", String.format("%.2f", stock.parsePrice(getSelectedItem(), "buy", getSelectedItem().getAmount())).replace(',', '.')*/);
 				}
 			}
