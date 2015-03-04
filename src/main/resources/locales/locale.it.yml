@@ -13,7 +13,7 @@ messages:
   trader-stock-back: ^6Sei tornato alla modalità stock
   trader-stock-price-set: '^6Settato il prezzo per: ^3{items}^6 oggetti'
   trader-stock-price-reset: '^6Resetato tutti i prezzi dello stock'
-  trader-transaction-item: '^6Avrai ^3{amount}^6 dopo {action} ^3{item}'
+  trader-transaction-item: '^6Avrai ^3{price}^6 dopo {action} ^3{item}'
   trader-transaction-success: ^3Hai acquistato/venduto un oggetto
   trader-transaction-failed-player-money: ^6Non hai abbastanza denaro
   trader-transaction-failed-trader-money: ^6{npc} non ha abbastanza denaro
