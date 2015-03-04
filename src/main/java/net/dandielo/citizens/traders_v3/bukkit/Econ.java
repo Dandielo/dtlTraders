@@ -41,6 +41,11 @@ public class Econ {
 		return enabled;
 	}
 	
+	public int getBalance(UUID uid) 
+	{
+		return economy.getBalance(Bukkit.getOfflinePlayer(uid));
+	}
+	
 	public boolean check(UUID uid, double amount) 
 	{
 		return economy.getBalance(Bukkit.getOfflinePlayer(uid)) >= amount;
