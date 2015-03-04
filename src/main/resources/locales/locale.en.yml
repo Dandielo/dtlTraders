@@ -13,7 +13,7 @@ messages:
   trader-stock-back: '^6You moved back to regular stock'
   trader-stock-price-set: '^6Set the price for: ^3{items}^6 items'
   trader-stock-price-reset: '^6Reseted all prices in stock'
-  trader-transaction-item: '^6{item}, price: ^e{price}'
+  trader-transaction-item: '^6You will have ^3{amount}^6 after {action} ^3{item}'
   trader-transaction-success: '^6You {action} ^3{amount} ^3{item}'
   trader-transaction-failed-limit-reached: '^6You reached your limit'
   trader-transaction-failed-player-money: '^6You cannot pay for this'
@@ -91,6 +91,7 @@ keywords:
   food-level: 'food'
   experience: 'experience'
   exp-level: 'levels'
+  buy: Buy
   bought: Bought
   owner: Owner
   amount: Amount
@@ -99,6 +100,7 @@ keywords:
   timeout: Timeout
   price: Price
   name: Name
+  sell: Sell
   sold: Sold
   enabled: Enabled
   disabled: Disabled
