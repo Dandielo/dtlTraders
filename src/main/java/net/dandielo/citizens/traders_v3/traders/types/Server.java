@@ -349,8 +349,8 @@ public class Server extends Trader {
 			else
 			{
 				//informations about the item some1 wants to buy
-				locale.sendMessage(player, "trader-transaction-buyitem",
-						"item", getSelectedItem().getName(), "amount", String.valueOf(econ.getBalance() - getSelectedItem().getAmount(slot))/*, 
+				locale.sendMessage(player, "trader-transaction-item",
+						"amount", String.valueOf(econ.getBalance() - getSelectedItem().getAmount(slot)), "action", "#buy", "item", getSelectedItem().getName()/*, 
 						"price", String.format("%.2f", stock.parsePrice(getSelectedItem(), "sell", getSelectedItem().getAmount(slot))).replace(',', '.')*/);
 			}
 		}
@@ -430,8 +430,8 @@ public class Server extends Trader {
 					else
 					{
 						//informations about the item some1 wants to buy
-						locale.sendMessage(player, "trader-transaction-buyitem",
-								"item", getSelectedItem().getName(), "amount", String.valueOf(econ.getBalance() - getSelectedItem().getAmount()/*, 
+						locale.sendMessage(player, "trader-transaction-item",
+								"amount", String.valueOf(econ.getBalance() - getSelectedItem().getAmount()), "action", "#buy", "item", getSelectedItem().getName()/*, 
 								"price", String.format("%.2f", stock.parsePrice(getSelectedItem(), "sell", getSelectedItem().getAmount())).replace(',', '.')*/);
 					}
 			}
@@ -490,8 +490,8 @@ public class Server extends Trader {
 				else
 				{
 					//informations about the item some1 wants to buy
-					locale.sendMessage(player, "trader-transaction-buyitem",
-							"item", getSelectedItem().getName(), "amount", String.valueOf(econ.getBalance() - getSelectedItem().getAmount())/*, 
+					locale.sendMessage(player, "trader-transaction-item",
+							"amount", String.valueOf(econ.getBalance() - getSelectedItem().getAmount()), "action", "#buy", "item", getSelectedItem().getName()/*, 
 							"price", String.format("%.2f", stock.parsePrice(getSelectedItem(), "sell", getSelectedItem().getAmount())).replace(',', '.')*/);
 				}
 			}
@@ -564,8 +564,8 @@ public class Server extends Trader {
 				else
 				{
 					//send the information message
-					locale.sendMessage(player, "trader-transaction-sellitem",
-							"item", getSelectedItem().getName(), "amount", String.valueOf(econ.getBalance() + getSelectedItem().getAmount())/*, 
+					locale.sendMessage(player, "trader-transaction-item",
+							"amount", String.valueOf(econ.getBalance() + getSelectedItem().getAmount()), "action", "#sell", "item", getSelectedItem().getName()/*, 
 							"price", String.format("%.2f", stock.parsePrice(getSelectedItem(), "buy", getSelectedItem().getAmount())*scale).replace(',', '.')*/);
 				}
 			}
@@ -621,7 +621,7 @@ public class Server extends Trader {
 				{
 					//send the information message
 					locale.sendMessage(player, "trader-transaction-item",
-							"item", getSelectedItem().getName(), "amount", String.valueOf(econ.getBalance() + getSelectedItem().getAmount())/*, 
+							"amount", String.valueOf(econ.getBalance() + getSelectedItem().getAmount()), "action", "#sell", "item", getSelectedItem().getName()/*, 
 							"price", String.format("%.2f", stock.parsePrice(getSelectedItem(), "buy", getSelectedItem().getAmount())).replace(',', '.')*/);
 				}
 			}
