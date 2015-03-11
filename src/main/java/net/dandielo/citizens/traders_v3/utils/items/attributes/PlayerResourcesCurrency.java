@@ -88,7 +88,7 @@ public class PlayerResourcesCurrency extends ItemAttr implements CurrencyHandler
 		}
 		else if (stock.equals("buy")) 
 		{
-			return true;
+			return info.getBuyer() != null;
 		}
 		return false;
 	}

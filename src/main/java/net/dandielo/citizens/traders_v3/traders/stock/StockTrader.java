@@ -23,7 +23,6 @@ public class StockTrader extends Stock {
 	public StockTrader(Settings settings)
 	{
 		super(settings);
-		this.settings = settings;
 	}
 
 	//stock operations

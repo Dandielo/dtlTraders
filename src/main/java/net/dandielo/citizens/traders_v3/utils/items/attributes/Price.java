@@ -103,7 +103,7 @@ public class Price extends ItemAttr implements CurrencyHandler {
 
 	@Override
 	public boolean allowTransaction(TransactionInfo info) {
-		if (price < 0)
+		if (price < 0 || info.getBuyer() == null)
 			return false;
 		return info.getBuyer().check(info.getTotalScaling() * price);
 	}

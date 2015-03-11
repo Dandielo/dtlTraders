@@ -50,7 +50,7 @@ public class WalletTrait extends Trait {
 		wallet.setMoney(money);
 	}
 
-	public  double getBalance()
+	public double getBalance()
 	{
 		return wallet.getMoney();
 	}

@@ -31,6 +31,7 @@ public class ShopSession {
 	 * 
 	 * <p>This session type allows to manipulate on a players and traders.</p> 
 	 * @param trader
+	 * @param wallet 
 	 * @param player
 	 */
 	public ShopSession(Trader trader, Player player)
