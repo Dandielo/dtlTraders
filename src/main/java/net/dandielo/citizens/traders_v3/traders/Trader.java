@@ -993,4 +993,15 @@ public abstract class Trader implements tNpc {
 		return settings.getNPC().getId() == npc.getId();
 	}
 	
+	
+	protected void sendTransactionMessage(String message, String action, double price) {		
+		locale.sendMessage(player, message, (Object[]) new String[] {
+			"player", player.getName(),
+			"trader", getNPC().getName(),
+			"item", selectedItem.getName(),
+			"amount", String.valueOf(selectedItem.getAmount()),
+			"price", String.format("%.2f", price).replace(',', '.'),
+			"action", action //#bought or #sold
+		});
+	}
 }

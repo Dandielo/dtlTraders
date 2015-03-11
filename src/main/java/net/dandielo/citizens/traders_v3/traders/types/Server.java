@@ -324,15 +324,10 @@ public class Server extends Trader {
 						addToInventory(slot);
 					
 					//prepare substitution args (for default Price attribute)
-					//TODO: rework
 					StockItem item = getSelectedItem();
 					double price = session.getCurrencyValue("sell", item, item.getAmount(slot), Price.class);
-
-					//send message
-					locale.sendMessage(player, "trader-transaction-success", "trader", getNPC().getName(),
-							"player", player.getName(), "action", "#bought", "item", getSelectedItem().getName(),
-							"amount", String.valueOf(getSelectedItem().getAmount(slot)), "price", String.format("%.2f", price).replace(',', '.'));
-
+					sendTransactionMessage("trader-transaction-success", "#bought", price);
+					
 					//update limits
 					updateSellLimits(slot);
 
@@ -342,14 +337,9 @@ public class Server extends Trader {
 			}
 			else
 			{
-				//TODO: rework
 				StockItem item = getSelectedItem();
 				double price = session.getCurrencyValue("sell", item, item.getAmount(slot), Price.class);
-				
-				//informations about the item some1 wants to buy
-				locale.sendMessage(player, "trader-transaction-item",
-						"item", getSelectedItem().getName(), "amount", String.valueOf(getSelectedItem().getAmount(slot)), 
-						"price", String.format("%.2f", price).replace(',', '.'));
+				sendTransactionMessage("trader-transaction-item", "#info", price);
 			}
 		}
 	}
@@ -412,15 +402,9 @@ public class Server extends Trader {
 									if ( transactionEvent(TransactionResult.SUCCESS_PLAYER_BUY).isSaveToInv() )
 										addToInventory();
 
-									//TODO: rework
 									StockItem item = getSelectedItem();
 									double price = session.getCurrencyValue("sell", item, item.getAmount(), Price.class);
-									
-
-									//send message
-									locale.sendMessage(player, "trader-transaction-success", "trader", getNPC().getName(),
-											"player", player.getName(), "action", "#bought", "item", getSelectedItem().getName(),
-											"amount", String.valueOf(getSelectedItem().getAmount()), "price", String.format("%.2f", price).replace(',', '.'));
+									sendTransactionMessage("trader-transaction-success", "#bought", price);
 
 									//update limits
 									updateSellLimits();
@@ -431,14 +415,9 @@ public class Server extends Trader {
 					}
 					else
 					{
-						//TODO: rework
 						StockItem item = getSelectedItem();
 						double price = session.getCurrencyValue("sell", item, item.getAmount(), Price.class);
-						
-						//informations about the item some1 wants to buy
-						locale.sendMessage(player, "trader-transaction-item",
-								"item", getSelectedItem().getName(), "amount", String.valueOf(getSelectedItem().getAmount()), 
-								"price", String.format("%.2f", price).replace(',', '.'));
+						sendTransactionMessage("trader-transaction-item", "#info", price);
 					}
 			}
 		}
@@ -480,15 +459,11 @@ public class Server extends Trader {
 								if ( transactionEvent(TransactionResult.SUCCESS_PLAYER_BUY).isSaveToInv() )
 									addToInventory();
 
-								//TODO: rework
 								StockItem item = getSelectedItem();
 								double price = session.getCurrencyValue("sell", item, item.getAmount(), Price.class);
 								
 								//send message
-								locale.sendMessage(player, "trader-transaction-success", "trader", getNPC().getName(),
-										"player", player.getName(), "action", "#bought", "item", getSelectedItem().getName(),
-										"amount", String.valueOf(getSelectedItem().getAmount()), 
-										"price", String.format("%.2f", price).replace(',', '.'));
+								sendTransactionMessage("trader-transaction-success", "#bought", price);
 
 								//update limits
 								updateSellLimits();
@@ -499,14 +474,9 @@ public class Server extends Trader {
 				}
 				else
 				{
-					//TODO: rework
 					StockItem item = getSelectedItem();
 					double price = session.getCurrencyValue("sell", item, item.getAmount(), Price.class);
-					
-					//informations about the item some1 wants to buy
-					locale.sendMessage(player, "trader-transaction-item",
-							"item", getSelectedItem().getName(), "amount", String.valueOf(getSelectedItem().getAmount()), 
-							"price", String.format("%.2f", price).replace(',', '.'));
+					sendTransactionMessage("trader-transaction-item", "#info", price);
 				}
 			}
 		}
@@ -563,15 +533,11 @@ public class Server extends Trader {
 							//remove the amount from inventory
 							removeFromInventory(slot, scale);
 
-							//TODO: rework
 							StockItem item = getSelectedItem();
 							double price = session.getCurrencyValue("sell", item, item.getAmount(), Price.class) * scale;
 							
 							//send the transaction success message
-							locale.sendMessage(player, "trader-transaction-success", "trader", getNPC().getName(),
-									"player", player.getName(), "action", "#sold", "item", getSelectedItem().getName(),
-									"amount", String.valueOf(getSelectedItem().getAmount()*scale), 
-									"price", String.format("%.2f", price).replace(',', '.'));
+							sendTransactionMessage("trader-transaction-success", "#sold", price);
 
 							updateBuyLimits(scale);
 
@@ -581,15 +547,9 @@ public class Server extends Trader {
 				}
 				else
 				{
-					//TODO: rework
 					StockItem item = getSelectedItem();
 					double price = session.getCurrencyValue("sell", item, item.getAmount(), Price.class) * scale;
-					
-					
-					//send the information message
-					locale.sendMessage(player, "trader-transaction-item",
-							"item", getSelectedItem().getName(), "amount", String.valueOf(getSelectedItem().getAmount()), 
-							"price", String.format("%.2f", price).replace(',', '.'));
+					sendTransactionMessage("trader-transaction-item", "#info", price);
 				}
 			}
 		}
@@ -627,15 +587,11 @@ public class Server extends Trader {
 							//remove the amount from inventory
 							removeFromInventory(slot);
 
-							//TODO: rework
 							StockItem item = getSelectedItem();
 							double price = session.getCurrencyValue("sell", item, item.getAmount(), Price.class);
 							
 							//send the transaction success message
-							locale.sendMessage(player, "trader-transaction-success", "trader", getNPC().getName(),
-									"player", player.getName(), "action", "#sold", "item", getSelectedItem().getName(),
-									"amount", String.valueOf(getSelectedItem().getAmount()), 
-									"price", String.format("%.2f", price).replace(',', '.'));
+							sendTransactionMessage("trader-transaction-success", "#sold", price);
 
 							//update limits
 							updateBuyLimits();
@@ -646,15 +602,9 @@ public class Server extends Trader {
 				}
 				else
 				{
-					//TODO: rework
 					StockItem item = getSelectedItem();
 					double price = session.getCurrencyValue("sell", item, item.getAmount(), Price.class);
-					
-					
-					//send the information message
-					locale.sendMessage(player, "trader-transaction-item",
-							"item", getSelectedItem().getName(), "amount", String.valueOf(getSelectedItem().getAmount()), 
-							"price", String.format("%.2f", price).replace(',', '.'));
+					sendTransactionMessage("trader-transaction-item", "#info", price);
 				}
 			}
 		}
