@@ -2,7 +2,7 @@ package net.dandielo.citizens.traders_v3.core.commands;
 
 import net.citizensnpcs.Citizens;
 import net.citizensnpcs.api.CitizensAPI;
-import net.dandielo.citizens.traders_v3.tNpc;
+import net.dandielo.citizens.traders_v3.TradingEntity;
 import net.dandielo.citizens.traders_v3.tNpcManager;
 
 import org.bukkit.command.Command;
@@ -27,7 +27,7 @@ public class DtlCommandExecutor implements CommandExecutor {
 		
 		if ( sender instanceof Player )
 		{
-	    	tNpc npc = manager.getRelation(sender.getName(), tNpc.class);
+	    	TradingEntity npc = manager.getRelation(sender.getName(), TradingEntity.class);
 			return cManager.execute(name, args, sender, npc);
 		}
 		return true;

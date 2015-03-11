@@ -15,8 +15,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
 import net.citizensnpcs.api.npc.NPC;
-import net.dandielo.citizens.traders_v3.tNpc;
-import net.dandielo.citizens.traders_v3.tNpcStatus;
+import net.dandielo.citizens.traders_v3.TradingEntity;
+import net.dandielo.citizens.traders_v3.TEntityStatus;
 import net.dandielo.citizens.traders_v3.bukkit.Perms;
 import net.dandielo.citizens.traders_v3.core.dB;
 import net.dandielo.citizens.traders_v3.core.events.trader.TraderTransactionEvent;
@@ -38,7 +38,7 @@ import net.dandielo.citizens.traders_v3.utils.NBTUtils;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.PatternItem;
 import net.dandielo.citizens.traders_v3.utils.items.flags.Lore;
 
-public abstract class Trader implements tNpc {
+public abstract class Trader implements TradingEntity {
 	
 	/**
 	 * All registered click functions for each trader type
@@ -93,8 +93,8 @@ public abstract class Trader implements tNpc {
 	 * Temporary trader data
 	 */
 	protected Inventory inventory;
-	protected tNpcStatus baseStatus;
-	protected tNpcStatus status;
+	protected TEntityStatus baseStatus;
+	protected TEntityStatus status;
 	
 	/*
 	 * Temporary item data
@@ -144,7 +144,7 @@ public abstract class Trader implements tNpc {
 	 * @return
 	 * the current status for the trader
 	 */
-	public tNpcStatus getStatus() 
+	public TEntityStatus getStatus() 
 	{
 		return status;
 	}
@@ -197,13 +197,13 @@ public abstract class Trader implements tNpc {
 	 * @param newStatus
 	 * the new applied status
 	 */
-	public void parseStatus(tNpcStatus newStatus)
+	public void parseStatus(TEntityStatus newStatus)
 	{
 		//set the general status variable
 	    status = newStatus;
 	    
 	    //parse the newStatus, this will determine if the new status is a base status (stock switching)
-		baseStatus = tNpcStatus.parseBaseManageStatus(baseStatus, newStatus);
+		baseStatus = TEntityStatus.parseBaseManageStatus(baseStatus, newStatus);
 	}
 	
 	@Override
@@ -394,7 +394,7 @@ public abstract class Trader implements tNpc {
 		int i = 0;
 		for ( ItemStack item : inv.getContents() )
 		{
-			if ( selectAndCheckNewItem(item) && status.equals(tNpcStatus.MANAGE_PRICE) )
+			if ( selectAndCheckNewItem(item) && status.equals(TEntityStatus.MANAGE_PRICE) )
 			{
 				//set price lore to special items
 				double value = GlobalSettings.getBlockValue(item);
@@ -405,7 +405,7 @@ public abstract class Trader implements tNpc {
 					inv.setItem(i, Lore.addLore(NBTUtils.cleanItem(item), lore));
 				}
 			}
-			else if (selectAndCheckNewItem(item) && status.equals(tNpcStatus.MANAGE_LIMIT))
+			else if (selectAndCheckNewItem(item) && status.equals(TEntityStatus.MANAGE_LIMIT))
 			{
 				//set time and limit lore for special items
 				List<String> lore = new ArrayList<String>();
@@ -929,9 +929,9 @@ public abstract class Trader implements tNpc {
 	 * @param stat
 	 *     array to check
 	 */
-	protected boolean checkStatusWith(tNpcStatus[] stat)
+	protected boolean checkStatusWith(TEntityStatus[] stat)
 	{
-		for ( tNpcStatus s : stat )
+		for ( TEntityStatus s : stat )
 			if ( s.equals(status) )
 				return true;
 		return false;
@@ -968,18 +968,18 @@ public abstract class Trader implements tNpc {
 	 * @return
 	 * the start stock (status) for the specified trader
 	 */
-	protected tNpcStatus getDefaultStatus()
+	protected TEntityStatus getDefaultStatus()
 	{
-		return tNpcStatus.baseStatus(settings.getStockStart());
+		return TEntityStatus.baseStatus(settings.getStockStart());
 	}
 
 	/**
 	 * @return
 	 * the management start stock (status) for the specified trader
 	 */
-	protected tNpcStatus getDefaultManagementStatus()
+	protected TEntityStatus getDefaultManagementStatus()
 	{
-		return tNpcStatus.baseManagementStatus(settings.getManagerStockStart());
+		return TEntityStatus.baseManagementStatus(settings.getManagerStockStart());
 	}
 
 	/**

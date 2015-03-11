@@ -8,7 +8,7 @@ import org.bukkit.inventory.ItemStack;
  * @author dandielo
  *
  */
-public interface tNpc {
+public interface TradingEntity {
 
 	/**
 	 * Allows simply to lock and save all unsaved changes to a tNpc on inventory close events
@@ -16,7 +16,7 @@ public interface tNpc {
 	public void lockAndSave();
 	
 	/**
-	 * Handles a left click on the tNPC
+	 * Handles a left click on the entity
 	 * @param itemInHand
 	 * the item hold when left clicking
 	 * @return
@@ -25,7 +25,7 @@ public interface tNpc {
 	public void onLeftClick(ItemStack itemInHand);
 	
 	/**
-	 * Handles a right click on the tNPC
+	 * Handles a right click on the entity
 	 * @param itemInHand
 	 * the item hold when right clicking
 	 * @return
@@ -49,7 +49,7 @@ public interface tNpc {
     
     /**
      * @return
-     * the currents tNpc status
+     * the current entity traging status
      */
-    public tNpcStatus getStatus();
+    public TEntityStatus getStatus();
 }

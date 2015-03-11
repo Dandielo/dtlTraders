@@ -9,7 +9,7 @@ import net.aufdemrand.denizen.objects.aH;
 import net.aufdemrand.denizen.utilities.debugging.dB;
 
 import net.dandielo.api.traders.TraderAPI;
-import net.dandielo.citizens.traders_v3.tNpcStatus;
+import net.dandielo.citizens.traders_v3.TEntityStatus;
 import net.dandielo.citizens.traders_v3.traits.TraderTrait;
 
 /**
@@ -31,7 +31,7 @@ public class TraderCommand extends AbstractCommand implements dExternal {
 	public void parseArgs(ScriptEntry scriptEntry) throws InvalidArgumentsException {
 		//Arguments 
 		Action action = null;
-		tNpcStatus status = tNpcStatus.SELL;
+		TEntityStatus status = TEntityStatus.SELL;
 		Context context = Context.STOCK;
 		
 		// Interpret arguments
@@ -41,7 +41,7 @@ public class TraderCommand extends AbstractCommand implements dExternal {
 				 action = Action.valueOf(arg);
 
 			 if ( aH.matchesArg("SELL, BUY", arg) )
-				 status = tNpcStatus.baseStatus(arg);
+				 status = TEntityStatus.baseStatus(arg);
 			 
 			 if ( aH.matchesArg("SELL, BUY", arg) )
 				 context = Context.valueOf(arg);
@@ -69,7 +69,7 @@ public class TraderCommand extends AbstractCommand implements dExternal {
 
 		// Fetch required objects
 		Action action = (Action) scriptEntry.getObject("action");
-		tNpcStatus status = (tNpcStatus) scriptEntry.getObject("status");
+		TEntityStatus status = (TEntityStatus) scriptEntry.getObject("status");
 		Context context = (Context) scriptEntry.getObject("context");
 		TraderTrait trait = scriptEntry.getNPC().getCitizen().getTrait(TraderTrait.class);
 

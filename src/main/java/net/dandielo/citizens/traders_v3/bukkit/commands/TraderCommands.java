@@ -14,7 +14,7 @@ import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.trait.trait.MobType;
 import net.dandielo.citizens.traders_v3.tNpcManager;
-import net.dandielo.citizens.traders_v3.tNpcStatus;
+import net.dandielo.citizens.traders_v3.TEntityStatus;
 import net.dandielo.citizens.traders_v3.bukkit.DtlTraders;
 import net.dandielo.citizens.traders_v3.core.commands.Command;
 import net.dandielo.citizens.traders_v3.core.events.trader.TraderCreateEvent;
@@ -102,8 +102,8 @@ public class TraderCommands {
 		nTrader.getSettings().setType(type);
 
 		//start with the unlocked status, to allow fast stock setting 
-		nTrader.parseStatus(tNpcStatus.MANAGE_SELL);
-		nTrader.parseStatus(tNpcStatus.MANAGE_UNLOCKED);
+		nTrader.parseStatus(TEntityStatus.MANAGE_SELL);
+		nTrader.parseStatus(TEntityStatus.MANAGE_UNLOCKED);
 
 		//register the relation
 		tNpcManager.instance().registerRelation(sender, nTrader);
@@ -688,7 +688,7 @@ public class TraderCommands {
 			Trader nTrader = (Trader) tNpcManager.create_tNpc(result, result.getTrait(TraderTrait.class).getType(), sender, TraderTrait.class);
 
 			//start with the unlocked status, to allow fast stock setting 
-			nTrader.parseStatus(tNpcStatus.MANAGE_SELL);
+			nTrader.parseStatus(TEntityStatus.MANAGE_SELL);
 
 			//register the relation
 			tNpcManager.instance().registerRelation(sender, nTrader);

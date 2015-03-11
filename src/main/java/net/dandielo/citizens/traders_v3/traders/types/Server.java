@@ -6,7 +6,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 import net.dandielo.citizens.traders_v3.tNpcManager;
-import net.dandielo.citizens.traders_v3.tNpcStatus;
+import net.dandielo.citizens.traders_v3.TEntityStatus;
 import net.dandielo.citizens.traders_v3.tNpcType;
 import net.dandielo.citizens.traders_v3.core.dB;
 import net.dandielo.citizens.traders_v3.core.events.trader.TraderClickEvent;
@@ -143,7 +143,7 @@ public class Server extends Trader {
 		}
 	}
 
-	@ClickHandler(status = {tNpcStatus.SELL, tNpcStatus.BUY, tNpcStatus.SELL_AMOUNTS}, inventory = InventoryType.TRADER)
+	@ClickHandler(status = {TEntityStatus.SELL, TEntityStatus.BUY, TEntityStatus.SELL_AMOUNTS}, inventory = InventoryType.TRADER)
 	public void generalUI(InventoryClickEvent e)
 	{
 		//debug info
@@ -164,7 +164,7 @@ public class Server extends Trader {
 				locale.sendMessage(player, "trader-stock-toggled", "stock", "#stock-buy");
 
 				//change status
-				parseStatus(tNpcStatus.BUY);
+				parseStatus(TEntityStatus.BUY);
 			}
 			else
 				if ( hitTest(slot, "sell") )
@@ -176,7 +176,7 @@ public class Server extends Trader {
 					locale.sendMessage(player, "trader-stock-toggled", "stock", "#stock-sell");
 
 					//change status
-					parseStatus(tNpcStatus.SELL);
+					parseStatus(TEntityStatus.SELL);
 				}
 				else
 					if ( hitTest(slot, "back") )
@@ -188,7 +188,7 @@ public class Server extends Trader {
 						locale.sendMessage(player, "trader-stock-back");
 
 						//change status
-						parseStatus(tNpcStatus.SELL);
+						parseStatus(TEntityStatus.SELL);
 					}
 			//Update the inventory on EACH UI CLICK
 			stock.setInventory(inventory, getStatus());
@@ -197,7 +197,7 @@ public class Server extends Trader {
 	}
 
 	@ClickHandler(
-	status = {tNpcStatus.MANAGE_SELL, tNpcStatus.MANAGE_BUY, tNpcStatus.MANAGE_UNLOCKED, tNpcStatus.MANAGE_AMOUNTS, tNpcStatus.MANAGE_PRICE, tNpcStatus.MANAGE_LIMIT, tNpcStatus.MANAGE_PLIMIT}, 
+	status = {TEntityStatus.MANAGE_SELL, TEntityStatus.MANAGE_BUY, TEntityStatus.MANAGE_UNLOCKED, TEntityStatus.MANAGE_AMOUNTS, TEntityStatus.MANAGE_PRICE, TEntityStatus.MANAGE_LIMIT, TEntityStatus.MANAGE_PLIMIT}, 
 	inventory = InventoryType.TRADER)
 	@SuppressWarnings("static-access")
 	public void manageUI(InventoryClickEvent e)
@@ -211,7 +211,7 @@ public class Server extends Trader {
 				locale.sendMessage(player, "trader-managermode-toggled", "mode", "#stock-buy");
 
 				//change status
-				parseStatus(tNpcStatus.MANAGE_BUY);
+				parseStatus(TEntityStatus.MANAGE_BUY);
 			}
 			else
 			if ( hitTest(slot, "sell") )
@@ -220,13 +220,13 @@ public class Server extends Trader {
 				locale.sendMessage(player, "trader-managermode-toggled", "mode", "#stock-sell");
 				
 				//change status
-				parseStatus(tNpcStatus.MANAGE_SELL);
+				parseStatus(TEntityStatus.MANAGE_SELL);
 			}
 			else
 			if ( hitTest(slot, "back") )
 			{
 				//if its backing from amounts managing save those amounts
-				if ( status.equals(tNpcStatus.MANAGE_AMOUNTS) )
+				if ( status.equals(TEntityStatus.MANAGE_AMOUNTS) )
 					stock.saveNewAmounts(inventory, getSelectedItem());
 				
 				//send message
@@ -241,7 +241,7 @@ public class Server extends Trader {
 				//send message
 				locale.sendMessage(player, "trader-managermode-toggled", "mode", "#price");
 					//change status
-				parseStatus(tNpcStatus.MANAGE_PRICE);
+				parseStatus(TEntityStatus.MANAGE_PRICE);
 			}
 			else
 			if ( hitTest(slot, "lock") )
@@ -260,7 +260,7 @@ public class Server extends Trader {
 				locale.sendMessage(player, "trader-managermode-stock-unlocked");
 
 				//change status
-				parseStatus(tNpcStatus.MANAGE_UNLOCKED);
+				parseStatus(TEntityStatus.MANAGE_UNLOCKED);
 			}
 			else
 			if ( hitTest(slot, "plimit") )
@@ -269,7 +269,7 @@ public class Server extends Trader {
 				locale.sendMessage(player, "trader-managermode-toggled", "mode", "#plimit");
 
 				//change status
-				parseStatus(tNpcStatus.MANAGE_PLIMIT);
+				parseStatus(TEntityStatus.MANAGE_PLIMIT);
 			}
 			else
 			if ( hitTest(slot, "limit") )
@@ -278,7 +278,7 @@ public class Server extends Trader {
 				locale.sendMessage(player, "trader-managermode-toggled", "mode", "#limit");
 
 				//change status
-				parseStatus(tNpcStatus.MANAGE_LIMIT);
+				parseStatus(TEntityStatus.MANAGE_LIMIT);
 			}
 			
 			stock.setManagementInventory(inventory, baseStatus, status);
@@ -287,7 +287,7 @@ public class Server extends Trader {
 		}
 	}
 
-	@ClickHandler(status = {tNpcStatus.SELL_AMOUNTS}, inventory = InventoryType.TRADER)
+	@ClickHandler(status = {TEntityStatus.SELL_AMOUNTS}, inventory = InventoryType.TRADER)
 	public void sellAmountsItems(InventoryClickEvent e)
 	{
 		e.setCancelled(true);
@@ -344,7 +344,7 @@ public class Server extends Trader {
 		}
 	}
 
-	@ClickHandler(status = {tNpcStatus.SELL}, inventory = InventoryType.TRADER)
+	@ClickHandler(status = {TEntityStatus.SELL}, inventory = InventoryType.TRADER)
 	public void sellItems(InventoryClickEvent e)
 	{
 		e.setCancelled(true);
@@ -364,7 +364,7 @@ public class Server extends Trader {
 					locale.sendMessage(player, "trader-stock-toggled", "stock", "#stock-amounts");
 
 					//change status
-					status = tNpcStatus.SELL_AMOUNTS;
+					status = TEntityStatus.SELL_AMOUNTS;
 					stock.setAmountsInventory(inventory, status, getSelectedItem());
 				}
 				else
@@ -482,13 +482,13 @@ public class Server extends Trader {
 		}
 	}
 
-	@ClickHandler(status = {tNpcStatus.SELL_AMOUNTS}, inventory = InventoryType.PLAYER)
+	@ClickHandler(status = {TEntityStatus.SELL_AMOUNTS}, inventory = InventoryType.PLAYER)
 	public void sellAmountsSec(InventoryClickEvent e)
 	{
 		e.setCancelled(true);
 	}
 
-	@ClickHandler(status = {tNpcStatus.SELL, tNpcStatus.BUY}, inventory = InventoryType.PLAYER)
+	@ClickHandler(status = {TEntityStatus.SELL, TEntityStatus.BUY}, inventory = InventoryType.PLAYER)
 	public void buyItems(InventoryClickEvent e)
 	{
 		e.setCancelled(true);
@@ -611,19 +611,19 @@ public class Server extends Trader {
 	}
 
 	/* manager mode handlers */
-	@ClickHandler(status={tNpcStatus.MANAGE_UNLOCKED}, inventory=InventoryType.TRADER)
+	@ClickHandler(status={TEntityStatus.MANAGE_UNLOCKED}, inventory=InventoryType.TRADER)
 	public void setStock(InventoryClickEvent e)
 	{
 		dB.info("Unlocked stock click event");
 	}
 
-	@ClickHandler(status={tNpcStatus.MANAGE_UNLOCKED}, inventory=InventoryType.PLAYER)
+	@ClickHandler(status={TEntityStatus.MANAGE_UNLOCKED}, inventory=InventoryType.PLAYER)
 	public void getStock(InventoryClickEvent e)
 	{
 		dB.info("Unlocked stock click event");
 	}
 
-	@ClickHandler(status={tNpcStatus.MANAGE_SELL, tNpcStatus.MANAGE_BUY}, inventory=InventoryType.TRADER, shift = true)
+	@ClickHandler(status={TEntityStatus.MANAGE_SELL, TEntityStatus.MANAGE_BUY}, inventory=InventoryType.TRADER, shift = true)
 	public void itemAttribs(InventoryClickEvent e)
 	{
 		//debug info
@@ -639,7 +639,7 @@ public class Server extends Trader {
 					stock.setAmountsInventory(inventory, status, getSelectedItem());
 
 					locale.sendMessage(player, "trader-managermode-toggled", "mode", "#amount");
-					parseStatus(tNpcStatus.MANAGE_AMOUNTS);
+					parseStatus(TEntityStatus.MANAGE_AMOUNTS);
 				}
 				else //if it's a shift rightclick
 				{
@@ -689,7 +689,7 @@ public class Server extends Trader {
 		e.setCancelled(true);
 	}
 
-	@ClickHandler(status={tNpcStatus.MANAGE_SELL, tNpcStatus.MANAGE_BUY}, inventory=InventoryType.PLAYER)
+	@ClickHandler(status={TEntityStatus.MANAGE_SELL, TEntityStatus.MANAGE_BUY}, inventory=InventoryType.PLAYER)
 	public void itemsForStock(InventoryClickEvent e)
 	{
 	}
@@ -698,7 +698,7 @@ public class Server extends Trader {
 	 * Price managing for manager stock, this allows you to change prices for all items in your traders stock
 	 * @param e
 	 */
-	@ClickHandler(status={tNpcStatus.MANAGE_PRICE}, inventory=InventoryType.TRADER)
+	@ClickHandler(status={TEntityStatus.MANAGE_PRICE}, inventory=InventoryType.TRADER)
 	public void managePrices(InventoryClickEvent e)
 	{
 		//debug info
@@ -758,7 +758,7 @@ public class Server extends Trader {
 	 * Limit managing for manager stock, this allows you to change limits for all items in your traders stock
 	 * @param e
 	 */
-	@ClickHandler(status={tNpcStatus.MANAGE_LIMIT}, inventory=InventoryType.TRADER, shift = true)
+	@ClickHandler(status={TEntityStatus.MANAGE_LIMIT}, inventory=InventoryType.TRADER, shift = true)
 	public void manageLimits(InventoryClickEvent e)
 	{
 		//debug info
@@ -856,7 +856,7 @@ public class Server extends Trader {
 	 * Limit managing for manager stock, this allows you to change limits for all items in your traders stock
 	 * @param e
 	 */
-	@ClickHandler(status={tNpcStatus.MANAGE_PLIMIT}, inventory=InventoryType.TRADER, shift = true)
+	@ClickHandler(status={TEntityStatus.MANAGE_PLIMIT}, inventory=InventoryType.TRADER, shift = true)
 	public void managePlayerLimits(InventoryClickEvent e)
 	{
 		//debug info
@@ -953,21 +953,21 @@ public class Server extends Trader {
 	}
 
 	//shift handler
-	@ClickHandler(status = {tNpcStatus.SELL, tNpcStatus.BUY, tNpcStatus.SELL_AMOUNTS, tNpcStatus.MANAGE_BUY, tNpcStatus.MANAGE_SELL}, shift = true, inventory = InventoryType.TRADER)
+	@ClickHandler(status = {TEntityStatus.SELL, TEntityStatus.BUY, TEntityStatus.SELL_AMOUNTS, TEntityStatus.MANAGE_BUY, TEntityStatus.MANAGE_SELL}, shift = true, inventory = InventoryType.TRADER)
 	public void topShift(InventoryClickEvent e)
 	{
 		if ( e.isShiftClick() )
 			e.setCancelled(true);
 	}
 
-	@ClickHandler(status = {tNpcStatus.SELL, tNpcStatus.BUY, tNpcStatus.SELL_AMOUNTS, tNpcStatus.MANAGE_BUY, tNpcStatus.MANAGE_SELL}, shift = true, inventory = InventoryType.PLAYER)
+	@ClickHandler(status = {TEntityStatus.SELL, TEntityStatus.BUY, TEntityStatus.SELL_AMOUNTS, TEntityStatus.MANAGE_BUY, TEntityStatus.MANAGE_SELL}, shift = true, inventory = InventoryType.PLAYER)
 	public void botShift(InventoryClickEvent e)
 	{
 		if ( e.isShiftClick() )
 			e.setCancelled(true);
 	}
 
-	@ClickHandler(status = {tNpcStatus.SELL, tNpcStatus.BUY, tNpcStatus.SELL_AMOUNTS, tNpcStatus.MANAGE_SELL, tNpcStatus.MANAGE_BUY, tNpcStatus.MANAGE_AMOUNTS, tNpcStatus.MANAGE_PRICE, tNpcStatus.MANAGE_LIMIT}, shift = true, inventory = InventoryType.TRADER)
+	@ClickHandler(status = {TEntityStatus.SELL, TEntityStatus.BUY, TEntityStatus.SELL_AMOUNTS, TEntityStatus.MANAGE_SELL, TEntityStatus.MANAGE_BUY, TEntityStatus.MANAGE_AMOUNTS, TEntityStatus.MANAGE_PRICE, TEntityStatus.MANAGE_LIMIT}, shift = true, inventory = InventoryType.TRADER)
 	public void topDebug(InventoryClickEvent e)
 	{
 		//debug info
@@ -975,7 +975,7 @@ public class Server extends Trader {
 		dB.info("slot: ", e.getSlot(), ", left: ", e.isLeftClick(), ", shift: ", e.isShiftClick());
 	}
 
-	@ClickHandler(status = {tNpcStatus.SELL, tNpcStatus.BUY, tNpcStatus.SELL_AMOUNTS, tNpcStatus.MANAGE_SELL, tNpcStatus.MANAGE_BUY, tNpcStatus.MANAGE_AMOUNTS, tNpcStatus.MANAGE_PRICE, tNpcStatus.MANAGE_LIMIT}, shift = true, inventory = InventoryType.PLAYER)
+	@ClickHandler(status = {TEntityStatus.SELL, TEntityStatus.BUY, TEntityStatus.SELL_AMOUNTS, TEntityStatus.MANAGE_SELL, TEntityStatus.MANAGE_BUY, TEntityStatus.MANAGE_AMOUNTS, TEntityStatus.MANAGE_PRICE, TEntityStatus.MANAGE_LIMIT}, shift = true, inventory = InventoryType.PLAYER)
 	public void botDebug(InventoryClickEvent e)
 	{
 		//debug info
@@ -983,27 +983,27 @@ public class Server extends Trader {
 		dB.info("slot: ", e.getSlot(), ", left: ", e.isLeftClick(), ", shift: ", e.isShiftClick());
 	}
 
-	@ClickHandler(status = {tNpcStatus.SELL, tNpcStatus.BUY, tNpcStatus.SELL_AMOUNTS}, inventory = InventoryType.TRADER)
+	@ClickHandler(status = {TEntityStatus.SELL, TEntityStatus.BUY, TEntityStatus.SELL_AMOUNTS}, inventory = InventoryType.TRADER)
 	public void __topUpdate(InventoryClickEvent e)
 	{
 		limits.refreshAll();
-		if (status.equals(tNpcStatus.SELL_AMOUNTS))
+		if (status.equals(TEntityStatus.SELL_AMOUNTS))
 			stock.setAmountsInventory(inventory, status, getSelectedItem());
 		else
 			stock.setInventory(inventory, status);
 	}
-	@ClickHandler(status = {tNpcStatus.SELL, tNpcStatus.BUY, tNpcStatus.SELL_AMOUNTS}, inventory = InventoryType.PLAYER)
+	@ClickHandler(status = {TEntityStatus.SELL, TEntityStatus.BUY, TEntityStatus.SELL_AMOUNTS}, inventory = InventoryType.PLAYER)
 	public void __bottomUpdate(InventoryClickEvent e)
 	{
 		limits.refreshAll();
-		if (status.equals(tNpcStatus.SELL_AMOUNTS))
+		if (status.equals(TEntityStatus.SELL_AMOUNTS))
 			stock.setAmountsInventory(inventory, status, getSelectedItem());
 		else
 			stock.setInventory(inventory, status);
 	}
 
 	@SuppressWarnings("deprecation")
-	@ClickHandler(status = {tNpcStatus.SELL, tNpcStatus.BUY, tNpcStatus.SELL_AMOUNTS}, inventory = InventoryType.PLAYER)
+	@ClickHandler(status = {TEntityStatus.SELL, TEntityStatus.BUY, TEntityStatus.SELL_AMOUNTS}, inventory = InventoryType.PLAYER)
 	public void __last(InventoryClickEvent e)
 	{
 		//Temporary fix for Touchscreen issue!

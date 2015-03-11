@@ -2,7 +2,7 @@ package net.dandielo.citizens.traders_v3.traders.stock;
 
 import java.util.List;
 
-import net.dandielo.citizens.traders_v3.tNpcStatus;
+import net.dandielo.citizens.traders_v3.TEntityStatus;
 import net.dandielo.citizens.traders_v3.core.dB;
 import net.dandielo.citizens.traders_v3.traders.setting.Settings;
 import net.dandielo.citizens.traders_v3.traders.transaction.ShopSession;
@@ -23,14 +23,14 @@ public class StockPlayer extends StockTrader {
 	}
 
 	@Override
-	public Inventory getInventory(tNpcStatus status) {
+	public Inventory getInventory(TEntityStatus status) {
 		Inventory inventory = getInventory();
 		setInventory(inventory, status);
 		return inventory;
 	}
 
 	@Override
-	public void setInventory(Inventory inventory, tNpcStatus status) {
+	public void setInventory(Inventory inventory, TEntityStatus status) {
 		//debug info
 		dB.info("Setting inventory, status: ", status.name().toLowerCase());
 		
@@ -55,10 +55,10 @@ public class StockPlayer extends StockTrader {
 	}
 
 	@Override
-	public void setAmountsInventory(Inventory inventory, tNpcStatus status, StockItem item) 
+	public void setAmountsInventory(Inventory inventory, TEntityStatus status, StockItem item) 
 	{
 		//debug info
-		dB.info("Setting inventory, status: ", tNpcStatus.SELL_AMOUNTS.name().toLowerCase());
+		dB.info("Setting inventory, status: ", TEntityStatus.SELL_AMOUNTS.name().toLowerCase());
 		
 		//clear the inventory
 		inventory.clear();
@@ -82,7 +82,7 @@ public class StockPlayer extends StockTrader {
 			//set the item
 			inventory.setItem(inventory.firstEmpty(), NBTUtils.markItem(itemStack));
 		}
-		setUi(inventory, null, tNpcStatus.SELL_AMOUNTS);
+		setUi(inventory, null, TEntityStatus.SELL_AMOUNTS);
 	}
 
 	public Player getPlayer()

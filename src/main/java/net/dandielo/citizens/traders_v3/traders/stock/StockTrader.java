@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.citizensnpcs.api.util.DataKey;
-import net.dandielo.citizens.traders_v3.tNpcStatus;
+import net.dandielo.citizens.traders_v3.TEntityStatus;
 import net.dandielo.citizens.traders_v3.core.dB;
 import net.dandielo.citizens.traders_v3.traders.setting.Settings;
 import net.dandielo.citizens.traders_v3.traders.setting.GlobalSettings;
@@ -156,20 +156,20 @@ public class StockTrader extends Stock {
 	}
 
 	@Override
-	public Inventory getInventory(tNpcStatus status) {
+	public Inventory getInventory(TEntityStatus status) {
 		Inventory inventory = getInventory();
 		setInventory(inventory, status);
 		return inventory;
 	}
 
 	@Override
-	public Inventory getManagementInventory(tNpcStatus baseStatus, tNpcStatus status) {
+	public Inventory getManagementInventory(TEntityStatus baseStatus, TEntityStatus status) {
 		Inventory inventory = getInventory();
 		setManagementInventory(inventory, baseStatus, status);
 		return inventory;
 	}
 
-	public void setInventory(Inventory inventory, tNpcStatus status)
+	public void setInventory(Inventory inventory, TEntityStatus status)
 	{
 		//debug info
 		dB.info("Setting inventory, status: ", status.name().toLowerCase());
@@ -190,10 +190,10 @@ public class StockTrader extends Stock {
 		setUi(inventory, null, status);
 	}
 
-	public void setAmountsInventory(Inventory inventory, tNpcStatus status, StockItem item)
+	public void setAmountsInventory(Inventory inventory, TEntityStatus status, StockItem item)
 	{
 		//debug info
-		dB.info("Setting inventory, status: ", tNpcStatus.SELL_AMOUNTS.name().toLowerCase());
+		dB.info("Setting inventory, status: ", TEntityStatus.SELL_AMOUNTS.name().toLowerCase());
 
 		//clear the inventory
 		inventory.clear();
@@ -206,10 +206,10 @@ public class StockTrader extends Stock {
 			//set the item
 			inventory.setItem(inventory.firstEmpty(), NBTUtils.markItem(itemStack));
 		}
-		setUi(inventory, null, tNpcStatus.SELL_AMOUNTS);
+		setUi(inventory, null, TEntityStatus.SELL_AMOUNTS);
 	}
 
-	public void setManagementInventory(Inventory inventory, tNpcStatus baseStatus, tNpcStatus status)
+	public void setManagementInventory(Inventory inventory, TEntityStatus baseStatus, TEntityStatus status)
 	{
 		//debug info
 		dB.info("Setting management inventory, status: ", status.name().toLowerCase(), ", base status: ", baseStatus.name().toLowerCase());
@@ -235,7 +235,7 @@ public class StockTrader extends Stock {
 		setUi(inventory, baseStatus, status);
 	}
 
-	public void setUi(Inventory inventory, tNpcStatus baseStatus, tNpcStatus status)
+	public void setUi(Inventory inventory, TEntityStatus baseStatus, TEntityStatus status)
 	{
 		Map<String, ItemStack> items = GlobalSettings.getUiItems();
 

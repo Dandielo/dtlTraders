@@ -2,7 +2,7 @@ package net.dandielo.citizens.traders_v3.bukkit;
 
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.trait.TraitInfo;
-import net.dandielo.citizens.traders_v3.tNpcListener;
+import net.dandielo.citizens.traders_v3.TEntityListener;
 import net.dandielo.citizens.traders_v3.tNpcManager;
 import net.dandielo.citizens.traders_v3.bukkit.commands.GeneralCommands;
 import net.dandielo.citizens.traders_v3.bukkit.commands.TraderCommands;
@@ -94,7 +94,7 @@ public class DtlTraders extends JavaPlugin {
 		tNpcManager.registerTypes();
 		
 		//register events
-		getServer().getPluginManager().registerEvents(tNpcListener.instance(), this);
+		getServer().getPluginManager().registerEvents(TEntityListener.instance(), this);
 		
 		//register commands
 		CommandManager.manager.registerCommands(GeneralCommands.class);

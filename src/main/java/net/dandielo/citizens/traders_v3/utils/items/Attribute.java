@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 
 import org.bukkit.Material;
 
-import net.dandielo.citizens.traders_v3.tNpcStatus;
+import net.dandielo.citizens.traders_v3.TEntityStatus;
 
 //import net.dandielo.citizens.traders_v3.traders.Trader.Status;
 
@@ -76,5 +76,5 @@ public @interface Attribute {
      * @return
      *     Status array when it should appear
      */
-    public tNpcStatus[] status() default { };
+    public TEntityStatus[] status() default { };
 }

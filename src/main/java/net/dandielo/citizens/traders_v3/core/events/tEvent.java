@@ -3,7 +3,7 @@ package net.dandielo.citizens.traders_v3.core.events;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
-import net.dandielo.citizens.traders_v3.tNpc;
+import net.dandielo.citizens.traders_v3.TradingEntity;
 import net.dandielo.citizens.traders_v3.bukkit.DtlTraders;
 
 /**
@@ -15,7 +15,7 @@ public abstract class tEvent extends Event {
 	/**
 	 * The tNpc that takes part in the event
 	 */
-	protected final tNpc npc;
+	protected final TradingEntity npc;
     
     /**
      * The player that takes part in the event
@@ -27,7 +27,7 @@ public abstract class tEvent extends Event {
      * @param npc
      * @param player
      */
-	protected tEvent(tNpc npc, Player player)
+	protected tEvent(TradingEntity npc, Player player)
 	{
 		this.npc = npc;
 		this.player = player;

@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.bukkit.inventory.ItemStack;
 
-import net.dandielo.citizens.traders_v3.tNpcStatus;
+import net.dandielo.citizens.traders_v3.TEntityStatus;
 import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeInvalidValueException;
 import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeValueNotFoundException;
 import net.dandielo.citizens.traders_v3.core.locale.LocaleManager;
@@ -14,7 +14,7 @@ import net.dandielo.citizens.traders_v3.utils.items.Attribute;
 import net.dandielo.citizens.traders_v3.utils.items.ItemAttr;
 
 @Attribute(name = "Limit", key = "l", standalone = true, priority = 0,
-status = {tNpcStatus.MANAGE_LIMIT})
+status = {TEntityStatus.MANAGE_LIMIT})
 public class Limit extends ItemAttr {
 	private String id;
 	private int limit, plimit;
@@ -122,7 +122,7 @@ public class Limit extends ItemAttr {
 	}
 
 	@Override
-	public void onStatusLoreRequest(tNpcStatus status, List<String> lore)
+	public void onStatusLoreRequest(TEntityStatus status, List<String> lore)
 	{
 		//If not in manager mode then we don't want to manage this request
 		//Maybe later just update the Attribute settings?
@@ -133,7 +133,7 @@ public class Limit extends ItemAttr {
 			lore.add(pLore.replace("{limit}", String.valueOf(limit)).replace("{timeout}", LimitManager.timeoutString(timeout)));
 	}
 	
-	public static List<String> loreRequest(String player, StockItem item, List<String> lore, tNpcStatus status)
+	public static List<String> loreRequest(String player, StockItem item, List<String> lore, TEntityStatus status)
 	{
 		LimitManager limits = LimitManager.self;
 		

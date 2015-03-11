@@ -2,7 +2,7 @@ package net.dandielo.citizens.traders_v3.utils.items.attributes;
 
 import java.util.List;
 
-import net.dandielo.citizens.traders_v3.tNpcStatus;
+import net.dandielo.citizens.traders_v3.TEntityStatus;
 import net.dandielo.citizens.traders_v3.core.dB;
 import net.dandielo.citizens.traders_v3.core.dB.DebugLevel;
 import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeInvalidValueException;
@@ -18,7 +18,7 @@ import org.bukkit.inventory.ItemStack;
 
 @Attribute(
 name="Price", key = "p", standalone = true, priority = 0,
-status = {tNpcStatus.BUY, tNpcStatus.SELL, tNpcStatus.SELL_AMOUNTS, tNpcStatus.MANAGE_PRICE})
+status = {TEntityStatus.BUY, TEntityStatus.SELL, TEntityStatus.SELL_AMOUNTS, TEntityStatus.MANAGE_PRICE})
 public class Price extends ItemAttr implements CurrencyHandler {
     //public static String lorePattern = ChatColor.GOLD + "Price: " + ChatColor.GRAY;
 	//private static Econ econ = Econ.econ;
@@ -82,7 +82,7 @@ public class Price extends ItemAttr implements CurrencyHandler {
 	
 
 	@Override
-	public void onStatusLoreRequest(tNpcStatus status, List<String> lore)
+	public void onStatusLoreRequest(TEntityStatus status, List<String> lore)
 	{
 		if ( !status.inManagementMode() ) return;
 

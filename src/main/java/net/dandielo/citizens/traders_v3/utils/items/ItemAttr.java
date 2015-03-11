@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.dandielo.citizens.traders_v3.tNpcStatus;
+import net.dandielo.citizens.traders_v3.TEntityStatus;
 import net.dandielo.citizens.traders_v3.bukkit.DtlTraders;
 import net.dandielo.citizens.traders_v3.core.dB;
 import net.dandielo.citizens.traders_v3.core.exceptions.InvalidItemException;
@@ -168,7 +168,7 @@ public abstract class ItemAttr {
 	 * @param lore
 	 *     Lore list, allows to re-arrange previous assigned lore. 
 	 */
-	public void onStatusLoreRequest(tNpcStatus status, List<String> lore)
+	public void onStatusLoreRequest(TEntityStatus status, List<String> lore)
 	{
 	}
 

@@ -10,7 +10,7 @@ import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.trait.trait.MobType;
 import net.dandielo.citizens.traders_v3.tNpcManager;
-import net.dandielo.citizens.traders_v3.tNpcStatus;
+import net.dandielo.citizens.traders_v3.TEntityStatus;
 import net.dandielo.citizens.traders_v3.traders.Trader;
 import net.dandielo.citizens.traders_v3.traders.setting.GlobalSettings;
 import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
@@ -60,7 +60,7 @@ public class TraderAPI {
 		npc.destroy();
 		return true;
 	}
-	public static boolean toggleStatus(Player player, tNpcStatus status)
+	public static boolean toggleStatus(Player player, TEntityStatus status)
 	{
 		Trader trader = tNpcManager.instance().getTraderRelation(player);
 		if ( trader == null )
@@ -69,7 +69,7 @@ public class TraderAPI {
 		return true;
 	}
 	
-	public static boolean openTrader(Player player, TraderTrait trait, tNpcStatus status, boolean openInv)
+	public static boolean openTrader(Player player, TraderTrait trait, TEntityStatus status, boolean openInv)
 	{
 		//check for a relation
 		Trader trader = manager.getTraderRelation(player);

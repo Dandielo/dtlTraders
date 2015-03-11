@@ -1,8 +1,8 @@
 package net.dandielo.citizens.traders_v3;
 
-import static net.dandielo.citizens.traders_v3.tNpcStatus.StatusType.*;
+import static net.dandielo.citizens.traders_v3.TEntityStatus.StatusType.*;
 
-public enum tNpcStatus
+public enum TEntityStatus
 {
 	/*
 	 * Trader status declarations
@@ -18,18 +18,6 @@ public enum tNpcStatus
 	MANAGE_LIMIT(TRADER, "mLimit"), 
 	MANAGE_PLIMIT(TRADER, "mpLimit"), 
 	MANAGE_UNLOCKED(TRADER, "mUnlocked"),
-	
-	/*
-	 * Banker status declarations
-	 */
-	ACCOUNT_LOCKED(BANKER, "aLocked"),
-	ACCOUNT_UNLOCKED(BANKER, "aUnlocked"),
-	ACCOUNT_MANAGE(BANKER, "aManage"),
-	
-	
-	/*
-	 * Auction status declarations
-	 */
 	;
 	
 	
@@ -43,7 +31,7 @@ public enum tNpcStatus
 	 * @param statusName
 	 * the status name
 	 */
-	tNpcStatus(StatusType type, String statusName)
+	TEntityStatus(StatusType type, String statusName)
 	{
 		this.type = type;
 		this.statusName = statusName;
@@ -65,32 +53,31 @@ public enum tNpcStatus
 	 */
 	public static enum StatusType
     {
-    	TRADER, BANKER, AUCTION
+    	TRADER
     }
 	
 	/*
 	 * Trader methods
 	 */
-	
 	public boolean inManagementMode()
 	{
-		return !( this.equals(SELL) || this.equals(BUY) || this.equals(SELL_AMOUNTS) || this.type.equals(BANKER) ); 
+		return !(this.equals(SELL) || this.equals(BUY) || this.equals(SELL_AMOUNTS)); 
 	}
 	
-	public static tNpcStatus parseBaseManageStatus(tNpcStatus oldStatus, tNpcStatus newStatus)
+	public static TEntityStatus parseBaseManageStatus(TEntityStatus oldStatus, TEntityStatus newStatus)
 	{
 		return newStatus.equals(MANAGE_SELL) || newStatus.equals(MANAGE_BUY) ||
 				newStatus.equals(SELL) || newStatus.equals(BUY) ? newStatus : oldStatus;
 	}
 	
-	public static tNpcStatus baseManagementStatus(String status)
+	public static TEntityStatus baseManagementStatus(String status)
 	{
 		if ( MANAGE_SELL.name().toLowerCase().contains(status) )
 			return MANAGE_SELL;
 		return MANAGE_BUY;
 	}
 	
-	public static tNpcStatus baseStatus(String status)
+	public static TEntityStatus baseStatus(String status)
 	{
 		if ( SELL.name().toLowerCase().equals(status) )
 			return SELL;

@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 
-import net.dandielo.citizens.traders_v3.tNpcStatus;
+import net.dandielo.citizens.traders_v3.TEntityStatus;
 import net.dandielo.citizens.traders_v3.core.dB;
 import net.dandielo.citizens.traders_v3.core.dB.DebugLevel;
 import net.dandielo.citizens.traders_v3.core.exceptions.InvalidItemException;
@@ -57,8 +57,6 @@ public final class StockItem {
 	/**
 	 * All additional data set for the item
 	 */
-	//private Map<Class<? extends ItemAttr>, ItemAttr> attr = new HashMap<Class<? extends ItemAttr>, ItemAttr>();
-	//private Map<ItemAttr, Class<? extends ItemAttr>> attr = new HashMap<ItemAttr, Class<? extends ItemAttr>>();
 	private Set<ItemAttr> attr = new HashSet<ItemAttr>();
 	
 	/**
@@ -601,7 +599,7 @@ public final class StockItem {
 	 * @return
 	 *     List of lore strings
 	 */ 
-	public List<String> getTempLore(tNpcStatus status)
+	public List<String> getTempLore(TEntityStatus status)
 	{
 		//create a new list
 		List<String> lore = new ArrayList<String>();
@@ -612,13 +610,13 @@ public final class StockItem {
 		
 		//for each attribute
 		for ( ItemAttr itemAttr : this.attr )
-			for ( tNpcStatus attrStatus : itemAttr.getInfo().status() )
+			for ( TEntityStatus attrStatus : itemAttr.getInfo().status() )
 				if ( attrStatus.equals(status) )
 			        itemAttr.onStatusLoreRequest(status, lore);
 		
 		//for each flag
 		for ( ItemFlag itemFlag : flags.values() )
-			for ( tNpcStatus attrStatus : itemFlag.getInfo().status() )
+			for ( TEntityStatus attrStatus : itemFlag.getInfo().status() )
 				if ( attrStatus.equals(status) )
 			        itemFlag.onStatusLoreRequest(status, lore);
 		

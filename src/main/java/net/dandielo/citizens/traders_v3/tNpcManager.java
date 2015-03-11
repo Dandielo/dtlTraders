@@ -42,7 +42,7 @@ public class tNpcManager {
 	/**
 	 * tNpc registry, registers all ongoing tNpc <=> player relations, only one for each player
 	 */
-	private Map<String, tNpc> relations = new HashMap<String, tNpc>();
+	private Map<String, TradingEntity> relations = new HashMap<String, TradingEntity>();
 
 	/**
 	 * Checks if the following player is in a relation with the given tNpc type.
@@ -53,7 +53,7 @@ public class tNpcManager {
 	 * @return
 	 * true if an relation is found with the given type 
 	 */
-	public <T extends tNpc> boolean checkRelationType(String player, Class<T> clazz)
+	public <T extends TradingEntity> boolean checkRelationType(String player, Class<T> clazz)
 	{
 		return inRelation(player) ? clazz.isInstance(relations.get(player)) : false;
 	}
@@ -89,7 +89,7 @@ public class tNpcManager {
 	 * @param trader
 	 * a tNpc that is in relation with player
 	 */
-	public void registerRelation(Player player, tNpc npc) 
+	public void registerRelation(Player player, TradingEntity npc) 
 	{
 		relations.put(player.getName(), npc);
 	}
@@ -103,7 +103,7 @@ public class tNpcManager {
 	 * existing relation of exists, null otherwise
 	 */
 	@SuppressWarnings("unchecked")
-	public <T extends tNpc> T getRelation(String player, Class<T> clazz)
+	public <T extends TradingEntity> T getRelation(String player, Class<T> clazz)
 	{
 		return checkRelationType(player, clazz) ? (T) relations.get(player) : null;
 	}
@@ -253,7 +253,7 @@ public class tNpcManager {
 	/**
 	 * Type registry, stores all registered types
 	 */
-	private final static Map<tNpcType, Class<? extends tNpc>> types = new HashMap<tNpcType, Class<? extends tNpc>>();
+	private final static Map<tNpcType, Class<? extends TradingEntity>> types = new HashMap<tNpcType, Class<? extends TradingEntity>>();
 	
 	/**
 	 * Registers the given class as a new type for use by this plugin. The class needs to have the tNpcType addnotation filled.
@@ -262,7 +262,7 @@ public class tNpcManager {
 	 * @throws TraderTypeRegistrationException
 	 * Thrown when the class does not have the tNpcType addnotation
 	 */
-	public static void registerType(Class<? extends tNpc> class1) throws TraderTypeRegistrationException
+	public static void registerType(Class<? extends TradingEntity> class1) throws TraderTypeRegistrationException
 	{
 		//check for addnotation
 		if ( !class1.isAnnotationPresent(tNpcType.class) ) throw new TraderTypeRegistrationException();
@@ -284,7 +284,7 @@ public class tNpcManager {
 	 * @throws TraderTypeNotFoundException
 	 * @throws InvalidTraderTypeException
 	 */
-	public static tNpc create_tNpc(NPC npc, String type, Player player, Class<? extends Trait> traitClazz) throws TraderTypeNotFoundException, InvalidTraderTypeException
+	public static TradingEntity create_tNpc(NPC npc, String type, Player player, Class<? extends Trait> traitClazz) throws TraderTypeNotFoundException, InvalidTraderTypeException
 	{
 		tNpcType typeInfo = null;
 		for ( tNpcType info : types.keySet() )
@@ -299,8 +299,8 @@ public class tNpcManager {
 			npc.addTrait(WalletTrait.class);
 		
 		//get the class of the type 
-		Class<? extends tNpc> clazz = types.get(typeInfo);
-		tNpc resultNpc = null;
+		Class<? extends TradingEntity> clazz = types.get(typeInfo);
+		TradingEntity resultNpc = null;
 		try
 		{
 			if ( clazz.getConstructor(traitClazz, WalletTrait.class, Player.class) != null )

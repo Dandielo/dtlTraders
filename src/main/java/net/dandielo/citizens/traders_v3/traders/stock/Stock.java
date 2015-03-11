@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.citizensnpcs.api.util.DataKey;
-import net.dandielo.citizens.traders_v3.tNpcStatus;
+import net.dandielo.citizens.traders_v3.TEntityStatus;
 import net.dandielo.citizens.traders_v3.bukkit.Perms;
 import net.dandielo.citizens.traders_v3.core.dB;
 import net.dandielo.citizens.traders_v3.traders.patterns.Pattern;
@@ -148,11 +148,11 @@ public abstract class Stock implements InventoryHolder {
 	public abstract void removeItem(StockItem item, String stock);
 	
 	/*abstract methods*/
-	public abstract Inventory getInventory(tNpcStatus status);
-	public abstract Inventory getManagementInventory(tNpcStatus baseStatus, tNpcStatus status);
-	public abstract void setInventory(Inventory inventory, tNpcStatus status);
-	public abstract void setAmountsInventory(Inventory inventory, tNpcStatus status, StockItem item);
-	public abstract void setManagementInventory(Inventory inventory, tNpcStatus baseStatus, tNpcStatus status);
+	public abstract Inventory getInventory(TEntityStatus status);
+	public abstract Inventory getManagementInventory(TEntityStatus baseStatus, TEntityStatus status);
+	public abstract void setInventory(Inventory inventory, TEntityStatus status);
+	public abstract void setAmountsInventory(Inventory inventory, TEntityStatus status, StockItem item);
+	public abstract void setManagementInventory(Inventory inventory, TEntityStatus baseStatus, TEntityStatus status);
 	
 	//oposite stock
 	public static String opositeStock(String stock)

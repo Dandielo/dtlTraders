@@ -31,7 +31,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class tNpcListener implements Listener {
+public class TEntityListener implements Listener {
 	/**
 	 * Permissions manager instance
 	 */
@@ -41,10 +41,10 @@ public class tNpcListener implements Listener {
 	 * Locale manager instance
 	 */
 	private LocaleManager locale = LocaleManager.locale;
-	private static tNpcListener instance = new tNpcListener();
+	private static TEntityListener instance = new TEntityListener();
 	
 	
-	public static tNpcListener instance()
+	public static TEntityListener instance()
 	{
 		return instance;
 	}
@@ -53,7 +53,7 @@ public class tNpcListener implements Listener {
 	//class definition
 	tNpcManager manager = tNpcManager.instance();
 
-	public tNpcListener()
+	public TEntityListener()
 	{
 	}
 
@@ -73,7 +73,7 @@ public class tNpcListener implements Listener {
 	@EventHandler
 	public void inventoryClickEvent(final InventoryClickEvent e)
 	{
-		tNpc trader = manager.getRelation(e.getWhoClicked().getName(), tNpc.class);
+		TradingEntity trader = manager.getRelation(e.getWhoClicked().getName(), TradingEntity.class);
 		
 		if ( trader != null )
 		{
@@ -162,7 +162,7 @@ public class tNpcListener implements Listener {
 	@EventHandler(priority = EventPriority.LOW)
 	public void inventoryCloseEvent(InventoryCloseEvent e)
 	{
-		tNpc npc = manager.getRelation(e.getPlayer().getName(), tNpc.class);
+		TradingEntity npc = manager.getRelation(e.getPlayer().getName(), TradingEntity.class);
 		if ( npc != null )
 		{
 			//unregister the inventory as a traderInventory
@@ -184,12 +184,12 @@ public class tNpcListener implements Listener {
 		    //in the mode is MANAGE_UNLOCKED, lock it and save items
 		    else
 		    {
-		    	if ( npc.getStatus().equals(tNpcStatus.MANAGE_UNLOCKED) )
+		    	if ( npc.getStatus().equals(TEntityStatus.MANAGE_UNLOCKED) )
 		    	{
 		    		//lock and save the inventory
 		    		npc.lockAndSave();
 		    	}
-		    	if ( npc.getStatus().equals(tNpcStatus.MANAGE_PRICE) )
+		    	if ( npc.getStatus().equals(TEntityStatus.MANAGE_PRICE) )
 		    	{
 		    		//remove all special block lores 
 		    		((Trader)npc).setSpecialBlockValues();

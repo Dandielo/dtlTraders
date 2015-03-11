@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import net.dandielo.citizens.traders_v3.tNpc;
+import net.dandielo.citizens.traders_v3.TradingEntity;
 import net.dandielo.citizens.traders_v3.bukkit.DtlTraders;
 import net.dandielo.citizens.traders_v3.bukkit.Perms;
 import net.dandielo.citizens.traders_v3.bukkit.commands.GeneralCommands;
@@ -128,7 +128,7 @@ public class CommandManager {
 	 * @return
 	 * always so all command messages are handler byt this manager
 	 */
-	public boolean execute(String name,  String[] args, CommandSender sender, tNpc tNPC)
+	public boolean execute(String name,  String[] args, CommandSender sender, TradingEntity tNPC)
 	{
 		for ( Map.Entry<CommandSyntax, CommandBinding> command : commands.entrySet() )
 			if ( new CommandSyntax(name, args).equals(command.getKey()) )
@@ -291,7 +291,7 @@ public class CommandManager {
 		 * @return
 		 * always true
 		 */
-		public Boolean execute(CommandSender sender, tNpc tNPC, String[] args)
+		public Boolean execute(CommandSender sender, TradingEntity tNPC, String[] args)
 		{
 			if ( !perms.has(sender, perm) )
 			{

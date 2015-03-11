@@ -5,13 +5,13 @@ import java.util.List;
 
 import org.bukkit.inventory.ItemStack;
 
-import net.dandielo.citizens.traders_v3.tNpcStatus;
+import net.dandielo.citizens.traders_v3.TEntityStatus;
 import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeInvalidValueException;
 import net.dandielo.citizens.traders_v3.utils.items.Attribute;
 import net.dandielo.citizens.traders_v3.utils.items.ItemAttr;
 
 @Attribute(name="Amount", key = "a", required = true, priority = 5,
-status = {tNpcStatus.MANAGE_SELL, tNpcStatus.MANAGE_BUY})
+status = {TEntityStatus.MANAGE_SELL, TEntityStatus.MANAGE_BUY})
 public class Amount extends ItemAttr {
 	private List<Integer> amounts = new ArrayList<Integer>();
 	
@@ -111,7 +111,7 @@ public class Amount extends ItemAttr {
 	}
 	
 	@Override
-	public void onStatusLoreRequest(tNpcStatus status, List<String> lore)
+	public void onStatusLoreRequest(TEntityStatus status, List<String> lore)
 	{
 		//TODO implement later
 	}
