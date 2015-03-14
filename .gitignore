@@ -2,6 +2,10 @@
 /target
 /dtlTraders v3
 
+# Ignore IntelliJ Files
+*.iml
+.idea
+
 # Eclipse stuff
 /.project
 /.classpath
