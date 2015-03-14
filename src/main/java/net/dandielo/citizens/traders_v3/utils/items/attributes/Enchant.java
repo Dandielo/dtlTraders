@@ -54,8 +54,6 @@ public class Enchant extends ItemAttr {
 	@Override
 	public String onSave()
 	{
-		String result = "";
-		
 		//for each enchant saved, with name and lvl
         List<String> enchantStrings = new ArrayList<String>();
 		for ( Map.Entry<Enchantment, Integer> enchant : enchants.entrySet() )
