@@ -1,8 +1,11 @@
 package net.dandielo.citizens.traders_v3.utils.items.attributes;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 
@@ -51,14 +54,13 @@ public class Enchant extends ItemAttr {
 	@Override
 	public String onSave()
 	{
-		String result = "";
-		
 		//for each enchant saved, with name and lvl
+        List<String> enchantStrings = new ArrayList<String>();
 		for ( Map.Entry<Enchantment, Integer> enchant : enchants.entrySet() )
-			result += "," + enchant.getKey().getName().toLowerCase() + "/" + enchant.getValue();
+            enchantStrings.add(enchant.getKey().getName().toLowerCase() + "/" + enchant.getValue());
 		
 		//return the save string
-		return result.substring(1);
+		return StringUtils.join(enchantStrings, ",");
 		
 	}
 
