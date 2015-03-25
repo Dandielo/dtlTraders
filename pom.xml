@@ -22,13 +22,13 @@
 	<distributionManagement>
 		<repository>
 			<uniqueVersion>false</uniqueVersion>
-			<id>deployment</id>
+			<id>releases</id>
 			<name>dtl Repository</name>
 			<url>http://repo.dandielo.net/content/repositories/releases/</url>
 		</repository>
 		<snapshotRepository> 
 			<uniqueVersion>true</uniqueVersion>
-			<id>deployment</id>
+			<id>snapshots</id>
 			<url>http://repo.dandielo.net/content/repositories/snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>
