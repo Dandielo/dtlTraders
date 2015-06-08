@@ -14,8 +14,9 @@ import net.dandielo.citizens.traders_v3.core.locale.LocaleManager;
 import net.dandielo.citizens.traders_v3.traders.Trader;
 import net.dandielo.citizens.traders_v3.traders.setting.Settings;
 import net.dandielo.citizens.traders_v3.traits.TraderTrait;
-import net.dandielo.citizens.traders_v3.utils.NBTUtils;
-import net.dandielo.citizens.traders_v3.utils.items.flags.Lore;
+import net.dandielo.citizens.traders_v3.utils.ItemUtils;
+import net.dandielo.core.bukkit.NBTUtils;
+import net.dandielo.core.items.serialize.flags.Lore;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -400,22 +401,22 @@ public class TEntityListener implements Listener {
 				{
 					if ( NBTUtils.isMarked(item) )
 					{
-						dB.high("Marked item found, remove it");
-						//specific debug info
-						dB.spec(DebugLevel.S1_ADONDRIEL, "Marked item found, remove it");
-						dB.spec(DebugLevel.S1_ADONDRIEL, "Item: ", item);
+//						dB.high("Marked item found, remove it");
+//						//specific debug info
+//						dB.spec(DebugLevel.S1_ADONDRIEL, "Marked item found, remove it");
+//						dB.spec(DebugLevel.S1_ADONDRIEL, "Item: ", item);
 				    	
 						//remove item
 						thisPlayer.getInventory().setItem(i, null);
 					}
 					else
 					{		
-						dB.spec(DebugLevel.S1_ADONDRIEL, "Item: ", item);	
-						dB.spec(DebugLevel.S1_ADONDRIEL, "Has trader lore: ", Lore.hasTraderLore(item));
-						dB.spec(DebugLevel.S1_ADONDRIEL, "Cleaned Item: ", NBTUtils.cleanItem(item));	
-						
+//						dB.spec(DebugLevel.S1_ADONDRIEL, "Item: ", item);	
+//						dB.spec(DebugLevel.S1_ADONDRIEL, "Has trader lore: ", Lore.hasTraderLore(item));
+//						dB.spec(DebugLevel.S1_ADONDRIEL, "Cleaned Item: ", ItemUtils.createStockItem(item).getItem(true));	
+//						
 						//clean transaction lores 
-						thisPlayer.getInventory().setItem(i, NBTUtils.cleanItem(item));
+						thisPlayer.getInventory().setItem(i, ItemUtils.createStockItem(item).getItem(true));
 					}
 				}
 				++i;

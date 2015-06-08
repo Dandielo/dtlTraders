@@ -14,8 +14,6 @@ import net.dandielo.citizens.traders_v3.traders.limits.LimitManager;
 import net.dandielo.citizens.traders_v3.traders.setting.GlobalSettings;
 import net.dandielo.citizens.traders_v3.traits.TraderTrait;
 import net.dandielo.citizens.traders_v3.traits.WalletTrait;
-import net.dandielo.citizens.traders_v3.utils.items.ItemAttr;
-import net.dandielo.citizens.traders_v3.utils.items.ItemFlag;
 import net.dandielo.stats.bukkit.Stats;
 import net.dandielo.stats.core.Manager;
 
@@ -89,8 +87,9 @@ public class DtlTraders extends JavaPlugin {
 		CitizensAPI.getTraitFactory().registerTrait(TraitInfo.create(WalletTrait.class).withName("wallet"));
 		
 		//registering core extensions
-		ItemAttr.registerCoreAttributes();
-		ItemFlag.registerCoreFlags();
+		//TODO: register dtlTraders only atributes.
+//		ItemAttribute.registerCoreAttributes();
+//		ItemFlag.registerCoreFlags();
 		tNpcManager.registerTypes();
 		
 		//register events

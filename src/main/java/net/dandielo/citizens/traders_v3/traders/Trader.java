@@ -34,9 +34,8 @@ import net.dandielo.citizens.traders_v3.traders.transaction.Wallet;
 import net.dandielo.citizens.traders_v3.traits.TraderTrait;
 import net.dandielo.citizens.traders_v3.traits.WalletTrait;
 import net.dandielo.citizens.traders_v3.utils.ItemUtils;
-import net.dandielo.citizens.traders_v3.utils.NBTUtils;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.PatternItem;
-import net.dandielo.citizens.traders_v3.utils.items.flags.Lore;
+import net.dandielo.core.items.serialize.flags.Lore;
 
 public abstract class Trader implements TradingEntity {
 	
@@ -339,6 +338,10 @@ public abstract class Trader implements TradingEntity {
 		return false;
 	}
 	
+	private static ItemStack CleanItem(ItemStack item) {
+		return ItemUtils.createStockItem(item).getItem(true);
+	}
+	
 	/**
 	 * Updates the players inventory resetting all transaction lores.
 	 */
@@ -365,12 +368,12 @@ public abstract class Trader implements TradingEntity {
 					lore.addAll(session.getDescription("buy", selectedItem, scale));
 					
 					//create the item
-					ItemStack nItem = Lore.addLore(NBTUtils.cleanItem(item), lore);
+					ItemStack nItem = Lore.addLore(CleanItem(item), lore);
 				    inv.setItem(i, nItem);
 				}
 				else
 					//clean the item from any lore
-					inv.setItem(i, NBTUtils.cleanItem(item));
+					inv.setItem(i, CleanItem(item));
 			}			
 			//next item please
 			i++;
@@ -401,8 +404,8 @@ public abstract class Trader implements TradingEntity {
 				if ( value != 1.0 )
 				{
 					List<String> lore = new ArrayList<String>();
-					lore.add(Lore.traderLorePrefix + ChatColor.GOLD + "Price value: " + ChatColor.YELLOW + String.format("%.2f", value));
-					inv.setItem(i, Lore.addLore(NBTUtils.cleanItem(item), lore));
+					lore.add(Lore.dCoreLorePrefix + ChatColor.GOLD + "Price value: " + ChatColor.YELLOW + String.format("%.2f", value));
+					inv.setItem(i, Lore.addLore(CleanItem(item), lore));
 				}
 			}
 			else if (selectAndCheckNewItem(item) && status.equals(TEntityStatus.MANAGE_LIMIT))
@@ -412,18 +415,18 @@ public abstract class Trader implements TradingEntity {
 				
 				long time = GlobalSettings.getBlockTimeoutValue(item);
 				if (time != 1)
-					lore.add(Lore.traderLorePrefix + ChatColor.GOLD + "Time value: " + ChatColor.YELLOW + LimitManager.timeoutString(time));
+					lore.add(Lore.dCoreLorePrefix + ChatColor.GOLD + "Time value: " + ChatColor.YELLOW + LimitManager.timeoutString(time));
 				
 				int limit = (int) GlobalSettings.getBlockValue(item);
 				if (limit > 1)
-					lore.add(Lore.traderLorePrefix + ChatColor.GOLD + "Limit value: " + ChatColor.YELLOW + String.valueOf(limit));
+					lore.add(Lore.dCoreLorePrefix + ChatColor.GOLD + "Limit value: " + ChatColor.YELLOW + String.valueOf(limit));
 				
-				inv.setItem(i, Lore.addLore(NBTUtils.cleanItem(item), lore));
+				inv.setItem(i, Lore.addLore(CleanItem(item), lore));
 			}
 			else
 			{
 				if ( item != null )
-				    inv.setItem(i, NBTUtils.cleanItem(item));
+				    inv.setItem(i, CleanItem(item));
 			}
 			
 			//next item please
@@ -458,13 +461,14 @@ public abstract class Trader implements TradingEntity {
 			if ( bItem != null && !stock.isUiSlot(slot) )
 			{
 				//to stock item
-				StockItem sItem = ItemUtils.createAbstractStockItem(bItem);
+				//TODO: Fix this too and too.
+				StockItem sItem = null;// ItemUtils.createAbstractStockItem(bItem);
 				dB.spec(dB.DebugLevel.S3_ATTRIB, "Item: ", sItem);
 				
 				StockItem matchedItem = null;
 				//match old items to persist item data
 				for ( StockItem item : oldItems )
-					if ( matchedItem == null && !item.hasAttr(PatternItem.class) && item.equalsStrong(sItem) )
+					if ( matchedItem == null && !item.hasAttribute(PatternItem.class) && item.equals(sItem) )
 						matchedItem = item; 
 
 				dB.spec(dB.DebugLevel.S3_ATTRIB, "Matched: ", matchedItem);
@@ -553,7 +557,7 @@ public abstract class Trader implements TradingEntity {
 		//get all item stack with the same type
 		for ( ItemStack item : inventory.all(selectedItem.getItem(false).getType()).values() )
 		{
-			if ( selectedItem.equalsWeak(ItemUtils.createStockItem(item)) )
+			if ( selectedItem.similar(ItemUtils.createStockItem(item)) )
 			{
 				if ( item.getAmount() + amountLeft <= item.getMaxStackSize() )
 					return true;
@@ -612,7 +616,7 @@ public abstract class Trader implements TradingEntity {
 		//Check for compatibility
 		for ( ItemStack item : inventory.all(generatedItem.getType()).values() ) 
 		{
-			if ( selectedItem.equalsWeak(ItemUtils.createStockItem(item)) )
+			if ( selectedItem.similar(ItemUtils.createStockItem(item)) )
 			{
 				//add amount to an item in the inventory, its done
 				if ( item.getAmount() + amountLeft <= item.getMaxStackSize() ) {
@@ -903,7 +907,9 @@ public abstract class Trader implements TradingEntity {
 	 */
 	protected boolean selectAndCheckItem(ItemStack item, String bStock)
 	{
-		return (selectedItem = item != null && !item.getType().equals(Material.AIR) ? stock.getItem(ItemUtils.createAbstractStockItem(item), bStock) : null ) != null;
+		//TODO: Fix this WHOOOOOLE SHIT!
+		//return (selectedItem = item != null && !item.getType().equals(Material.AIR) ? stock.getItem(ItemUtils.createAbstractStockItem(item), bStock) : null ) != null;
+		return false;
 	}
 	
 	/** 

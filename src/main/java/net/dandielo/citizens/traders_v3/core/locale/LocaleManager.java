@@ -13,7 +13,7 @@ import java.util.Map;
 import net.dandielo.citizens.traders_v3.bukkit.DtlTraders;
 import net.dandielo.citizens.traders_v3.core.dB;
 import net.dandielo.citizens.traders_v3.core.PluginSettings;
-import net.dandielo.citizens.traders_v3.utils.items.flags.Lore;
+import net.dandielo.core.items.serialize.flags.Lore;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
@@ -492,7 +492,7 @@ public class LocaleManager {
 		List<String> list = new ArrayList<String>();
 		if ( ui.containsKey(new LocaleEntry(key, localeVersion)) ) {
 			for ( String l : ui.get(new LocaleEntry(key, localeVersion)).lore() )
-				list.add(/* add the trader lore prefix */ Lore.traderLorePrefix + l.replace('&', '§').replace('^', '§'));
+				list.add(Lore.dCoreLorePrefix + l.replace('&', '§').replace('^', '§'));
 		} else {
 		    // The Lore-List may be empty, but if the ui-entry is missing, the locale is incomplete
 		    dB.high("Missing Locale: " + key);

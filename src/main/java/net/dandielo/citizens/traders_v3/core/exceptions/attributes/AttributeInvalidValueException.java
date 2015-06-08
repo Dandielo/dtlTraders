@@ -1,6 +1,6 @@
 package net.dandielo.citizens.traders_v3.core.exceptions.attributes;
 
-import net.dandielo.citizens.traders_v3.utils.items.Attribute;
+import net.dandielo.core.items.serialize.Attribute;
 
 public class AttributeInvalidValueException extends AttributeException {
 	private static final long serialVersionUID = 1L;

@@ -51,9 +51,9 @@ public abstract class Stock implements InventoryHolder {
 		dB.high("Creating player specific stock");
 		//remove all pattern items
 		Iterator<StockItem> it = stock.stock.get("sell").iterator();
-		while(it.hasNext()) if ( it.next().hasAttr(PatternItem.class) ) it.remove(); 
+		while(it.hasNext()) if ( it.next().hasAttribute(PatternItem.class) ) it.remove(); 
 		it = stock.stock.get("buy").iterator();
-		while(it.hasNext()) if ( it.next().hasAttr(PatternItem.class) ) it.remove(); 
+		while(it.hasNext()) if ( it.next().hasAttribute(PatternItem.class) ) it.remove(); 
 		dB.high("Creating player specific stock");
 
 		//update stock with pattern items
@@ -119,11 +119,13 @@ public abstract class Stock implements InventoryHolder {
 	
 	public StockItem getItem(StockItem item, String stock)
 	{
-		for ( StockItem sItem : this.stock.get(stock) )
-			if ( sItem.equalsWeak(item) )
+		for (StockItem sItem : this.stock.get(stock))
+		{
+			if (sItem.similar(item))
 			{
 				return sItem;
 			}
+		}
 		return null;
 	}
 

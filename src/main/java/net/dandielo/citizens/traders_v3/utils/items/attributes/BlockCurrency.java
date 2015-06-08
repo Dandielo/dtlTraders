@@ -7,23 +7,21 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import net.dandielo.citizens.traders_v3.TEntityStatus;
-import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeInvalidValueException;
-import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeValueNotFoundException;
 import net.dandielo.citizens.traders_v3.core.locale.LocaleManager;
+import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
 import net.dandielo.citizens.traders_v3.traders.transaction.CurrencyHandler;
 import net.dandielo.citizens.traders_v3.traders.transaction.TransactionInfo;
-import net.dandielo.citizens.traders_v3.utils.items.Attribute;
-import net.dandielo.citizens.traders_v3.utils.items.ItemAttr;
+import net.dandielo.citizens.traders_v3.utils.items.StockItemAttribute;
+import net.dandielo.core.items.serialize.Attribute;
 
-@Attribute(key = "p", sub = {"b"}, name = "Block Price", standalone = true, priority = 0,
-status = {TEntityStatus.BUY, TEntityStatus.SELL, TEntityStatus.SELL_AMOUNTS, TEntityStatus.MANAGE_PRICE})
-public class BlockCurrency extends ItemAttr implements CurrencyHandler {
+@Attribute(key = "p", sub = {"b"}, name = "Block Price", standalone = true, priority = 0)
+//status = {TEntityStatus.BUY, TEntityStatus.SELL, TEntityStatus.SELL_AMOUNTS, TEntityStatus.MANAGE_PRICE})
+public class BlockCurrency extends StockItemAttribute implements CurrencyHandler {
 	private ItemStack is;
 	private int amount;
 
-	public BlockCurrency(String key, String sub) {
-		super(key, sub);
+	public BlockCurrency(StockItem item, String key, String sub) {
+		super(item, key, sub);
 	}
 
 	@Override
@@ -112,27 +110,20 @@ public class BlockCurrency extends ItemAttr implements CurrencyHandler {
 	}
 
 	@Override
-	public void onLoad(String data) throws AttributeInvalidValueException {
+	public boolean deserialize(String data) {
 		String[] info = data.split("-");
 		is = new ItemStack(Material.getMaterial(info[0].toUpperCase()));
 		amount = Integer.parseInt(info[1]);
+		return true;
 	}
 
 	@Override
-	public String onSave() {
+	public String serialize() {
 		return is.getType().name().toLowerCase() + "-" + String.valueOf(amount);
 	}
 
 	@Override
-	public void onFactorize(ItemStack item)
-			throws AttributeValueNotFoundException {
-		throw new AttributeValueNotFoundException();
-	}
-
-	@Override
 	public double getTotalPrice(TransactionInfo info) {
-		//Just pass 0, or whatever 
 		return 0.0;
 	}
-
 }

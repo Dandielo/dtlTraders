@@ -18,7 +18,7 @@ import net.dandielo.citizens.traders_v3.traders.setting.Settings;
 import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
 import net.dandielo.citizens.traders_v3.traders.transaction.participants.PlayerParticipant;
 import net.dandielo.citizens.traders_v3.traders.transaction.participants.TraderParticipant;
-import net.dandielo.citizens.traders_v3.utils.items.ItemAttr;
+import net.dandielo.core.items.serialize.ItemAttribute;
 
 public class ShopSession {
 	private Trader trader;
@@ -71,7 +71,7 @@ public class ShopSession {
 			if (pattern instanceof PricePattern)
 				currencies.merge(((PricePattern) pattern).getItemCurrency(player, stock, item));
 		currencies.resetPriorities();
-		for (ItemAttr attr : item.getAttribs("p"))
+		for (ItemAttribute attr : item.getAttributes("p"))
 			if (attr instanceof CurrencyHandler)
 				currencies.merge((CurrencyHandler) attr, 0);
 		

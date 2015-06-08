@@ -1,47 +1,40 @@
 package net.dandielo.citizens.traders_v3.utils.items.attributes;
 
-import org.bukkit.inventory.ItemStack;
-
-import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeInvalidValueException;
-import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeValueNotFoundException;
-import net.dandielo.citizens.traders_v3.utils.items.Attribute;
-import net.dandielo.citizens.traders_v3.utils.items.ItemAttr;
+import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
+import net.dandielo.citizens.traders_v3.utils.items.StockItemAttribute;
+import net.dandielo.core.items.serialize.Attribute;
+import net.dandielo.core.items.serialize.ItemAttribute;
 
 @Attribute(name = "PatternItem", key = "pat", standalone = true)
-public class PatternItem extends ItemAttr {
+public class PatternItem extends StockItemAttribute {
 	private int priority = 0;
 	
-	public PatternItem(String key)
+	public PatternItem(StockItem item, String key)
 	{
-		super(key);
+		super(item, key);
 	}
 
 	@Override
-	public void onLoad(String data) throws AttributeInvalidValueException
+	public boolean deserialize(String data)
 	{
 		priority = Integer.parseInt(data);
+		return true;
 	}
 
 	@Override
-	public String onSave()
+	public String serialize()
 	{
 		return String.valueOf(priority);
 	}
 
 	@Override
-	public void onFactorize(ItemStack item)
-			throws AttributeValueNotFoundException
+	public boolean similar(ItemAttribute attr)
 	{
-		throw new AttributeValueNotFoundException();
+		return equals(attr);
 	}
 	
 	@Override
-	public boolean equalsWeak(ItemAttr attr)
-	{
-		return equalsStrong(attr);
-	}
-	@Override
-	public boolean equalsStrong(ItemAttr attr)
+	public boolean equals(ItemAttribute attr)
 	{
 		return priority >= ((PatternItem)attr).priority;
 	}

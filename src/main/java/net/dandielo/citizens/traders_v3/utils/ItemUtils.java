@@ -21,23 +21,23 @@ public class ItemUtils {
 		//creating a clean item
 		StockItem sItem = new StockItem(clone);
 		//getting data out of it (by force ;>)
-		sItem.factorize(clone);
+		sItem.refactor(clone);
 		//returning the item
 		return sItem;
 	}
 
-	public static StockItem createAbstractStockItem(ItemStack vItem)
-	{
-		ItemStack clone = vItem.clone();
-		//creating a clean item
-		StockItem sItem = new StockItem(clone);
-		//set the item as abstract
-		sItem.addFlag(".abstract");
-		//getting data out of it (by force ;>)
-		sItem.factorize(clone);
-		//returning the item
-		return sItem;
-	}
+//	public static StockItem createAbstractStockItem(ItemStack vItem)
+//	{
+//		ItemStack clone = vItem.clone();
+//		//creating a clean item
+//		StockItem sItem = new StockItem(clone);
+//		//set the item as abstract
+//		//sItem.addFlag(".abstract");
+//		//getting data out of it (by force ;>)
+//		sItem.refactor(clone);
+//		//returning the item
+//		return sItem;
+//	}
 	
 	//create ItemStack
 	public static ItemStack createItemStack(String data)

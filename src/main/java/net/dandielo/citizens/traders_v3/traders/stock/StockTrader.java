@@ -10,9 +10,9 @@ import net.dandielo.citizens.traders_v3.TEntityStatus;
 import net.dandielo.citizens.traders_v3.core.dB;
 import net.dandielo.citizens.traders_v3.traders.setting.Settings;
 import net.dandielo.citizens.traders_v3.traders.setting.GlobalSettings;
-import net.dandielo.citizens.traders_v3.utils.NBTUtils;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.PatternItem;
-import net.dandielo.citizens.traders_v3.utils.items.flags.Lore;
+import net.dandielo.core.bukkit.NBTUtils;
+import net.dandielo.core.items.serialize.flags.Lore;
 
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.Inventory;
@@ -103,11 +103,11 @@ public class StockTrader extends Stock {
 		dB.info("Saving traders stock");
 
 		List<Object> sellList = new ArrayList<Object>();
-		for ( StockItem item : stock.get("sell") )
+		for (StockItem item : stock.get("sell"))
 		{
-			if ( !item.hasAttr(PatternItem.class) )
+			if (!item.hasAttribute(PatternItem.class))
 			{
-				if ( item.hasFlag(Lore.class) )
+				if (item.hasFlag(Lore.class))
 				{
 					Map<String, List<String>> temp = new HashMap<String, List<String>>();
 					temp.put(item.toString(), escapeLore(item.getLore()));
@@ -121,7 +121,7 @@ public class StockTrader extends Stock {
 		List<Object> buyList = new ArrayList<Object>();
 		for ( StockItem item : stock.get("buy") )
 		{
-			if ( !item.hasAttr(PatternItem.class) )
+			if ( !item.hasAttribute(PatternItem.class) )
 			{
 				if ( item.hasFlag(Lore.class) )
 				{
@@ -182,7 +182,8 @@ public class StockTrader extends Stock {
 				item.setSlot(inventory.firstEmpty());
 
 			//set the lore
-			ItemStack itemStack = item.getItem(false, item.getTempLore(status));
+			//TODO: Fix this shit too!
+			ItemStack itemStack = null;// item.getItem(false, item.getStatusLore(status));
 
 			//set the item 
 			inventory.setItem(item.getSlot(), NBTUtils.markItem(itemStack));
@@ -200,7 +201,8 @@ public class StockTrader extends Stock {
 		for ( Integer amount : item.getAmounts() )
 		{
 			//set new amount
-			ItemStack itemStack = item.getItem(false, item.getTempLore(status));
+			//TODO: And this too!
+			ItemStack itemStack = null;//item.getItem(false, item.getStatusLore(status));
 			itemStack.setAmount(amount);
 
 			//set the item
@@ -219,13 +221,14 @@ public class StockTrader extends Stock {
 		for ( StockItem item : this.stock.get(baseStatus.asStock()) )
 		{
 			dB.spec(dB.DebugLevel.S3_ATTRIB, "Set inv: ", item);
-			if ( !item.hasAttr(PatternItem.class) )
+			if ( !item.hasAttribute(PatternItem.class) )
 			{
 				if ( item.getSlot() < 0 )
 					item.setSlot(inventory.firstEmpty());
 
 				//set the lore
-				ItemStack itemStack = item.getItem(false, item.getTempLore(status));
+				//TODO: And this!!
+				ItemStack itemStack = null; //item.getItem(false, item.getStatusLore(status));
 
 				dB.spec(dB.DebugLevel.S3_ATTRIB, "End item: ", item);
 				//set the item 

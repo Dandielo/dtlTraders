@@ -489,14 +489,15 @@ public class TraderCommands {
 		StockItem price = new StockItem(itemString);
 		for ( StockItem item : trader.getStock().getStock("sell") )
 		{
-			if ( item.priorityMatch(price) >= 0 )
-			{
-				++items;
-				if ( item.hasAttr(Price.class) )
-					item.getPriceAttr().setPrice(price.getPrice());
-				else
-					item.addAttr("p", price.getPriceFormated());
-			}
+			//TODO: priorityMatch
+//			if ( item.priorityMatch(price) >= 0 )
+//			{
+//				++items;
+//				if ( item.hasAttr(Price.class) )
+//					item.getPriceAttr().setPrice(price.getPrice());
+//				else
+//					item.addAttr("p", price.getPriceFormated());
+//			}
 		}
 		//send message
 		locale.sendMessage(sender, "trader-stock-price-set", "items", String.valueOf(items));
@@ -518,14 +519,15 @@ public class TraderCommands {
 		StockItem price = new StockItem(itemString);
 		for ( StockItem item : trader.getStock().getStock("buy") )
 		{
-			if ( price.priorityMatch(item) >= 0 )
-			{
-				++items;
-				if ( item.hasAttr(Price.class) )
-					item.getPriceAttr().setPrice(price.getPrice());
-				else
-					item.addAttr("p", price.getPriceFormated());
-			}
+			//TODO: priorityMatch
+//			if ( price.priorityMatch(item) >= 0 )
+//			{
+//				++items;
+//				if ( item.hasAttr(Price.class) )
+//					item.getPriceAttr().setPrice(price.getPrice());
+//				else
+//					item.addAttr("p", price.getPriceFormated());
+//			}
 		}
 
 		//send message
@@ -543,7 +545,7 @@ public class TraderCommands {
 		{
 			//remove all prices attributes
 			for ( StockItem item : trader.getStock().getStock("sell") )
-				item.removeAttr(Price.class);
+				item.removeAttribute(Price.class);
 
 			//send a message
 			locale.sendMessage(sender, "trader-stock-price-reset");

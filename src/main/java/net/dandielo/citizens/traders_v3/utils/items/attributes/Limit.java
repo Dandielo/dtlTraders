@@ -2,27 +2,22 @@ package net.dandielo.citizens.traders_v3.utils.items.attributes;
 
 import java.util.List;
 
-import org.bukkit.inventory.ItemStack;
-
 import net.dandielo.citizens.traders_v3.TEntityStatus;
-import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeInvalidValueException;
-import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeValueNotFoundException;
 import net.dandielo.citizens.traders_v3.core.locale.LocaleManager;
 import net.dandielo.citizens.traders_v3.traders.limits.LimitManager;
 import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
-import net.dandielo.citizens.traders_v3.utils.items.Attribute;
-import net.dandielo.citizens.traders_v3.utils.items.ItemAttr;
+import net.dandielo.citizens.traders_v3.utils.items.StockItemAttribute;
+import net.dandielo.core.items.serialize.Attribute;
 
-@Attribute(name = "Limit", key = "l", standalone = true, priority = 0,
-status = {TEntityStatus.MANAGE_LIMIT})
-public class Limit extends ItemAttr {
+@Attribute(name = "Limit", key = "l", standalone = true, priority = 0)
+public class Limit extends StockItemAttribute {
 	private String id;
 	private int limit, plimit;
 	private long timeout, ptimeout;
 
-	public Limit(String key)
+	public Limit(StockItem item, String key)
 	{
-		super(key);
+		super(item, key);
 	}
 	
 	public String getID()
@@ -83,7 +78,7 @@ public class Limit extends ItemAttr {
 	}
 	
 	@Override
-	public void onLoad(String raw) throws AttributeInvalidValueException
+	public boolean deserialize(String raw)
 	{
 		String[] data = raw.split("/");
 		
@@ -101,12 +96,13 @@ public class Limit extends ItemAttr {
 		}
 		catch(NumberFormatException e)
 		{
-			throw new AttributeInvalidValueException(this.info, raw);
+			return false;
 		}
+		return true;
 	}
 
 	@Override
-	public String onSave()
+	public String serialize()
 	{
 		String result = id + "/" + limit + "/" + LimitManager.timeoutString(timeout);
 		if (plimit != 0)
@@ -115,16 +111,9 @@ public class Limit extends ItemAttr {
 	}
 
 	@Override
-	public void onFactorize(ItemStack item)
-			throws AttributeValueNotFoundException
-	{		
-		throw new AttributeValueNotFoundException();
-	}
-
-	@Override
-	public void onStatusLoreRequest(TEntityStatus status, List<String> lore)
+	public void getDescription(TEntityStatus status, List<String> lore)
 	{
-		//If not in manager mode then we don't want to manage this request
+		//TODO: If not in manager mode then we don't want to manage this request
 		//Maybe later just update the Attribute settings?
 		if ( !status.inManagementMode() ) return;
 
@@ -133,11 +122,12 @@ public class Limit extends ItemAttr {
 			lore.add(pLore.replace("{limit}", String.valueOf(limit)).replace("{timeout}", LimitManager.timeoutString(timeout)));
 	}
 	
+	//TODO: check this one?
 	public static List<String> loreRequest(String player, StockItem item, List<String> lore, TEntityStatus status)
 	{
 		LimitManager limits = LimitManager.self;
 		
-		if (!item.hasAttr(Limit.class)) return lore;
+		if (!item.hasAttribute(Limit.class)) return lore;
 
 		//add the limit lore
 		for ( String pLore : LocaleManager.locale.getLore("item-" + status.asStock() + "-limit") )

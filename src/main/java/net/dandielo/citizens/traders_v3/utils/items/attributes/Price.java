@@ -5,27 +5,21 @@ import java.util.List;
 import net.dandielo.citizens.traders_v3.TEntityStatus;
 import net.dandielo.citizens.traders_v3.core.dB;
 import net.dandielo.citizens.traders_v3.core.dB.DebugLevel;
-import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeInvalidValueException;
-import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeValueNotFoundException;
 import net.dandielo.citizens.traders_v3.core.locale.LocaleManager;
+import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
 import net.dandielo.citizens.traders_v3.traders.transaction.CurrencyHandler;
 import net.dandielo.citizens.traders_v3.traders.transaction.TransactionInfo;
-import net.dandielo.citizens.traders_v3.utils.items.Attribute;
-import net.dandielo.citizens.traders_v3.utils.items.ItemAttr;
+import net.dandielo.citizens.traders_v3.utils.items.StockItemAttribute;
 
 import org.bukkit.ChatColor;
-import org.bukkit.inventory.ItemStack;
 
-@Attribute(
-name="Price", key = "p", standalone = true, priority = 0,
-status = {TEntityStatus.BUY, TEntityStatus.SELL, TEntityStatus.SELL_AMOUNTS, TEntityStatus.MANAGE_PRICE})
-public class Price extends ItemAttr implements CurrencyHandler {
-    //public static String lorePattern = ChatColor.GOLD + "Price: " + ChatColor.GRAY;
-	//private static Econ econ = Econ.econ;
+@net.dandielo.core.items.serialize.Attribute(
+		name="Price", key = "p", standalone = true, priority = 0)
+public class Price extends StockItemAttribute implements CurrencyHandler {
 	private double price;
 
-	public Price(String key) {
-		super(key);
+	public Price(StockItem item, String key) {
+		super(item, key);
 		price = 0.0;
 	}
 	
@@ -50,7 +44,7 @@ public class Price extends ItemAttr implements CurrencyHandler {
 	}
 
 	@Override
-	public void onLoad(String data) throws AttributeInvalidValueException 
+	public boolean deserialize(String data)
 	{
 		try
 		{
@@ -59,30 +53,19 @@ public class Price extends ItemAttr implements CurrencyHandler {
 		catch(NumberFormatException e)
 		{
 			dB.spec(DebugLevel.S2_MAGIC_POWA, "A exception occured when parsing the price");
-			throw new AttributeInvalidValueException(getInfo(), data);
+			return false;
 		}
+		return true;
 	}
 
 	@Override
-	public String onSave()
+	public String serialize()
 	{
 		return String.format("%.2f", price).replace(',', '.');
-	}
+	}	
 
 	@Override
-	public void onAssign(ItemStack item) 
-	{
-	}
-
-	@Override
-	public void onFactorize(ItemStack item)	throws AttributeValueNotFoundException 
-	{
-		throw new AttributeValueNotFoundException();
-	}
-	
-
-	@Override
-	public void onStatusLoreRequest(TEntityStatus status, List<String> lore)
+	public void getDescription(TEntityStatus status, List<String> lore)
 	{
 		if ( !status.inManagementMode() ) return;
 
@@ -90,6 +73,7 @@ public class Price extends ItemAttr implements CurrencyHandler {
 		for ( String pLore : LocaleManager.locale.getLore("item-unitPrice") )
 			lore.add(pLore.replace("{price}", String.format("%.2f", price)).replace(',', '.'));
 	}
+	
 	
 	public double getTotalPrice(TransactionInfo info) {
 		return info.getTotalScaling() * price;

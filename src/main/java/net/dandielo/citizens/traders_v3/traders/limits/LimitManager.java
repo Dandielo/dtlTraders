@@ -130,10 +130,10 @@ public class LimitManager {
 	
 	public boolean checkLimit(Player player, StockItem item, int amount, String type)
 	{
-		if( item.hasAttr(Limit.class) )
+		if( item.hasAttribute(Limit.class) )
 		{
 			//get the limit attribute
-			Limit lm = item.getAttr(Limit.class);
+			Limit lm = item.getAttribute(Limit.class, false);
 
 			//get or create a new limit entry
 			LimitEntry entry = limits.get(lm.getID());
@@ -157,10 +157,10 @@ public class LimitManager {
 	
 	public void updateLimit(Player player, StockItem item, int amount, String type)
 	{
-		if( item.hasAttr(Limit.class) )
+		if( item.hasAttribute(Limit.class) )
 		{
 			//get the limit attribute
-			Limit lm = item.getAttr(Limit.class);
+			Limit lm = item.getAttribute(Limit.class, false);
 			
 			//get or create a new limit entry
 			LimitEntry entry = limits.get(lm.getID());
@@ -175,10 +175,10 @@ public class LimitManager {
 	
 	public long getTotalLimit(StockItem item)
 	{
-		if( item.hasAttr(Limit.class) )
+		if( item.hasAttribute(Limit.class) )
 		{
 			//get the limit attribute
-			Limit lm = item.getAttr(Limit.class);
+			Limit lm = item.getAttribute(Limit.class, false);
 			
 			//get or create a new limit entry
 			LimitEntry entry = limits.get(lm.getID());
@@ -192,10 +192,10 @@ public class LimitManager {
 	
 	public long getPlayerLimit(StockItem item)
 	{
-		if( item.hasAttr(Limit.class) )
+		if( item.hasAttribute(Limit.class) )
 		{
 			//get the limit attribute
-			Limit lm = item.getAttr(Limit.class);
+			Limit lm = item.getAttribute(Limit.class, false);
 			
 			//get or create a new limit entry
 			LimitEntry entry = limits.get(lm.getID());
@@ -209,10 +209,10 @@ public class LimitManager {
 	
 	public int getTotalUsed(StockItem item)
 	{
-		if( item.hasAttr(Limit.class) )
+		if( item.hasAttribute(Limit.class) )
 		{
 			//get the limit attribute
-			Limit lm = item.getAttr(Limit.class);
+			Limit lm = item.getAttribute(Limit.class, false);
 			
 			//get or create a new limit entry
 			LimitEntry entry = limits.get(lm.getID());
@@ -226,10 +226,10 @@ public class LimitManager {
 	
 	public int getPlayerUsed(String player, StockItem item)
 	{
-		if( item.hasAttr(Limit.class) )
+		if( item.hasAttribute(Limit.class) )
 		{
 			//get the limit attribute
-			Limit lm = item.getAttr(Limit.class);
+			Limit lm = item.getAttribute(Limit.class, false);
 			
 			//get or create a new limit entry
 			LimitEntry entry = limits.get(lm.getID());

@@ -1,21 +1,16 @@
 package net.dandielo.citizens.traders_v3.utils.items.attributes;
 
-import org.bukkit.inventory.ItemStack;
+import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
+import net.dandielo.citizens.traders_v3.utils.items.StockItemAttribute;
 
-import net.dandielo.citizens.traders_v3.core.exceptions.InvalidItemException;
-import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeInvalidValueException;
-import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeValueNotFoundException;
-import net.dandielo.citizens.traders_v3.utils.items.Attribute;
-import net.dandielo.citizens.traders_v3.utils.items.ItemAttr;
-
-@Attribute(name = "Multiplier", key = "m", standalone = true, priority = 0)
-public class Multiplier extends ItemAttr {
-
+@net.dandielo.core.items.serialize.Attribute(
+		name = "Multiplier", key = "m", standalone = true, priority = 0)
+public class Multiplier extends StockItemAttribute {
 	private double multiplier;
 	
-	public Multiplier(String key)
+	public Multiplier(StockItem item, String key)
 	{
-		super(key);
+		super(item, key);
 	}
 	
 	public double getMultiplier()
@@ -24,7 +19,7 @@ public class Multiplier extends ItemAttr {
 	}
 
 	@Override
-	public void onLoad(String data) throws AttributeInvalidValueException
+	public boolean deserialize(String data) 
 	{
 		try
 		{
@@ -32,27 +27,14 @@ public class Multiplier extends ItemAttr {
 		}
 		catch( Exception e )
 		{
-			throw new AttributeInvalidValueException(getInfo(), data);
+			return false;
 		}
+		return true;
 	}
 
 	@Override
-	public String onSave()
+	public String serialize()
 	{
 		return String.format("%.2f", multiplier);
 	}
-
-	@Override
-	public void onAssign(ItemStack item) throws InvalidItemException
-	{
-		//unused
-	}
-
-	@Override
-	public void onFactorize(ItemStack item)
-			throws AttributeValueNotFoundException
-	{
-		throw new AttributeValueNotFoundException();
-	}
-
 }

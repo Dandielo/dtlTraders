@@ -4,30 +4,26 @@ import java.util.List;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-
-import net.dandielo.citizens.traders_v3.TEntityStatus;
-import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeInvalidValueException;
-import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeValueNotFoundException;
 import net.dandielo.citizens.traders_v3.core.locale.LocaleManager;
+import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
 import net.dandielo.citizens.traders_v3.traders.transaction.CurrencyHandler;
 import net.dandielo.citizens.traders_v3.traders.transaction.TransactionInfo;
-import net.dandielo.citizens.traders_v3.utils.items.Attribute;
-import net.dandielo.citizens.traders_v3.utils.items.ItemAttr;
+import net.dandielo.citizens.traders_v3.utils.items.StockItemAttribute;
+import net.dandielo.core.items.serialize.Attribute;
 
 @Attribute(
 		name = "Player Resources Currency", 
 		key = "p", sub = {"h", "f", "e", "l"}, 
-		standalone = true, priority = 0,
-		status = {TEntityStatus.BUY, TEntityStatus.SELL, TEntityStatus.SELL_AMOUNTS, TEntityStatus.MANAGE_PRICE})
-public class PlayerResourcesCurrency extends ItemAttr implements CurrencyHandler {
+		standalone = true, priority = 0)
+//		status = {TEntityStatus.BUY, TEntityStatus.SELL, TEntityStatus.SELL_AMOUNTS, TEntityStatus.MANAGE_PRICE})
+public class PlayerResourcesCurrency extends StockItemAttribute implements CurrencyHandler {
 	private int experience;
 	private double health; 
 	private int level;
 	private int food;
 
-	public PlayerResourcesCurrency(String key, String sub) {
-		super(key, sub);
+	public PlayerResourcesCurrency(StockItem item, String key, String sub) {
+		super(item, key, sub);
 	}
 
 	@Override
@@ -37,32 +33,32 @@ public class PlayerResourcesCurrency extends ItemAttr implements CurrencyHandler
 		int amount = info.getScale();
 		if (stock.equals("sell"))
 		{
-			if (getSub().equals("h"))
+			if (getSubkey().equals("h"))
 				player.setHealth(player.getHealth() - health * ((double)amount));
-			if (getSub().equals("f"))
+			if (getSubkey().equals("f"))
 				player.setFoodLevel(player.getFoodLevel() - food * amount);
-			if (getSub().equals("e"))
+			if (getSubkey().equals("e"))
 				giveSilentExperience(player, (int) (-experience * info.getTotalScaling()));
-			if (getSub().equals("l"))
+			if (getSubkey().equals("l"))
 				player.setLevel(player.getLevel() - level * amount);
 		}
 		else if (stock.equals("buy"))
 		{
-			if (getSub().equals("h"))
+			if (getSubkey().equals("h"))
 			{
 				double hp = health * amount + player.getHealth();
 				player.setHealth(hp > player.getMaxHealth() ? player.getMaxHealth() : hp);
 			}
-			if (getSub().equals("f"))
+			if (getSubkey().equals("f"))
 			{
 				int fd = food * amount + player.getFoodLevel();
 				player.setFoodLevel(fd > 20 ? 20 : fd);
 			}
-			if (getSub().equals("e"))
+			if (getSubkey().equals("e"))
 			{
 				giveSilentExperience(player, (int) (experience * info.getTotalScaling()));
 			}
-			if (getSub().equals("l"))
+			if (getSubkey().equals("l"))
 			{
 				player.setLevel(player.getLevel() + level * amount);
 			}
@@ -77,13 +73,13 @@ public class PlayerResourcesCurrency extends ItemAttr implements CurrencyHandler
 		int amount = info.getScale();
 		if (stock.equals("sell"))
 		{
-			if (getSub().equals("h"))
+			if (getSubkey().equals("h"))
 				return player.getHealth() > (((double)amount) * health);
-			if (getSub().equals("f"))
+			if (getSubkey().equals("f"))
 				return player.getFoodLevel() >= food * amount;
-			if (getSub().equals("e"))
+			if (getSubkey().equals("e"))
 				return getTotalExperience(player) >= (int) (info.getTotalScaling() * experience);	
-			if (getSub().equals("l"))
+			if (getSubkey().equals("l"))
 				return player.getLevel() >= amount * level;					
 		}
 		else if (stock.equals("buy")) 
@@ -95,13 +91,13 @@ public class PlayerResourcesCurrency extends ItemAttr implements CurrencyHandler
 
 	@Override
 	public double getTotalPrice(TransactionInfo info) {
-		if (getSub().equals("h"))
+		if (getSubkey().equals("h"))
 			return health * info.getScale();
-		if (getSub().equals("f"))
+		if (getSubkey().equals("f"))
 			return food * info.getScale();
-		if (getSub().equals("e"))
+		if (getSubkey().equals("e"))
 			return (int)(experience * info.getTotalScaling());
-		if (getSub().equals("l"))
+		if (getSubkey().equals("l"))
 			return level * info.getScale();
 		return 0.0;
 	}
@@ -113,7 +109,7 @@ public class PlayerResourcesCurrency extends ItemAttr implements CurrencyHandler
 		ChatColor mReqColor = this.allowTransaction(info) ? ChatColor.GREEN : ChatColor.RED;
 		for (String lLine : lm.getLore("item-currency-price"))
 		{
-			if (getSub().equals("h"))
+			if (getSubkey().equals("h"))
 			{
 				lore.add(
 						lLine
@@ -121,7 +117,7 @@ public class PlayerResourcesCurrency extends ItemAttr implements CurrencyHandler
 						.replace("{text}", " ").replace("{currency}", mReqColor + lm.getKeyword("health-points"))
 						);
 			}
-			if (getSub().equals("f"))
+			if (getSubkey().equals("f"))
 			{
 				lore.add(
 						lLine
@@ -129,7 +125,7 @@ public class PlayerResourcesCurrency extends ItemAttr implements CurrencyHandler
 						.replace("{text}", " ").replace("{currency}", mReqColor + lm.getKeyword("food-level"))
 						);
 			}
-			if (getSub().equals("e"))
+			if (getSubkey().equals("e"))
 			{
 				lore.add(
 						lLine
@@ -137,7 +133,7 @@ public class PlayerResourcesCurrency extends ItemAttr implements CurrencyHandler
 						.replace("{text}", " ").replace("{currency}", mReqColor + lm.getKeyword("experience"))
 						);
 			}
-			if (getSub().equals("l"))
+			if (getSubkey().equals("l"))
 			{
 				lore.add(
 						lLine
@@ -150,47 +146,42 @@ public class PlayerResourcesCurrency extends ItemAttr implements CurrencyHandler
 	
 	@Override
 	public String getName() {
-		if (getSub().equals("h"))
+		if (getSubkey().equals("h"))
 			return "Health currency";
-		if (getSub().equals("f"))
+		if (getSubkey().equals("f"))
 			return "Food currency";
-		if (getSub().equals("e"))
+		if (getSubkey().equals("e"))
 			return "Experience currency";
-		if (getSub().equals("l"))
+		if (getSubkey().equals("l"))
 			return "Level currency";
 		return "Error!";
 	}
 
 	@Override
-	public void onLoad(String data) throws AttributeInvalidValueException {
-		if (data == "") throw new AttributeInvalidValueException(getInfo(), data);
-		if (getSub().equals("h"))
+	public boolean deserialize(String data)  {
+		if (data == "") return false;
+		if (getSubkey().equals("h"))
 			health = Double.parseDouble(data);
-		if (getSub().equals("f"))
+		if (getSubkey().equals("f"))
 			food = Integer.parseInt(data);
-		if (getSub().equals("e"))
+		if (getSubkey().equals("e"))
 			experience = Integer.parseInt(data);
-		if (getSub().equals("l"))
+		if (getSubkey().equals("l"))
 			level = Integer.parseInt(data);
+		return true;
 	}
 
 	@Override
-	public String onSave() {
-		if (getSub().equals("h"))
+	public String serialize() {
+		if (getSubkey().equals("h"))
 			return String.valueOf(health);
-		if (getSub().equals("f"))
+		if (getSubkey().equals("f"))
 			return String.valueOf(food);
-		if (getSub().equals("e"))
+		if (getSubkey().equals("e"))
 			return String.valueOf(experience);
-		if (getSub().equals("l"))
+		if (getSubkey().equals("l"))
 			return String.valueOf(level);
 		return "";
-	}
-
-	@Override
-	public void onFactorize(ItemStack item)
-			throws AttributeValueNotFoundException {
-		throw new AttributeValueNotFoundException();
 	}
 	
 	//Experience helpers

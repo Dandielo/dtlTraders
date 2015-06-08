@@ -1,45 +1,28 @@
 package net.dandielo.citizens.traders_v3.utils.items.attributes;
 
-import org.bukkit.inventory.ItemStack;
-
-import net.dandielo.citizens.traders_v3.core.exceptions.InvalidItemException;
-import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeInvalidValueException;
-import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeValueNotFoundException;
-import net.dandielo.citizens.traders_v3.utils.items.Attribute;
-import net.dandielo.citizens.traders_v3.utils.items.ItemAttr;
+import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
+import net.dandielo.citizens.traders_v3.utils.items.StockItemAttribute;
+import net.dandielo.core.items.serialize.Attribute;
 
 @Attribute(name="Tier", key = "t", priority = 25, standalone = true)
-public class Tier extends ItemAttr {
+public class Tier extends StockItemAttribute {
 	private String tier;
 	
-	public Tier(String key)
+	public Tier(StockItem item, String key)
 	{
-		super(key);
+		super(item, key);
 	}
 
 	@Override
-	public void onLoad(String data) throws AttributeInvalidValueException
+	public boolean deserialize(String data)
 	{
 		tier = data;
+		return true;
 	}
 
 	@Override
-	public String onSave()
+	public String serialize()
 	{
 		return tier;
 	}
-
-	@Override
-	public void onAssign(ItemStack item) throws InvalidItemException
-	{
-		//unused
-	}
-
-	@Override
-	public void onFactorize(ItemStack item)
-			throws AttributeValueNotFoundException
-	{
-		throw new AttributeValueNotFoundException();
-	}
-
 }

@@ -16,7 +16,6 @@ import net.dandielo.citizens.traders_v3.core.dB.DebugLevel;
 import net.dandielo.citizens.traders_v3.traders.patterns.Pattern;
 import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
 import net.dandielo.citizens.traders_v3.traders.transaction.CurrencyHandler;
-import net.dandielo.citizens.traders_v3.utils.items.ItemAttr;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Multiplier;
 
 public class PricePattern extends Pattern {
@@ -60,7 +59,7 @@ public class PricePattern extends Pattern {
 				{
 					StockItem stockItem = new StockItem(item);
 
-					if ( tier ) stockItem.addAttr("t", getName());
+					if ( tier ) stockItem.addAttribute("t", getName());
 
 					sell.add(stockItem);
 					buy.add(stockItem);
@@ -73,7 +72,7 @@ public class PricePattern extends Pattern {
 					{
 						StockItem stockItem = new StockItem(item);
 
-						if ( tier ) stockItem.addAttr("t", getName());
+						if ( tier ) stockItem.addAttribute("t", getName());
 
 						//specific debug info
 						dB.spec(DebugLevel.S2_MAGIC_POWA, "Added \"", stockItem, "\" item to the sell category");
@@ -88,7 +87,7 @@ public class PricePattern extends Pattern {
 						{
 							StockItem stockItem = new StockItem(item);
 
-							if ( tier ) stockItem.addAttr("t", getName());
+							if ( tier ) stockItem.addAttribute("t", getName());
 
 							buy.add(stockItem);
 						}
@@ -210,17 +209,18 @@ public class PricePattern extends Pattern {
 		//reset priorities before we continue
 		result.resetPriorities();
 		dB.spec(DebugLevel.CURRENCY, "Stock size: ", items.get(stock).size());
-		for (StockItem patternItem : items.get(stock))
-		{
-			dB.spec(DebugLevel.CURRENCY, "Item: ", patternItem.toString());
-			int tempPriority = patternItem.priorityMatch(item);
-			dB.spec(DebugLevel.CURRENCY, "Priority: ", tempPriority);
-			if (patternItem.hasMultiplier())
-				result.multiplier(patternItem.getAttr(Multiplier.class), tempPriority + 1000 * priority);
-			for (ItemAttr patternAttrib : patternItem.getAttribs("p"))
-				if (patternAttrib instanceof CurrencyHandler)
-					result.merge((CurrencyHandler) patternAttrib, tempPriority + 1000 * priority);
-		}
+		//TODO: Currency update
+//		for (StockItem patternItem : items.get(stock))
+//		{
+//			dB.spec(DebugLevel.CURRENCY, "Item: ", patternItem.toString());
+//			int tempPriority = patternItem.priorityMatch(item);
+//			dB.spec(DebugLevel.CURRENCY, "Priority: ", tempPriority);
+//			if (patternItem.hasMultiplier())
+//				result.multiplier(patternItem.getAttr(Multiplier.class), tempPriority + 1000 * priority);
+//			for (ItemAttribute patternAttrib : patternItem.getAttribs("p"))
+//				if (patternAttrib instanceof CurrencyHandler)
+//					result.merge((CurrencyHandler) patternAttrib, tempPriority + 1000 * priority);
+//		}
 		
 		//override with tiers
 		for (Map.Entry<String, PricePattern> e : tiers.entrySet())

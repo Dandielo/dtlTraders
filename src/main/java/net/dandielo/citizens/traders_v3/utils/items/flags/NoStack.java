@@ -1,22 +1,14 @@
 package net.dandielo.citizens.traders_v3.utils.items.flags;
 
-import org.bukkit.inventory.ItemStack;
-
-import net.dandielo.citizens.traders_v3.core.exceptions.InvalidItemException;
-import net.dandielo.citizens.traders_v3.utils.items.Attribute;
-import net.dandielo.citizens.traders_v3.utils.items.ItemFlag;
+import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
+import net.dandielo.citizens.traders_v3.utils.items.StockItemFlag;
+import net.dandielo.core.items.serialize.Attribute;
 
 @Attribute(name = "NoStack", key = ".nostack")
-public class NoStack extends ItemFlag {
+public class NoStack extends StockItemFlag {
 
-	public NoStack(String key)
+	public NoStack(StockItem item, String key)
 	{
-		super(key);
+		super(item, key);
 	}
-
-	@Override
-	public void onAssign(ItemStack item) throws InvalidItemException
-	{
-	}
-
 }

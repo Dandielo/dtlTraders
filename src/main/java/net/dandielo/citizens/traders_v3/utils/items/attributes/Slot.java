@@ -1,13 +1,11 @@
 package net.dandielo.citizens.traders_v3.utils.items.attributes;
 
-import org.bukkit.inventory.ItemStack;
-
-import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeInvalidValueException;
-import net.dandielo.citizens.traders_v3.utils.items.Attribute;
-import net.dandielo.citizens.traders_v3.utils.items.ItemAttr;
+import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
+import net.dandielo.citizens.traders_v3.utils.items.StockItemAttribute;
+import net.dandielo.core.items.serialize.Attribute;
 
 @Attribute(name="Slot", key="s", required = true, priority = 0)
-public class Slot extends ItemAttr {
+public class Slot extends StockItemAttribute {
 	private int slot;
 	
 	/**
@@ -15,8 +13,8 @@ public class Slot extends ItemAttr {
 	 * @param key
 	 *     unique key to register 
 	 */
-	public Slot(String key) {
-		super(key);
+	public Slot(StockItem item, String key) {
+		super(item, key);
 		slot = -1;
 	}
 	
@@ -41,7 +39,7 @@ public class Slot extends ItemAttr {
 	}
 
 	@Override
-	public void onLoad(String data) throws AttributeInvalidValueException 
+	public boolean deserialize(String data)
 	{
 		try
 		{
@@ -49,20 +47,14 @@ public class Slot extends ItemAttr {
 		}
 		catch(NumberFormatException e)
 		{
-			throw new AttributeInvalidValueException(getInfo(), data);
+			return false;
 		}
+		return true;
 	}
 
 	@Override
-	public String onSave()
+	public String serialize()
 	{
 		return String.valueOf(slot);
-	}
-
-	@Override
-	public void onFactorize(ItemStack item)
-	{
-		//unused
-	}
-	
+	}	
 }

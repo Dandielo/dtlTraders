@@ -6,8 +6,8 @@ import net.dandielo.citizens.traders_v3.TEntityStatus;
 import net.dandielo.citizens.traders_v3.core.dB;
 import net.dandielo.citizens.traders_v3.traders.setting.Settings;
 import net.dandielo.citizens.traders_v3.traders.transaction.ShopSession;
-import net.dandielo.citizens.traders_v3.utils.NBTUtils;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Limit;
+import net.dandielo.core.bukkit.NBTUtils;
 
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -42,11 +42,12 @@ public class StockPlayer extends StockTrader {
 				item.setSlot(inventory.firstEmpty());
 			
 			//set the lore
-			List<String> lore = item.getTempLore(status);
+			List<String> lore = item.getStatusLore(status);
 			lore = Limit.loreRequest(player.getName(), item, lore, status);
 			lore.addAll(new ShopSession(settings, player).getDescription(status.asStock(), item, item.getAmount()));
 			
-			ItemStack itemStack = item.getItem(false, lore);
+			//TODO: Fix this shit
+			ItemStack itemStack = null;//item.getItem(false, lore);
 			
 			//set the item 
 			inventory.setItem(item.getSlot(), NBTUtils.markItem(itemStack));
@@ -65,11 +66,12 @@ public class StockPlayer extends StockTrader {
 		for ( Integer amount : item.getAmounts() )
 		{
 			//set new amount
-			List<String> lore = item.getTempLore(status);
+			List<String> lore = item.getStatusLore(status);
 			lore = Limit.loreRequest(player.getName(), item, lore, status);
 			lore.addAll(new ShopSession(settings, player).getDescription("sell", item, amount));
 			
-			ItemStack itemStack = item.getItem(false, lore);
+			//TODO: Fix this shit
+			ItemStack itemStack = null;// item.getItem(false, lore);
 			itemStack.setAmount(amount);
 
 			//set the lore
@@ -103,9 +105,9 @@ public class StockPlayer extends StockTrader {
 	//override to support item patterns
 	public StockItem getItem(StockItem item, String stock)
 	{
-		for ( StockItem sItem : this.stock.get(stock) )
+		for (StockItem sItem : this.stock.get(stock))
 		{
-			if ( sItem.equalsWeak(item) )
+			if (sItem.similar(item))
 			{
 				return sItem;
 			}

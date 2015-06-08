@@ -58,8 +58,8 @@ public class ItemPattern extends Pattern {
 					if ( item instanceof String )
 					{
 						StockItem stockItem = new StockItem((String)item);
-						stockItem.addAttr("pat", String.valueOf(priority));
-						if ( tier ) stockItem.addAttr("t", getName());
+						stockItem.addAttribute("pat", String.valueOf(priority));
+						if ( tier ) stockItem.addAttribute("t", getName());
 						
 						sell.add(stockItem);
 						buy.add(stockItem);
@@ -70,8 +70,8 @@ public class ItemPattern extends Pattern {
 						for ( Map.Entry<String, List<String>> entry : ((Map<String, List<String>>) item).entrySet() )
 							stockItem = new StockItem(entry.getKey(), entry.getValue());
 
-						stockItem.addAttr("pat", String.valueOf(priority));
-						if ( tier ) stockItem.addAttr("t", getName());
+						stockItem.addAttribute("pat", String.valueOf(priority));
+						if ( tier ) stockItem.addAttribute("t", getName());
 
 						sell.add(stockItem);
 						buy.add(stockItem);
@@ -86,8 +86,8 @@ public class ItemPattern extends Pattern {
 						if ( item instanceof String )
 						{
 							StockItem stockItem = new StockItem((String)item);
-							stockItem.addAttr("pat", String.valueOf(priority));
-							if ( tier ) stockItem.addAttr("t", getName());
+							stockItem.addAttribute("pat", String.valueOf(priority));
+							if ( tier ) stockItem.addAttribute("t", getName());
 							
 							sell.add(stockItem);
 						}
@@ -97,8 +97,8 @@ public class ItemPattern extends Pattern {
 							for ( Map.Entry<String, List<String>> entry : ((Map<String, List<String>>) item).entrySet() )
 								stockItem = new StockItem(entry.getKey(), entry.getValue());
 
-							stockItem.addAttr("pat", String.valueOf(priority));
-							if ( tier ) stockItem.addAttr("t", getName());
+							stockItem.addAttribute("pat", String.valueOf(priority));
+							if ( tier ) stockItem.addAttribute("t", getName());
 
 							sell.add(stockItem);
 						}
@@ -113,8 +113,8 @@ public class ItemPattern extends Pattern {
 							if ( item instanceof String )
 							{
 								StockItem stockItem = new StockItem((String)item);
-								stockItem.addAttr("pat", String.valueOf(priority));
-								if ( tier ) stockItem.addAttr("t", getName());
+								stockItem.addAttribute("pat", String.valueOf(priority));
+								if ( tier ) stockItem.addAttribute("t", getName());
 								
 								buy.add(stockItem);
 							}
@@ -128,8 +128,8 @@ public class ItemPattern extends Pattern {
 									stockItem = new StockItem(entry.getKey(), entry.getValue());
 								}
 
-								stockItem.addAttr("pat", String.valueOf(priority));
-								if ( tier ) stockItem.addAttr("t", getName());
+								stockItem.addAttribute("pat", String.valueOf(priority));
+								if ( tier ) stockItem.addAttribute("t", getName());
 
 								buy.add(stockItem);
 							}

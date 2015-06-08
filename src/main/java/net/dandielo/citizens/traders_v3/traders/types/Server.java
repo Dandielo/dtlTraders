@@ -21,10 +21,10 @@ import net.dandielo.citizens.traders_v3.traders.setting.GlobalSettings;
 import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
 import net.dandielo.citizens.traders_v3.traits.TraderTrait;
 import net.dandielo.citizens.traders_v3.traits.WalletTrait;
-import net.dandielo.citizens.traders_v3.utils.NBTUtils;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Limit;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Price;
 import net.dandielo.citizens.traders_v3.utils.items.flags.StackPrice;
+import net.dandielo.core.bukkit.NBTUtils;
 
 @tNpcType(name="server", author="dandielo")
 public class Server extends Trader {
@@ -745,7 +745,8 @@ public class Server extends Trader {
 					}
 
 				//Get a clean item and it's meta
-	            ItemStack itemStack = item.getItem(false, item.getTempLore(status));
+				//TODO: Fix shit again!
+	            ItemStack itemStack = null;// item.getItem(false, item.getStatusLore(status));
 	            
 	            //replace the item with that one in the inventory
 	            e.getInventory().setItem(item.getSlot(), NBTUtils.markItem(itemStack));
@@ -771,9 +772,9 @@ public class Server extends Trader {
 			StockItem item = getSelectedItem();
 
 			//get the limit attribute
-			if (!item.hasAttr(Limit.class))
-				item.addAttr("l", this.settings.getNPC().getId() + "@" + baseStatus.asStock() + ":" + item.getSlot() + "/0/0s");
-			Limit limit = item.getAttr(Limit.class);
+			if (!item.hasAttribute(Limit.class))
+				item.addAttribute("l", this.settings.getNPC().getId() + "@" + baseStatus.asStock() + ":" + item.getSlot() + "/0/0s");
+			Limit limit = item.getAttribute(Limit.class, false);
 
 			//show the current price in chat, if cursor is AIR
 			if ( e.getCursor().getType().equals(Material.AIR) )
@@ -838,7 +839,8 @@ public class Server extends Trader {
 				}
 
 				//Get a clean item and it's meta
-				ItemStack itemStack = item.getItem(false, item.getTempLore(status));
+				//TODO: Another shit fix!
+				ItemStack itemStack = null;//item.getItem(false, item.getStatusLore(status));
 				//replace the item with that one in the inventory
 				e.getInventory().setItem(item.getSlot(), NBTUtils.markItem(itemStack));
 			}
@@ -846,7 +848,7 @@ public class Server extends Trader {
 			//remove the attribute if not needed
 			if (limit.getLimit() == 0 && limit.getPlayerLimit() == 0)
 			{
-				item.removeAttr(Limit.class);
+				item.removeAttribute(Limit.class);
 			}
 		}
 		e.setCancelled(true);
@@ -869,9 +871,9 @@ public class Server extends Trader {
 			StockItem item = getSelectedItem();
 
 			//get the limit attribute
-			if (!item.hasAttr(Limit.class))
-				item.addAttr("l", this.settings.getNPC().getId() + "@" + baseStatus.asStock() + ":" + item.getSlot() + "/0/0s");
-			Limit limit = item.getAttr(Limit.class);
+			if (!item.hasAttribute(Limit.class))
+				item.addAttribute("l", this.settings.getNPC().getId() + "@" + baseStatus.asStock() + ":" + item.getSlot() + "/0/0s");
+			Limit limit = item.getAttribute(Limit.class, false);
 
 			//show the current price in chat, if cursor is AIR
 			if ( e.getCursor().getType().equals(Material.AIR) )
@@ -936,7 +938,8 @@ public class Server extends Trader {
 				}
 
 				//Get a clean item and it's meta
-				ItemStack itemStack = item.getItem(false, item.getTempLore(status));
+				//TODO: Next fix incoming!
+				ItemStack itemStack = null;//item.getItem(false, item.getStatusLore(status));
 
 				//replace the item with that one in the inventory
 				e.getInventory().setItem(item.getSlot(), NBTUtils.markItem(itemStack));
@@ -945,7 +948,7 @@ public class Server extends Trader {
 				//remove the attribute if not needed
 				if (limit.getLimit() == 0 && limit.getPlayerLimit() == 0)
 				{
-					item.removeAttr(Limit.class);
+					item.removeAttribute(Limit.class);
 				}
 			}
 			e.setCancelled(true);

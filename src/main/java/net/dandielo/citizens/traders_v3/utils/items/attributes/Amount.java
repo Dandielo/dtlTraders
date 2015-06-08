@@ -3,16 +3,18 @@ package net.dandielo.citizens.traders_v3.utils.items.attributes;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
+import net.dandielo.citizens.traders_v3.utils.items.ShopStatus;
+import net.dandielo.citizens.traders_v3.utils.items.StockItemAttribute;
+import net.dandielo.core.items.serialize.Attribute;
+import net.dandielo.core.items.serialize.ItemAttribute;
+
 import org.bukkit.inventory.ItemStack;
 
-import net.dandielo.citizens.traders_v3.TEntityStatus;
-import net.dandielo.citizens.traders_v3.core.exceptions.attributes.AttributeInvalidValueException;
-import net.dandielo.citizens.traders_v3.utils.items.Attribute;
-import net.dandielo.citizens.traders_v3.utils.items.ItemAttr;
 
-@Attribute(name="Amount", key = "a", required = true, priority = 5,
-status = {TEntityStatus.MANAGE_SELL, TEntityStatus.MANAGE_BUY})
-public class Amount extends ItemAttr {
+@ShopStatus
+@Attribute(name="ShopAmount", key = "a", required = true, priority = 5)
+public class Amount extends StockItemAttribute {
 	private List<Integer> amounts = new ArrayList<Integer>();
 	
 	/**
@@ -20,9 +22,8 @@ public class Amount extends ItemAttr {
 	 * @param key
 	 *     attribute unique key
 	 */
-	public Amount(String key) {
-		super(key);
-		//default value
+	public Amount(StockItem item, String key) {
+		super(item, key);
 		amounts.add(1);
 	}
 	
@@ -74,8 +75,41 @@ public class Amount extends ItemAttr {
 	}
 
 	@Override
-	public void onLoad(String data) throws AttributeInvalidValueException 
+	public void onAssign(ItemStack item, boolean unused)
 	{
+		item.setAmount(getAmount());
+	}
+
+	@Override
+	public boolean onRefactor(ItemStack item)
+	{
+		amounts.clear();
+		amounts.add(item.getAmount());
+		return true;
+	}
+
+	@Override
+	public boolean similar(ItemAttribute that)
+	{
+		return equals(that);
+	}
+
+	@Override
+	public boolean equals(ItemAttribute that)
+	{
+		return ((Amount)that).getAmount() == getAmount();
+	}
+
+	@Override
+	public String serialize() {
+		String result = "";
+		for ( int i = 0 ; i < amounts.size() ; ++i )
+			result += amounts.get(i) + ( i + 1 < amounts.size() ? "," : "" );
+		return result;
+	}
+
+	@Override
+	public boolean deserialize(String data) {
 		amounts.clear();
 		try
 		{
@@ -84,41 +118,8 @@ public class Amount extends ItemAttr {
 		} 
 		catch (NumberFormatException e)
 		{
-			throw new AttributeInvalidValueException(getInfo(), data);
+			return false;
 		}
-	}
-
-	@Override
-	public String onSave() 
-	{
-		String result = "";
-		for ( int i = 0 ; i < amounts.size() ; ++i )
-			result += amounts.get(i) + ( i + 1 < amounts.size() ? "," : "" );
-		return result;
-	}
-
-	@Override
-	public void onAssign(ItemStack item)
-	{
-		item.setAmount(getAmount());
-	}
-
-	@Override
-	public void onFactorize(ItemStack item)
-	{
-		amounts.clear();
-		amounts.add(item.getAmount());
-	}
-	
-	@Override
-	public void onStatusLoreRequest(TEntityStatus status, List<String> lore)
-	{
-		//TODO implement later
-	}
-
-	@Override
-	public boolean equalsStrong(ItemAttr amount)
-	{
-		return ((Amount)amount).getAmount() == getAmount();
+		return true;
 	}
 }
