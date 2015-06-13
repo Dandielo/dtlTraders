@@ -745,8 +745,7 @@ public class Server extends Trader {
 					}
 
 				//Get a clean item and it's meta
-				//TODO: Fix shit again!
-	            ItemStack itemStack = null;// item.getItem(false, item.getStatusLore(status));
+	            ItemStack itemStack = item.getItem(false, item.getDescription(status));
 	            
 	            //replace the item with that one in the inventory
 	            e.getInventory().setItem(item.getSlot(), NBTUtils.markItem(itemStack));
@@ -839,8 +838,7 @@ public class Server extends Trader {
 				}
 
 				//Get a clean item and it's meta
-				//TODO: Another shit fix!
-				ItemStack itemStack = null;//item.getItem(false, item.getStatusLore(status));
+				ItemStack itemStack = item.getItem(false, item.getDescription(status));
 				//replace the item with that one in the inventory
 				e.getInventory().setItem(item.getSlot(), NBTUtils.markItem(itemStack));
 			}
@@ -939,7 +937,7 @@ public class Server extends Trader {
 
 				//Get a clean item and it's meta
 				//TODO: Next fix incoming!
-				ItemStack itemStack = null;//item.getItem(false, item.getStatusLore(status));
+				ItemStack itemStack = item.getItem(false, item.getDescription(status));
 
 				//replace the item with that one in the inventory
 				e.getInventory().setItem(item.getSlot(), NBTUtils.markItem(itemStack));

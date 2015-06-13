@@ -14,8 +14,22 @@ import net.dandielo.citizens.traders_v3.traders.limits.LimitManager;
 import net.dandielo.citizens.traders_v3.traders.setting.GlobalSettings;
 import net.dandielo.citizens.traders_v3.traits.TraderTrait;
 import net.dandielo.citizens.traders_v3.traits.WalletTrait;
+import net.dandielo.citizens.traders_v3.utils.items.attributes.BlockCurrency;
+import net.dandielo.citizens.traders_v3.utils.items.attributes.Limit;
+import net.dandielo.citizens.traders_v3.utils.items.attributes.Multiplier;
+import net.dandielo.citizens.traders_v3.utils.items.attributes.PatternItem;
+import net.dandielo.citizens.traders_v3.utils.items.attributes.PlayerResourcesCurrency;
+import net.dandielo.citizens.traders_v3.utils.items.attributes.Price;
+import net.dandielo.citizens.traders_v3.utils.items.attributes.Slot;
+import net.dandielo.citizens.traders_v3.utils.items.attributes.Tier;
+import net.dandielo.citizens.traders_v3.utils.items.flags.AnyLore;
+import net.dandielo.citizens.traders_v3.utils.items.flags.NoStack;
+import net.dandielo.citizens.traders_v3.utils.items.flags.Regex;
+import net.dandielo.citizens.traders_v3.utils.items.flags.StackPrice;
 import net.dandielo.stats.bukkit.Stats;
 import net.dandielo.stats.core.Manager;
+import static net.dandielo.core.items.serialize.ItemAttribute.registerAttr;
+import static net.dandielo.core.items.serialize.ItemFlag.registerFlag;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.ConsoleCommandSender;
@@ -26,7 +40,6 @@ public class DtlTraders extends JavaPlugin {
 	public static final String PREFIX = "[dtlTraders]" + ChatColor.WHITE; 
 	
 	//bukkit resources
-	//private static Logger logger = Logger.getLogger("Minecraft");
 	private static ConsoleCommandSender console;
 	
 	//plugin instance
@@ -87,9 +100,19 @@ public class DtlTraders extends JavaPlugin {
 		CitizensAPI.getTraitFactory().registerTrait(TraitInfo.create(WalletTrait.class).withName("wallet"));
 		
 		//registering core extensions
-		//TODO: register dtlTraders only atributes.
-//		ItemAttribute.registerCoreAttributes();
-//		ItemFlag.registerCoreFlags();
+		registerAttr(PlayerResourcesCurrency.class);
+		registerAttr(BlockCurrency.class);
+		registerAttr(PatternItem.class);
+		registerAttr(Multiplier.class);
+		registerAttr(Limit.class);
+		registerAttr(Price.class);
+		registerAttr(Slot.class);
+		registerAttr(Tier.class);
+
+		registerFlag(StackPrice.class);
+		registerFlag(AnyLore.class);
+		registerFlag(NoStack.class);
+		registerFlag(Regex.class);
 		tNpcManager.registerTypes();
 		
 		//register events
@@ -163,14 +186,12 @@ public class DtlTraders extends JavaPlugin {
 	public static void info(String message)
 	{
 		console.sendMessage(PREFIX + "[INFO] " + message);
-	//	logger.info("["+instance.getDescription().getName()+"] " + message);
 	}
 	
 	//static logger warning
 	public static void warning(String message)
 	{
 		console.sendMessage(PREFIX + ChatColor.GOLD + "[WARNING] " + ChatColor.RESET + message);
-	//	logger.warning("["+instance.getDescription().getName()+"] " + message);
 	}
 	
 	//static logger severe

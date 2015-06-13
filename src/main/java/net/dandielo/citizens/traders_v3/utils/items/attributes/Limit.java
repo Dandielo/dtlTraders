@@ -113,8 +113,6 @@ public class Limit extends StockItemAttribute {
 	@Override
 	public void getDescription(TEntityStatus status, List<String> lore)
 	{
-		//TODO: If not in manager mode then we don't want to manage this request
-		//Maybe later just update the Attribute settings?
 		if ( !status.inManagementMode() ) return;
 
 		//add the lore to the item

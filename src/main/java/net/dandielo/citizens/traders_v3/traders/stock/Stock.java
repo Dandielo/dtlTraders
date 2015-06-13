@@ -166,7 +166,4 @@ public abstract class Stock implements InventoryHolder {
 	{
 		return this.stock.get(stock);
 	}
-//
-//	public abstract double parsePrice(StockItem item, int slot);
-//	public abstract double parsePrice(StockItem item, String stock, int amount);
 }

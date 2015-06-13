@@ -60,13 +60,13 @@ public abstract class StockItemAttribute extends ItemAttribute {
 	{
 	}
 
-	/**
-	 * Tells the item factorizing function to not check the lore anymore because it was already checked, retrieved and saved somewhere else. 
-	 */
-	public void loreManaged()
-	{
-		item.loreManaged(true);
-	}
+//	/**
+//	 * Tells the item factorizing function to not check the lore anymore because it was already checked, retrieved and saved somewhere else. 
+//	 */
+//	public void loreManaged()
+//	{
+//		item.loreManaged(true);
+//	}
 
 	/**
 	 * Returns information about the attribute

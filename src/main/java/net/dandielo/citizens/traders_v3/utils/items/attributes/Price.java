@@ -67,7 +67,7 @@ public class Price extends StockItemAttribute implements CurrencyHandler {
 	@Override
 	public void getDescription(TEntityStatus status, List<String> lore)
 	{
-		if ( !status.inManagementMode() ) return;
+		if (!status.inManagementMode()) return;
 
 		//add the lore to the item
 		for ( String pLore : LocaleManager.locale.getLore("item-unitPrice") )

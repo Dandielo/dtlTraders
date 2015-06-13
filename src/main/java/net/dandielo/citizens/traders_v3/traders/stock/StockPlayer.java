@@ -3,7 +3,9 @@ package net.dandielo.citizens.traders_v3.traders.stock;
 import java.util.List;
 
 import net.dandielo.citizens.traders_v3.TEntityStatus;
+import net.dandielo.citizens.traders_v3.tNpcManager;
 import net.dandielo.citizens.traders_v3.core.dB;
+import net.dandielo.citizens.traders_v3.traders.Trader;
 import net.dandielo.citizens.traders_v3.traders.setting.Settings;
 import net.dandielo.citizens.traders_v3.traders.transaction.ShopSession;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Limit;
@@ -31,6 +33,8 @@ public class StockPlayer extends StockTrader {
 
 	@Override
 	public void setInventory(Inventory inventory, TEntityStatus status) {
+		Trader trader = tNpcManager.instance().getTraderRelation(player);
+		
 		//debug info
 		dB.info("Setting inventory, status: ", status.name().toLowerCase());
 		
@@ -42,12 +46,11 @@ public class StockPlayer extends StockTrader {
 				item.setSlot(inventory.firstEmpty());
 			
 			//set the lore
-			List<String> lore = item.getStatusLore(status);
+			List<String> lore = item.getDescription(status);
 			lore = Limit.loreRequest(player.getName(), item, lore, status);
-			lore.addAll(new ShopSession(settings, player).getDescription(status.asStock(), item, item.getAmount()));
+			lore.addAll(new ShopSession(trader, player).getDescription(status.asStock(), item, item.getAmount()));
 			
-			//TODO: Fix this shit
-			ItemStack itemStack = null;//item.getItem(false, lore);
+			ItemStack itemStack = item.getItem(false, lore);
 			
 			//set the item 
 			inventory.setItem(item.getSlot(), NBTUtils.markItem(itemStack));
@@ -58,6 +61,8 @@ public class StockPlayer extends StockTrader {
 	@Override
 	public void setAmountsInventory(Inventory inventory, TEntityStatus status, StockItem item) 
 	{
+		Trader trader = tNpcManager.instance().getTraderRelation(player);
+		
 		//debug info
 		dB.info("Setting inventory, status: ", TEntityStatus.SELL_AMOUNTS.name().toLowerCase());
 		
@@ -66,12 +71,11 @@ public class StockPlayer extends StockTrader {
 		for ( Integer amount : item.getAmounts() )
 		{
 			//set new amount
-			List<String> lore = item.getStatusLore(status);
+			List<String> lore = item.getDescription(status);
 			lore = Limit.loreRequest(player.getName(), item, lore, status);
-			lore.addAll(new ShopSession(settings, player).getDescription("sell", item, amount));
+			lore.addAll(new ShopSession(trader, player).getDescription("sell", item, amount));
 			
-			//TODO: Fix this shit
-			ItemStack itemStack = null;// item.getItem(false, lore);
+			ItemStack itemStack = item.getItem(false, lore);
 			itemStack.setAmount(amount);
 
 			//set the lore

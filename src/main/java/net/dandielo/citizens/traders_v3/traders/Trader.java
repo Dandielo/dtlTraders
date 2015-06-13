@@ -461,8 +461,8 @@ public abstract class Trader implements TradingEntity {
 			if ( bItem != null && !stock.isUiSlot(slot) )
 			{
 				//to stock item
-				//TODO: Fix this too and too.
-				StockItem sItem = null;// ItemUtils.createAbstractStockItem(bItem);
+				//TODO: Monitor this one
+				StockItem sItem = ItemUtils.createStockItem(bItem);
 				dB.spec(dB.DebugLevel.S3_ATTRIB, "Item: ", sItem);
 				
 				StockItem matchedItem = null;
@@ -907,9 +907,8 @@ public abstract class Trader implements TradingEntity {
 	 */
 	protected boolean selectAndCheckItem(ItemStack item, String bStock)
 	{
-		//TODO: Fix this WHOOOOOLE SHIT!
-		//return (selectedItem = item != null && !item.getType().equals(Material.AIR) ? stock.getItem(ItemUtils.createAbstractStockItem(item), bStock) : null ) != null;
-		return false;
+		//TODO: Monitor this
+		return (selectedItem = item != null && !item.getType().equals(Material.AIR) ? stock.getItem(ItemUtils.createStockItem(item), bStock) : null ) != null;
 	}
 	
 	/** 

@@ -182,8 +182,7 @@ public class StockTrader extends Stock {
 				item.setSlot(inventory.firstEmpty());
 
 			//set the lore
-			//TODO: Fix this shit too!
-			ItemStack itemStack = null;// item.getItem(false, item.getStatusLore(status));
+			ItemStack itemStack = item.getItem(false, item.getDescription(status));
 
 			//set the item 
 			inventory.setItem(item.getSlot(), NBTUtils.markItem(itemStack));
@@ -201,8 +200,7 @@ public class StockTrader extends Stock {
 		for ( Integer amount : item.getAmounts() )
 		{
 			//set new amount
-			//TODO: And this too!
-			ItemStack itemStack = null;//item.getItem(false, item.getStatusLore(status));
+			ItemStack itemStack = item.getItem(false, item.getDescription(status));
 			itemStack.setAmount(amount);
 
 			//set the item
@@ -227,8 +225,8 @@ public class StockTrader extends Stock {
 					item.setSlot(inventory.firstEmpty());
 
 				//set the lore
-				//TODO: And this!!
-				ItemStack itemStack = null; //item.getItem(false, item.getStatusLore(status));
+				ItemStack itemStack = item.getItem(false, item.getDescription(status));
+				
 
 				dB.spec(dB.DebugLevel.S3_ATTRIB, "End item: ", item);
 				//set the item 
@@ -242,7 +240,6 @@ public class StockTrader extends Stock {
 	{
 		Map<String, ItemStack> items = GlobalSettings.getUiItems();
 
-		//TODO mark items
 		//Switch betwean all status values
 		switch(status)
 		{

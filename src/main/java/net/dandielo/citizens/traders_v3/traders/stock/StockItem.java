@@ -87,14 +87,13 @@ public final class StockItem extends dItem {
 	}
 
 	/**
-	 * TODO: The status lore request? CHange the name and way if works 
 	 * Returns a list of temporary lore strings that should be applied depending on the traders status. 
 	 * @param status
 	 *     Status that is checked
 	 * @return
 	 *     List of lore strings
 	 */ 
-	public List<String> getStatusLore(TEntityStatus status)
+	public List<String> getDescription(TEntityStatus status)
 	{
 		//create a new list
 		List<String> lore = new ArrayList<String>();
@@ -110,8 +109,8 @@ public final class StockItem extends dItem {
 			{
 				StockItemAttribute siAttr = (StockItemAttribute) itemAttr;
 
-				for (TEntityStatus attrStatus : siAttr.getShopStatus().status())
-					if (attrStatus.equals(status))
+				//for (TEntityStatus attrStatus : siAttr.getShopStatus().status())
+				//	if (attrStatus.equals(status))
 				        siAttr.getDescription(status, lore);
 			}
 		}
@@ -123,8 +122,8 @@ public final class StockItem extends dItem {
 			{
 				StockItemFlag siFlag = (StockItemFlag) itemFlag;
 
-				for ( TEntityStatus attrStatus : siFlag.getShopStatus().status())
-					if ( attrStatus.equals(status))
+				//for (TEntityStatus attrStatus : siFlag.getShopStatus().status())
+				//	if ( attrStatus.equals(status))
 						siFlag.getDescription(status, lore);
 			}
 		}
@@ -294,27 +293,27 @@ public final class StockItem extends dItem {
 		return hasFlag(Lore.class) ? getFlag(Lore.class, false).getRawLore() : null;
 	}
 
-	/**
-	 * holds info if the lore was managed by another plugin
-	 */
-	private boolean loreManaged = false;
-	
-	/**
-	 * This function tells the item factorizer should load the lore or if it skip it because some other attribute has managed it. 
-	 * @param managed
-	 * true if the lore loading should be skipped
-	 */
-	public void loreManaged(boolean managed)
-	{
-		loreManaged = managed;
-	}
+//	/**
+//	 * holds info if the lore was managed by another plugin
+//	 */
+//	private boolean loreManaged = false;
+//	
+//	/**
+//	 * This function tells the item factorizer should load the lore or if it skip it because some other attribute has managed it. 
+//	 * @param managed
+//	 * true if the lore loading should be skipped
+//	 */
+//	public void loreManaged(boolean managed)
+//	{
+//		loreManaged = managed;
+//	}
 	
 //	private boolean standaloneAttrCheck(StockItem item)
 //	{
 //		boolean containsAll = true;
-//		for ( ItemAttribute key : item.attr )//TODO
+//		for ( ItemAttribute key : item.attr )
 //			containsAll = containsAll && !key.getInfo().standalone() ? this.attr.contains(key) : containsAll;
-//		for ( ItemAttribute key : this.attr)//TODO
+//		for ( ItemAttribute key : this.attr)
 //			containsAll = containsAll && !key.getInfo().standalone() ? item.attr.contains(key) : containsAll;
 //		return containsAll;
 //	}
@@ -337,7 +336,7 @@ public final class StockItem extends dItem {
 //	private boolean patternStandaloneAttrCheck(StockItem item)
 //	{
 //		boolean containsAll = true;
-//		for ( ItemAttribute key : this.attr )//TODO
+//		for ( ItemAttribute key : this.attr )
 //			containsAll = containsAll && !key.getInfo().standalone() ? item.attr.contains(key) : containsAll;
 //		return containsAll;
 //	}
@@ -377,7 +376,7 @@ public final class StockItem extends dItem {
 //		if ( equals )
 //		{
 //			//for each attribute in this item
-//			for ( ItemAttribute tAttr : attr )//TODO
+//			for ( ItemAttribute tAttr : attr )
 //			{
 //				//if only once is false then return false
 //				if ( !equals ) break;
@@ -389,7 +388,7 @@ public final class StockItem extends dItem {
 //				dB.low("Before ", tAttr.getInfo().name() ," check: ", equals, ", with: ", tAttr.onSave());
 //				
 //				//check each item in the second item, if the attribute is found and strong equal continue
-//				for ( ItemAttribute iAttr : item.attr )//TODO
+//				for ( ItemAttribute iAttr : item.attr )
 //				{
 //					//debug low
 //		//			dB.info("Checking ", iAttr.getInfo().name() ," with: ", iAttr.onSave());
@@ -447,7 +446,7 @@ public final class StockItem extends dItem {
 //		if ( equals )
 //		{
 //			//for each attribute in this item
-//			for ( ItemAttribute tAttr : attr )//TODO
+//			for ( ItemAttribute tAttr : attr )
 //			{
 //				//if only once is false then return false
 //				if ( !equals ) break;
@@ -459,7 +458,7 @@ public final class StockItem extends dItem {
 //				dB.low("Before ", tAttr.getInfo().name() ," check: ", equals, ", with: ", tAttr.onSave());
 //				
 //				//check each item in the second item, if the attribute is found and strong equal continue
-//				for ( ItemAttribute iAttr : item.attr )//TODO
+//				for ( ItemAttribute iAttr : item.attr )
 //				{
 //					//debug low
 //			//		dB.info("Checking ", iAttr.getInfo().name() ," with: ", iAttr.onSave());
@@ -501,78 +500,126 @@ public final class StockItem extends dItem {
 //		return (object instanceof StockItem && equalsStrong((StockItem)object));
 //	}
 	
-	//TODO: Patterns
+	//TO-DO: Patterns
 //	public final int priorityMatch(StockItem that)
 //	{
+//		
 //		int priority = 0;
-//
-//		//id and data check
-//		if ( this.hasFlag(DataCheck.class) )
+//		
+//		Material mat = getMaterial();
+//		if (mat.getMaxDurability() == 0)
 //		{
-//			if ( !this.item.getType().equals(Material.AIR) )
+//			if (mat.equals(Material.AIR))
 //			{
-//				if ( this.item.getType().equals(that.item.getType()) &&
-//					 this.item.getDurability() == that.item.getDurability() )
-//					priority += 140;
-//				else
-//					priority = -2;
+//				priority += getMaterialData().equals(that.getMaterialData()) ? 120 : -2;
 //			}
-//			else
+//			else 
 //			{
-//				if ( this.item.getType().equals(Material.AIR) && this.item.getDurability() == that.item.getDurability() )
-//					priority += 120;
-//				else
-//					priority = -2;
+//				priority += getMaterialData().equals(that.getMaterialData()) &&
+//						mat.equals(that.getMaterial()) ? 140 : -2; 
 //			}
 //		}
 //		else
 //		{
-//			if ( !this.item.getType().equals(Material.AIR) )
-//			{
-//				if ( this.item.getType().equals(that.item.getType()) )
-//				{
-//					priority = 130;
-//				}
-//				else priority = -2;
-//			}
-//			else
-//			    priority = 0;
+//			if (!mat.equals(Material.AIR))
+//				priority += mat.equals(that.getMaterial()) ? 130 : -2;	
 //		}
+//		
+////
+////		//id and data check
+////		if ( this.hasFlag(DataCheck.class) )
+////		{
+////			if ( !this.item.getType().equals(Material.AIR) )
+////			{
+////				if ( this.item.getType().equals(that.item.getType()) &&
+////					 this.item.getDurability() == that.item.getDurability() )
+////					priority += 140;
+////				else
+////					priority = -2;
+////			}
+////			else
+////			{
+////				if ( this.item.getType().equals(Material.AIR) && this.item.getDurability() == that.item.getDurability() )
+////					priority += 120;
+////				else
+////					priority = -2;
+////			}
+////		}
+////		else
+////		{
+////			if ( !this.item.getType().equals(Material.AIR) )
+////			{
+////				if ( this.item.getType().equals(that.item.getType()) )
+////				{
+////					priority = 130;
+////				}
+////				else priority = -2;
+////			}
+////			else
+////			    priority = 0;
+////		}
 //
-//		if ( patternAttributeMissmatch(that) ) return -2;
+////		if ( patternAttributeMissmatch(that) ) return -2;
+//		
 //		
 //		//now a if block to not make thousands of not needed checks 
 //		if ( priority < 0 ) return priority;
 //
-//		//for each attribute in this item
-//		for ( ItemAttribute tAttr : attr )//TODO
+//		
+//		for (ItemAttribute thisItemAttr : attributes)
 //		{
-//			//check each item in the second item, if the attribute is found and strong equal continue
-//			for ( ItemAttribute iAttr : that.attr )//TODO
+//			if (!thisItemAttr.getInfo().standalone())
 //			{
-//				//debug low
-//		//		dB.info("Checking ", iAttr.getInfo().name() ," with: ", iAttr.onSave());
-//
-//				//same attributes
-//				if ( tAttr.getClass().equals(iAttr.getClass()) && tAttr.equalsStrong(iAttr) )
-//					priority += tAttr.getInfo().priority();
-//			}
-//			//debug low
-//		//	dB.low("After ", tAttr.getInfo().name() ," check: ", String.valueOf(priority));
-//		}
-//			
-//		//for each attribute in this item
-//		for ( ItemFlag tFlag : flags.values() )
-//		{
-//			//check each item in the second item, if the attribute is found and strong equal continue
-//			for ( ItemFlag iFlag : that.flags.values() )
-//			{
-//				//same attributes
-//				if ( tFlag.getClass().equals(iFlag.getClass()) && tFlag.equalsStrong(iFlag) )
-//					priority += tFlag.getInfo().priority();
+//				for (ItemAttribute thatItemAttr : that.attributes)
+//				{
+//					if (thisItemAttr.getClass().equals(thatItemAttr.getClass()) && thisItemAttr.equals(thatItemAttr))
+//						priority += thisItemAttr.getInfo().priority();
+//				}
 //			}
 //		}
 //		
+////		//for each attribute in this item
+////		for ( ItemAttribute tAttr : attr )
+////		{
+////			//check each item in the second item, if the attribute is found and strong equal continue
+////			for ( ItemAttribute iAttr : that.attr )
+////			{
+////				//debug low
+////		//		dB.info("Checking ", iAttr.getInfo().name() ," with: ", iAttr.onSave());
+////
+////				//same attributes
+////				if ( tAttr.getClass().equals(iAttr.getClass()) && tAttr.equalsStrong(iAttr) )
+////					priority += tAttr.getInfo().priority();
+////			}
+////			//debug low
+////		//	dB.low("After ", tAttr.getInfo().name() ," check: ", String.valueOf(priority));
+////		}
+//
+//		//for each attribute in this item
+//		for (ItemFlag thisItemFlag : flags)
+//		{
+//			if (!thisItemFlag.getInfo().standalone())
+//			{
+//				for (ItemFlag thatItemFlag : that.flags)
+//				{
+//					if (thisItemFlag.getClass().equals(thatItemFlag.getClass()) && thisItemFlag.equals(thatItemFlag))
+//						priority += thisItemFlag.getInfo().priority();
+//				}
+//			}
+//		}
+////		
+////		//for each attribute in this item
+////		for ( ItemFlag tFlag : flags.values() )
+////		{
+////			//check each item in the second item, if the attribute is found and strong equal continue
+////			for ( ItemFlag iFlag : that.flags.values() )
+////			{
+////				//same attributes
+////				if ( tFlag.getClass().equals(iFlag.getClass()) && tFlag.equalsStrong(iFlag) )
+////					priority += tFlag.getInfo().priority();
+////			}
+////		}
+////		
 //	//	dB.info("Priority result: ", priority);
 //		return priority;
 //	}
