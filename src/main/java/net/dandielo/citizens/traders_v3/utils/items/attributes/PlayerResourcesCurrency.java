@@ -4,11 +4,13 @@ import java.util.List;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+
 import net.dandielo.citizens.traders_v3.core.locale.LocaleManager;
 import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
 import net.dandielo.citizens.traders_v3.traders.transaction.CurrencyHandler;
 import net.dandielo.citizens.traders_v3.traders.transaction.TransactionInfo;
 import net.dandielo.citizens.traders_v3.utils.items.StockItemAttribute;
+import net.dandielo.core.items.dItem;
 import net.dandielo.core.items.serialize.Attribute;
 
 @Attribute(
@@ -22,7 +24,7 @@ public class PlayerResourcesCurrency extends StockItemAttribute implements Curre
 	private int level;
 	private int food;
 
-	public PlayerResourcesCurrency(StockItem item, String key, String sub) {
+	public PlayerResourcesCurrency(dItem item, String key, String sub) {
 		super(item, key, sub);
 	}
 
@@ -30,7 +32,7 @@ public class PlayerResourcesCurrency extends StockItemAttribute implements Curre
 	public boolean finalizeTransaction(TransactionInfo info) {
 		String stock = info.getStock().name().toLowerCase();
 		Player player = info.getPlayerParticipant();
-		int amount = info.getScale();
+		int amount = info.getAmount();
 		if (stock.equals("sell"))
 		{
 			if (getSubkey().equals("h"))
@@ -70,7 +72,7 @@ public class PlayerResourcesCurrency extends StockItemAttribute implements Curre
 	public boolean allowTransaction(TransactionInfo info) {
 		String stock = info.getStock().name().toLowerCase();
 		Player player = info.getPlayerParticipant();
-		int amount = info.getScale();
+		int amount = info.getAmount();
 		if (stock.equals("sell"))
 		{
 			if (getSubkey().equals("h"))
@@ -92,19 +94,19 @@ public class PlayerResourcesCurrency extends StockItemAttribute implements Curre
 	@Override
 	public double getTotalPrice(TransactionInfo info) {
 		if (getSubkey().equals("h"))
-			return health * info.getScale();
+			return health * info.getAmount();
 		if (getSubkey().equals("f"))
-			return food * info.getScale();
+			return food * info.getAmount();
 		if (getSubkey().equals("e"))
 			return (int)(experience * info.getTotalScaling());
 		if (getSubkey().equals("l"))
-			return level * info.getScale();
+			return level * info.getAmount();
 		return 0.0;
 	}
 
 	@Override
 	public void getDescription(TransactionInfo info, List<String> lore) {
-		int amount = info.getScale();
+		int amount = info.getAmount();
 		LocaleManager lm = LocaleManager.locale; 
 		ChatColor mReqColor = this.allowTransaction(info) ? ChatColor.GREEN : ChatColor.RED;
 		for (String lLine : lm.getLore("item-currency-price"))

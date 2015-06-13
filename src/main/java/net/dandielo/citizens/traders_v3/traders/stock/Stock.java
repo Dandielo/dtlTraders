@@ -140,10 +140,14 @@ public abstract class Stock implements InventoryHolder {
 		si.getAmounts().clear();
 		for ( ItemStack is : inventory.getContents() ) 
 			if ( is != null ) 
+			{
 				si.addAmount(is.getAmount());
+				System.out.println(is.getAmount());
+			}
 		
 		if ( si.getAmounts().size() > 1 )
 			si.getAmounts().remove(si.getAmounts().size()-1);
+		si.setAmount(si.getAmount());
 	}
 	
 	public abstract void addItem(StockItem item, String stock);

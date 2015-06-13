@@ -28,7 +28,7 @@ public class BlockCurrency extends StockItemAttribute implements CurrencyHandler
 	public boolean finalizeTransaction(TransactionInfo info) {
 		String stock = info.getStock().name().toLowerCase();
 		Player player = info.getPlayerParticipant();
-		int amount = info.getScale();
+		int amount = info.getAmount();
 		
 		
 		boolean result = false;
@@ -66,7 +66,7 @@ public class BlockCurrency extends StockItemAttribute implements CurrencyHandler
 	public boolean allowTransaction(TransactionInfo info) {
 		String stock = info.getStock().name().toLowerCase();
 		Player player = info.getPlayerParticipant();
-		int amount = info.getScale();
+		int amount = info.getAmount();
 		
 		
 		boolean result = false;
@@ -92,7 +92,7 @@ public class BlockCurrency extends StockItemAttribute implements CurrencyHandler
 
 	@Override
 	public void getDescription(TransactionInfo info, List<String> lore) {
-		int amount = info.getScale();		
+		int amount = info.getAmount();		
 		ChatColor mReqColor = allowTransaction(info) ? ChatColor.GREEN : ChatColor.RED;
 		
 		for ( String pLore : LocaleManager.locale.getLore("item-currency-price") )

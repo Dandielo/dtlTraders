@@ -14,7 +14,7 @@ messages:
   trader-stock-price-set: '^6Set the price for: ^3{items}^6 items'
   trader-stock-price-reset: '^6Reseted all prices in stock'
   trader-transaction-item: '^6{item}, price: ^e{price}'
-  trader-transaction-success: '^6You {action} ^3{amount} ^3{item}'
+  trader-transaction-success: '^6You {action} ^3{amount} ^3{item} ^6for ^3{price}'
   trader-transaction-failed-limit-reached: '^6You reached your limit'
   trader-transaction-failed-player-money: '^6You cannot pay for this'
   trader-transaction-failed-trader-money: '^6{npc} can''t pay you for this'
@@ -135,6 +135,10 @@ ui:
   item-unitPrice:
     lore:
     - '^6Unit-Price: ^7{price}^6$'
+  item-price-summary:
+    lore:
+    - '^6Unit price: ^7{unit}^6$'
+    - '^6Total price: ^7{total}^6$'
   item-price-list:
     lore:
     - '^6Requires:'

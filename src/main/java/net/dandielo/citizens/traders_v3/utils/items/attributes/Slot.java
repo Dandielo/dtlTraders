@@ -1,7 +1,7 @@
 package net.dandielo.citizens.traders_v3.utils.items.attributes;
 
-import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
 import net.dandielo.citizens.traders_v3.utils.items.StockItemAttribute;
+import net.dandielo.core.items.dItem;
 import net.dandielo.core.items.serialize.Attribute;
 
 @Attribute(name="Slot", key="s", required = true, priority = 0)
@@ -13,7 +13,7 @@ public class Slot extends StockItemAttribute {
 	 * @param key
 	 *     unique key to register 
 	 */
-	public Slot(StockItem item, String key) {
+	public Slot(dItem item, String key) {
 		super(item, key);
 		slot = -1;
 	}

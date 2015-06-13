@@ -7,6 +7,7 @@ import net.dandielo.citizens.traders_v3.core.locale.LocaleManager;
 import net.dandielo.citizens.traders_v3.traders.limits.LimitManager;
 import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
 import net.dandielo.citizens.traders_v3.utils.items.StockItemAttribute;
+import net.dandielo.core.items.dItem;
 import net.dandielo.core.items.serialize.Attribute;
 
 @Attribute(name = "Limit", key = "l", standalone = true, priority = 0)
@@ -15,7 +16,7 @@ public class Limit extends StockItemAttribute {
 	private int limit, plimit;
 	private long timeout, ptimeout;
 
-	public Limit(StockItem item, String key)
+	public Limit(dItem item, String key)
 	{
 		super(item, key);
 	}

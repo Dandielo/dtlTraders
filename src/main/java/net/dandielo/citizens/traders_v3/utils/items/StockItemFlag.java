@@ -1,8 +1,10 @@
 package net.dandielo.citizens.traders_v3.utils.items;
 
 import java.util.List;
+
 import net.dandielo.citizens.traders_v3.TEntityStatus;
 import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
+import net.dandielo.core.items.dItem;
 import net.dandielo.core.items.serialize.ItemFlag;
 
 /**
@@ -14,7 +16,7 @@ import net.dandielo.core.items.serialize.ItemFlag;
 public abstract class StockItemFlag extends ItemFlag {
 	private ShopStatus shopStatus;
 	
-	public StockItemFlag(StockItem item, String key) {
+	public StockItemFlag(dItem item, String key) {
 		super(item, key);
 	}
 	

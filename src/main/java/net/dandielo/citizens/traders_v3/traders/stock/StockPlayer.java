@@ -40,7 +40,7 @@ public class StockPlayer extends StockTrader {
 		
 		//clear the inventory
 		inventory.clear();
-		for ( StockItem item : this.stock.get(status.asStock()) )
+		for (StockItem item : this.stock.get(status.asStock()))
 		{
 			if (  item.getSlot() < 0 )
 				item.setSlot(inventory.firstEmpty());

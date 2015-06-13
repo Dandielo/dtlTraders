@@ -14,16 +14,16 @@ public class TransactionInfo {
 	/* Transaction details */
 	private StockItem item;
 	public enum Stock { SELL, BUY }; Stock stock;
-	private int scale;
+	private int amount;
 	
 	/* Price details */
 	private double multiplier;
 	
-	public TransactionInfo(String stock, StockItem item, int scale)
+	public TransactionInfo(String stock, StockItem item, int amount)
 	{
 		this.stock = Stock.valueOf(stock.toUpperCase());
 		this.item = item;
-		this.scale = scale;
+		this.amount = amount;
 	}
 
 	private void setSeller(Participant seller) {
@@ -55,8 +55,8 @@ public class TransactionInfo {
 		return item.hasFlag(StackPrice.class);
 	}
 	
-	public int getScale() {
-		return scale;
+	public int getAmount() {
+		return isStackprice() ? amount / item.getAmount() : amount;
 	}
 	
 	public double getMultiplier() {
@@ -76,7 +76,7 @@ public class TransactionInfo {
 	}
 	
 	public double getTotalScaling() {
-		return multiplier * scale;
+		return multiplier * getAmount();
 	}
 	
 	public Player getPlayerParticipant() {

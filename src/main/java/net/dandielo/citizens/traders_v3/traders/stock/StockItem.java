@@ -6,7 +6,6 @@ import java.util.List;
 import net.dandielo.citizens.traders_v3.TEntityStatus;
 import net.dandielo.citizens.traders_v3.utils.items.StockItemAttribute;
 import net.dandielo.citizens.traders_v3.utils.items.StockItemFlag;
-import net.dandielo.citizens.traders_v3.utils.items.attributes.Amount;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Limit;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Multiplier;
 import net.dandielo.citizens.traders_v3.utils.items.attributes.Price;
@@ -14,6 +13,7 @@ import net.dandielo.citizens.traders_v3.utils.items.attributes.Slot;
 import net.dandielo.core.items.dItem;
 import net.dandielo.core.items.serialize.ItemAttribute;
 import net.dandielo.core.items.serialize.ItemFlag;
+import net.dandielo.core.items.serialize.core.Amount;
 import net.dandielo.core.items.serialize.flags.Lore;
 
 import org.bukkit.inventory.ItemStack;
@@ -234,15 +234,6 @@ public final class StockItem extends dItem {
 	public boolean hasMultipleAmounts()
 	{
 		return getAttribute(Amount.class, true).hasMultipleAmounts();
-	}
-
-	/**
-	 * @return
-	 *    the first set amount, considered as the major one
-	 */
-	public int getAmount()
-	{
-		return getAttribute(Amount.class, true).getAmount();
 	}
 
 	/**

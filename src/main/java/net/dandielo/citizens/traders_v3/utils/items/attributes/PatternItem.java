@@ -1,7 +1,7 @@
 package net.dandielo.citizens.traders_v3.utils.items.attributes;
 
-import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
 import net.dandielo.citizens.traders_v3.utils.items.StockItemAttribute;
+import net.dandielo.core.items.dItem;
 import net.dandielo.core.items.serialize.Attribute;
 import net.dandielo.core.items.serialize.ItemAttribute;
 
@@ -9,7 +9,7 @@ import net.dandielo.core.items.serialize.ItemAttribute;
 public class PatternItem extends StockItemAttribute {
 	private int priority = 0;
 	
-	public PatternItem(StockItem item, String key)
+	public PatternItem(dItem item, String key)
 	{
 		super(item, key);
 	}

@@ -10,6 +10,7 @@ import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
 import net.dandielo.citizens.traders_v3.traders.transaction.CurrencyHandler;
 import net.dandielo.citizens.traders_v3.traders.transaction.TransactionInfo;
 import net.dandielo.citizens.traders_v3.utils.items.StockItemAttribute;
+import net.dandielo.core.items.dItem;
 
 import org.bukkit.ChatColor;
 
@@ -18,7 +19,7 @@ import org.bukkit.ChatColor;
 public class Price extends StockItemAttribute implements CurrencyHandler {
 	private double price;
 
-	public Price(StockItem item, String key) {
+	public Price(dItem item, String key) {
 		super(item, key);
 		price = 0.0;
 	}
@@ -70,8 +71,12 @@ public class Price extends StockItemAttribute implements CurrencyHandler {
 		if (!status.inManagementMode()) return;
 
 		//add the lore to the item
-		for ( String pLore : LocaleManager.locale.getLore("item-unitPrice") )
-			lore.add(pLore.replace("{price}", String.format("%.2f", price)).replace(',', '.'));
+		double totalPrice = item.hasFlag(".sp") ? price : price * item.getAmount();
+		for ( String pLore : LocaleManager.locale.getLore("item-price-summary") )
+			lore.add(pLore
+					.replace("{unit}", String.format("%.2f", price)).replace(',', '.')
+					.replace("{total}", String.format("%.2f", totalPrice)).replace(',', '.')
+				);
 	}
 	
 	

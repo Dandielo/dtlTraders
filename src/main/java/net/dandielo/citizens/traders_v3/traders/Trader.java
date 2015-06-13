@@ -286,19 +286,14 @@ public abstract class Trader implements TradingEntity {
 	 */
 	protected boolean sellTransaction(int slot)
 	{
-		//ShopSession pricing = new ShopSession(player, "sell", selectedItem);
 		int amount = selectedItem.getAmount(slot);
-		//double price = stock.parsePrice(selectedItem, "sell", amount);
-		
-		//if (pricing.onPriceCheckRequest(amount) && (price < 0.0 || wallet.withdraw(player, price)))
+
 		if (session.allowTransaction("sell", selectedItem, amount))
 		{
-			//if (!pricing.tryCompleteTransaction(amount))
 			if (!session.finalizeTransaction("sell", selectedItem, amount))
 			{
 				dB.critical("Some thing went REALLLLLLY WRONG HERE! GOT RIGHT NOW TO THE DEV!");
 			}
-			//wallet.deposit(this, price);
 			return true;
 		}
 		return false;
@@ -321,18 +316,12 @@ public abstract class Trader implements TradingEntity {
 	 */
 	protected boolean buyTransaction(int scale)
 	{
-//		int amount = selectedItem.getAmount();
-	//	double price = stock.parsePrice(selectedItem, "buy", amount) * scale;
-		
-		//if (pricing.onPriceCheckRequest(scale) && (price < 0.0 || wallet.withdraw(this, price)))
-		if (session.allowTransaction("buy", selectedItem, scale))
+		if (session.allowTransaction("buy", selectedItem, selectedItem.getAmount() * scale))
 		{
-			//if (!pricing.tryCompleteTransaction(scale))
-			if (!session.finalizeTransaction("buy", selectedItem, scale))
+			if (!session.finalizeTransaction("buy", selectedItem, selectedItem.getAmount() * scale))
 			{
 				dB.critical("Some thing went REALLLLLLY WRONG HERE! GOT RIGHT NOW TO THE DEV!");
 			}
-//			wallet.deposit(player, price);
 			return true;
 		}
 		return false;
@@ -365,15 +354,17 @@ public abstract class Trader implements TradingEntity {
 				{
 				    //set the new lore
 					List<String> lore = new ArrayList<String>();
-					lore.addAll(session.getDescription("buy", selectedItem, scale));
+					lore.addAll(session.getDescription("buy", selectedItem, selectedItem.getAmount() * scale));
 					
 					//create the item
 					ItemStack nItem = Lore.addLore(CleanItem(item), lore);
 				    inv.setItem(i, nItem);
 				}
 				else
-					//clean the item from any lore
-					inv.setItem(i, CleanItem(item));
+				{
+					ItemStack cleaned = CleanItem(item);
+					inv.setItem(i, cleaned);
+				}
 			}			
 			//next item please
 			i++;
@@ -997,7 +988,7 @@ public abstract class Trader implements TradingEntity {
 	{
 		return settings.getNPC().getId() == npc.getId();
 	}
-	
+
 	
 	protected void sendTransactionMessage(String message, String action, double price) {		
 		locale.sendMessage(player, message, (Object[]) new String[] {
@@ -1005,6 +996,17 @@ public abstract class Trader implements TradingEntity {
 			"trader", getNPC().getName(),
 			"item", selectedItem.getName(),
 			"amount", String.valueOf(selectedItem.getAmount()),
+			"price", String.format("%.2f", price).replace(',', '.'),
+			"action", action //#bought or #sold
+		});
+	}
+	
+	protected void sendTransactionMessage(String message, String action, double price, int amount) {		
+		locale.sendMessage(player, message, (Object[]) new String[] {
+			"player", player.getName(),
+			"trader", getNPC().getName(),
+			"item", selectedItem.getName(),
+			"amount", String.valueOf(amount),
 			"price", String.format("%.2f", price).replace(',', '.'),
 			"action", action //#bought or #sold
 		});

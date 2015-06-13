@@ -326,7 +326,7 @@ public class Server extends Trader {
 					//prepare substitution args (for default Price attribute)
 					StockItem item = getSelectedItem();
 					double price = session.getCurrencyValue("sell", item, item.getAmount(slot), Price.class);
-					sendTransactionMessage("trader-transaction-success", "#bought", price);
+					sendTransactionMessage("trader-transaction-success", "#bought", price, item.getAmount(slot));
 					
 					//update limits
 					updateSellLimits(slot);
@@ -399,7 +399,7 @@ public class Server extends Trader {
 								else
 								{
 									//send event
-									if ( transactionEvent(TransactionResult.SUCCESS_PLAYER_BUY).isSaveToInv() )
+									if (transactionEvent(TransactionResult.SUCCESS_PLAYER_BUY).isSaveToInv())
 										addToInventory();
 
 									StockItem item = getSelectedItem();
@@ -537,7 +537,7 @@ public class Server extends Trader {
 							double price = session.getCurrencyValue("sell", item, item.getAmount(), Price.class) * scale;
 							
 							//send the transaction success message
-							sendTransactionMessage("trader-transaction-success", "#sold", price);
+							sendTransactionMessage("trader-transaction-success", "#sold", price, item.getAmount() * scale);
 
 							updateBuyLimits(scale);
 
@@ -591,7 +591,7 @@ public class Server extends Trader {
 							double price = session.getCurrencyValue("sell", item, item.getAmount(), Price.class);
 							
 							//send the transaction success message
-							sendTransactionMessage("trader-transaction-success", "#sold", price);
+							sendTransactionMessage("trader-transaction-success", "#sold", price, item.getAmount());
 
 							//update limits
 							updateBuyLimits();
@@ -936,7 +936,6 @@ public class Server extends Trader {
 				}
 
 				//Get a clean item and it's meta
-				//TODO: Next fix incoming!
 				ItemStack itemStack = item.getItem(false, item.getDescription(status));
 
 				//replace the item with that one in the inventory

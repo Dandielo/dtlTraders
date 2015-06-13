@@ -1,8 +1,10 @@
 package net.dandielo.citizens.traders_v3.utils.items;
 
 import java.util.List;
+
 import net.dandielo.citizens.traders_v3.TEntityStatus;
 import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
+import net.dandielo.core.items.dItem;
 import net.dandielo.core.items.serialize.ItemAttribute;
 
 /**
@@ -17,17 +19,12 @@ public abstract class StockItemAttribute extends ItemAttribute {
 	 */
 	protected ShopStatus status;
 
-	/***
-	 * @brief The item associated with the attribute
-	 */
-	protected StockItem item;
-
 	/**
 	 * @brief Default constructor (needs a key)
 	 * @param key
 	 *     the attribute key
 	 */
-	public StockItemAttribute(StockItem item, String key)
+	public StockItemAttribute(dItem item, String key)
 	{
 		super(item, key);
 	}
@@ -44,7 +41,7 @@ public abstract class StockItemAttribute extends ItemAttribute {
 	 *  @param sub
 	 *      Provided on registration sub-name for the new attribute
 	 */
-	public StockItemAttribute(StockItem item, String key, String sub)
+	public StockItemAttribute(dItem item, String key, String sub)
 	{
 		super(item, key, sub);
 	}
@@ -77,14 +74,14 @@ public abstract class StockItemAttribute extends ItemAttribute {
 		return status;
 	}
 
-	/**
-	 * Sets the stock item for this item attribute
-	 */
-	@Deprecated
-	public void setItem(StockItem item)
-	{
-		this.item = item;
-	}
+//	/**
+//	 * Sets the stock item for this item attribute
+//	 */
+//	@Deprecated
+//	public void setItem(StockItem item)
+//	{
+//		this.item = item;
+//	}
 
 	@Override
 	public final int hashCode()

@@ -1,14 +1,14 @@
 package net.dandielo.citizens.traders_v3.utils.items.attributes;
 
-import net.dandielo.citizens.traders_v3.traders.stock.StockItem;
 import net.dandielo.citizens.traders_v3.utils.items.StockItemAttribute;
+import net.dandielo.core.items.dItem;
 
 @net.dandielo.core.items.serialize.Attribute(
 		name = "Multiplier", key = "m", standalone = true, priority = 0)
 public class Multiplier extends StockItemAttribute {
 	private double multiplier;
 	
-	public Multiplier(StockItem item, String key)
+	public Multiplier(dItem item, String key)
 	{
 		super(item, key);
 	}

@@ -72,8 +72,12 @@ public class ShopSession {
 				currencies.merge(((PricePattern) pattern).getItemCurrency(player, stock, item));
 		currencies.resetPriorities();
 		for (ItemAttribute attr : item.getAttributes("p"))
+		{
 			if (attr instanceof CurrencyHandler)
+			{
 				currencies.merge((CurrencyHandler) attr, 0);
+			}
+		}
 		
 		//set the cache
 		cachedStock.put(item, currencies);

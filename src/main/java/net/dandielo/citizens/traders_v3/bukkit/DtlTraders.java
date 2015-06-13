@@ -29,6 +29,7 @@ import net.dandielo.citizens.traders_v3.utils.items.flags.StackPrice;
 import net.dandielo.stats.bukkit.Stats;
 import net.dandielo.stats.core.Manager;
 import static net.dandielo.core.items.serialize.ItemAttribute.registerAttr;
+import static net.dandielo.core.items.serialize.ItemAttribute.extendAttrKey;
 import static net.dandielo.core.items.serialize.ItemFlag.registerFlag;
 
 import org.bukkit.ChatColor;
@@ -69,6 +70,17 @@ public class DtlTraders extends JavaPlugin {
 		
 		dB.info("Enabling plugin");
 		
+		//check dtlCore dependency
+		if ( !checkCore() )
+		{
+			this.setEnabled(false);
+			this.getPluginLoader().disablePlugin(this);
+			
+			//Severe message
+			severe("dtlCore plugin not found, disabling dtlTraders.");
+			return;
+		}
+		
 		//init Vault
 		if ( !initVault() )
 		{
@@ -76,7 +88,7 @@ public class DtlTraders extends JavaPlugin {
 			this.getPluginLoader().disablePlugin(this);
 			
 			//Severe message
-			severe("Vault plugin not found, disabling plugin");
+			severe("Vault plugin not found, disabling dtlTraders.");
 			return;
 		}
 		
@@ -87,7 +99,7 @@ public class DtlTraders extends JavaPlugin {
 			this.getPluginLoader().disablePlugin(this);
 			
 			//Severe message
-			severe("Vault plugin not found, disabling plugin");
+			severe("Citizen2 plugin not found, disabling dtlTraders.");
 			return;
 		}
 		
@@ -100,14 +112,15 @@ public class DtlTraders extends JavaPlugin {
 		CitizensAPI.getTraitFactory().registerTrait(TraitInfo.create(WalletTrait.class).withName("wallet"));
 		
 		//registering core extensions
-		registerAttr(PlayerResourcesCurrency.class);
-		registerAttr(BlockCurrency.class);
 		registerAttr(PatternItem.class);
 		registerAttr(Multiplier.class);
 		registerAttr(Limit.class);
 		registerAttr(Price.class);
 		registerAttr(Slot.class);
 		registerAttr(Tier.class);
+		
+		extendAttrKey("p", PlayerResourcesCurrency.class);
+		extendAttrKey("p", BlockCurrency.class);
 
 		registerFlag(StackPrice.class);
 		registerFlag(AnyLore.class);
@@ -166,11 +179,20 @@ public class DtlTraders extends JavaPlugin {
 		}
 		return Econ.econ.isEnabled();
 	}
+
 	private boolean checkCitizens()
 	{
 		if ( getServer().getPluginManager().getPlugin("Citizens") == null ) 
 		{
-			warning("Citizens2 plugin not found! Disabling plugin");
+			return false;
+		}
+		return true;
+	}
+	
+	private boolean checkCore()
+	{
+		if ( getServer().getPluginManager().getPlugin("dtlCore") == null ) 
+		{
 			return false;
 		}
 		return true;

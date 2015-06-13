@@ -21,7 +21,7 @@ public class ItemUtils {
 		//creating a clean item
 		StockItem sItem = new StockItem(clone);
 		//getting data out of it (by force ;>)
-		sItem.refactor(clone);
+		//sItem.refactor(clone);
 		//returning the item
 		return sItem;
 	}

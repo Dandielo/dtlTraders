@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>net.dandielo</groupId>
 	<artifactId>dtlTraders</artifactId>
-	<version>3.3-SNAPSHOT</version>
+	<version>3.4-SNAPSHOT</version>
 	<name>dtlTraders</name>
 	<description>Trader trait for Citizens 2</description>
 
@@ -14,7 +14,7 @@
 		<vault.version>1.4.1</vault.version>
 		<denizen.version>0.9.3-SNAPSHOT</denizen.version>
 		<stats.version>1.2.0-SNAPSHOT</stats.version>
-		<core.version>0.0.1-SNAPSHOT</core.version>
+		<core.version>1.0-SNAPSHOT</core.version>
 		<build.number>Unknown</build.number>
 		<BUILD_NUMBER>Unknown</BUILD_NUMBER>
 	</properties>
