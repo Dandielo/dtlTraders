@@ -734,7 +734,7 @@ public class TraderCommands {
 	}
 	
 	@Command(
-			name = "trader", syntax = "open (trader)",
+			name = "trader", syntax = "open <trader>",
 			perm = "dtl.trader.commands.open",
 			usage = "", desc = "", npc = true)
 	public void traderOpen(DtlTraders plugin, Player sender, Trader trader, Map<String, String> args) throws TraderTypeNotFoundException, InvalidTraderTypeException
