@@ -734,12 +734,79 @@ public class TraderCommands {
 	}
 	
 	@Command(
-			name = "trader", syntax = "open",
+			name = "trader", syntax = "open (trader)",
 			perm = "dtl.trader.commands.open",
 			usage = "", desc = "", npc = true)
-	public void traderOpen(DtlTraders plugin, Player sender, Trader trader, Map<String, String> args)
+	public void traderOpen(DtlTraders plugin, Player sender, Trader trader, Map<String, String> args) throws TraderTypeNotFoundException, InvalidTraderTypeException
 	{
+		Iterator<NPC> it = CitizensAPI.getNPCRegistry().iterator();
+		Pattern pat = Pattern.compile("&.");
+		NPC result = null;
 
+		while(it.hasNext() && result == null)
+		{
+			if ( !pat.matcher((result = it.next()).getName()).replaceAll("").equals(args.get("trader")) )
+			{
+				try
+				{
+					if ( result.getId() != Integer.parseInt(args.get("trader")) )
+						result = null;
+
+				} catch( Exception e ) { result = null; }
+			}
+
+			if ( result != null && !result.hasTrait(TraderTrait.class) )
+				result = null;
+		}
+
+		if ( result == null ) 
+		{
+			locale.sendMessage(sender, "error-npc-invalid");
+			return;
+		}
+
+		if (!tNpcManager.instance().inRelation(sender))
+		{
+			Trader tr = tNpcManager.instance().getTraderRelation(sender);
+			tNpcManager.instance().removeRelation(sender);
+			sender.closeInventory();
+		}
+		
+		if ( !tNpcManager.instance().inRelation(sender) )
+		{
+			//create a test Trader Npc
+			TraderTrait settings = result.getTrait(TraderTrait.class);
+			Trader nTrader = (Trader) tNpcManager.create_tNpc(result, settings.getType(), sender, TraderTrait.class);
+
+			//start with the unlocked status, to allow fast stock setting 
+			//nTrader.parseStatus(TEntityStatus.MANAGE_SELL);
+			nTrader.parseStatus(TEntityStatus.baseStatus(settings.getSettings().getStockStart()));
+
+			//register the relation
+			tNpcManager.instance().registerRelation(sender, nTrader);
+
+			//send messages
+		//	locale.sendMessage(sender, "trader-managermode-enabled", "npc", result.getName());
+		}
+//		else
+//		{
+//			Trader tr = tNpcManager.instance().getTraderRelation(sender);
+//			//remove the relation
+//			tNpcManager.instance().removeRelation(sender);
+//			sender.closeInventory();
+//			//send messages
+//			locale.sendMessage(sender, "trader-managermode-disabled", "npc", tr.getNPC().getName());
+//
+//			if ( tr.getNPC().getId() != result.getId() )
+//			{
+//				//create a test Trader Npc
+//				Trader nTrader = (Trader) tNpcManager.create_tNpc(result, result.getTrait(TraderTrait.class).getType(), sender, TraderTrait.class);
+//				//register the relation
+//				tNpcManager.instance().registerRelation(sender, nTrader);
+//				//send messages
+//				locale.sendMessage(sender, "trader-managermode-enabled", "npc", result.getName());
+//			}
+//		}
 	}
 	/*
 	@SerializableAs("dice")
