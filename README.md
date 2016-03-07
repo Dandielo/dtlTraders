@@ -1,4 +1,20 @@
-dtlTraders 3.0 and later
+dtlTraders 3.4.2 and later
 ==========
 
-Citizens2 trader and banker traits
+== About
+
+== Installation
+
+=== Dependencies 
+
+=== Configuration
+The whole configuration file is explained here.
+
+
+== Features
+
+
+== Work in progress
+
+
+== Other
