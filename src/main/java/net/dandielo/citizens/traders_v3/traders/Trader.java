@@ -186,7 +186,7 @@ public abstract class Trader implements TradingEntity {
 	
 	public TraderTransactionEvent transactionEvent(TransactionResult result)
 	{
-		return (TraderTransactionEvent) new TraderTransactionEvent(this, player, selectedItem, TransactionResult.INVENTORY_FULL).callEvent();
+		return (TraderTransactionEvent) new TraderTransactionEvent(this, player, selectedItem, result).callEvent();
 	}
 	
 	/**
